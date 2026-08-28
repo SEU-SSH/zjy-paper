@@ -1,7 +1,7 @@
 # DeFuzz Paper
 
-This repository contains the manuscript, bibliography, figures, and supporting
-notes for the DeFuzz paper. The review manuscript uses the IEEE conference
+This repository contains the manuscript, bibliography, figures, and build
+assets for the DeFuzz paper. The review manuscript uses the IEEE conference
 format and keeps author information anonymous.
 
 ## Build
@@ -26,7 +26,4 @@ only requires Tectonic.
 - `main.tex`: LaTeX manuscript source
 - `refs.bib`: BibTeX bibliography
 - `figures/`: publication PDFs, SVG previews, and D2 sources
-- `paper.md`: Markdown working draft
-- `outline*.md`: outline and completion tracking
-- `experiment_*.md`: experiment status and execution notes
-- `DeFuzz-中文阅读版.*`: Chinese reading edition
+- `outline_status.md`: manuscript completion tracker
