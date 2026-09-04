@@ -74,8 +74,8 @@
 \pagestyle{plain}     % Force page numbers on subsequent pages for review
 
 \begin{abstract}
-Compiler-inserted defenses---stack canaries, \texttt{\_FORTIFY\_SOURCE},
-CET/IBT, CFI, BTI, PAC, and shadow stacks---are the last line that must hold
+Compiler-inserted defenses, including stack canaries, \texttt{\_FORTIFY\_SOURCE},
+CET/IBT, CFI, BTI, PAC, and shadow stacks, are the last line that must hold
 once a memory-safety bug is triggered. Their effectiveness depends not only on
 the correctness of the defense code but also on assumptions about the
 underlying instruction set architecture (ISA). When such an assumption breaks
@@ -92,11 +92,11 @@ We present DeFuzz, an agentic system that systematically addresses these challen
 
 \section{Introduction}\label{sec:intro}
 
-The number of publicly disclosed memory-safety vulnerabilities has grown relentlessly over the past decade. Major vendors and security researchers increasingly acknowledge that manual auditing and secure-coding disciplines alone are insufficient to eradicate memory-safety bugs in complex, upper-layer software. As a consequence, the behavior of a program \emph{after} a vulnerability is triggered has become critical. Compiler-inserted defenses---such as stack canaries, \texttt{\_FORTIFY\_SOURCE}, Control-Flow Integrity (CFI), Pointer Authentication (PAC), and shadow stacks---are deployed jointly by the compiler and the runtime environment as a fail-safe backstop intended to hold even when an exploit fires.
+The number of publicly disclosed memory-safety vulnerabilities has grown relentlessly over the past decade. Major vendors and security researchers increasingly acknowledge that manual auditing and secure-coding disciplines alone are insufficient to eradicate memory-safety bugs in complex, upper-layer software. As a consequence, the behavior of a program \emph{after} a vulnerability is triggered has become critical. Compiler-inserted defenses, such as stack canaries, \texttt{\_FORTIFY\_SOURCE}, Control-Flow Integrity (CFI), Pointer Authentication (PAC), and shadow stacks, are deployed jointly by the compiler and the runtime environment as a fail-safe backstop intended to hold even when an exploit fires.
 \incfig{defense-role}{Compiler-inserted defenses as the runtime last
 line: they must hold once an upper-layer memory-safety bug is triggered.}
 
-These defenses share a common operational model: the compiler analyzes the Abstract Syntax Tree (AST) and inserts check instructions, layout constraints, or metadata so that any runtime deviation is caught, halting the program. The stack canary is the canonical example---a random sentinel placed between a local buffer and the saved return address is verified before the function returns.
+These defenses share a common operational model: the compiler analyzes the Abstract Syntax Tree (AST) and inserts check instructions, layout constraints, or metadata so that any runtime deviation is caught, halting the program. The stack canary is the canonical example: a random sentinel placed between a local buffer and the saved return address is verified before the function returns.
 
 However, defense mechanisms are themselves code, synthesized by complex compiler backends, and are susceptible to logic bugs. Crucially, the efficacy of a defense depends not only on its abstract implementation but heavily on the underlying Instruction Set Architecture (ISA). As the diversity of hardware targets grows, the cross-architecture attack surface widens, making the rigor of compiler defense emission increasingly difficult to guarantee.
 
@@ -157,7 +157,7 @@ This class of failure is \emph{double-silent}: it raises no error at compile tim
 
 \subsection{Why Existing Methods Miss It}
 Systematically exposing silent failures requires overcoming the oracle gap.
-\emph{Crash and differential fuzzing} (e.g., Csmith, YARPGen) monitor surface-level signals---whether the program crashes or disagrees with another compiler's output. By definition, a silent failure preserves the original program semantics and does not induce a crash unless actively exploited; thus, these tools register nothing. \emph{Static analysis} is constrained by predefined patterns; silent failures exhibit heterogeneous forms across different backends, rendering pattern matching difficult to generalize. Finally, \emph{free-running agent fuzzers} sacrifice reproducibility: when a Large Language Model (LLM) autonomously dictates control flow and bug adjudication, execution trajectories cannot be reliably replayed, ablations cannot be isolated, and bug claims cannot be rigorously traced back to deterministic evidence, leading to high false-positive rates due to LLM hallucination.
+\emph{Crash and differential fuzzing} (e.g., Csmith, YARPGen) monitor surface-level signals, whether the program crashes or disagrees with another compiler's output. By definition, a silent failure preserves the original program semantics and does not induce a crash unless actively exploited; thus, these tools register nothing. \emph{Static analysis} is constrained by predefined patterns; silent failures exhibit heterogeneous forms across different backends, rendering pattern matching difficult to generalize. Finally, \emph{free-running agent fuzzers} sacrifice reproducibility: when a Large Language Model (LLM) autonomously dictates control flow and bug adjudication, execution trajectories cannot be reliably replayed, ablations cannot be isolated, and bug claims cannot be rigorously traced back to deterministic evidence, leading to high false-positive rates due to LLM hallucination.
 
 \section{System Overview}\label{sec:overview}
 
@@ -198,7 +198,7 @@ effective; violating it means the mechanism has been silently weakened in the
 compiled artifact or at run time, whether or not the code itself contains an
 overt bug. Each invariant is recorded with a machine-verifiable
 \texttt{statement} and, separately, an \texttt{observation} field that names
-only the externally observable phenomenon of a violation---not how to detect it.
+only the externally observable phenomenon of a violation, not how to detect it.
 The separation of the phenomenon from its detection recipe is deliberate: ``the
 \texttt{\_\_stack\_chk\_fail} symbol is missing from the binary'' is a
 phenomenon, whereas ``look it up in the ELF \texttt{.dynsym}'' is a detection
@@ -258,8 +258,8 @@ confirm the cited evidence supports its statement and observation, and after the
 novelty check (threshold 85.0) confirms it does not duplicate an existing seed
 or manual rule.
 Because the dense retriever returns slightly different vectors per call, we cache
-query vectors keyed by query text so that top-$k$ ordering---and hence the
-accepted set---reproduces across runs. After a new finding, including a zero-day,
+query vectors keyed by query text so that top-$k$ ordering, and hence the
+accepted set, reproduces across runs. After a new finding, including a zero-day,
 is reproduced and its root cause is confirmed, we serialize it in the same
 schema and add it to the probe pool. The next campaign can then search for
 further instances of that root cause.
@@ -388,14 +388,14 @@ The orchestrator governs the explicit agentic loop, maintaining the strict topol
 \section{Evaluation}\label{sec:eval}
 \emph{Setup.} [DEFERRED: Awaiting experimental data. Setup must specify LLM parameters (model, temperature), baseline configurations (free-running agent setup), and exact computational budget/hardware for reproducibility.]
 
-\paragraph{RQ1 --- Real bugs} [DEFERRED: Awaiting experimental data. Needs confirmed bug counts and CVE IDs.]
+\paragraph{RQ1: Real bugs} [DEFERRED: Awaiting experimental data. Needs confirmed bug counts and CVE IDs.]
 
-\paragraph{RQ2 --- Invariant generation quality} [DEFERRED: Awaiting experimental data. Requires expert sampling grading (True Security Property, Reasonable but Non-essential, Trivial, Incorrect) and Cohen's $\kappa$ calculation.]
+\paragraph{RQ2: Invariant generation quality} [DEFERRED: Awaiting experimental data. Requires expert sampling grading (True Security Property, Reasonable but Non-essential, Trivial, Incorrect) and Cohen's $\kappa$ calculation.]
 
-\paragraph{RQ3 --- Ablation} [DEFERRED: Awaiting experimental data. Requires evaluation of explicit orchestration vs. free-running baseline, coverage feedback, and oracle grounding.]
+\paragraph{RQ3: Ablation} [DEFERRED: Awaiting experimental data. Requires evaluation of explicit orchestration vs. free-running baseline, coverage feedback, and oracle grounding.]
 \figplaceholder{ablation}{Ablation: contribution of explicit orchestration (vs. free-running agents), oracle grounding, and coverage feedback to hit rate and cost.}
 
-\paragraph{RQ4 --- Cross-ISA generalization} [DEFERRED: Awaiting experimental data.]
+\paragraph{RQ4: Cross-ISA generalization} [DEFERRED: Awaiting experimental data.]
 
 \section{Discussion and Limitations}\label{sec:disc}
 [DEFERRED: Awaiting experimental data. Must include: (1) Manual effort analysis for converting invariants to checkers, (2) LLM API token cost/budget analysis, (3) False positive analysis, specifically regarding QEMU simulation fidelity vs. bare-metal hardware.]
@@ -416,7 +416,7 @@ Recent advancements leverage Large Language Models to deduce system properties. 
 The integration of LLMs as autonomous agents in fuzzing pipelines (e.g., AgentFuzz~\cite{liu2025agentfuzz}) introduces powerful directed exploration capabilities. However, free-running agent architectures suffer from severe reproducibility and hallucination issues. When an LLM is granted the autonomy to decide whether a complex output constitutes a ``bug,'' the system inevitably yields false positives driven by model hallucination. DeFuzz structurally diverges from this paradigm through explicit orchestration (\S\ref{sec:loop}). By confining the LLM to generation and feedback roles, and strictly mandating that all bug claims be grounded in the deterministic execution of programmatic checkers, DeFuzz eliminates hallucination from the adjudication phase, ensuring that every reported violation is a reproducible, actionable defect.
 
 \section{Conclusion}\label{sec:concl}
-Compiler-inserted security defenses represent a critical backstop against memory-safety exploits, yet their efficacy is frequently compromised by silent failures during backend lowering. These failures---which bypass traditional crash and differential fuzzing oracles---leave binaries seemingly protected but functionally vulnerable across the mechanism $\times$ ISA matrix.
+Compiler-inserted security defenses represent a critical backstop against memory-safety exploits, yet their efficacy is frequently compromised by silent failures during backend lowering. These failures, which bypass traditional crash and differential fuzzing oracles, leave binaries seemingly protected but functionally vulnerable across the mechanism $\times$ ISA matrix.
 
 DeFuzz addresses this fundamental blind spot. By distilling defense semantics into a deterministic, machine-checkable oracle, we transition the detection of silent failures from ad-hoc manual auditing to a systematic, reproducible science. Our cross-mechanism invariant transfer pipeline demonstrates that historical root causes can be abstracted and transferred to uncover analogous flaws in disparate defenses. Furthermore, our explicitly orchestrated agentic loop proves that LLMs can be effectively harnessed for complex fuzzing tasks without succumbing to adjudication hallucinations, provided their outputs are strictly grounded in deterministic execution evidence.
 
