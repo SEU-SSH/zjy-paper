@@ -74,9 +74,9 @@
 \pagestyle{plain}     % Force page numbers on subsequent pages for review
 
 \begin{abstract}
-Compiler security defenses---such as stack canaries, CFI, and shadow stacks---serve as the last line of protection against memory-safety exploits. However, their implementations often fail to meet design expectations due to complex backend lowering and cross-architecture inconsistencies. Such failures are \emph{silent}: the program compiles cleanly and functions correctly, but its security contract is broken. Detecting silent failures is challenging due to the \emph{oracle gap}---there are no crashes or functional deviations to guide traditional fuzzers---and the massive search space across defense mechanisms and instruction set architectures (ISAs). Furthermore, manually scaling security oracles across this matrix is intractable.
+Compiler-inserted security defenses (e.g., stack canaries, CFI, and shadow stacks) serve as the last line of protection against memory-safety exploits. However, their implementations often fail to meet design expectations due to complex backend lowering and other root causes. These failures are \emph{silent}: the program compiles cleanly and executes functionally correctly, but its security contract is broken. Finding silent defense failures is difficult due to two main challenges. First is the \emph{oracle gap}; because there is no crash or semantic divergence, traditional fuzzing tools lack guidance. Second is the vast search space, as correctness must be validated across a two-dimensional matrix of defense mechanisms and Instruction Set Architectures (ISAs).
 
-We present DeFuzz, an agentic framework to systematically discover silent defense failures. First, we construct a deterministic oracle by translating defense semantics into machine-checkable security invariants, ensuring verdicts are grounded in execution evidence rather than non-deterministic model outputs. Second, to overcome the oracle-scaling bottleneck, we introduce a cross-mechanism invariant transfer pipeline that generalizes root causes from historical bugs into new invariants. Finally, because an invariant imposes different checking constraints under different ISAs, DeFuzz employs an explicitly orchestrated agentic loop that translates invariants into ISA-specific checkers and automates the discovery process. On GCC and LLVM, DeFuzz discovered \tbd{N} silent-failure defects, yielding \tbd{M} confirmed upstream patches. These findings highlight the fragility of compiler defenses and demonstrate that agent-driven discovery, when strictly grounded, can systematically secure compiler backends.
+We present DeFuzz, an explicitly orchestrated agentic framework that systematically discovers silent defense failures. First, to bridge the oracle gap, we construct a deterministic oracle by extracting and formalizing defense semantics into machine-checkable security invariants. These invariants mandate that all verdicts derive from static binary states or runtime execution signals, eliminating reliance on non-deterministic Large Language Model (LLM) judgments. Second, to address the massive search space, we introduce a cross-mechanism invariant transfer pipeline that generalizes root causes from historical bugs into new invariants. Finally, because an invariant imposes different checking constraints under different ISAs, DeFuzz employs an explicitly orchestrated agentic loop that translates invariants into ISA-specific checkers and automates the discovery process. On GCC and LLVM, DeFuzz discovered \tbd{N} silent-failure defects, yielding \tbd{M} confirmed CVEs and upstream patches. These findings highlight the fragility of compiler defenses and demonstrate that explicitly orchestrated agent fuzzing, when strictly grounded, can systematically secure compiler backends.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -118,7 +118,7 @@ In summary, this paper makes the following contributions:
 \subsection{Compiler Security Defenses}
 A compiler security defense is a mechanism that inserts extra check instructions (e.g., canary comparisons, CFI target checks), layout constraints (e.g., guard placement, shadow-stack slots), or metadata (e.g., BTI landing pads, PAC signing) at compile time so that any run-time deviation is detected. These defenses are typically introduced during the middle-end IR phase (e.g., GIMPLE or LLVM IR) but must survive the transition to backend-specific representations (e.g., RTL, SelectionDAG, or Machine IR).
 
-This lowering process is fraught with architecture-specific complexities. Register allocation, instruction scheduling, and stack frame finalization are dictated by the target ISA's Application Binary Interface (ABI). A defense mechanism that appears structurally sound in the target-independent IR can be silently dismantled during backend lowering. Consequently, the defense mechanism $\times$ ISA matrix has genuinely independent cells: a defense implemented correctly for one ISA may be silently broken on another due to disparate backend emission templates.
+This lowering process is fraught with architecture-specific complexities. Register allocation, instruction scheduling, and stack frame finalization are dictated by the target ISA's Application Binary Interface (ABI). A defense mechanism that appears structurally sound in the target-independent IR can be silently dismantled during backend lowering. For instance, dynamic stack allocations (e.g., \texttt{alloca} or Variable Length Arrays) require target-specific frame pointer adjustments that can inadvertently overwrite or bypass previously established security boundaries. Consequently, the defense mechanism $\times$ ISA matrix has genuinely independent cells: a defense implemented correctly for one ISA may be silently broken on another due to disparate backend emission templates.
 \incfig{defense-matrix}{The defense mechanism $\times$ ISA matrix. Each
 cell is an independent backend/pass; silent failures hide in individual cells.}
 
@@ -262,7 +262,12 @@ Each checker returns a four-state verdict
 when the mechanism is off or the seed does not exercise it, and is
 ignored by the aggregation layer. A finding is counted as confirmed only when a
 deterministic checker fails or an execution differential reproduces, never on
-the strength of model output alone.
+the strength of model output alone
+(Figure~\ref{fig:oracle-flow}).
+\incfigh{oracle-flow}{An accepted invariant is translated into a static or
+dynamic checker; four-state verdicts pass through a deterministic-evidence gate
+before any finding is confirmed.}{0.82}
+
 When a programmatic checker cannot decide an invariant--ISA cell, it returns
 NotApplicable or Error. The LLM is strictly prohibited from inferring or
 overriding verdicts based on disassembly or symbol evidence; all Fails must
@@ -325,6 +330,8 @@ The agents form a closed loop where feedback guides subsequent generation, the o
 \end{algorithm}
 
 This architecture enforces reproducibility (as pinning a blackboard version deterministically fixes agent inputs), ablatability (enabling independent toggling of linkage edges), and auditability (ensuring every bug claim traces back to deterministic execution evidence).
+\incfig{blackboard}{The blackboard: all inter-agent linkage flows through
+versioned shared state, enabling reproduce / ablate / audit.}
 
 \subsection{Three agents}
 The \textbf{Generator} (invoked at the start) carries read-only source-search and
@@ -352,6 +359,9 @@ its budget expires. Error follows the same non-bug path, remains visible as an
 infrastructure diagnostic, and consumes the current round. A Fail transfers the
 seed and deterministic evidence to the Minimizer. The blackboard records both
 branches before the orchestrator advances.
+\incfig{checker-routing}{Deterministic target scheduling: one
+invariant--checker pair remains fixed for its budget, while checker metadata
+expands the applicable ISAs and cheap static checkers remain enabled.}
 
 \section{Implementation}\label{sec:impl}
 The DeFuzz architecture is decoupled into a high-performance evaluation core and a Python-based agentic orchestrator. The core service, implemented in Go, provides deterministic build execution, coverage tracking, and oracle adjudication. It exposes these capabilities to the orchestrator via gRPC for high-throughput programmatic access, and via the Model Context Protocol (MCP) to provide agents with read-only tools for source code search, invariant querying, and delta debugging (C-Reduce) invocation. Crucially, the oracle definitions, static/dynamic checkers, and ISA applicability rules are centralized within the Go core, serving as the single source of truth for all metadata.
