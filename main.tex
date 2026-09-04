@@ -96,7 +96,7 @@ The number of publicly disclosed memory-safety vulnerabilities has grown relentl
 \incfig{defense-role}{Compiler-inserted defenses as the runtime last
 line: they must hold once an upper-layer memory-safety bug is triggered.}
 
-These defenses share a common operational model: the compiler analyzes the Abstract Syntax Tree (AST) and inserts check instructions, layout constraints, or metadata so that any runtime deviation is caught, halting the program. The stack canary is the canonical example: a random sentinel placed between a local buffer and the saved return address is verified before the function returns.
+These defenses share a common operational model: the compiler analyzes intermediate representations (e.g., AST, GIMPLE, or LLVM IR) and inserts check instructions, layout constraints, or metadata so that any runtime deviation is caught, halting the program. The stack canary is the canonical example: a random sentinel placed between a local buffer and the saved return address is verified before the function returns.
 
 However, defense mechanisms are themselves code, synthesized by complex compiler backends, and are susceptible to logic bugs. Crucially, the efficacy of a defense depends not only on its abstract implementation but heavily on the underlying Instruction Set Architecture (ISA). As the diversity of hardware targets grows, the cross-architecture attack surface widens, making the rigor of compiler defense emission increasingly difficult to guarantee.
 
@@ -144,7 +144,7 @@ We evaluate the security of the compiler's emitted defense code under the follow
 \begin{itemize}
     \item \textbf{Assumptions:} The target application contains a latent, exploitable memory-safety vulnerability (e.g., a buffer overflow) in its upper-layer source code. The attacker possesses the capability to trigger this vulnerability and aims to hijack control flow or execute arbitrary code.
     \item \textbf{In-Scope:} We focus exclusively on the correctness and efficacy of the security mechanisms automatically inserted by the compiler. A vulnerability is considered in-scope if the defense mechanism fails to operate as expected (i.e., fails to detect or mitigate the exploit as designed). We describe only the violated security invariant (the falsification surface) and do not construct working end-to-end exploits.
-    \item \textbf{Out-of-Scope:} Hardware-level vulnerabilities, side-channel attacks, business logic flaws, and explicit source-level bugs (e.g., intentionally bypassing defenses via inline assembly) are outside our threat model.
+    \item \textbf{Out-of-Scope:} Hardware-level vulnerabilities, side-channel attacks, business logic flaws, and explicit source-level bugs (e.g., intentionally bypassing defenses via inline assembly) are outside our threat model. Furthermore, we evaluate standard defense emissions and explicitly exclude vulnerabilities arising from the interaction between aggressive compilation optimization flags and defense mechanisms.
 \end{itemize}
 To maintain a stable reference for evidence grounding and reproduction, our empirical evaluation is pinned to GCC~16.1.
 
