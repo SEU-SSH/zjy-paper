@@ -1,4 +1,4 @@
-# Fig: compiler-inserted defenses as the runtime last line (academic monochrome)
+# Fig: compiler-instrumented defenses as a runtime protection layer (academic monochrome)
 # render: d2 --theme=0 --pad=8 defense-role.d2 ../defense-role.svg
 
 classes: {
@@ -11,7 +11,7 @@ direction: down
 
 app: "Upper-layer code\n(memory-safety bug triggered)" { class: box }
 
-defense: "Compiler-inserted defenses  —  the last line\nstack canary · _FORTIFY_SOURCE · IBT/CET\nCFI · PAC · shadow stack" {
+defense: "Compiler-instrumented defenses\nstack canary · _FORTIFY_SOURCE · IBT/CET\nCFI · PAC · shadow stack" {
   class: emph
 }
 

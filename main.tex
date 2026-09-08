@@ -64,7 +64,7 @@
 
 \begin{document}
 
-\title{DeFuzz: Agentic Discovery of Silently-Failing\\Compiler Defenses via Security Invariants}
+\title{DeFuzz: Invariant-Guided Agentic Testing\\of Compiler-Instrumented Defenses}
 
 \author{\IEEEauthorblockN{Anonymous Author(s)}
 \IEEEauthorblockA{Paper \#XXX --- IEEE S\&P Double-Blind Review}}
@@ -74,90 +74,264 @@
 \pagestyle{plain}     % Force page numbers on subsequent pages for review
 
 \begin{abstract}
-Compiler-inserted defenses, including stack canaries, \texttt{\_FORTIFY\_SOURCE},
-CET/IBT, CFI, BTI, PAC, and shadow stacks, are the last line that must hold
-once a memory-safety bug is triggered. Their effectiveness depends not only on
-the correctness of the defense code but also on assumptions about the
-underlying instruction set architecture (ISA). When such an assumption breaks
-on a particular backend, the defense can fail \emph{silently}: the program
-compiles without warning and runs with correct functionality, yet its security
-contract is no longer enforced. CVE-2023-4039, in which the stack protector of GCC
-is defeated on AArch64 in the presence of variable-length arrays, is one such
-case, and its cross-architecture siblings have persisted upstream for years.
+Compiler-instrumented defenses, such as stack canaries and control-flow
+integrity, mitigate the exploitation of memory-safety bugs. Yet these defenses
+can fail silently while compilation and functional tests still pass.
+CVE-2023-4039, for example, allows an overflow in a dynamically allocated buffer
+to bypass the GCC stack protector on AArch64. Such failures expose an oracle
+gap: ordinary crashes and output disagreements do not reliably reveal whether
+a defense still enforces its security guarantees.
 
-The detection of silent failures is challenging due to three main reasons. First is the \emph{oracle gap}: the binary neither crashes nor disagrees with other compilers; thus, crash-based and differential-oracle fuzzers detect no violations. Second is the \emph{massive search space}: correctness must be validated across a two-dimensional matrix of defense mechanism $\times$ ISA, each cell backed by an independent backend template. Third is the \emph{irreproducibility and unablatability of free agents}: when Large Language Models (LLMs) autonomously dictate control flow, their execution trajectories cannot be reliably replayed or isolated.
-
-We present DeFuzz, an agentic system that systematically addresses these challenges to discover silent failures. First, to close the oracle gap, we systematize the security invariants that each defense must satisfy into a machine-checkable oracle; every checker stays sound by grounding each bug claim in a deterministic binary or runtime signal rather than in model output. Second, to tackle the massive search space, we introduce a cross-mechanism invariant-generation pipeline that treats a confirmed root cause in one mechanism as a probe to retrieve and instantiate new invariants in other mechanisms. Third, to overcome the irreproducibility and unablatability of free agents, we build an explicitly-orchestrated agentic loop: a deterministic pipeline drives build, coverage, and oracle in a fixed order and invokes agents only at fixed positions, where they communicate through a versioned blackboard. This design yields reproducible traces, per-edge ablation, and bug claims that trace back to deterministic evidence. On GCC and LLVM, DeFuzz discovered \tbd{N} silent-failure defects, of which \tbd{M} were confirmed upstream.
+We present DeFuzz, an agentic system for discovering silent failures in
+compiler-instrumented defenses through security invariants (properties required
+for a defense to hold under its threat model). The task poses three challenges:
+deriving these invariants, constructing checkers and test seeds that exercise
+them, and accounting for instruction set architecture (ISA) semantics.
+DeFuzz extracts candidate invariants from compiler source, architectural
+specifications, and historical bug reports and patches, retaining their
+supporting evidence. Accepted invariants guide both executable checkers and
+agent-generated seeds. Agents use source context, coverage measurements, and
+checker feedback to refine seeds toward potential violations, while ISA-aware
+checkers evaluate binary or runtime evidence under the relevant architectural
+assumptions. A fixed orchestration pipeline records this evidence for replay and
+keeps model output separate from bug adjudication.
+On GCC and LLVM, DeFuzz discovered \tbd{N} silent compiler defense failures,
+of which \tbd{M} were confirmed upstream. These findings expose weaknesses
+that functional compiler testing alone does not detect.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
 
-The number of publicly disclosed memory-safety vulnerabilities has grown relentlessly over the past decade. Major vendors and security researchers increasingly acknowledge that manual auditing and secure-coding disciplines alone are insufficient to eradicate memory-safety bugs in complex, upper-layer software. As a consequence, the behavior of a program \emph{after} a vulnerability is triggered has become critical. Compiler-inserted defenses, such as stack canaries, \texttt{\_FORTIFY\_SOURCE}, Control-Flow Integrity (CFI), Pointer Authentication (PAC), and shadow stacks, are deployed jointly by the compiler and the runtime environment as a fail-safe backstop intended to hold even when an exploit fires.
-\incfig{defense-role}{Compiler-inserted defenses as the runtime last
-line: they must hold once an upper-layer memory-safety bug is triggered.}
+Memory-safety bugs remain a threat to C and C++ software even after auditing and
+testing. Compiler-instrumented defenses, such as stack canaries, Control-Flow
+Integrity (CFI), and Pointer Authentication (PAC), provide an additional layer
+of protection when such bugs are triggered. We refer to these mechanisms as
+compiler defenses and study whether their emitted code enforces the intended
+security guarantees (Figure~\ref{fig:defense-role}).
+\incfig{defense-role}{Compiler-instrumented defenses mitigate attacks after
+an application-level memory-safety bug is triggered.}
 
-These defenses share a common operational model: the compiler analyzes intermediate representations (e.g., AST, GIMPLE, or LLVM IR) and inserts check instructions, layout constraints, or metadata so that any runtime deviation is caught, halting the program. The stack canary is the canonical example: a random sentinel placed between a local buffer and the saved return address is verified before the function returns.
+Depending on the mechanism, instrumentation is introduced in middle-end
+representations such as GIMPLE or LLVM IR, or during target-specific lowering.
+The compiler inserts checks, constrains layouts, or emits metadata to enforce
+a particular security policy. For example, a stack canary is checked before a
+function returns to detect overwrites that cross the guard.
 
-However, defense mechanisms are themselves code, synthesized by complex compiler backends, and are susceptible to logic bugs. Crucially, the efficacy of a defense depends not only on its abstract implementation but heavily on the underlying Instruction Set Architecture (ISA). As the diversity of hardware targets grows, the cross-architecture attack surface widens, making the rigor of compiler defense emission increasingly difficult to guarantee.
+Defense implementations are themselves code and can contain errors. Their
+effectiveness depends on both the instrumentation logic and its compatibility
+with the target instruction set architecture (ISA) and application binary
+interface (ABI). Incorrect checks, misplaced guards, or inconsistent
+assumptions across compilation stages can weaken a defense. The central
+question is whether the emitted implementation preserves its security
+guarantees under the semantics and conventions of the target architecture.
 
-\subsection{Silent Failure}
-When a compiler defense fails, it often does so \emph{silently}. CVE-2023-4039 exemplifies this phenomenon: the \texttt{-fstack-protector} mechanism in GCC was defeated on AArch64. When a function utilized a variable-length array (VLA), the backend placed the canary \emph{above} the VLA, leaving the saved return address exposed below it. An overflow could thus rewrite the return address without disturbing the canary. Figure~\ref{fig:stack-layout} illustrates this buggy frame layout.
-\incfigh{stack-layout}{CVE-2023-4039 buggy stack frame: canary above the
-VLA, return address below it, so an overflow bypasses the check.}{0.86}
+\subsection{Silent Defense Failures}
+A compiler defense fails \emph{silently} when compilation and ordinary
+functional tests succeed despite a violation of its security guarantees.
+CVE-2023-4039 exemplifies this problem: an overflow in a variable-length array
+(VLA) or \texttt{alloca} buffer could overwrite a saved return address without
+triggering the GCC stack protector on AArch64~\cite{cve20234039}.
+The program still behaves correctly on non-attacking inputs, concealing the
+missing protection. We examine the faulty layout in \S\ref{sec:bg}.
 
-This class of failure is exceptionally pernicious because it is \emph{double-silent}: the toolchain issues no warnings during compilation, and the program executes its intended logic flawlessly at runtime. The security contract, however, is entirely broken, providing attackers with a complete bypass to an ostensibly protected binary.
+Csmith~\cite{yang2011csmith} and YARPGen~\cite{livinskii2020yarpgen} use
+differential testing to expose compiler errors that change program behavior.
+Such output comparisons do not establish whether a defense remains effective:
+correct functional outputs can coexist with broken protection. This is the
+\emph{oracle gap} for compiler defense testing.
 
 \subsection{Three Coupled Challenges}
-Systematically exposing silent failures presents three intertwined challenges:
+Our starting point is a \emph{security invariant}: a property that a defense
+must satisfy under its threat model. Testing such properties can expose
+missing protection without requiring a functional miscompilation. Turning this
+idea into a systematic testing method presents three coupled challenges.
 
-\emph{The Oracle Gap.} Detecting a defense failure is difficult because the compiled binary neither crashes nor disagrees with binaries produced by other compilers. Traditional testing and fuzzing methodologies (e.g., Csmith, YARPGen) rely on differential output or crash signals, rendering them blind to logic flaws that compromise only the security contract. We term this fundamental lack of adjudicative capability the \emph{oracle gap}.
+\emph{Deriving Security Invariants.} Defense requirements are scattered across
+compiler documentation, source comments and assertions, ISA and ABI
+specifications, and historical fixes. They are rarely available as executable
+properties. Deriving an invariant requires identifying the protected asset,
+activation conditions, and required guarantee, while distinguishing security
+intent from implementation details that may themselves be faulty.
 
-\emph{Large Search Space.} As shown in Figure~\ref{fig:defense-matrix}, compilers must uphold security contracts across a two-dimensional matrix of defense mechanisms (e.g., Canary, IBT, PAC) $\times$ ISAs (e.g., x86-64, AArch64, RISC-V). Each cell maps to an independent middle-end pass or target-specific lowering template. Homologous omissions frequently persist across this matrix.
-\incfig{defense-matrix}{The defense mechanism $\times$ ISA matrix. Each
-cell is an independent backend/pass; silent failures hide in individual cells.}
+\emph{Constructing Invariant-Directed Tests.} An invariant needs both a checker
+that recognizes a violation and a seed that exercises the relevant conditions.
+Generic program generation does not explicitly target this combination.
+For the stack protector, a seed must preserve the allocation and control-flow
+structure needed to expose a faulty guard placement, and the checker must
+observe that placement or its effect.
 
-\emph{Irreproducibility and Unablatability of Free Agents.} Recent free-running LLM agents attempt to bridge the aforementioned gaps by autonomously dictating control flow and bug adjudication. However, this autonomy sacrifices scientific rigor: their execution trajectories cannot be reliably replayed, and specific module contributions cannot be isolated for ablation, rendering the methodology irreproducible and unablatable.
+\emph{Accounting for ISA Semantics.} The same security requirement can depend
+on different instruction semantics, register conventions, and stack layouts.
+Checkers must encode these assumptions and distinguish violations from valid
+target-specific implementations. The defense mechanism $\times$ ISA matrix
+therefore expands both the search space and the semantic work needed to
+interpret each result.
 
 \subsection{Our Approach}
-DeFuzz is an agentic system designed to systematically address these challenges. First, to close the oracle gap, we systematize the security invariants that defenses must satisfy into a machine-checkable oracle. To prevent hallucination, our oracle strictly grounds every bug claim in deterministic binary states or runtime execution signals, eliminating reliance on non-deterministic LLM judgments for adjudication. Second, to search the vast defense matrix, we introduce a cross-mechanism invariant-generation pipeline that utilizes confirmed historical bugs as probes to retrieve and generalize root causes across diverse mechanisms. Third, to overcome the irreproducibility and unablatability of free agents, we build an explicitly orchestrated agentic loop. Rather than allowing agents to dictate control flow, our orchestrator enforces a deterministic pipeline (build $\rightarrow$ coverage $\rightarrow$ oracle), invoking agents only at fixed positions to generate seeds and provide semantic minimization feedback via a versioned blackboard.
+DeFuzz addresses these challenges with evidence-grounded invariant extraction,
+invariant-directed agentic testing, and ISA-aware checkers. Offline, it
+extracts candidate properties from compiler source, specifications, and
+historical bug reports and patches. Confirmed root causes also serve as
+retrieval probes for related implementations. Each accepted invariant retains
+its source evidence and is specialized to a concrete defense; transferring a
+failure pattern does not make the resulting invariant universal across
+mechanisms.
+
+Online, each invariant--checker pair defines a testing objective. Large
+Language Model (LLM) agents use source-search tools and the invariant context
+to construct seeds, then revise them using measured coverage and checker
+feedback. This motivates the agentic design: generating a syntactically valid
+program is insufficient when the test must preserve specific semantic
+conditions, and one-shot generation cannot adapt to whether those conditions
+were reached. The agents perform this contextual refinement, while a fixed
+pipeline controls compilation and checking.
+
+Static and dynamic checkers interpret evidence using target-specific
+instruction and ABI assumptions. Their metadata determines ISA applicability
+and routing, so unsupported cases are not mistaken for successful protection.
+Bug claims require deterministic binary or runtime evidence, not an LLM
+verdict. A versioned blackboard records seeds, feedback, and results for replay
+and ablation.
 
 \subsection{Contributions}
 In summary, this paper makes the following contributions:
 \begin{itemize}
-  \item \textbf{A Deterministic Oracle for Silent Defense Failures.} We construct a sound, machine-checkable oracle framework that bridges the silent-failure gap. By mandating that all verdicts stem from reproducible execution or static evidence, we eliminate the hallucination risks prevalent in naive LLM-driven vulnerability discovery (\S\ref{sec:oracle}).
-  \item \textbf{Cross-Mechanism Invariant Transfer.} We propose a retrieval-augmented pipeline that distills historical bugs into abstract failure modes. By transferring these signatures across the mechanism $\times$ ISA matrix, we generated [DEFERRED: N] novel transferred invariants (\S\ref{sec:invariants},~\S\ref{sec:specgen}).
-  \item \textbf{An Explicitly Orchestrated Agentic Framework.} We design a fuzzing architecture where agents operate at fixed pipeline positions and communicate exclusively through a versioned blackboard. This explicitly orchestrated approach guarantees reproducibility and enables precise, ISA-bound checker routing (\S\ref{sec:loop}).
-  \item \textbf{Empirical Discovery.} Evaluating GCC and LLVM across multiple architectures, DeFuzz discovered [DEFERRED: N] previously unknown silent compiler defense failures, resulting in [DEFERRED: M] confirmed CVEs and upstream patches (\S\ref{sec:eval}).
+  \item \textbf{Evidence-Grounded Security Invariants.} We derive
+  defense-specific properties from documented requirements and historical
+  failures, using root-cause retrieval to identify related candidates with
+  explicit provenance (\S\ref{sec:invariants},~\S\ref{sec:specgen}).
+  \item \textbf{Invariant-Directed Agentic Testing.} We couple executable
+  checkers with semantic seed generation and feedback, using explicit
+  orchestration to make the search traceable and its components ablatable
+  (\S\ref{sec:loop}).
+  \item \textbf{ISA-Aware Oracles.} We operationalize security invariants as
+  static or dynamic checkers with explicit architectural applicability and
+  deterministic evidence, addressing the oracle gap across supported targets
+  (\S\ref{sec:oracle}).
+  \item \textbf{Empirical Discovery.} On GCC and LLVM across multiple
+  architectures, DeFuzz discovered \tbd{N} previously unknown silent compiler
+  defense failures, of which \tbd{M} were confirmed upstream
+  (\S\ref{sec:eval}).
 \end{itemize}
 
 \section{Background and Motivation}\label{sec:bg}
 
-\subsection{Compiler Security Defenses}
-A compiler security defense is a mechanism that inserts extra check instructions (e.g., canary comparisons, CFI target checks), layout constraints (e.g., guard placement, shadow-stack slots), or metadata (e.g., BTI landing pads, PAC signing) at compile time so that any run-time deviation is detected. These defenses are typically introduced during the middle-end IR phase (e.g., GIMPLE or LLVM IR) but must survive the transition to backend-specific representations (e.g., RTL, SelectionDAG, or Machine IR).
+\subsection{Compiler-Instrumented Defenses}
+A compiler-instrumented defense introduces checks, layout constraints, or
+metadata at compile time to enforce a security policy at run time. Enforcement
+may also require runtime libraries, operating-system support, or hardware
+features. Stack canaries use guard comparisons, CFI restricts indirect
+control-flow targets, and PAC uses signing and authentication instructions.
+The presence of such instrumentation alone does not establish that the
+intended protection holds.
 
-This lowering process is fraught with architecture-specific complexities. Register allocation, instruction scheduling, and stack frame finalization are dictated by the target ISA's Application Binary Interface (ABI). A defense mechanism that appears structurally sound in the target-independent IR can be silently dismantled during backend lowering. For instance, dynamic stack allocations (e.g., \texttt{alloca} or Variable Length Arrays) require target-specific frame pointer adjustments that can inadvertently overwrite or bypass previously established security boundaries. Consequently, the defense mechanism $\times$ ISA matrix has genuinely independent cells: a defense implemented correctly for one ISA may be silently broken on another due to disparate backend emission templates.
-\incfig{defense-matrix}{The defense mechanism $\times$ ISA matrix. Each
-cell is an independent backend/pass; silent failures hide in individual cells.}
+Defense logic can span target-independent IR and backend representations such
+as RTL, SelectionDAG, or Machine IR. Lowering must respect instruction
+semantics and ABI conventions for registers, stack alignment, and call frames.
+For instance, dynamic allocations through \texttt{alloca} or VLAs require
+target-specific stack-pointer adjustments and can change the relation between
+buffers, saved registers, and guards. A property preserved by one backend may
+therefore fail in another. Figure~\ref{fig:defense-matrix} summarizes this
+mechanism $\times$ ISA space. Implementations may share middle-end logic, but
+their target-specific behavior still requires separate validation.
+\incfig{defense-matrix}{The defense mechanism $\times$ ISA testing space:
+correctness on one target does not establish correctness on another.}
+
+\subsection{Sources of Security Invariants}
+Security invariants express required protection, rather than merely describing
+behavior observed in an existing binary. Their evidence comes from three
+sources: compiler source and documentation, ISA and ABI specifications, and
+historical bug reports with their fixes. Documentation and specifications
+describe intended constraints; source comments and assertions identify where
+they apply; bug reports and patches expose assumptions that an implementation
+failed to preserve. Because the implementation under test can be wrong, its
+current behavior is not by itself a specification.
+
+Recent work also separates property generation from verification.
+PropertyGPT~\cite{liu2025propertygpt} retrieves human-written smart-contract
+properties to generate new candidates and checks them with a dedicated prover.
+CIll~\cite{su2026cill} uses model-checking feedback to refine LLM-generated
+inductive invariants. These approaches motivate pairing generated properties
+with independent checking. Our task differs from proving a program assertion:
+we extract the security requirements of compiler defenses and search for
+compiled artifacts that violate them. An invariant must state its mechanism,
+applicability conditions, required property, and supporting evidence before it
+can guide a checker and a test seed.
 
 \subsection{Threat Model and Scope}
-We evaluate the security of the compiler's emitted defense code under the following threat model, which aligns with the assumptions of the defense mechanisms themselves:
+We evaluate emitted defense code under the assumptions of each defense
+mechanism:
 \begin{itemize}
-    \item \textbf{Assumptions:} The target application contains a latent, exploitable memory-safety vulnerability (e.g., a buffer overflow) in its upper-layer source code. The attacker possesses the capability to trigger this vulnerability and aims to hijack control flow or execute arbitrary code.
-    \item \textbf{In-Scope:} We focus exclusively on the correctness and efficacy of the security mechanisms automatically inserted by the compiler. A vulnerability is considered in-scope if the defense mechanism fails to operate as expected (i.e., fails to detect or mitigate the exploit as designed). We describe only the violated security invariant (the falsification surface) and do not construct working end-to-end exploits.
-    \item \textbf{Out-of-Scope:} Hardware-level vulnerabilities, side-channel attacks, business logic flaws, and explicit source-level bugs (e.g., intentionally bypassing defenses via inline assembly) are outside our threat model. Furthermore, we evaluate standard defense emissions and explicitly exclude vulnerabilities arising from the interaction between aggressive compilation optimization flags and defense mechanisms.
+    \item \textbf{Assumptions:} The application contains a memory-safety
+    vulnerability that an attacker can trigger. The defense is enabled and its
+    required runtime and hardware support is present. Attacker capabilities
+    are limited to the threat model of the mechanism being tested; a stack
+    canary, for example, does not promise to stop arbitrary writes that skip
+    the guard.
+    \item \textbf{In-Scope:} We study silent failures in compiler-instrumented
+    defenses: compilation and ordinary functional tests succeed, but the
+    emitted code violates a security invariant under the documented
+    preconditions. Tests may inspect binary structure or exercise a violation
+    at run time. They establish the failed protection without requiring an
+    end-to-end exploit.
+    \item \textbf{Out-of-Scope:} We do not search for application-level
+    vulnerabilities or intentional source-level bypasses such as inline
+    assembly that disables protection. Hardware vulnerabilities, side-channel
+    attacks, and business logic flaws are also excluded. We evaluate standard
+    defense emissions and exclude interactions between compilation
+    optimization options and defense mechanisms.
 \end{itemize}
-To maintain a stable reference for evidence grounding and reproduction, our empirical evaluation is pinned to GCC~16.1.
+The source corpus used for invariant extraction is pinned to GCC~16.1;
+bug-testing results are tied to the compiler version and target configuration
+recorded for each run.
 
 \subsection{Silent Failure: A Representative Case}
-When a compiler defense fails, it often does so \emph{silently}. The stack protector mechanism, for example, depends on the invariant ``the canary lies between every overflow-reachable stack object and the saved return address.'' In CVE-2023-4039, when a function used a Variable Length Array (VLA), the AArch64 backend stack-frame construction logic placed the canary \emph{above} the dynamically allocated area, while the saved return address resided \emph{below} it. An overflow originating from the VLA thus overwrites the return address before the canary is ever evaluated.
-\incfigh{stack-layout}{CVE-2023-4039 buggy stack frame: canary above the
-VLA, return address below it, so an overflow bypasses the check.}{0.86}
+CVE-2023-4039 illustrates the connection between a defense requirement, its
+architectural assumptions, and a testable violation~\cite{hebb2023stackprotector}.
+For a contiguous stack overflow covered by the stack-protector policy, the
+guard must lie on the overwrite path to the saved return address. In the
+affected AArch64 layout, the saved return address lies at a higher address
+than the VLA or \texttt{alloca} buffer but below the canary
+(Figure~\ref{fig:stack-layout}). An overflow toward higher addresses can
+therefore corrupt the return address without changing the guard. The canary
+comparison still executes and passes.
+\incfigh{stack-layout}{CVE-2023-4039: an overflow from the VLA reaches the
+saved return address before the canary, leaving the guard unchanged.}{0.86}
 
-This class of failure is \emph{double-silent}: it raises no error at compile time (toolchain and functional tests pass) and produces correct functional results at run time (program behavior is nominally correct), yet the security contract is broken. Furthermore, homologous omissions frequently persist. PR-96191, a sibling of CVE-2023-4039 fixed in 2020, covered primary architectures but left fallback backends untouched, allowing the same failure to persist silently on other targets for years.
+The report traces this failure to a mismatch between target-independent guard
+placement and the AArch64 frame layout. It suggests both a seed containing a
+dynamic allocation and a checker that resolves the relative locations of the
+allocation, guard, and saved return address. Merely finding a canary comparison
+in the binary would miss the failure.
+
+A separate failure, GCC PR-96191~\cite{gccpr96191}, concerns a canary value left
+in a temporary register after the AArch64 stack-protector check. The report
+cites the machine-description requirement that intermediate values must not
+survive the protection sequence. This yields a different invariant, about
+register state rather than stack layout, and requires a checker that follows
+the relevant register updates. The two cases show why the security property
+and its ISA-specific observation must both be explicit.
 
 \subsection{Why Existing Methods Miss It}
-Systematically exposing silent failures requires overcoming the oracle gap.
-\emph{Crash and differential fuzzing} (e.g., Csmith, YARPGen) monitor surface-level signals, whether the program crashes or disagrees with another compiler's output. By definition, a silent failure preserves the original program semantics and does not induce a crash unless actively exploited; thus, these tools detect no violations. \emph{Static analysis} is constrained by predefined patterns; silent failures exhibit heterogeneous forms across different backends, rendering pattern matching difficult to generalize. Finally, \emph{free-running agent fuzzers} sacrifice reproducibility: when a Large Language Model (LLM) autonomously dictates control flow and bug adjudication, execution trajectories cannot be reliably replayed, ablations cannot be isolated, and bug claims cannot be rigorously traced back to deterministic evidence, leading to high false-positive rates due to LLM hallucination.
+\emph{Crash and differential testing} can reveal functional miscompilations,
+but matching outputs on non-attacking inputs do not validate a defense.
+Moreover, attack-triggering executions may involve source-level undefined
+behavior, making ordinary cross-compiler output agreement unsuitable as the
+security oracle. Tests must instead check the protection promised by the
+enabled defense.
+
+\emph{Static checking} can detect a known violation when its rule models the
+relevant semantics. A symbol or instruction-presence rule, however, cannot
+establish correct guard placement or register cleanup. Extending such checks
+requires defense-specific properties and target-specific interpretation.
+
+\emph{Generic seed generation} does not directly connect those properties to
+the program structures that exercise them. Random generation may reach such
+structures, but coverage alone does not say whether a seed tests the assigned
+invariant. This motivates agents that inspect source context and revise seeds
+from checker feedback. Their role is to direct the search; executable checkers
+remain responsible for deciding whether the generated artifact violates the
+defense requirement.
 
 \section{System Overview}\label{sec:overview}
 

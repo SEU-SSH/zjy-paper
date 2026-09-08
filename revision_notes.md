@@ -1,5 +1,35 @@
 # 论文修订意见整理
 
+## 2026-09-08：截图意见落实（标题、摘要与前两章）
+
+本轮以截图最后一组意见为准，将挑战改为“不变量提炼、checker 与种子的协同构造、跨 ISA 语义适配”。下文“近期提交落实情况”保留为历史记录，不代表本轮修订后的状态。
+
+| 意见 | 本轮处理 |
+| --- | --- |
+| 使用 `compiler-instrumented defenses`，重构标题 | 标题改为 `DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses`；摘要、前两章及 defense-role 图统一术语，正文定义 `compiler defenses` 为简称。 |
+| 减少摘要中的枚举和原因解释 | 仅保留 stack canaries 与 CFI 两个例子；删除 `on a particular backend`，直接描述 CVE-2023-4039 导致的保护绕过；摘要由约 366 词缩至约 223 词。 |
+| 体现 invariants 从哪里来 | 首次使用时给出定义；第二章新增来源说明，区分编译器源码与文档、ISA/ABI 规范、历史漏洞及补丁，并说明当前实现行为不能直接当作规范。 |
+| 将生成 checker 与生成种子合为一个挑战 | 第二项挑战围绕同一个不变量的可观测违例与触发条件组织，贡献列表与其对应。 |
+| 体现编译器防御实现与 ISA 假设是否匹配 | 第三项挑战明确指令语义、寄存器约定和栈布局；checker 需要解释这些语义，ISA 元数据路由只是适用性控制。 |
+| 说明为何引入 Agent | 动机改为利用源码上下文生成有特定语义结构的种子，并根据 coverage/checker 反馈迭代；不再把 free agent 的不可复现性当成领域固有挑战。 |
+| 参考近期 invariant 研究 | 引用已核验的 PropertyGPT（NDSS 2025）与 CIll（2026 年 arXiv 预印本），借鉴“候选生成与独立检查分离”，不将本文的 security invariants 等同于归纳循环不变量。 |
+| 保留必要技术细节与图 | 保留 VLA/alloca、动态栈调整和关键图；defense-matrix 与 stack-layout 各保留第二章的一份，消除重复图及标签。 |
+
+### 随文核实
+
+- PR-96191 实际是 AArch64 `stack_protect_test` 后 canary 值残留于寄存器，不是 CVE-2023-4039 的栈布局同源漏洞。已修正文献标题和第二章描述，并用该案例说明如何从 machine-description 要求提炼不变量。
+- CVE-2023-4039 的地址关系改为明确的“动态缓冲区 < 保存的返回地址 < canary”；违例是覆盖返回地址而不改变 guard，不是 canary 比较没有执行。
+- Threat Model 明确防御已启用且所需运行环境成立；不把超出机制威胁模型的任意写入当作防御缺陷。GCC 16.1 限定为不变量提炼语料，避免与 GCC/LLVM 测试范围冲突。
+- 不再把确定性证据等同于形式化 soundness 或零误报保证。漏洞数及上游确认数保留占位符，未补造实验结果。
+
+核验来源：[CVE 原始报告](https://rtx.meta.security/mitigation/2023/09/12/CVE-2023-4039.html)、[GCC PR-96191](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96191)、[PropertyGPT 官方页面](https://www.ndss-symposium.org/ndss-paper/propertygpt-llm-driven-formal-verification-of-smart-contracts-through-retrieval-augmented-property-generation/)、[CIll 预印本](https://arxiv.org/abs/2602.23389)。
+
+### 后续范围
+
+- 第三章及之后正文未改；后续需同步术语和挑战主线，并核实关于 soundness、复现保证和现有方法不足的绝对化表述。
+- `refs.bib` 原有 SpecAuditor 条目本轮未找到可核验的原始来源；保留其现状，待修改 Related Work 时确认，不用于前两章论证。
+- 实验数据、确认状态及图中结果标记仍需与实验记录核对；本轮未改变这些数据。
+
 ## 标题与核心术语
 - 调研并统一 compiler defense 的通用命名，避免使用文献中不常见的表述。
 - 修改标题中的 `cross-mechanism invariants`，因为最终不变量仍与具体机制绑定。
