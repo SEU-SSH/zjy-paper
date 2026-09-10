@@ -10,20 +10,20 @@ classes: {
 
 direction: down
 
-queue: "Orchestrator target queue\n(INV-A, Checker A) · (INV-B, Checker B) · …" { class: state }
-meta: "Checker-metadata SSOT\napplicable ISAs · mode · cost" { class: state }
-lock: "Locked directed task\none invariant–checker pair\n+ applicable ISAs + budget" { class: key }
+queue: "Orchestrator target queue\n(INV-A, Checkers A) · (INV-B, Checkers B) · …" { class: state }
+meta: "Checker-metadata SSOT\nISA-to-checker map · mode · cost" { class: state }
+lock: "Locked directed task\none invariant + checker suite\n+ applicable ISAs + budget" { class: key }
 gen: "Generator agent\nconstruct seed for the assigned invariant\n(no checker or ISA selection)" { class: node }
-routing: "Deterministic routing\nseed × fixed checker × bound ISAs" { class: node }
-x86: "Checker A × x86-64" { class: node }
-arm: "Checker A × AArch64" { class: node }
-rv: "Checker A × RISC-V" { class: node }
-rule: "Differential checker: every bound ISA is mandatory" { class: note }
+routing: "Deterministic routing\nseed × (ISA, checker) mapping" { class: node }
+x86: "INV-A: Checker A_x86\nx86-64" { class: node }
+arm: "INV-A: Checker A_arm\nAArch64" { class: node }
+rv: "INV-A: Checker A_rv\nRISC-V" { class: node }
+rule: "Differential test: all mapped checkers are required" { class: note }
 
 queue -> lock: "fixed cursor" { style: { stroke: "#1A1A1A"; stroke-width: 1; font-color: "#555555" } }
 meta -> lock: "metadata lookup" { style: { stroke: "#1A1A1A"; stroke-width: 1; font-color: "#555555" } }
 lock -> gen: "assign invariant" { style: { stroke: "#1A1A1A"; stroke-width: 1; font-color: "#555555" } }
-lock -> routing: "fix checker + ISAs" { style: { stroke: "#1A1A1A"; stroke-width: 1; font-color: "#555555" } }
+lock -> routing: "fix suite + ISAs" { style: { stroke: "#1A1A1A"; stroke-width: 1; font-color: "#555555" } }
 gen -> routing: "seed only" { style: { stroke: "#1A1A1A"; stroke-width: 1; font-color: "#555555" } }
 routing -> x86: "fan-out" { style: { stroke: "#1A1A1A"; stroke-width: 1; font-color: "#555555" } }
 routing -> arm: "" { style: { stroke: "#1A1A1A"; stroke-width: 1 } }

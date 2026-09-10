@@ -11,13 +11,13 @@ classes: {
 
 direction: down
 
-target: "Orchestrator locks one invariant–checker pair\n+ applicable ISAs + budget" { class: key }
+target: "Orchestrator locks one invariant + checker suite\n+ applicable ISAs + budget" { class: key }
 gen: "Generator agent\nseed for the locked invariant only" { class: agent }
 spine: "Deterministic spine\nrouting → build → coverage → static / dynamic checker\n→ four-state verdict + evidence" { class: node }
 route: "FAIL + deterministic evidence?" { class: node; shape: diamond }
 feedback: "Feedback agent\nwrite coverage/verdict guidance → next round" { class: agent }
 minim: "Minimizer + C-Reduce\nreduce → rebuild → same-checker revalidate" { class: agent }
-next: "Continue locked target; then next pair" { class: term }
+next: "Continue locked target; then next target" { class: term }
 poc: "Revalidated minimized PoC\n→ human review" { class: term }
 bb: "Versioned blackboard\nappend target, seeds, coverage, verdict/evidence,\nguidance, reduction, and revalidation" { class: state }
 

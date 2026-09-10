@@ -14,9 +14,9 @@ route: "" {
 
   discovery: "1  INVARIANT GENERATION\n\nSegmented CoT review: large corpus → candidates\nHistorical-bug RAG: root-cause homologues\nacross middle-end and target backends\n→ grounded, generalized invariants" { class: stage; width: 500; height: 210 }
 
-  oracle: "2  CHECKER CONSTRUCTION\n\nInvariant → static / dynamic checker\nApplicable-ISA metadata\nFour-state verdict + deterministic evidence\nPASS · FAIL · NOT APPLICABLE · ERROR" { class: key; width: 500; height: 210 }
+  oracle: "2  CHECKER CONSTRUCTION\n\nInvariant + ISA → static / dynamic checker\nISA-to-checker mapping\nFour-state verdict + deterministic evidence\nPASS · FAIL · NOT APPLICABLE · ERROR" { class: key; width: 500; height: 210 }
 
-  loop: "3  AGENT LOOP\n\nOrchestrator locks one invariant–checker pair\n+ applicable ISAs + budget; Generator builds its seed\nrouting → build → coverage → checker\nFeedback or C-Reduce + same-checker revalidation" { class: stage; width: 500; height: 210 }
+  loop: "3  AGENT LOOP\n\nOrchestrator locks one invariant + checker suite\n+ applicable ISAs + budget; Generator builds its seed\nrouting → build → coverage → checker\nFeedback or C-Reduce + same-checker revalidation" { class: stage; width: 500; height: 210 }
 
   state: "EVIDENCE AND FEEDBACK\n\nEvery state and result → versioned blackboard\nRevalidated violation → minimized PoC\nConfirmed new finding, including a zero-day\n→ next campaign's probe corpus" { class: stage; width: 500; height: 210 }
 }

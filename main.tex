@@ -89,8 +89,9 @@ deriving these invariants, constructing checkers and test seeds that exercise
 them, and accounting for instruction set architecture (ISA) semantics.
 DeFuzz extracts candidate invariants from compiler source, architectural
 specifications, and historical bug reports and patches, retaining their
-supporting evidence. Accepted invariants guide both executable checkers and
-agent-generated seeds. Agents use source context, coverage measurements, and
+supporting evidence. For each accepted invariant, DeFuzz generates a separate
+checker for each applicable ISA and uses the invariant to guide seed generation.
+Agents use source context, coverage measurements, and
 checker feedback to refine seeds toward potential violations, while ISA-aware
 checkers evaluate binary or runtime evidence under the relevant architectural
 assumptions. A fixed orchestration pipeline records this evidence for replay and
@@ -162,8 +163,9 @@ observe that placement or its effect.
 
 \emph{Accounting for ISA Semantics.} The same security requirement can depend
 on different instruction semantics, register conventions, and stack layouts.
-Checkers must encode these assumptions and distinguish violations from valid
-target-specific implementations. The defense mechanism $\times$ ISA matrix
+A separate checker is therefore needed for each applicable ISA, even for the
+same invariant, to distinguish violations from valid target-specific
+implementations. The defense mechanism $\times$ ISA matrix
 therefore expands both the search space and the semantic work needed to
 interpret each result.
 
@@ -177,7 +179,7 @@ its source evidence and is specialized to a concrete defense; transferring a
 failure pattern does not make the resulting invariant universal across
 mechanisms.
 
-Online, each invariant--checker pair defines a testing objective. Large
+Online, each invariant and its checker suite define a testing objective. Large
 Language Model (LLM) agents use source-search tools and the invariant context
 to construct seeds, then revise them using measured coverage and checker
 feedback. This motivates the agentic design: generating a syntactically valid
@@ -205,7 +207,7 @@ In summary, this paper makes the following contributions:
   orchestration to make the search traceable and its components ablatable
   (\S\ref{sec:loop}).
   \item \textbf{ISA-Aware Oracles.} We operationalize security invariants as
-  static or dynamic checkers with explicit architectural applicability and
+  separate static or dynamic checkers for each applicable ISA, with
   deterministic evidence, addressing the oracle gap across supported targets
   (\S\ref{sec:oracle}).
   \item \textbf{Empirical Discovery.} On GCC and LLVM across multiple
@@ -345,8 +347,9 @@ the historical-bug pool as new retrieval probes.
 
 The online stage evaluates the compiler's defense emission by orchestrating the compilation and subsequent execution of generated seeds. At run
 initialization, the orchestrator enumerates the checker catalog into a fixed
-queue. Each target denotes one invariant--checker pair; checker metadata supplies
-the applicable ISAs. The target remains fixed until its round or wall-clock budget is exhausted.
+queue. Each target denotes one invariant and its checker suite; metadata maps
+each applicable ISA to its separately generated checker.
+The target remains fixed until its round or wall-clock budget is exhausted.
 Within each round, the Generator produces a C seed and a hard-wired
 pipeline executes routing $\rightarrow$ build $\rightarrow$ coverage
 $\rightarrow$ oracle. Pass, NotApplicable, and Error enter the Feedback branch
@@ -360,8 +363,8 @@ explicitly orchestrated agent loop.}
 
 Figure~\ref{fig:main-loop} shows one target-specific iteration end to end; the
 following sections detail each stage.
-\incfigh{main-loop}{Agent loop for one invariant--checker target and its
-applicable ISAs: generate $\rightarrow$ build $\rightarrow$ coverage
+\incfigh{main-loop}{Agent loop for one invariant and its ISA-specific checker
+suite: generate $\rightarrow$ build $\rightarrow$ coverage
 $\rightarrow$ check $\rightarrow$ feedback or minimization.}{0.92}
 
 \section{Security Invariants for Compiler Defenses}\label{sec:invariants}
@@ -446,6 +449,12 @@ To operationalize an accepted invariant into an executable oracle, we define a f
 \mathcal{O}: \mathcal{P} \times \mathcal{I} \times \mathcal{S} \rightarrow \{\text{Pass}, \text{Fail}, \text{NA}, \text{Error}\}
 \end{equation}
 
+For each accepted invariant $s$, DeFuzz generates a distinct checker
+implementation $C_{s,i}$ for each applicable ISA $i$. These implementations
+form the checker suite for $s$: they test the same security requirement but
+encode different instruction semantics, register conventions, and stack
+layouts. The oracle selects the checker matching the target ISA.
+
 Invariants decidable without execution are implemented as static checkers analyzing symbols, sections, or disassembly. Conversely, invariants requiring runtime context (e.g., exit status, memory states) are realized as dynamic checkers. Invariants amenable to both are implemented redundantly, preserving deterministic precision over heuristic approximation.
 
 Each checker returns a four-state verdict
@@ -455,8 +464,9 @@ ignored by the aggregation layer. A finding is counted as confirmed only when a
 deterministic checker fails or an execution differential reproduces, never on
 the strength of model output alone
 (Figure~\ref{fig:oracle-flow}).
-\incfigh{oracle-flow}{An accepted invariant is translated into a static or
-dynamic checker; four-state verdicts pass through a deterministic-evidence gate
+\incfigh{oracle-flow}{For each applicable ISA, an accepted invariant is
+translated into a separate static or dynamic checker; four-state verdicts
+pass through a deterministic-evidence gate
 before any finding is confirmed.}{0.82}
 
 When a programmatic checker cannot decide an invariant--ISA cell, it returns
@@ -472,11 +482,11 @@ A per-mechanism aggregator combines checker verdicts: any Fail raises a
 mechanism-level violation carrying its evidence. On/off flag profiles let the
 oracle adjudicate differentially (defense enabled vs.\ disabled), and because the
 checkers key on binary and runtime signals rather than on the producing
-compiler, GCC and LLVM share the same checkers.
+compiler, GCC and LLVM share the same checkers within a given ISA.
 
 \subsection{Checker metadata as a single source of truth}
-Each checker declares three metadata fields: which ISAs it binds, whether it is
-single-ISA or differential, and whether it is cheap or expensive. This metadata
+The catalog maps each invariant--ISA combination to its checker implementation,
+together with testing mode (single-ISA or differential) and cost metadata. This metadata
 is the single source of truth read by both the gRPC and the MCP adapter, and it
 is what makes the ISA routing in \S\ref{sec:loop} a table lookup rather than an
 agent decision.
@@ -485,9 +495,9 @@ agent decision.
 
 \subsection{Design principles}
 The orchestrator, rather than an agent, owns target selection and control flow.
-At run initialization it constructs a fixed queue of invariant--checker pairs.
-For each target, checker metadata determines the applicable ISAs, and the target
-remains fixed for a configured round or time budget. Within a round, the
+At run initialization it constructs a fixed queue of invariants and their
+checker suites. For each target, metadata determines the ISA--checker mapping,
+and the target remains fixed for a configured round or time budget. Within a round, the
 pipeline follows the same order: generate $\rightarrow$ routing $\rightarrow$
 build $\rightarrow$ coverage $\rightarrow$ oracle $\rightarrow$ route. Agents
 are invoked only at fixed positions and communicate through shared state. The
@@ -501,7 +511,7 @@ The agents form a closed loop where feedback guides subsequent generation, the o
 \caption{Explicitly Orchestrated Agentic Loop}
 \label{alg:orchestration}
 \begin{algorithmic}[1]
-\REQUIRE Queue $Q$ of invariant--checker targets, Budget $B$
+\REQUIRE Queue $Q$ of invariant--suite targets, Budget $B$
 \STATE Initialize Blackboard $\mathcal{B}$
 \FOR{target $T \in Q$}
   \WHILE{budget $B > 0$}
@@ -526,7 +536,7 @@ versioned shared state, enabling reproduce / ablate / audit.}
 
 \subsection{Three agents}
 The \textbf{Generator} (invoked at the start) carries read-only source-search and
-invariant-query tools and outputs a seed for the assigned invariant--checker pair;
+invariant-query tools and outputs a seed for the assigned invariant and checker suite;
 coverage is not an agent-reportable tool but is measured by the coverage node and
 fed back, so the agent cannot fabricate coverage. The \textbf{feedback agent}
 (invoked on a non-violation) is a context-isolated subagent that turns the
@@ -539,20 +549,22 @@ delete the structure that triggers the bug. Each candidate reduction is compiled
 and rechecked with the same checker before it is retained.
 
 \subsection{Checker-routed seeds, ISA-bound checkers}
-Each target in the deterministic queue denotes one invariant and its checker.
-The routing node expands that checker to every ISA in its metadata; the Generator
-never chooses either the target invariant or an ISA. A differential checker always expands to its
-full ISA set so that a cross-ISA signal cannot be pruned by model behavior. Cheap
+Each target in the deterministic queue denotes one invariant and its checker
+suite. For each applicable ISA, the routing node selects the corresponding
+checker implementation; it does not reuse one checker across ISAs. The Generator
+never chooses either the target invariant or an ISA. Cross-ISA differential
+testing collects evidence from the respective checkers over the full required
+ISA set, so a cross-ISA signal cannot be pruned by model behavior. Cheap
 static checkers remain enabled as a side path, but they do not change the
 Generator's assigned target. When a checker returns Pass or NotApplicable, the
-Feedback agent records the relevant context and the same pair continues until
+Feedback agent records the relevant context and the same target continues until
 its budget expires. Error follows the same non-bug path, remains visible as an
 infrastructure diagnostic, and consumes the current round. A Fail transfers the
 seed and deterministic evidence to the Minimizer. The blackboard records both
 branches before the orchestrator advances.
 \incfig{checker-routing}{Deterministic target scheduling: one
-invariant--checker pair remains fixed for its budget, while checker metadata
-expands the applicable ISAs and cheap static checkers remain enabled.}
+invariant and its checker suite remain fixed for their budget; routing selects
+a distinct checker for each ISA, while cheap static checkers remain enabled.}
 
 \section{Implementation}\label{sec:impl}
 The DeFuzz architecture is decoupled into a high-performance evaluation core and a Python-based agentic orchestrator. The core service, implemented in Go, provides deterministic build execution, coverage tracking, and oracle adjudication. It exposes these capabilities to the orchestrator via gRPC for high-throughput programmatic access, and via the Model Context Protocol (MCP) to provide agents with read-only tools for source code search, invariant querying, and delta debugging (C-Reduce) invocation. Crucially, the oracle definitions, static/dynamic checkers, and ISA applicability rules are centralized within the Go core, serving as the single source of truth for all metadata.
