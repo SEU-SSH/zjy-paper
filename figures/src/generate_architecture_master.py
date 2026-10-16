@@ -1,0 +1,763 @@
+#!/usr/bin/env python3
+"""
+DeFuzz Full Methodology Architecture Diagram Generator
+Aligned with top-tier security conference standards (IEEE S&P, USENIX Security, ACM CCS, NDSS).
+Generates publication-ready SVG, PDF, and PNG with crisp typography, elegant color palettes, and rich vector iconography.
+"""
+
+import os
+from pathlib import Path
+import cairosvg
+
+def generate_svg():
+    W, H = 1920, 1080
+    svg = []
+    svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" style="background-color: #0F172A; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
+
+    # Definitions, Gradients, Filters, Markers, Icons
+    svg.append('''
+  <defs>
+    <!-- Shadow Filters -->
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glow-amber" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Gradients for Phase Containers -->
+    <linearGradient id="grad-bg-main" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="50%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+
+    <!-- Phase 1 Gradient (Purple / Indigo) -->
+    <linearGradient id="bg-phase1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E1B4B" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="header-phase1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#818CF8"/>
+    </linearGradient>
+
+    <!-- Phase 2 Gradient (Cyan / Teal) -->
+    <linearGradient id="bg-phase2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="header-phase2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0D9488"/>
+      <stop offset="100%" stop-color="#14B8A6"/>
+    </linearGradient>
+
+    <!-- Phase 3 Gradient (Blue / Sky) -->
+    <linearGradient id="bg-phase3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0C4A6E" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="header-phase3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+
+    <!-- Phase 4 Gradient (Amber / Rose) -->
+    <linearGradient id="bg-phase4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#451A03" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="header-phase4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+
+    <!-- Node Card Gradients -->
+    <linearGradient id="card-dark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="card-agent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2E1065"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <linearGradient id="card-compiler" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B"/>
+      <stop offset="100%" stop-color="#022C22"/>
+    </linearGradient>
+    <linearGradient id="card-oracle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="card-feedback" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#78350F"/>
+      <stop offset="100%" stop-color="#451A03"/>
+    </linearGradient>
+    <linearGradient id="card-bug" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#881337"/>
+      <stop offset="100%" stop-color="#4C0519"/>
+    </linearGradient>
+
+    <!-- Markers for Arrows -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38BDF8"/>
+    </marker>
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2DD4BF"/>
+    </marker>
+    <marker id="arrow-indigo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#818CF8"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#FBBF24"/>
+    </marker>
+    <marker id="arrow-rose" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#FB7185"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#34D399"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#C084FC"/>
+    </marker>
+  </defs>
+''')
+
+    # Global Background
+    svg.append(f'<rect x="0" y="0" width="{W}" height="{H}" fill="url(#grad-bg-main)"/>')
+
+    # Top Header Banner
+    svg.append('''
+  <!-- Top Header -->
+  <g transform="translate(40, 25)">
+    <text x="0" y="32" fill="#FFFFFF" font-size="26" font-weight="800" letter-spacing="0.5">DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses</text>
+    <text x="0" y="56" fill="#94A3B8" font-size="14" font-weight="400">Autonomous Invariant Distillation · Code Grounding &amp; Log Probe · PBT Parameterized Fuzzing · Compiler Diagnostics &amp; Dual-Path Adaptation</text>
+    
+    <!-- Feature Badges -->
+    <g transform="translate(1080, 10)">
+      <rect x="0" y="0" width="135" height="28" rx="14" fill="#1E293B" stroke="#38BDF8" stroke-width="1.2"/>
+      <text x="67" y="18" fill="#38BDF8" font-size="11" font-weight="600" text-anchor="middle">PBT Generator Seeds</text>
+
+      <rect x="145" y="0" width="145" height="28" rx="14" fill="#1E293B" stroke="#2DD4BF" stroke-width="1.2"/>
+      <text x="217" y="18" fill="#2DD4BF" font-size="11" font-weight="600" text-anchor="middle">Unique-ID Log Probes</text>
+
+      <rect x="300" y="0" width="160" height="28" rx="14" fill="#1E293B" stroke="#F59E0B" stroke-width="1.2"/>
+      <text x="380" y="18" fill="#F59E0B" font-size="11" font-weight="600" text-anchor="middle">Compiler Diagnostics</text>
+
+      <rect x="470" y="0" width="165" height="28" rx="14" fill="#1E293B" stroke="#C084FC" stroke-width="1.2"/>
+      <text x="552" y="18" fill="#C084FC" font-size="11" font-weight="600" text-anchor="middle">Two-Tier Refinement Loop</text>
+
+      <rect x="645" y="0" width="130" height="28" rx="14" fill="#1E293B" stroke="#FB7185" stroke-width="1.2"/>
+      <text x="710" y="18" fill="#FB7185" font-size="11" font-weight="600" text-anchor="middle">Lateral Bug Fuzzing</text>
+    </g>
+  </g>
+''')
+
+    # Layout Coordinates
+    col_y = 100
+    col_h = 880
+
+    p1_x, p1_w = 40, 410
+    p2_x, p2_w = 475, 420
+    p3_x, p3_w = 920, 470
+    p4_x, p4_w = 1415, 465
+
+    # Icons
+    icon_brain = '<path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0-2 3.5c0 1.5.8 2.8 2 3.5v1a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4v-1c1.2-.7 2-2 2-3.5A4 4 0 0 0 20 7V6a4 4 0 0 0-4-4h-4zm-2 5a2 2 0 1 1 4 0v1h-4V7zm6 8a2 2 0 1 1-4 0v-1h4v1z" fill="currentColor"/>'
+    icon_gear = '<path d="M19.4 13c.04-.32.06-.66.06-1s-.02-.68-.06-1l2.1-1.65c.2-.15.25-.42.13-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.5 1c-.52-.4-1.08-.73-1.7-.98l-.37-2.65c-.04-.24-.25-.42-.5-.42h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.62.25-1.18.58-1.7.98l-2.5-1c-.22-.08-.49 0-.61.22l-2 3.46c-.13.22-.07.49.13.64l2.1 1.65c-.04.32-.06.65-.06 1s.02.68.06 1l-2.1 1.65c-.2.15-.25.42-.13.64l2 3.46c.12.22.39.3.61.22l2.5-1c.52.4 1.08.73 1.7.98l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.62-.25 1.18-.58 1.7-.98l2.5 1c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.13-.64l-2.1-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" fill="currentColor"/>'
+    icon_shield = '<path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" fill="currentColor"/>'
+    icon_target = '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="2" fill="currentColor"/>'
+    icon_tools = '<path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" fill="currentColor"/>'
+    icon_bug = '<path d="M19 8h-1.81a6.04 6.04 0 0 0-1.4-2.17l1.51-1.51a1 1 0 0 0-1.41-1.41l-1.8 1.8a5.98 5.98 0 0 0-4-1.71c-1.48 0-2.85.54-3.92 1.44l-1.87-1.87a1 1 0 0 0-1.41 1.41l1.59 1.59A6.04 6.04 0 0 0 5 8H3a1 1 0 1 0 0 2h1.09c-.06.33-.09.66-.09 1v1H3a1 1 0 1 0 0 2h1v1c0 .34.03.67.09 1H3a1 1 0 1 0 0 2h2a6 6 0 0 0 10 0h2a1 1 0 1 0 0-2h-1.09c.06-.33.09-.66.09-1v-1h1a1 1 0 1 0 0-2h-1v-1c0-.34-.03-.67-.09-1H19a1 1 0 1 0 0-2zm-5 7H10v-6h4v6z" fill="currentColor"/>'
+    icon_diag = '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="currentColor"/>'
+
+    # =========================================================================
+    # PHASE 1: INVARIANT SYNTHESIS & ORACLE SUITE
+    # =========================================================================
+    svg.append(f'''
+  <!-- ==================== PHASE 1 CONTAINER ==================== -->
+  <g transform="translate({p1_x}, {col_y})">
+    <rect x="0" y="0" width="{p1_w}" height="{col_h}" rx="12" fill="url(#bg-phase1)" stroke="#6366F1" stroke-width="1.5" filter="url(#card-shadow)"/>
+    
+    <path d="M 0 12 Q 0 0 12 0 L {p1_w-12} 0 Q {p1_w} 0 {p1_w} 12 L {p1_w} 42 L 0 42 Z" fill="url(#header-phase1)"/>
+    <text x="16" y="27" fill="#FFFFFF" font-size="15" font-weight="700" letter-spacing="0.3">① Invariant Synthesis &amp; Oracle Suite</text>
+    <rect x="{p1_w-75}" y="10" width="60" height="22" rx="11" fill="#1E1B4B" stroke="#A5B4FC" stroke-width="1"/>
+    <text x="{p1_w-45}" y="25" fill="#C7D2FE" font-size="10.5" font-weight="700" text-anchor="middle">OFFLINE</text>
+
+    <!-- Sub-Block 1: Raw Sources & Corpus -->
+    <g transform="translate(16, 56)">
+      <rect x="0" y="0" width="{p1_w-32}" height="78" rx="8" fill="#0F172A" stroke="#334155" stroke-width="1.2"/>
+      <text x="14" y="22" fill="#94A3B8" font-size="11.5" font-weight="700" letter-spacing="0.5">INPUT SOURCES</text>
+      
+      <rect x="12" y="32" width="170" height="34" rx="6" fill="#1E293B" stroke="#475569" stroke-width="1"/>
+      <text x="22" y="47" fill="#E2E8F0" font-size="10.5" font-weight="600">📜 Compiler Specs &amp; ABI</text>
+      <text x="22" y="59" fill="#94A3B8" font-size="9">GCC/LLVM Defense Manuals</text>
+
+      <rect x="194" y="32" width="170" height="34" rx="6" fill="#1E293B" stroke="#475569" stroke-width="1"/>
+      <text x="204" y="47" fill="#E2E8F0" font-size="10.5" font-weight="600">🐛 Bugzilla &amp; CVE Corpus</text>
+      <text x="204" y="59" fill="#94A3B8" font-size="9">Historical Root Causes &amp; Fixes</text>
+    </g>
+
+    <path d="M {p1_w/2} 134 L {p1_w/2} 150" stroke="#818CF8" stroke-width="2" marker-end="url(#arrow-indigo)"/>
+
+    <!-- Sub-Block 2: Invariant Distillation Agent -->
+    <g transform="translate(16, 154)">
+      <rect x="0" y="0" width="{p1_w-32}" height="125" rx="8" fill="url(#card-agent)" stroke="#818CF8" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#A5B4FC">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_brain}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Invariant Synthesis Agent</text>
+      <text x="40" y="43" fill="#A5B4FC" font-size="10.5">Segmented CoT + Dual Retrieval (BM25 + Embedding)</text>
+      
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="82" height="24" rx="4" fill="#1E1B4B" stroke="#6366F1" stroke-width="1"/>
+        <text x="41" y="16" fill="#C7D2FE" font-size="10" font-weight="600" text-anchor="middle">Canary / SP</text>
+
+        <rect x="88" y="0" width="82" height="24" rx="4" fill="#1E1B4B" stroke="#6366F1" stroke-width="1"/>
+        <text x="129" y="16" fill="#C7D2FE" font-size="10" font-weight="600" text-anchor="middle">Fortify Source</text>
+
+        <rect x="176" y="0" width="82" height="24" rx="4" fill="#1E1B4B" stroke="#6366F1" stroke-width="1"/>
+        <text x="217" y="16" fill="#C7D2FE" font-size="10" font-weight="600" text-anchor="middle">IBT / CET</text>
+
+        <rect x="264" y="0" width="88" height="24" rx="4" fill="#1E1B4B" stroke="#6366F1" stroke-width="1"/>
+        <text x="308" y="16" fill="#C7D2FE" font-size="10" font-weight="600" text-anchor="middle">PAC / AutoInit</text>
+      </g>
+
+      <rect x="12" y="86" width="{p1_w-56}" height="28" rx="5" fill="#0F172A" stroke="#475569" stroke-width="1"/>
+      <text x="20" y="104" fill="#F8FAFC" font-size="10.5" font-family="monospace">Invariant: &lt;Target, Precondition, FailureMode, Assertion&gt;</text>
+    </g>
+
+    <path d="M {p1_w/2} 279 L {p1_w/2} 296" stroke="#818CF8" stroke-width="2" marker-end="url(#arrow-indigo)"/>
+
+    <!-- Sub-Block 3: Invariant Catalog -->
+    <g transform="translate(16, 300)">
+      <rect x="0" y="0" width="{p1_w-32}" height="85" rx="8" fill="#0F172A" stroke="#6366F1" stroke-width="1.4"/>
+      <text x="14" y="22" fill="#818CF8" font-size="11.5" font-weight="700">INVARIANT CATALOG (SSOT BLACKBOARD)</text>
+      
+      <rect x="12" y="32" width="110" height="42" rx="5" fill="#1E1B4B" stroke="#4F46E5" stroke-width="1"/>
+      <text x="67" y="50" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">INV-SP-L01/02</text>
+      <text x="67" y="64" fill="#94A3B8" font-size="9" text-anchor="middle">VLA/alloca Layout</text>
+
+      <rect x="130" y="32" width="115" height="42" rx="5" fill="#1E1B4B" stroke="#4F46E5" stroke-width="1"/>
+      <text x="187" y="50" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">INV-FS-O01/02</text>
+      <text x="187" y="64" fill="#94A3B8" font-size="9" text-anchor="middle">Object Size Chk</text>
+
+      <rect x="253" y="32" width="113" height="42" rx="5" fill="#1E1B4B" stroke="#4F46E5" stroke-width="1"/>
+      <text x="309" y="50" fill="#FFFFFF" font-size="11" font-weight="700" text-anchor="middle">INV-IBT-T01</text>
+      <text x="309" y="64" fill="#94A3B8" font-size="9" text-anchor="middle">endbr64 Landing</text>
+    </g>
+
+    <path d="M {p1_w/2} 385 L {p1_w/2} 402" stroke="#818CF8" stroke-width="2" marker-end="url(#arrow-indigo)"/>
+
+    <!-- Sub-Block 4: Initial Checker Authoring -->
+    <g transform="translate(16, 406)">
+      <rect x="0" y="0" width="{p1_w-32}" height="454" rx="8" fill="url(#card-oracle)" stroke="#38BDF8" stroke-width="1.5" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#38BDF8">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_shield}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Initial ISA-Bound Checker Suite</text>
+      <text x="40" y="43" fill="#7DD3FC" font-size="10.5">Deterministic Truth Oracles per Mechanism &amp; Architecture</text>
+
+      <!-- Static Checker Card -->
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p1_w-56}" height="175" rx="6" fill="#0F172A" stroke="#0284C7" stroke-width="1.2"/>
+        <text x="12" y="20" fill="#38BDF8" font-size="11.5" font-weight="700">🛡️ Static Checkers (Binary &amp; Symbol Inspector)</text>
+        
+        <rect x="10" y="30" width="{p1_w-76}" height="38" rx="4" fill="#1E293B"/>
+        <text x="18" y="46" fill="#E2E8F0" font-size="10.5" font-weight="600">ELF Symbol &amp; Relocation Verifier</text>
+        <text x="18" y="60" fill="#94A3B8" font-size="9.5">Assert __stack_chk_fail / __chk_fail presence in UND imports</text>
+
+        <rect x="10" y="74" width="{p1_w-76}" height="38" rx="4" fill="#1E293B"/>
+        <text x="18" y="90" fill="#E2E8F0" font-size="10.5" font-weight="600">Disassembly Instruction Scan</text>
+        <text x="18" y="104" fill="#94A3B8" font-size="9.5">Check IBT endbr64 landing pads &amp; BTI / PAC instructions</text>
+
+        <rect x="10" y="118" width="{p1_w-76}" height="45" rx="4" fill="#1E293B"/>
+        <text x="18" y="134" fill="#E2E8F0" font-size="10.5" font-weight="600">GNU Notes &amp; Section Flags</text>
+        <text x="18" y="148" fill="#94A3B8" font-size="9.5">Verify .note.gnu.property &amp; non-executable stack flags</text>
+      </g>
+
+      <!-- Dynamic Checker Card -->
+      <g transform="translate(12, 240)">
+        <rect x="0" y="0" width="{p1_w-56}" height="195" rx="6" fill="#0F172A" stroke="#0D9488" stroke-width="1.2"/>
+        <text x="12" y="20" fill="#2DD4BF" font-size="11.5" font-weight="700">⚡ Dynamic Checkers (Runtime Probing Harness)</text>
+
+        <rect x="10" y="30" width="{p1_w-76}" height="46" rx="4" fill="#1E293B"/>
+        <text x="18" y="46" fill="#E2E8F0" font-size="10.5" font-weight="600">Dynamic Stack Layout Prober (Binary Search)</text>
+        <text x="18" y="60" fill="#94A3B8" font-size="9.5">Sweep overflow offsets 1..4096 bytes via argv[2] to probe LR/FP</text>
+
+        <rect x="10" y="82" width="{p1_w-76}" height="46" rx="4" fill="#1E293B"/>
+        <text x="18" y="98" fill="#E2E8F0" font-size="10.5" font-weight="600">Trap &amp; Signal Classifier</text>
+        <text x="18" y="112" fill="#94A3B8" font-size="9.5">SIGABRT = Protected (Expected)  vs  SIGSEGV = Invariant Violated</text>
+
+        <g transform="translate(10, 138)">
+          <rect x="0" y="0" width="95" height="24" rx="4" fill="#134E4A" stroke="#14B8A6" stroke-width="1"/>
+          <text x="47" y="16" fill="#99F6E4" font-size="10" font-weight="600" text-anchor="middle">x86_64 Checker</text>
+
+          <rect x="105" y="0" width="105" height="24" rx="4" fill="#134E4A" stroke="#14B8A6" stroke-width="1"/>
+          <text x="157" y="16" fill="#99F6E4" font-size="10" font-weight="600" text-anchor="middle">AArch64 Checker</text>
+
+          <rect x="220" y="0" width="100" height="24" rx="4" fill="#134E4A" stroke="#14B8A6" stroke-width="1"/>
+          <text x="270" y="16" fill="#99F6E4" font-size="10" font-weight="600" text-anchor="middle">RISC-V Checker</text>
+        </g>
+      </g>
+    </g>
+  </g>
+''')
+
+    # Connecting Pipe: Phase 1 -> Phase 2
+    svg.append(f'''
+  <!-- Pipe 1 -> 2: Target Invariant to Grounding Agent -->
+  <path d="M {p1_x+p1_w} {col_y+340} L {p2_x} {col_y+130}" stroke="#818CF8" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrow-indigo)" fill="none"/>
+  <rect x="{p1_x+p1_w+5}" y="{col_y+210}" width="60" height="22" rx="4" fill="#0F172A" stroke="#818CF8" stroke-width="1"/>
+  <text x="{p1_x+p1_w+35}" y="{col_y+225}" fill="#C7D2FE" font-size="9" font-weight="700" text-anchor="middle">Target Inv</text>
+''')
+
+    # =========================================================================
+    # PHASE 2: CODE GROUNDING & LOG INSTRUMENTATION (MCP-ASSISTED)
+    # =========================================================================
+    svg.append(f'''
+  <!-- ==================== PHASE 2 CONTAINER ==================== -->
+  <g transform="translate({p2_x}, {col_y})">
+    <rect x="0" y="0" width="{p2_w}" height="{col_h}" rx="12" fill="url(#bg-phase2)" stroke="#0D9488" stroke-width="1.5" filter="url(#card-shadow)"/>
+    
+    <path d="M 0 12 Q 0 0 12 0 L {p2_w-12} 0 Q {p2_w} 0 {p2_w} 12 L {p2_w} 42 L 0 42 Z" fill="url(#header-phase2)"/>
+    <text x="16" y="27" fill="#FFFFFF" font-size="15" font-weight="700" letter-spacing="0.3">② Code Grounding &amp; Log Probe</text>
+    <rect x="{p2_w-90}" y="10" width="75" height="22" rx="11" fill="#042F2E" stroke="#5EEAD4" stroke-width="1"/>
+    <text x="{p2_w-52}" y="25" fill="#99F6E4" font-size="10.5" font-weight="700" text-anchor="middle">MCP-DRIVEN</text>
+
+    <!-- Sub-Block 1: Autonomous Free Mapping Agent -->
+    <g transform="translate(16, 56)">
+      <rect x="0" y="0" width="{p2_w-32}" height="135" rx="8" fill="url(#card-agent)" stroke="#14B8A6" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#2DD4BF">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_brain}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Autonomous Mapping Agent</text>
+      <text x="40" y="43" fill="#5EEAD4" font-size="10.5">Free Agent (e.g. Claude Code) + MCP Tooling Stack</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p2_w-56}" height="70" rx="6" fill="#0F172A" stroke="#0F766E" stroke-width="1.2"/>
+        <g transform="translate(10, 8)" fill="#2DD4BF">
+          <svg width="16" height="16" viewBox="0 0 24 24">{icon_tools}</svg>
+        </g>
+        <text x="32" y="21" fill="#2DD4BF" font-size="11" font-weight="700">MCP Tools Suite</text>
+        
+        <rect x="10" y="32" width="170" height="28" rx="4" fill="#134E4A" stroke="#14B8A6" stroke-width="1"/>
+        <text x="18" y="50" fill="#E2E8F0" font-size="10" font-weight="600">🔀 Call-Graph MCP</text>
+        <text x="110" y="50" fill="#99F6E4" font-size="8.5">(CodeQL/IPA Dump)</text>
+
+        <rect x="190" y="32" width="170" height="28" rx="4" fill="#134E4A" stroke="#14B8A6" stroke-width="1"/>
+        <text x="198" y="50" fill="#E2E8F0" font-size="10" font-weight="600">📂 Source / AST MCP</text>
+        <text x="295" y="50" fill="#99F6E4" font-size="8.5">(File Reader)</text>
+      </g>
+    </g>
+
+    <path d="M {p2_w/2} 191 L {p2_w/2} 210" stroke="#2DD4BF" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+
+    <!-- Sub-Block 2: Three-Level Invariant-to-Code Mapping -->
+    <g transform="translate(16, 214)">
+      <rect x="0" y="0" width="{p2_w-32}" height="270" rx="8" fill="#0F172A" stroke="#14B8A6" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <text x="14" y="22" fill="#2DD4BF" font-size="12" font-weight="700">THREE-LEVEL INVARIANT-TO-CODE MAPPING</text>
+
+      <!-- Level 1 Card -->
+      <g transform="translate(12, 34)">
+        <rect x="0" y="0" width="{p2_w-56}" height="64" rx="5" fill="#1E293B" stroke="#0284C7" stroke-width="1"/>
+        <rect x="8" y="8" width="65" height="20" rx="3" fill="#0369A1"/>
+        <text x="40" y="22" fill="#FFFFFF" font-size="9.5" font-weight="700" text-anchor="middle">LEVEL 1</text>
+        <text x="80" y="22" fill="#38BDF8" font-size="11.5" font-weight="700">Pass Pipeline Chain</text>
+        <text x="12" y="42" fill="#CBD5E1" font-size="10">GCC: passes.def (pass_protect_stack → aarch64_layout_frame)</text>
+        <text x="12" y="56" fill="#CBD5E1" font-size="10">LLVM: PassRegistry (StackProtectorPass → PEI)</text>
+      </g>
+
+      <!-- Level 2 Card -->
+      <g transform="translate(12, 106)">
+        <rect x="0" y="0" width="{p2_w-56}" height="74" rx="5" fill="#1E293B" stroke="#0D9488" stroke-width="1"/>
+        <rect x="8" y="8" width="65" height="20" rx="3" fill="#0F766E"/>
+        <text x="40" y="22" fill="#FFFFFF" font-size="9.5" font-weight="700" text-anchor="middle">LEVEL 2</text>
+        <text x="80" y="22" fill="#2DD4BF" font-size="11.5" font-weight="700">Function Cluster (Resolved Hooks)</text>
+        <text x="12" y="42" fill="#CBD5E1" font-size="10">Target-Hook Dispatched: aarch64_layout_frame [6850..7020]</text>
+        <text x="12" y="56" fill="#CBD5E1" font-size="10">Deep Allocator (depth 6): assign_stack_local_1 [450..520]</text>
+        <text x="12" y="70" fill="#CBD5E1" font-size="10">Assembly Emitter: aarch64_expand_prologue [9210..9380]</text>
+      </g>
+
+      <!-- Level 3 Card -->
+      <g transform="translate(12, 188)">
+        <rect x="0" y="0" width="{p2_w-56}" height="72" rx="5" fill="#1E293B" stroke="#D97706" stroke-width="1"/>
+        <rect x="8" y="8" width="65" height="20" rx="3" fill="#B45309"/>
+        <text x="40" y="22" fill="#FFFFFF" font-size="9.5" font-weight="700" text-anchor="middle">LEVEL 3</text>
+        <text x="80" y="22" fill="#FBBF24" font-size="11.5" font-weight="700">Semantic Anchors &amp; Conditions</text>
+        <text x="12" y="42" fill="#CBD5E1" font-size="10">Struct Fields: struct aarch64_frame (locals_offset, canary_offset)</text>
+        <text x="12" y="56" fill="#CBD5E1" font-size="10">Guard Predicate: if (cfun-&gt;calls_alloca || has_nonlocal_label)</text>
+        <text x="12" y="70" fill="#CBD5E1" font-size="10">Offset Calc: frame.locals_offset = frame.saved_regs_offset + var_size</text>
+      </g>
+    </g>
+
+    <path d="M {p2_w/2} 484 L {p2_w/2} 504" stroke="#2DD4BF" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+
+    <!-- Sub-Block 3: Unique-ID Log Instrumentation Engine -->
+    <g transform="translate(16, 508)">
+      <rect x="0" y="0" width="{p2_w-32}" height="175" rx="8" fill="#0F172A" stroke="#F59E0B" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#F59E0B">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_target}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Unique-ID Log Instrumentation</text>
+      <text x="40" y="43" fill="#FCD34D" font-size="10.5">Non-colliding Probe Injection at Critical Anchors</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p2_w-56}" height="110" rx="5" fill="#1E293B" stroke="#475569" stroke-width="1"/>
+        <text x="10" y="18" fill="#94A3B8" font-size="9" font-family="monospace">// Auto-injected at aarch64_layout_frame:6915</text>
+        <text x="10" y="34" fill="#38BDF8" font-size="9" font-family="monospace">fprintf(stderr, "[DEFUZZ_LOG_SP_01] Entry: calls_alloca=%d\\n",</text>
+        <text x="10" y="48" fill="#38BDF8" font-size="9" font-family="monospace">        cfun-&gt;calls_alloca);</text>
+        <text x="10" y="68" fill="#FBBF24" font-size="9" font-family="monospace">fprintf(stderr, "[DEFUZZ_LOG_SP_02] Frame Offset: local=%lld, ",</text>
+        <text x="10" y="82" fill="#FBBF24" font-size="9" font-family="monospace">        frame.locals_offset);</text>
+        <text x="10" y="98" fill="#34D399" font-size="9" font-family="monospace">// Re-evaluate compiler internal invariant state</text>
+      </g>
+    </g>
+
+    <path d="M {p2_w/2} 683 L {p2_w/2} 703" stroke="#2DD4BF" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+
+    <!-- Sub-Block 4: Compiler Build & Instrumented Instance -->
+    <g transform="translate(16, 707)">
+      <rect x="0" y="0" width="{p2_w-32}" height="153" rx="8" fill="url(#card-compiler)" stroke="#10B981" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#34D399">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_gear}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Instrumented Target Compiler</text>
+      <text x="40" y="43" fill="#A7F3D0" font-size="10.5">Rebuilt Observable GCC / LLVM Binary</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="170" height="85" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1"/>
+        <text x="12" y="20" fill="#A7F3D0" font-size="11" font-weight="700">Instrumented GCC</text>
+        <text x="12" y="38" fill="#E2E8F0" font-size="9.5">• gcc-13.2-defuzz-log</text>
+        <text x="12" y="54" fill="#E2E8F0" font-size="9.5">• -fstack-usage enabled</text>
+        <text x="12" y="70" fill="#E2E8F0" font-size="9.5">• [DEFUZZ_LOG_*] emitters</text>
+
+        <rect x="184" y="0" width="170" height="85" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1"/>
+        <text x="196" y="20" fill="#A7F3D0" font-size="11" font-weight="700">Instrumented LLVM</text>
+        <text x="196" y="38" fill="#E2E8F0" font-size="9.5">• clang-17-defuzz-log</text>
+        <text x="196" y="54" fill="#E2E8F0" font-size="9.5">• -fstack-size-section</text>
+        <text x="196" y="70" fill="#E2E8F0" font-size="9.5">• Pass timing &amp; DAG dump</text>
+      </g>
+    </g>
+  </g>
+''')
+
+    # =========================================================================
+    # PHASE 3: AGENTIC DIRECTED FUZZING LOOP
+    # =========================================================================
+    svg.append(f'''
+  <!-- ==================== PHASE 3 CONTAINER ==================== -->
+  <g transform="translate({p3_x}, {col_y})">
+    <rect x="0" y="0" width="{p3_w}" height="{col_h}" rx="12" fill="url(#bg-phase3)" stroke="#0284C7" stroke-width="1.5" filter="url(#card-shadow)"/>
+    
+    <path d="M 0 12 Q 0 0 12 0 L {p3_w-12} 0 Q {p3_w} 0 {p3_w} 12 L {p3_w} 42 L 0 42 Z" fill="url(#header-phase3)"/>
+    <text x="16" y="27" fill="#FFFFFF" font-size="15" font-weight="700" letter-spacing="0.3">③ Invariant-Guided Agentic Fuzzing Loop</text>
+    <rect x="{p3_w-90}" y="10" width="75" height="22" rx="11" fill="#082F49" stroke="#7DD3FC" stroke-width="1"/>
+    <text x="{p3_w-52}" y="25" fill="#BAE6FD" font-size="10.5" font-weight="700" text-anchor="middle">ROUND LOOP</text>
+
+    <!-- Sub-Block 1: Equal-Budget Invariant Scheduler -->
+    <g transform="translate(16, 56)">
+      <rect x="0" y="0" width="{p3_w-32}" height="65" rx="8" fill="#0F172A" stroke="#0369A1" stroke-width="1.2"/>
+      <text x="14" y="22" fill="#38BDF8" font-size="11.5" font-weight="700">EQUAL-BUDGET INVARIANT SCHEDULER</text>
+      <text x="14" y="40" fill="#94A3B8" font-size="10">Allocates equal time budget T_inv &amp; round budget per Invariant Target.</text>
+      <text x="14" y="54" fill="#BAE6FD" font-size="10" font-weight="600">Current Active Target: &lt;INV-SP-L02, AArch64, GCC-13&gt;</text>
+    </g>
+
+    <path d="M {p3_w/2} 121 L {p3_w/2} 140" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+    <!-- Sub-Block 2: Generator Agent (PBT Formulation) -->
+    <g transform="translate(16, 144)">
+      <rect x="0" y="0" width="{p3_w-32}" height="270" rx="8" fill="url(#card-agent)" stroke="#38BDF8" stroke-width="1.5" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#38BDF8">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_brain}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Generator Agent (PBT Formulation)</text>
+      <text x="40" y="43" fill="#7DD3FC" font-size="10.5">Synthesizes Parameterized C/C++ Test Harnesses (Aware of Invariant &amp; Checker)</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p3_w-56}" height="42" rx="5" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <text x="10" y="18" fill="#BAE6FD" font-size="10" font-weight="700">Context Inputs:</text>
+        <text x="95" y="18" fill="#E2E8F0" font-size="9.5">• Active Invariant &amp; Grounded Code Slices</text>
+        <text x="10" y="32" fill="#E2E8F0" font-size="9.5">• Checker Protocol Definition  • Static/Dynamic One-Shot Templates  • Guidance</text>
+      </g>
+
+      <g transform="translate(12, 104)">
+        <rect x="0" y="0" width="{p3_w-56}" height="152" rx="5" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <text x="10" y="18" fill="#38BDF8" font-size="10.5" font-weight="700">Parameterized C/C++ Seed (PBT Harness):</text>
+        
+        <rect x="8" y="26" width="{p3_w-72}" height="34" rx="4" fill="#1E293B"/>
+        <text x="16" y="40" fill="#E2E8F0" font-size="9.5" font-weight="600">1. Macro Matrix (-D Injection)</text>
+        <text x="16" y="52" fill="#94A3B8" font-size="9">#define BUF_SIZE N, #ifdef USE_VLA / USE_ALLOCA</text>
+
+        <rect x="8" y="64" width="{p3_w-72}" height="36" rx="4" fill="#1E293B"/>
+        <text x="16" y="78" fill="#E2E8F0" font-size="9.5" font-weight="600">2. Anti-Optimization Barriers</text>
+        <text x="16" y="92" fill="#94A3B8" font-size="9">asm volatile("" : "+m"(buf) : : "memory"); __attribute__((noinline))</text>
+
+        <rect x="8" y="104" width="{p3_w-72}" height="38" rx="4" fill="#1E293B"/>
+        <text x="16" y="118" fill="#E2E8F0" font-size="9.5" font-weight="600">3. Dynamic Runtime Exploration</text>
+        <text x="16" y="132" fill="#94A3B8" font-size="9">main(argc, argv) accepts dynamic size &amp; sweep probe offsets</text>
+      </g>
+    </g>
+
+    <path d="M {p3_w/2} 414 L {p3_w/2} 434" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+    <!-- Sub-Block 3: Compilation & Execution -->
+    <g transform="translate(16, 438)">
+      <rect x="0" y="0" width="{p3_w-32}" height="135" rx="8" fill="#0F172A" stroke="#0284C7" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#38BDF8">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_gear}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Compile &amp; Execute (Instrumented)</text>
+      <text x="40" y="43" fill="#7DD3FC" font-size="10.5">Target Compiler compiles Seed $\rightarrow$ Collects Diagnostics &amp; Logs</text>
+
+      <g transform="translate(12, 52)">
+        <rect x="0" y="0" width="195" height="70" rx="5" fill="#1E293B" stroke="#0369A1" stroke-width="1"/>
+        <text x="10" y="18" fill="#38BDF8" font-size="10" font-weight="700">Compiler Artifacts</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9.5">• Binary Executable (ELF)</text>
+        <text x="10" y="48" fill="#E2E8F0" font-size="9.5">• -fstack-usage (.su file)</text>
+        <text x="10" y="62" fill="#E2E8F0" font-size="9.5">• Optimization remarks stream</text>
+
+        <rect x="205" y="0" width="200" height="70" rx="5" fill="#1E293B" stroke="#0369A1" stroke-width="1"/>
+        <text x="10" y="18" fill="#38BDF8" font-size="10" font-weight="700">Runtime Execution Logs</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9.5">• [DEFUZZ_LOG_*] trace stream</text>
+        <text x="10" y="48" fill="#E2E8F0" font-size="9.5">• Exit Code / Signal (SIGABRT/SEGV)</text>
+        <text x="10" y="62" fill="#E2E8F0" font-size="9.5">• GDB / Disassembly trace</text>
+      </g>
+    </g>
+
+    <path d="M {p3_w/2} 573 L {p3_w/2} 593" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+    <!-- Sub-Block 4: Oracle Evaluation Gateway -->
+    <g transform="translate(16, 597)">
+      <rect x="0" y="0" width="{p3_w-32}" height="263" rx="8" fill="url(#card-oracle)" stroke="#38BDF8" stroke-width="1.5" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#38BDF8">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_shield}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Oracle Adjudication Engine</text>
+      <text x="40" y="43" fill="#7DD3FC" font-size="10.5">Evaluates against Deterministic Checker Suite</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p3_w-56}" height="90" rx="5" fill="#0F172A" stroke="#0284C7" stroke-width="1"/>
+        <text x="12" y="20" fill="#E2E8F0" font-size="10.5" font-weight="700">Adjudication Rule Set:</text>
+        <text x="12" y="38" fill="#34D399" font-size="10">• PASS (Not Violated):</text>
+        <text x="135" y="38" fill="#CBD5E1" font-size="9.5">Canary intact or trap triggered correctly (SIGABRT)</text>
+        <text x="12" y="56" fill="#F87171" font-size="10">• VIOLATED (Bug Found):</text>
+        <text x="145" y="56" fill="#CBD5E1" font-size="9.5">Canary bypassed to return address (SIGSEGV) / Missing Symbol</text>
+        <text x="12" y="74" fill="#FBBF24" font-size="10">• NOT APPLICABLE (NA):</text>
+        <text x="150" y="74" fill="#CBD5E1" font-size="9.5">Preconditions unfulfilled or frame optimized out</text>
+      </g>
+
+      <g transform="translate(12, 154)">
+        <rect x="0" y="0" width="195" height="95" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1.2"/>
+        <text x="12" y="22" fill="#34D399" font-size="11.5" font-weight="700">Branch A: Not Violated</text>
+        <text x="12" y="40" fill="#A7F3D0" font-size="9.5">Seed failed to break invariant.</text>
+        <text x="12" y="56" fill="#E2E8F0" font-size="9.5">$\rightarrow$ Collect deep diagnostics</text>
+        <text x="12" y="72" fill="#E2E8F0" font-size="9.5">$\rightarrow$ Enter Feedback Agent</text>
+
+        <rect x="210" y="0" width="195" height="95" rx="5" fill="#4C0519" stroke="#E11D48" stroke-width="1.2"/>
+        <text x="222" y="22" fill="#FB7185" font-size="11.5" font-weight="700">Branch B: Violated!</text>
+        <text x="222" y="40" fill="#FDA4AF" font-size="9.5">Defense bypassed or broken!</text>
+        <text x="222" y="56" fill="#E2E8F0" font-size="9.5">$\rightarrow$ Persist PoC &amp; Log Trace</text>
+        <text x="222" y="72" fill="#E2E8F0" font-size="9.5">$\rightarrow$ Trigger Lateral Fuzzing</text>
+      </g>
+    </g>
+  </g>
+''')
+
+    # Connecting Pipes: Phase 3 -> Phase 4
+    svg.append(f'''
+  <path d="M {p3_x+210} {col_y+800} L {p4_x} {col_y+160}" stroke="#F59E0B" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrow-amber)" fill="none"/>
+  <rect x="{p3_x+p3_w+10}" y="{col_y+420}" width="65" height="22" rx="4" fill="#0F172A" stroke="#F59E0B" stroke-width="1"/>
+  <text x="{p3_x+p3_w+42}" y="{col_y+435}" fill="#FCD34D" font-size="9" font-weight="700" text-anchor="middle">Not Violated</text>
+
+  <path d="M {p3_x+420} {col_y+800} L {p4_x} {col_y+720}" stroke="#E11D48" stroke-width="2.5" marker-end="url(#arrow-rose)" fill="none"/>
+  <rect x="{p3_x+p3_w+10}" y="{col_y+750}" width="65" height="22" rx="4" fill="#0F172A" stroke="#E11D48" stroke-width="1"/>
+  <text x="{p3_x+p3_w+42}" y="{col_y+765}" fill="#FDA4AF" font-size="9" font-weight="700" text-anchor="middle">Violated (PoC)</text>
+''')
+
+    # =========================================================================
+    # PHASE 4: DIAGNOSTICS FEEDBACK & LATERAL DISCOVERY
+    # =========================================================================
+    svg.append(f'''
+  <!-- ==================== PHASE 4 CONTAINER ==================== -->
+  <g transform="translate({p4_x}, {col_y})">
+    <rect x="0" y="0" width="{p4_w}" height="{col_h}" rx="12" fill="url(#bg-phase4)" stroke="#D97706" stroke-width="1.5" filter="url(#card-shadow)"/>
+    
+    <path d="M 0 12 Q 0 0 12 0 L {p4_w-12} 0 Q {p4_w} 0 {p4_w} 12 L {p4_w} 42 L 0 42 Z" fill="url(#header-phase4)"/>
+    <text x="16" y="27" fill="#FFFFFF" font-size="15" font-weight="700" letter-spacing="0.3">④ Feedback, Refinement &amp; Lateral Fuzzing</text>
+    <rect x="{p4_w-90}" y="10" width="75" height="22" rx="11" fill="#451A03" stroke="#FCD34D" stroke-width="1"/>
+    <text x="{p4_w-52}" y="25" fill="#FDE68A" font-size="10.5" font-weight="700" text-anchor="middle">DUAL-PATH</text>
+
+    <!-- Sub-Block 1: Feedback Agent -->
+    <g transform="translate(16, 56)">
+      <rect x="0" y="0" width="{p4_w-32}" height="275" rx="8" fill="url(#card-feedback)" stroke="#F59E0B" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#FBBF24">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_diag}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Feedback Agent (Diagnostic Analysis)</text>
+      <text x="40" y="43" fill="#FCD34D" font-size="10.5">Aggregates Compiler Diagnostics &amp; Unique-ID Trace Stream</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p4_w-56}" height="105" rx="5" fill="#0F172A" stroke="#D97706" stroke-width="1"/>
+        <text x="10" y="18" fill="#FBBF24" font-size="10.5" font-weight="700">Advanced Diagnostic Inputs (via MCP):</text>
+        
+        <rect x="8" y="26" width="{p4_w-72}" height="32" rx="4" fill="#1E293B"/>
+        <text x="16" y="40" fill="#E2E8F0" font-size="9.5" font-weight="600">• Optimization Elimination Detector</text>
+        <text x="16" y="52" fill="#94A3B8" font-size="9">-fstack-usage == 0? -Wstack-protector? SRA / DCE dropped vars?</text>
+
+        <rect x="8" y="62" width="{p4_w-72}" height="35" rx="4" fill="#1E293B"/>
+        <text x="16" y="76" fill="#E2E8F0" font-size="9.5" font-weight="600">• Unique-ID Log Trace Verification</text>
+        <text x="16" y="88" fill="#94A3B8" font-size="9">Did execution reach [DEFUZZ_LOG_SP_01] calls_alloca branch?</text>
+      </g>
+
+      <g transform="translate(12, 168)">
+        <rect x="0" y="0" width="195" height="95" rx="5" fill="#1E293B" stroke="#38BDF8" stroke-width="1"/>
+        <text x="10" y="20" fill="#38BDF8" font-size="10.5" font-weight="700">Path 1: Seed Guidance</text>
+        <text x="10" y="38" fill="#E2E8F0" font-size="9.5">Direct Generator to inject:</text>
+        <text x="10" y="52" fill="#94A3B8" font-size="9">• Memory barriers (volatile)</text>
+        <text x="10" y="66" fill="#94A3B8" font-size="9">• Force dynamic stack size</text>
+        <text x="10" y="80" fill="#94A3B8" font-size="9">• Trigger critical condition</text>
+
+        <rect x="210" y="0" width="195" height="95" rx="5" fill="#1E293B" stroke="#C084FC" stroke-width="1"/>
+        <text x="10" y="20" fill="#C084FC" font-size="10.5" font-weight="700">Path 2: Checker Refine</text>
+        <text x="10" y="38" fill="#E2E8F0" font-size="9.5">If NA / Error counts $\ge \tau$:</text>
+        <text x="10" y="52" fill="#94A3B8" font-size="9">• Trigger Checker Rewriting</text>
+        <text x="10" y="66" fill="#94A3B8" font-size="9">• Align compiler assumptions</text>
+        <text x="10" y="80" fill="#94A3B8" font-size="9">• Re-pass Grounding Gate</text>
+      </g>
+    </g>
+
+    <!-- Sub-Block 2: Checker Refinement Agent -->
+    <g transform="translate(16, 345)">
+      <rect x="0" y="0" width="{p4_w-32}" height="195" rx="8" fill="url(#card-agent)" stroke="#C084FC" stroke-width="1.4" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#C084FC">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_brain}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Checker Refinement Agent</text>
+      <text x="40" y="43" fill="#E9D5FF" font-size="10.5">Inter-Tier Self-Healing on Persistent Oracle/Precondition Flaws</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p4_w-56}" height="128" rx="5" fill="#0F172A" stroke="#7E22CE" stroke-width="1"/>
+        <text x="12" y="20" fill="#C084FC" font-size="10.5" font-weight="700">Adaptive Refinement Protocol:</text>
+        
+        <text x="12" y="40" fill="#E2E8F0" font-size="9.5">1. Analyzes compiler diagnostic traces &amp; failed probe assumptions</text>
+        <text x="12" y="58" fill="#E2E8F0" font-size="9.5">2. Synthesizes patched Checker code (Static symbol / Dynamic offset)</text>
+        <text x="12" y="76" fill="#E2E8F0" font-size="9.5">3. <tspan fill="#F59E0B" font-weight="700">Grounding Gate Re-Verification</tspan>: Validates on baseline test set</text>
+        <text x="12" y="94" fill="#E2E8F0" font-size="9.5">4. Replaces catalog entry in Blackboard with new version tag</text>
+        <text x="12" y="114" fill="#34D399" font-size="9.5" font-weight="600">$\rightarrow$ Resumes seed generation with zero goalpost drift</text>
+      </g>
+    </g>
+
+    <!-- Sub-Block 3: Bug Confirmed & Lateral Fuzzing -->
+    <g transform="translate(16, 555)">
+      <rect x="0" y="0" width="{p4_w-32}" height="305" rx="8" fill="url(#card-bug)" stroke="#FB7185" stroke-width="1.5" filter="url(#card-shadow)"/>
+      <g transform="translate(14, 12)" fill="#FB7185">
+        <svg width="20" height="20" viewBox="0 0 24 24">{icon_bug}</svg>
+      </g>
+      <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Bug Confirmed &amp; Lateral Fuzzing</text>
+      <text x="40" y="43" fill="#FECDD3" font-size="10.5">Persists Confirmed PoC + Steers Generator for Variant Mining</text>
+
+      <g transform="translate(12, 54)">
+        <rect x="0" y="0" width="{p4_w-56}" height="105" rx="5" fill="#0F172A" stroke="#BE123C" stroke-width="1"/>
+        <text x="12" y="20" fill="#FB7185" font-size="11" font-weight="700">Confirmed Silent Defense Failure:</text>
+        <text x="12" y="40" fill="#E2E8F0" font-size="9.5">• Target: GCC 13.2 AArch64 Frame Layout (CVE-2023-4039 Class)</text>
+        <text x="12" y="58" fill="#E2E8F0" font-size="9.5">• Root Cause: VLA dynamic stack allocation placed above canary slot</text>
+        <text x="12" y="76" fill="#E2E8F0" font-size="9.5">• Observable Effect: Crafted payload bypasses canary directly to LR</text>
+        <text x="12" y="94" fill="#34D399" font-size="9.5" font-weight="600">• PoC Artifact: Minimized Seed + Reproducible Compiler Flags</text>
+      </g>
+
+      <g transform="translate(12, 168)">
+        <rect x="0" y="0" width="{p4_w-56}" height="125" rx="5" fill="#0F172A" stroke="#BE123C" stroke-width="1"/>
+        <text x="12" y="20" fill="#F43F5E" font-size="11" font-weight="700">↔️ Lateral Thinking Guidance (横向发散探索):</text>
+        <text x="12" y="38" fill="#E2E8F0" font-size="9.5">When a bug is confirmed, guide Generator to explore:</text>
+        <text x="12" y="54" fill="#FECDD3" font-size="9">• Orthogonal syntax variants (alloca vs VLA vs dynamic struct array)</text>
+        <text x="12" y="70" fill="#FECDD3" font-size="9">• Multiple nested function frames &amp; non-local goto labels</text>
+        <text x="12" y="86" fill="#FECDD3" font-size="9">• Optimization flags matrix (-O1, -O2, -O3, -Os, -fno-omit-frame-pointer)</text>
+        <text x="12" y="104" fill="#FBBF24" font-size="9.5" font-weight="600">$\rightarrow$ Exploits maximum vulnerability surface under same invariant</text>
+      </g>
+    </g>
+  </g>
+''')
+
+    # =========================================================================
+    # MAJOR GLOBAL FEEDBACK LOOPS
+    # =========================================================================
+    svg.append(f'''
+  <!-- Feedback Guidance Pipe back to Generator Agent -->
+  <path d="M {p4_x+16+100} {col_y+331} C {p4_x-60} {col_y+360}, {p3_x+p3_w+40} {col_y+240}, {p3_x+p3_w-16} {col_y+240}" stroke="#F59E0B" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow-amber)" fill="none"/>
+  <rect x="{p3_x+p3_w-20}" y="{col_y+290}" width="95" height="24" rx="5" fill="#0F172A" stroke="#F59E0B" stroke-width="1.2"/>
+  <text x="{p3_x+p3_w+27}" y="{col_y+306}" fill="#FCD34D" font-size="9.5" font-weight="700" text-anchor="middle">Seed Guidance ↺</text>
+''')
+
+    svg.append(f'''
+  <!-- Checker Refinement Pipe back to Phase 1 Blackboard -->
+  <path d="M {p4_x+16+100} {col_y+540} C {p4_x-100} {col_y+940}, {p2_x+200} {col_y+1020}, {p1_x+p1_w/2} {col_y+385}" stroke="#C084FC" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow-purple)" fill="none"/>
+  <rect x="{p2_x+120}" y="{col_y+960}" width="160" height="26" rx="5" fill="#0F172A" stroke="#C084FC" stroke-width="1.2"/>
+  <text x="{p2_x+200}" y="{col_y+977}" fill="#E9D5FF" font-size="10" font-weight="700" text-anchor="middle">Patched Checker Catalog ↺</text>
+''')
+
+    svg.append(f'''
+  <!-- Lateral Fuzzing Guidance back to Generator Agent -->
+  <path d="M {p4_x+16+100} {col_y+860} C {p4_x-80} {col_y+900}, {p3_x+p3_w+60} {col_y+340}, {p3_x+p3_w-16} {col_y+340}" stroke="#FB7185" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow-rose)" fill="none"/>
+  <rect x="{p3_x+p3_w-15}" y="{col_y+500}" width="105" height="24" rx="5" fill="#0F172A" stroke="#FB7185" stroke-width="1.2"/>
+  <text x="{p3_x+p3_w+37}" y="{col_y+516}" fill="#FDA4AF" font-size="9.5" font-weight="700" text-anchor="middle">Lateral Mining ↔️</text>
+''')
+
+    # Footer Legend
+    svg.append(f'''
+  <!-- Footer Legend -->
+  <g transform="translate(40, {H-45})">
+    <rect x="0" y="0" width="{W-80}" height="32" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+    <text x="16" y="20" fill="#94A3B8" font-size="11" font-weight="700">LEGEND:</text>
+
+    <!-- Dataflow -->
+    <line x1="80" y1="16" x2="115" y2="16" stroke="#38BDF8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+    <text x="122" y="20" fill="#E2E8F0" font-size="10.5">Main Pipeline Dataflow</text>
+
+    <!-- Control & Probe -->
+    <line x1="270" y1="16" x2="305" y2="16" stroke="#2DD4BF" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrow-cyan)"/>
+    <text x="312" y="20" fill="#E2E8F0" font-size="10.5">Log Instrumentation &amp; Target Probe</text>
+
+    <!-- Diagnostics Loop -->
+    <line x1="510" y1="16" x2="545" y2="16" stroke="#F59E0B" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrow-amber)"/>
+    <text x="552" y="20" fill="#E2E8F0" font-size="10.5">Diagnostics &amp; Seed Guidance Loop</text>
+
+    <!-- Checker Refinement -->
+    <line x1="760" y1="16" x2="795" y2="16" stroke="#C084FC" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrow-purple)"/>
+    <text x="802" y="20" fill="#E2E8F0" font-size="10.5">Checker Self-Healing Loop</text>
+
+    <!-- Lateral Bug Fuzzing -->
+    <line x1="975" y1="16" x2="1010" y2="16" stroke="#FB7185" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrow-rose)"/>
+    <text x="1017" y="20" fill="#E2E8F0" font-size="10.5">Lateral Vulnerability Mining</text>
+
+    <text x="{W-100}" y="20" fill="#64748B" font-size="10.5" font-weight="600" text-anchor="end">Target: IEEE S&amp;P / USENIX Security / ACM CCS / NDSS</text>
+  </g>
+</svg>
+''')
+
+    return "".join(svg)
+
+if __name__ == "__main__":
+    svg_str = generate_svg()
+    out_dir = Path("/mnt/propagation/sources/research-defuzz-paper-0a9b3a25380dae02/figures")
+    svg_path = out_dir / "architecture_master_v7.svg"
+    pdf_path = out_dir / "architecture_master_v7.pdf"
+    png_path = out_dir / "architecture_master_v7.png"
+
+    with open(svg_path, "w", encoding="utf-8") as f:
+        f.write(svg_str)
+    print(f"[+] Wrote SVG: {svg_path} ({len(svg_str)} bytes)")
+
+    cairosvg.svg2pdf(bytestring=svg_str.encode("utf-8"), write_to=str(pdf_path))
+    print(f"[+] Converted to PDF: {pdf_path}")
+
+    cairosvg.svg2png(bytestring=svg_str.encode("utf-8"), write_to=str(png_path), scale=2.0)
+    print(f"[+] Converted to PNG: {png_path}")

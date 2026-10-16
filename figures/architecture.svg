@@ -1,102 +1,920 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" data-d2-version="0.7.1" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1256 676"><svg class="d2-2619726779 d2-svg" width="1256" height="676" viewBox="-101 -101 1256 676"><rect x="-101.000000" y="-101.000000" width="1256.000000" height="676.000000" rx="0.000000" fill="#FFFFFF" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-2619726779 .text-bold {
-	font-family: "d2-2619726779-font-bold";
-}
-@font-face {
-	font-family: d2-2619726779-font-bold;
-	src: url("data:application/font-woff;base64,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");
-}
-.d2-2619726779 .text-italic {
-	font-family: "d2-2619726779-font-italic";
-}
-@font-face {
-	font-family: d2-2619726779-font-italic;
-	src: url("data:application/font-woff;base64,d09GRgABAAAAABMgAAoAAAAAHUAAARhRAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAAA9AAAAGAAAABgW1SVeGNtYXAAAAFUAAAAzAAAAR4G4SljZ2x5ZgAAAiAAAAvjAAAQ2MKXZNRoZWFkAAAOBAAAADYAAAA2G7Ur2mhoZWEAAA48AAAAJAAAACQLeAjgaG10eAAADmAAAADZAAAA8GnVBtZsb2NhAAAPPAAAAHoAAAB6imSGDm1heHAAAA+4AAAAIAAAACAAVAD2bmFtZQAAD9gAAAMmAAAIMgntVzNwb3N0AAATAAAAACAAAAAg/8YAMgADAeEBkAAFAAACigJY//EASwKKAlgARAFeADIBIwAAAgsFAwMEAwkCBCAAAHcAAAADAAAAAAAAAABBREJPAAEAIP//Au7/BgAAA9gBESAAAZMAAAAAAeYClAAAACAAA3ichM+5LkQBHEbx3zWXsYxt7PsMw9jGNrZQKYWIKPRK0YhS4SE8hAdAorO8iMRTaCR/cVUqX33ynRwkchIUpEkRFSWpVEnVgkU1y+p27Tt07NS5S9eeyrcR/KFW7dhz4MiJMxeufqn4UPh5l5ePr/iMt3iNl3iOx3iI+7h5v8v8/y9Rt2XFuk01S5lxTYOcVKMmec1atGpT0K5Dpy7dinr06tNvwKAhw0aMGjNuQknZpCkV02ZUzZozn/Vs2OYbAAD//wEAAP//wZsqU3icfFd9bBvneX+f9048WaY+yCOPJi2SIo+8k6gjJfFEHimKpCjqg+KHZEmWrFgflh1/xLbiKnbkJLPdOPaWJdniMYXXIUWAFOs2tA3QDE4LrNiWtnGxaM08bEO6ZWsToE2qFPaKxILmpUF0N9yRoigN2z+nF+L7vs/7/J7f7/e8L6pBHoTwOXwTEWgPakRGZEZIpF0EIUoSayFEnmcpSuJpmvJcg9VrXyPTh3/V+vXfCk5y+Jlv5f5z8TV8c3MJrs4//bQ8+9yJE4fu3ZN98K/3EEIIK+8gBD/FRbQHGRCiKZHnOJ7V6QBEmuVZ6sOe23VkHUnaRPkf4Pjh/Ljx16fhqeXl7jOR6Cl5HBc3l+/cQYhALEK4BReRAdnUsUiLQcZs0ukoitH+soQYDIe6OXZ7wF5//chSe9oD4tDw5dGehYXDg9nZs+cXzhVGHsfF7LAwINSS+lRkZF6Ai8OSP7h5dzAfjKvnBhRVNrAfv4KcCNW4OS7UncBikLFQHMe6G7DZxDBiMCxZdDpw5x4Jdx6+ko+M7wvTYa7nSL/HnY21pltYz7w+/eRo4eYTw5KvrYWPH3+yNzYfatkfdPpVbLScwho2dFVGLC8Gw1sZ/M7zL069+qXp6anL6VMPh3Hx95964rsn+g5+9ej86dI51T2acBHt1WpGuSiRYikXxV6HM/Xyh777DZ+IwDXgYuqn/Q/6q+bvqZpPlGf779d/2ouLqY/65X/bwiCGX0FuDYP/AwKJlURCpwPh4pXO2WfGY+NWiZZaE8cGPWw+6YnS3ufq/zHqWdC/9OTozSeGKkD0LIT3NX2vT/7I4a3kcXorD5Fw0SLB0i6CvT4agdZI4fpoUn4vgYvyPTBvLkNEXi2tQRu4iIjSGvb66HWVMJX9DuEi0pd+E0GkaJagKPb6aIqAkZkHfzz+5ef9uCj/DQx8IS/BsWd/vrUOvoKLqKZ8DnXBRTDV4+LmrS38TuJiuWK0RQyHJTU2obKaUs/wVR+pa6gbzF0v3GwndY11Q7gozz3f9agIc5vL8I0XxTNB+VWt/r3KBl7Ar6Am1FKNMGM2NWA+mMAqB0pIg/PcSmB6ZSh7ojsw/Xg6dCjhzo6q3xH9n1zOFVcGBy5N5l5aGUz3HluJHl2JHVvpWbxY4Zhfw9VUzTGWoLdl8v2589lnDp7uTh05cSafOYGL2ekDp7rkz2D4wFhURJV9eFxE9YjZ3keFdMdO35177Nzkhcml89LAwwvHc5lFXByanD1nkD8ERr4LUxND4Y4Sb/XKBsj4FeRDyOLmeEkjU6ib43lVbOFwhWk6ndnEWCwllX+cXm6N2qek3nG/N++LheZisUWnaB0KeEP2Lk++ozt2Ut/T094eHIh4gkzANiIFJ4LdrQFHm7NzP9fB+JuHpZ7ZbgRoHiEcwkVEqdmwkotiib9YebMe3qn/wQoupNObb5TOOaZsaPVmyhXSqq0eSeU+rTHfcfysjsyO5vb0DUYOm8fzE83X9KdPmjussCw/73cPFebOwlfkszeeUvebQAinNByRSIg0w5QZBC/GxvbX1BKkNWT73kH5W7go3ww9Gg59qRuWNEojjHhlAz6DdWRSq2HZVqQoiQQrsTodr+qxIs83+vJCdkHk4waSThxN1pLsjJEb8wjmYLMnHXJ26Wenhp6aE1tdcdmW8Xb0BTr+nXP7RuaDyXgpnlPZgE/xKjKrHUKtEkuxtEhRolaeHSzVfPguHzcQpuSNAs9gz0G/Fj7kSYccnW3ucTZgEvWtrjhefXPR3n54Wg3d5xuZFxNxn/djzo0AeZUNuAXrqHlHdtssKDvue2PHhcLRkNDL+GnO3jkdjva0hBm3raA/OT9wYarDbe20mAeW0/1DNkPQ5K1gh/mqXLax+//B6zESTVyhWEZv1LsbPb7lyJubkd3wYS2XH8A6siFvdTxNNS5dpXsQomb1aoYfTZ/25+Y6pZRDXyP/eE9L2mePWhz28ZcVTBjb2NCC/szRweUJIXAg2Cw2JA94rQbR7ATv3n31zV3OKQSoHSF4Eb+LLBqnk7haRZRm9O1Tyb2ppsbRuM1n3F+33+BqqzUc0z88Bd+M1oxnJ+v3SlRdsH0yIc+omIHigXVYR04UqFapJOl07E726XTEDvRe65pmPc2DrYlsg5U72BE/0D4y18UlDASdPElfiLLj7namq5lNiY6On3P2kMWd73uEE6an0o8/FFT5SBw5Ca523z9x7rahmc5YrKRFJ0LwHl5FVs2BtnlIESytwqimSThvFDqbyLYJIRGqTeR7STLTnAkM4tV7cbYjFXF65J+AYNpXn/MF5G8qiron+hzfwhyKIoR0qCezHes3eLXSP2i1f/AU5bxRWMS/nXlrZXR+2YZXZTvAO/KvfnP+EgIkKBvoc7yKjCpaoe6SPZhN5VI/mtJdKlwBMBA6CuoYfdJgxWc3X6L2EEbAMZKsxMV3YV31RTVmKUVLOVHdjkyrkz6apEhukuvpqumY8cbDJJkoxEly2JwRBlUMhphM+yCsjXi6pFZBTEUMDlM1DtujbZxhHe2rPsNumNWIbROBHShrEXaDvO1dP4N11Ijs1XoomUjpulMS+btjC0J2ITh2RMgt+PzjYjiofvSPzA5emAqUvn39ywP9w+nlgf4h7Y75QBHhU1gvaZuqOnEDZjXXougdPlX3QlJHeKcCmsSDXC+Njc4/r/apO/iNPqe/LHDnI68ClI2K+7XXtc2Py7COmqowslDcFjZ7SXvebzXvb7J58s44rM0L8T0DtcmYfAeB8oWyAVdgHfG7e9/u1qd2vlLj+0bXvLXT0sf54m2RQFQYEQLZ5gAturiucEuiu3NC393KOVsDrI132hJt7Smvx9FqsvmdDs7o7hX8A171zL3KBszgpYq/hiXVJUTNGar89ft93SREh/fmPan9l/RXokSzu8G219DUoU/6G231YIzWPPtsQr5rNDocdTUS1ajuHVE24BNYU7Vp2e6TZfbTZYt9rcLMjH1YGMyrTan1oL5fMjhpCMvv0laVMjAj27KsWMI5hhD8Atb+d7+8Npz3kDqSNHjoPyrIm7Amf8zmWM+IB6yyrbR2CCH8Nqwh16612yOCJUrvEYo4zeabAIBs3N90NWfAGMgGW9PTmfePNGj/tTdehDX5l+4Bt3vADY6qkQ3q2IzHk2HlBwiUdxGCfynhwNK8aCmHkkTKwpbfPhQl/MfsqK+2gSIbWxqnJlcfHhNqDXVkk5teAPzREsObTW3mpf+6f54JMIxguYAQKG8pHfAhrCEbQpTGGc2IdyDSgHV1LQ1Wo9Gbshon85x6mzB4jX+Yl39pjWX+maKie+JBFj6WP3EVWDbvBsPm/Y6CoGGlPEAIvgNr6ruAlUC9EIFI1dVC+v16iNfKfyvrBbic8Mu/lyhha0MIruIva/d1Sb1BhSWREClb/R8sPlY3JcUev6bvgw+CevfmW31b+/8Yv6CuY6UEURYjXxEq5aLqahdvLHSIoZaUmxcOdU7M+CYuT4JJHxi/dOyhgNDrcnZybQ8NhBYWlzP96p7/rWzA3+MXUOsuHbFSxVEofss5zSUh/XXqhEO0ZLsGDh08oR+b5YOiPW3nJ+cPHMplQ7H4aX3K3+ruzkXF/p62uMMXbraIyQP98TkzacgE4w91qXF/ocyhIlpSta9mIGnNsBzHtLcjSmHGwdptzYf/LGDs9dgYK+9xjKh3OEVBFmUDrcL7mEcx1AePIZ3KcEXR9tz5/04N56vwbXQfv6q+R2iVRdRVS2OO9sG3X56be1l7j3wAdWBV30Dqz6z+Z/UfaP1SUdAY6NEP4XcxhWIoAvu0Ov+Vsgh/iv9OnU+BCBm4FZELXydOfvG1Ul070Sn4CfapdZVCbEgMiWbRzJo/+M7rva//5am3o7dvR99W55mUT3EC16h8qeElV8jFS2CGCH9b7oMf3uZB1+T7UfJHPvmzmopfojuwtvVWcx4tHIM1TaiAhnEO3cK31Jh0FZRP0g7WYrKzOGdhrK59jLUFgYbfc2hJnWupmjvEWPlmZp9X38zYBDtjFdD/AAAA//8BAAD//xuxkA4AAAEAAAABGFERIXyjXw889QABA+gAAAAA2F2gzAAAAADdZi83/r3+3QgdA8kAAgADAAIAAAAAAAAAAQAAA9j+7wAACED+vf28CB0D6ADC/9EAAAAAAAAAAAAAADx4nCzNoUpDYRyG8ed9F1UQFKYrX/i7LRxBo8NVXRGmIja7IJgsNq/B6D2YLMahRRBMFsFwdgGCnLCJjH1ywPQrDzy+YoMX0Dy/ekC4Q8+HhKaEPggf0PMlwYzwFqE3wheEr+m7Q7gg9Mui5pz5nKG+OfY6Xa+R9EDbTboa01aLwivICyS+SPok8cNmI5G8RHKDrpt5olOSbvNMe/S9zI5G7PqZfd3nd43yk+7yRCUtlbV5SpXHVDT/vVFBUDHUSX5UybaPWK1/wKDu/gAAAP//AQAA///Ejj3fAAAAAAAALgAuAFIAigC8AN4A9gEMAUIBXAFqAYYBlgG8Ae4CEgI6AnoCjgK2AtQDDANEA3IDqgPkBAwEVAR+BIoEpATGBQgFMgVgBZoFuAX0BiIGTgZsBqYG0gcCBxoHMgdcB5gHtgfCB84H3gfsB/YIBggaCDIIQAhWCGwAAAABAAAAPACMAAwAZgAHAAEAAAAAAAAAAAAAAAAABAADeJyclNtOG1cUhj8H2216uqhQRG7QvkylZEyjECXhypSgjIpw6nF6kKpKgz0+iPHMyDOYkifodd+ib5GrPkafoup1tX8vgx1FQSAE/Hv2OvxrrX9tYJP/2KBWvwv83ZwbrrHd/NnwHb5oHhneYL/5meE6Dxv/GG4waLw13ORBo2v4E97V/zT8KU/qvxm+y1b90PDnPK5vGv5yw/Gv4a94wrsFrsEz/jBcY4vC8B02+dXwBvewmLU699gx3OBrtg032QZ6TKhImZAxwjFkwogzZiSURCTMmDAkYYAjpE1Kpa8ZsZBj9MGvMREVM2JFHFPhSIlIiSkZW8S38sp5rYxDnWZ216ZiTMyJPE6JyXDkjMjJSDhVnIqKghe0aFHSF9+CipKAkgkpATkzRrTocMgRPcZMKHEcKpJnFpEzpOKcWPmdWfjO9EnIKI3VGRkD8XTil8g75AhHh0K2q5GP1iI8xPGjvD23XLbfEujXrTBbz7tkEzNXP1N1JdXNuSY41q3P2+YH4YoXuFv1Z53J9T0a6H+lyCecaf4DTSoTkwzntmgTSUGRu49jX+eQSB35iZAer+jwhp7Obbp0aXNMj5CX8u3QxfEdHY45kEcovLg7lGKO+QXH94Sy8bET689iYgm/U5i6S3GcqY4phXrumQeqNVGFN5+w36F8TR2lfPraI2/pNL9MexYzMlUUYjhVL5faKK1/A1PEVLX42V7d+22Y2+4tt/iCXDvs1brg5Ce3YHTdVIP3NHOun4CYATknsuiTM6VFxYV4vybmjBTHgbr3SltS0b708XkupJKEqRiEZIozo9Df2HQTGff+mu6dvSUD+Xump5dV3SaLU6+uZvRG3VveRdblZGUCLZtqvqKmvrhmpv1EO7XKP5Jvqdct5xGh4i52+0OvwA7P2WWPsbL0dTO/vPOvhLfYUwdOSWQ1lKZ9DY8J2CXgKbvs8pyn7/VyycYZH7fGZzV/mwP26bB3bTUL2w77vFyL9vHMf4ntjupxPLo8Pbv1NB/cQLXfaN+u3s2uJuenMbdoV9txTMzUc3FbqzW5+wT/AwAA//8BAAD//3KhUUAAAAADAAD/9QAA/84AMgAAAAAAAAAAAAAAAAAAAAAAAAAA");
-}]]></style><style type="text/css"><![CDATA[.shape {
-  shape-rendering: geometricPrecision;
-  stroke-linejoin: round;
-}
-.connection {
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.blend {
-  mix-blend-mode: multiply;
-  opacity: 0.5;
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 960" width="1680" height="960">
+  <defs>
+    <style><![CDATA[
+      text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .code-text {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+      
+      /* Drop Shadows & Filters */
+      .card-shadow {
+        filter: drop-shadow(0px 3px 6px rgba(15, 23, 42, 0.06)) drop-shadow(0px 1px 2px rgba(15, 23, 42, 0.04));
+      }
+      .card-shadow-lg {
+        filter: drop-shadow(0px 6px 14px rgba(15, 23, 42, 0.09)) drop-shadow(0px 2px 4px rgba(15, 23, 42, 0.05));
+      }
+      .glow-purple {
+        filter: drop-shadow(0px 0px 8px rgba(147, 51, 234, 0.35));
+      }
+      .glow-red {
+        filter: drop-shadow(0px 0px 8px rgba(220, 38, 38, 0.35));
+      }
+      .glow-amber {
+        filter: drop-shadow(0px 0px 8px rgba(217, 119, 6, 0.35));
+      }
+    ]]></style>
 
-		.d2-2619726779 .fill-N1{fill:#0A0F25;}
-		.d2-2619726779 .fill-N2{fill:#676C7E;}
-		.d2-2619726779 .fill-N3{fill:#9499AB;}
-		.d2-2619726779 .fill-N4{fill:#CFD2DD;}
-		.d2-2619726779 .fill-N5{fill:#DEE1EB;}
-		.d2-2619726779 .fill-N6{fill:#EEF1F8;}
-		.d2-2619726779 .fill-N7{fill:#FFFFFF;}
-		.d2-2619726779 .fill-B1{fill:#0D32B2;}
-		.d2-2619726779 .fill-B2{fill:#0D32B2;}
-		.d2-2619726779 .fill-B3{fill:#E3E9FD;}
-		.d2-2619726779 .fill-B4{fill:#E3E9FD;}
-		.d2-2619726779 .fill-B5{fill:#EDF0FD;}
-		.d2-2619726779 .fill-B6{fill:#F7F8FE;}
-		.d2-2619726779 .fill-AA2{fill:#4A6FF3;}
-		.d2-2619726779 .fill-AA4{fill:#EDF0FD;}
-		.d2-2619726779 .fill-AA5{fill:#F7F8FE;}
-		.d2-2619726779 .fill-AB4{fill:#EDF0FD;}
-		.d2-2619726779 .fill-AB5{fill:#F7F8FE;}
-		.d2-2619726779 .stroke-N1{stroke:#0A0F25;}
-		.d2-2619726779 .stroke-N2{stroke:#676C7E;}
-		.d2-2619726779 .stroke-N3{stroke:#9499AB;}
-		.d2-2619726779 .stroke-N4{stroke:#CFD2DD;}
-		.d2-2619726779 .stroke-N5{stroke:#DEE1EB;}
-		.d2-2619726779 .stroke-N6{stroke:#EEF1F8;}
-		.d2-2619726779 .stroke-N7{stroke:#FFFFFF;}
-		.d2-2619726779 .stroke-B1{stroke:#0D32B2;}
-		.d2-2619726779 .stroke-B2{stroke:#0D32B2;}
-		.d2-2619726779 .stroke-B3{stroke:#E3E9FD;}
-		.d2-2619726779 .stroke-B4{stroke:#E3E9FD;}
-		.d2-2619726779 .stroke-B5{stroke:#EDF0FD;}
-		.d2-2619726779 .stroke-B6{stroke:#F7F8FE;}
-		.d2-2619726779 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-2619726779 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-2619726779 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-2619726779 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-2619726779 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-2619726779 .background-color-N1{background-color:#0A0F25;}
-		.d2-2619726779 .background-color-N2{background-color:#676C7E;}
-		.d2-2619726779 .background-color-N3{background-color:#9499AB;}
-		.d2-2619726779 .background-color-N4{background-color:#CFD2DD;}
-		.d2-2619726779 .background-color-N5{background-color:#DEE1EB;}
-		.d2-2619726779 .background-color-N6{background-color:#EEF1F8;}
-		.d2-2619726779 .background-color-N7{background-color:#FFFFFF;}
-		.d2-2619726779 .background-color-B1{background-color:#0D32B2;}
-		.d2-2619726779 .background-color-B2{background-color:#0D32B2;}
-		.d2-2619726779 .background-color-B3{background-color:#E3E9FD;}
-		.d2-2619726779 .background-color-B4{background-color:#E3E9FD;}
-		.d2-2619726779 .background-color-B5{background-color:#EDF0FD;}
-		.d2-2619726779 .background-color-B6{background-color:#F7F8FE;}
-		.d2-2619726779 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-2619726779 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-2619726779 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-2619726779 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-2619726779 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-2619726779 .color-N1{color:#0A0F25;}
-		.d2-2619726779 .color-N2{color:#676C7E;}
-		.d2-2619726779 .color-N3{color:#9499AB;}
-		.d2-2619726779 .color-N4{color:#CFD2DD;}
-		.d2-2619726779 .color-N5{color:#DEE1EB;}
-		.d2-2619726779 .color-N6{color:#EEF1F8;}
-		.d2-2619726779 .color-N7{color:#FFFFFF;}
-		.d2-2619726779 .color-B1{color:#0D32B2;}
-		.d2-2619726779 .color-B2{color:#0D32B2;}
-		.d2-2619726779 .color-B3{color:#E3E9FD;}
-		.d2-2619726779 .color-B4{color:#E3E9FD;}
-		.d2-2619726779 .color-B5{color:#EDF0FD;}
-		.d2-2619726779 .color-B6{color:#F7F8FE;}
-		.d2-2619726779 .color-AA2{color:#4A6FF3;}
-		.d2-2619726779 .color-AA4{color:#EDF0FD;}
-		.d2-2619726779 .color-AA5{color:#F7F8FE;}
-		.d2-2619726779 .color-AB4{color:#EDF0FD;}
-		.d2-2619726779 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker-d2-2619726779);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker-d2-2619726779);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark-d2-2619726779);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker-d2-2619726779);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark-d2-2619726779);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal-d2-2619726779);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal-d2-2619726779);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright-d2-2619726779);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g class="cm91dGU="><g class="shape" ><rect x="0.000000" y="0.000000" width="1054.000000" height="474.000000" stroke="transparent" fill="transparent" style="stroke-width:2;" /></g></g><g class="cm91dGUuZGlzY292ZXJ5 stage"><g class="shape" ><rect x="18.000000" y="18.000000" width="500.000000" height="210.000000" stroke="#1A1A1A" fill="white" style="stroke-width:1;" /></g><text x="268.000000" y="88.500000" fill="#1A1A1A" class="text-bold" style="text-anchor:middle;font-size:16px"><tspan x="268.000000" dy="0.000000">1  INVARIANT GENERATION</tspan><tspan x="268.000000" dy="16.833333"> </tspan><tspan x="268.000000" dy="16.833333">Segmented CoT review: large corpus → candidates</tspan><tspan x="268.000000" dy="16.833333">Historical-bug RAG: root-cause homologues</tspan><tspan x="268.000000" dy="16.833333">across middle-end and target backends</tspan><tspan x="268.000000" dy="16.833333">→ grounded, generalized invariants</tspan></text></g><g class="cm91dGUub3JhY2xl key"><g class="shape" ><rect x="536.000000" y="18.000000" width="500.000000" height="210.000000" stroke="#1A1A1A" fill="#E3E3E3" style="stroke-width:2;" /></g><text x="786.000000" y="88.500000" fill="#1A1A1A" class="text-bold" style="text-anchor:middle;font-size:16px"><tspan x="786.000000" dy="0.000000">2  CHECKER CONSTRUCTION</tspan><tspan x="786.000000" dy="16.833333"> </tspan><tspan x="786.000000" dy="16.833333">Invariant + ISA → static / dynamic checker</tspan><tspan x="786.000000" dy="16.833333">ISA-to-checker mapping</tspan><tspan x="786.000000" dy="16.833333">Four-state verdict + deterministic evidence</tspan><tspan x="786.000000" dy="16.833333">PASS · FAIL · NOT APPLICABLE · ERROR</tspan></text></g><g class="cm91dGUubG9vcA== stage"><g class="shape" ><rect x="18.000000" y="246.000000" width="500.000000" height="210.000000" stroke="#1A1A1A" fill="white" style="stroke-width:1;" /></g><text x="268.000000" y="316.500000" fill="#1A1A1A" class="text-bold" style="text-anchor:middle;font-size:16px"><tspan x="268.000000" dy="0.000000">3  AGENT LOOP</tspan><tspan x="268.000000" dy="16.833333"> </tspan><tspan x="268.000000" dy="16.833333">Orchestrator locks one invariant + checker suite</tspan><tspan x="268.000000" dy="16.833333">+ applicable ISAs + budget; Generator builds its seed</tspan><tspan x="268.000000" dy="16.833333">routing → build → coverage → checker</tspan><tspan x="268.000000" dy="16.833333">Feedback or C-Reduce + same-checker revalidation</tspan></text></g><g class="cm91dGUuc3RhdGU= stage"><g class="shape" ><rect x="536.000000" y="246.000000" width="500.000000" height="210.000000" stroke="#1A1A1A" fill="white" style="stroke-width:1;" /></g><text x="786.000000" y="316.500000" fill="#1A1A1A" class="text-bold" style="text-anchor:middle;font-size:16px"><tspan x="786.000000" dy="0.000000">EVIDENCE AND FEEDBACK</tspan><tspan x="786.000000" dy="16.833333"> </tspan><tspan x="786.000000" dy="16.833333">Every state and result → versioned blackboard</tspan><tspan x="786.000000" dy="16.833333">Revalidated violation → minimized PoC</tspan><tspan x="786.000000" dy="16.833333">Confirmed new finding, including a zero-day</tspan><tspan x="786.000000" dy="16.833333">→ next campaign&#39;s probe corpus</tspan></text></g><g class="cm91dGUuKGRpc2NvdmVyeSAtJmd0OyBvcmFjbGUpWzBd"><marker id="mk-d2-2619726779-1509737973" markerWidth="10.000000" markerHeight="12.000000" refX="8.500000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" fill="#1A1A1A" class="connection" stroke-width="1" /> </marker><path d="M 519.000000 123.000000 L 533.500000 123.000000" stroke="#1A1A1A" fill="none" class="connection" style="stroke-width:1;" marker-end="url(#mk-d2-2619726779-1509737973)" mask="url(#d2-2619726779)" /></g><g class="cm91dGUuKG9yYWNsZSAtJmd0OyBsb29wKVswXQ=="><path d="M 545.626534 228.602985 L 507.831288 245.196020" stroke="#1A1A1A" fill="none" class="connection" style="stroke-width:1;" marker-end="url(#mk-d2-2619726779-1509737973)" mask="url(#d2-2619726779)" /></g><g class="cm91dGUuKGxvb3AgLSZndDsgc3RhdGUpWzBd"><path d="M 519.000000 351.000000 L 534.000000 351.000000" stroke="#1A1A1A" fill="none" class="connection" style="stroke-width:1;" marker-end="url(#mk-d2-2619726779-1509737973)" mask="url(#d2-2619726779)" /></g><g class="cm91dGUuKHN0YXRlIC0mZ3Q7IGRpc2NvdmVyeSlbMF0="><marker id="mk-d2-2619726779-90359975" markerWidth="10.000000" markerHeight="12.000000" refX="8.500000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" fill="#7A7A7A" class="connection" stroke-width="1" /> </marker><path d="M 546.084356 245.598010 L 507.831288 228.803980" stroke="#7A7A7A" fill="none" class="connection" style="stroke-width:1;stroke-dasharray:4.000000,4.000000;" marker-end="url(#mk-d2-2619726779-90359975)" mask="url(#d2-2619726779)" /><text x="526.500000" y="243.000000" fill="#555555" class="text-italic" style="text-anchor:middle;font-size:16px">confirmed root cause</text></g><mask id="d2-2619726779" maskUnits="userSpaceOnUse" x="-101" y="-101" width="1256" height="676">
-<rect x="-101" y="-101" width="1256" height="676" fill="white"></rect>
-<rect x="455.000000" y="227.000000" width="143" height="21" fill="black"></rect>
-</mask></svg></svg>
+    <!-- Gradients -->
+    <linearGradient id="bg-canvas" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="50%" stop-color="#F1F5F9" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <linearGradient id="grad-header" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#EFF6FF" />
+      <stop offset="100%" stop-color="#DBEAFE" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F0FDFA" />
+      <stop offset="100%" stop-color="#CCFBF1" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F0FDF4" />
+      <stop offset="100%" stop-color="#DCFCE7" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FAF5FF" />
+      <stop offset="100%" stop-color="#F3E8FF" />
+    </linearGradient>
+
+    <linearGradient id="grad-blackboard" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
+
+    <!-- Node Gradients -->
+    <linearGradient id="grad-agent-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#6D28D9" />
+    </linearGradient>
+    
+    <linearGradient id="grad-agent-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D9488" />
+      <stop offset="100%" stop-color="#0F766E" />
+    </linearGradient>
+
+    <linearGradient id="grad-violation" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DC2626" />
+      <stop offset="100%" stop-color="#991B1B" />
+    </linearGradient>
+
+    <linearGradient id="grad-feedback" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EA580C" />
+      <stop offset="100%" stop-color="#C2410C" />
+    </linearGradient>
+
+    <!-- Marker Arrows -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#2563EB" />
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#0D9488" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#16A34A" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#7C3AED" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#DC2626" />
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#EA580C" />
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#475569" />
+    </marker>
+
+    <!-- Vector Icons Library -->
+    <g id="icon-agent">
+      <rect x="2" y="5" width="16" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="7" cy="10" r="1.5" fill="currentColor"/>
+      <circle cx="13" cy="10" r="1.5" fill="currentColor"/>
+      <path d="M7 14 H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M10 2 V5" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="10" cy="2" r="1" fill="currentColor"/>
+      <path d="M0 9 H2 M18 9 H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <g id="icon-shield">
+      <path d="M10 2 L3 5 V10 C3 14.5 6 18.5 10 20 C14 18.5 17 14.5 17 10 V5 L10 2 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M7 10 L9 12 L13 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g id="icon-book">
+      <path d="M4 19.5 A2.5 2.5 0 0 1 6.5 17 H20" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M6.5 2 H20 V22 H6.5 A2.5 2.5 0 0 1 4 19.5 V4.5 A2.5 2.5 0 0 1 6.5 2 z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+
+    <g id="icon-gears">
+      <circle cx="10" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M10 2 V4 M10 16 V18 M2 10 H4 M16 10 H18 M4.9 4.9 L6.3 6.3 M13.7 13.7 L15.1 15.1 M4.9 15.1 L6.3 13.7 M13.7 6.3 L15.1 4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <g id="icon-graph">
+      <circle cx="5" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="15" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="10" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M7.5 6.5 L8.5 12.5 M12.5 6.5 L11.5 12.5 M8 5 H12" stroke="currentColor" stroke-width="1.5"/>
+    </g>
+
+    <g id="icon-compiler">
+      <rect x="3" y="3" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M7 8 L10 11 L7 14 M12 14 H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 1 V3 M12 1 V3 M8 17 V19 M12 17 V19 M1 8 H3 M1 12 H3 M17 8 H19 M17 12 H19" stroke="currentColor" stroke-width="1.5"/>
+    </g>
+
+    <g id="icon-log">
+      <rect x="2" y="3" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M5 7 L8 10 L5 13 M10 13 H15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g id="icon-checker">
+      <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M13.5 13.5 L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M7 9 H11 M9 7 V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <g id="icon-scale">
+      <path d="M10 3 V17 M4 7 H16 M10 17 H6 M10 17 H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4 7 L2 12 H6 Z M16 7 L14 12 H18 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    </g>
+
+    <g id="icon-bug">
+      <ellipse cx="10" cy="11" rx="5" ry="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M10 5 V3 M7 4 L5 2 M13 4 L15 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M5 9 H2 M15 9 H18 M5 12 H2 M15 12 H18 M6 15 L3 17 M14 15 L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="8" cy="9" r="1" fill="currentColor"/>
+      <circle cx="12" cy="9" r="1" fill="currentColor"/>
+    </g>
+
+    <g id="icon-diagnostics">
+      <rect x="2" y="2" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M4 10 H7 L9 5 L11 15 L13 8 L14 10 H16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g id="icon-target-clock">
+      <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M10 5 V10 L13 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M10 1 V3 M10 17 V19 M1 10 H3 M17 10 H19" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+
+    <g id="icon-refresh">
+      <path d="M3 10 A7 7 0 1 1 10 17 M10 17 L7 14 M10 17 L13 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17 10 A7 7 0 0 1 10 3 M10 3 L13 6 M10 3 L7 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <g id="icon-lateral">
+      <circle cx="4" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="16" cy="5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="16" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M6.5 9.5 C10 8 11 5 13.5 5 M6.5 10.5 C10 12 11 15 13.5 15" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+
+    <g id="icon-database">
+      <ellipse cx="10" cy="5" rx="7" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M3 5 V15 C3 16.5 6 17.5 10 17.5 C14 17.5 17 16.5 17 15 V5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M3 10 C3 11.5 6 12.5 10 12.5 C14 12.5 17 11.5 17 10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect x="0" y="0" width="1680" height="960" fill="url(#bg-canvas)" rx="16"/>
+
+  <!-- ========================================================================= -->
+  <!-- TOP HEADER & TITLE BAR -->
+  <!-- ========================================================================= -->
+  <g transform="translate(24, 16)">
+    <rect x="0" y="0" width="1632" height="50" rx="10" fill="url(#grad-header)" class="card-shadow"/>
+    
+    <!-- Title Text -->
+    <text x="24" y="32" font-size="18" font-weight="800" fill="#FFFFFF" letter-spacing="0.2">
+      DeFuzz: Invariant-Guided Testing &amp; Self-Healing Framework for Compiler Defenses
+    </text>
+    
+    <!-- Badges on the right -->
+    <g transform="translate(1160, 11)">
+      <rect x="0" y="0" width="135" height="28" rx="6" fill="#3B82F6" opacity="0.25"/>
+      <rect x="0" y="0" width="135" height="28" rx="6" fill="none" stroke="#60A5FA" stroke-width="1"/>
+      <text x="67" y="19" font-size="11.5" font-weight="700" fill="#93C5FD" text-anchor="middle">IEEE S&amp;P / CCS Style</text>
+    </g>
+    <g transform="translate(1310, 11)">
+      <rect x="0" y="0" width="155" height="28" rx="6" fill="#10B981" opacity="0.2"/>
+      <rect x="0" y="0" width="155" height="28" rx="6" fill="none" stroke="#34D399" stroke-width="1"/>
+      <text x="77" y="19" font-size="11.5" font-weight="700" fill="#6EE7B7" text-anchor="middle">GCC 13-17 &amp; LLVM 15-19</text>
+    </g>
+    <g transform="translate(1480, 11)">
+      <rect x="0" y="0" width="138" height="28" rx="6" fill="#8B5CF6" opacity="0.25"/>
+      <rect x="0" y="0" width="138" height="28" rx="6" fill="none" stroke="#A78BFA" stroke-width="1"/>
+      <text x="69" y="19" font-size="11.5" font-weight="700" fill="#C4B5FD" text-anchor="middle">Agentic Directed Fuzz</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 1: INVARIANT SPECGEN (OFFLINE) -->
+  <!-- Coordinates: x=24, y=78, w=340, h=550 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(24, 78)" class="card-shadow">
+    <rect x="0" y="0" width="340" height="550" rx="12" fill="url(#grad-phase1)" stroke="#93C5FD" stroke-width="1.8"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="12" y="12" width="316" height="40" rx="8" fill="#1E40AF"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-shield" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13.5" font-weight="800" fill="#FFFFFF">PHASE 1: Invariant SpecGen</text>
+    <rect x="232" y="21" width="86" height="22" rx="4" fill="#3B82F6"/>
+    <text x="275" y="36" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">CoT + RAG</text>
+
+    <!-- Sub-block 1: Multi-Source Knowledge Corpus -->
+    <g transform="translate(12, 64)">
+      <rect x="0" y="0" width="316" height="106" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#1E3A8A">
+        <use href="#icon-book" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="12" font-weight="700" fill="#1E3A8A">Knowledge Corpus</text>
+      
+      <!-- Source Item 1 -->
+      <rect x="10" y="32" width="296" height="20" rx="4" fill="#F8FAFC"/>
+      <text x="18" y="46" font-size="10.5" font-weight="600" fill="#334155">• Compiler Sources &amp; Comments</text>
+      
+      <!-- Source Item 2 -->
+      <rect x="10" y="55" width="296" height="20" rx="4" fill="#F8FAFC"/>
+      <text x="18" y="69" font-size="10.5" font-weight="600" fill="#334155">• Architecture ABI &amp; ISA Specs</text>
+      
+      <!-- Source Item 3 -->
+      <rect x="10" y="78" width="296" height="20" rx="4" fill="#F8FAFC"/>
+      <text x="18" y="92" font-size="10.5" font-weight="600" fill="#334155">• Historical CVE Vulnerabilities</text>
+    </g>
+
+    <!-- Sub-block 2: SpecGen Extraction & Synthesis -->
+    <g transform="translate(12, 180)">
+      <rect x="0" y="0" width="316" height="152" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#1E3A8A">
+        <use href="#icon-gears" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="12" font-weight="700" fill="#1E3A8A">Extraction &amp; Synthesis</text>
+      
+      <!-- Path A: Segmented CoT -->
+      <g transform="translate(10, 32)">
+        <rect x="0" y="0" width="296" height="50" rx="5" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+        <text x="12" y="19" font-size="11" font-weight="700" fill="#1D4ED8">Path A: Segmented CoT</text>
+        <text x="12" y="36" font-size="10" font-weight="500" fill="#475569">Extracts assets, bounds &amp; guarantees</text>
+      </g>
+
+      <!-- Path B: Historical-Bug RAG -->
+      <g transform="translate(10, 88)">
+        <rect x="0" y="0" width="296" height="52" rx="5" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+        <text x="12" y="19" font-size="11" font-weight="700" fill="#1D4ED8">Path B: Homologue RAG</text>
+        <text x="12" y="36" font-size="10" font-weight="600" fill="#0D9488">Cross-backend root-cause transfer</text>
+      </g>
+    </g>
+
+    <!-- Sub-block 3: Formal Invariant Schema -->
+    <g transform="translate(12, 342)">
+      <rect x="0" y="0" width="316" height="194" rx="8" fill="#1E293B" stroke="#0F172A" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#60A5FA">
+        <use href="#icon-shield" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="12" font-weight="700" fill="#93C5FD">Security Invariant Schema</text>
+      
+      <!-- Invariant Box Display -->
+      <g transform="translate(8, 30)">
+        <rect x="0" y="0" width="300" height="152" rx="5" fill="#0F172A"/>
+        <text x="12" y="20" font-size="10" font-weight="600" fill="#F87171" class="code-text">id: <tspan fill="#FDE047">"INV-SP-042"</tspan> <tspan fill="#94A3B8">(Stack-Protector)</tspan></text>
+        <text x="12" y="38" font-size="10" font-weight="500" fill="#38BDF8" class="code-text">asset: <tspan fill="#F1F5F9">"Saved Return Address &amp; Frame"</tspan></text>
+        <text x="12" y="56" font-size="10" font-weight="500" fill="#38BDF8" class="code-text">precond: <tspan fill="#F1F5F9">"VLA / Dynamic alloca present"</tspan></text>
+        <text x="12" y="74" font-size="10" font-weight="700" fill="#4ADE80" class="code-text">guarantee: <tspan fill="#A7F3D0">"canary_offset &gt; max_buf"</tspan></text>
+        <text x="12" y="92" font-size="10" font-weight="500" fill="#C084FC" class="code-text">observation: <tspan fill="#E2E8F0">"Guard intact on overflow"</tspan></text>
+        <text x="12" y="110" font-size="10" font-weight="600" fill="#F59E0B" class="code-text">budget: <tspan fill="#FDE68A">Fixed Window T (e.g. 30m)</tspan></text>
+        <text x="12" y="128" font-size="10" font-weight="500" fill="#60A5FA" class="code-text">verdict: <tspan fill="#F1F5F9">{PASS, FAIL, NA, ERROR}</tspan></text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Flow Arrow Phase 1 -> Phase 2 -->
+  <path d="M 364 240 H 380" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+  <path d="M 364 450 H 380" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 2: INVARIANT-TO-SOURCE MAPPING & LOGGING -->
+  <!-- Coordinates: x=384, y=78, w=370, h=550 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(384, 78)" class="card-shadow">
+    <rect x="0" y="0" width="370" height="550" rx="12" fill="url(#grad-phase2)" stroke="#5EEAD4" stroke-width="1.8"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="12" y="12" width="346" height="40" rx="8" fill="#0F766E"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-graph" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13.5" font-weight="800" fill="#FFFFFF">PHASE 2: Source Mapping &amp; Log</text>
+    <rect x="256" y="21" width="92" height="22" rx="4" fill="#0D9488"/>
+    <text x="302" y="36" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Free Agent</text>
+
+    <!-- Sub-block 1: Autonomous Free Analysis Agent & Tool Suite -->
+    <g transform="translate(12, 64)">
+      <rect x="0" y="0" width="346" height="106" rx="8" fill="#FFFFFF" stroke="#99F6E4" stroke-width="1.2"/>
+      
+      <!-- Agent Badge -->
+      <rect x="10" y="10" width="326" height="28" rx="5" fill="url(#grad-agent-teal)"/>
+      <g transform="translate(18, 15)" color="#FFFFFF">
+        <use href="#icon-agent" width="18" height="18"/>
+      </g>
+      <text x="42" y="29" font-size="11.5" font-weight="700" fill="#FFFFFF">Source-Analysis Agent (Claude Code / Free Agent)</text>
+      
+      <!-- Tool Integrations & MCP -->
+      <g transform="translate(10, 46)">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="103" height="48" rx="4" fill="#F0FDFA" stroke="#99F6E4"/>
+          <text x="51" y="18" font-size="10.5" font-weight="700" fill="#0F766E" text-anchor="middle">CodeQL Engine</text>
+          <text x="51" y="34" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">AST &amp; Dataflow</text>
+        </g>
+
+        <g transform="translate(111, 0)">
+          <rect x="0" y="0" width="104" height="48" rx="4" fill="#F0FDFA" stroke="#99F6E4"/>
+          <text x="52" y="18" font-size="10.5" font-weight="700" fill="#0F766E" text-anchor="middle">IPA CallGraph</text>
+          <text x="52" y="34" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">-fdump-ipa-cgraph</text>
+        </g>
+
+        <g transform="translate(223, 0)">
+          <rect x="0" y="0" width="103" height="48" rx="4" fill="#F0FDFA" stroke="#99F6E4"/>
+          <text x="51" y="18" font-size="10.5" font-weight="700" fill="#0F766E" text-anchor="middle">File / Grep MCP</text>
+          <text x="51" y="34" font-size="9" font-weight="500" fill="#475569" text-anchor="middle">Source Context</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Sub-block 2: 3-Level Hierarchical Code Mapping -->
+    <g transform="translate(12, 180)">
+      <rect x="0" y="0" width="346" height="180" rx="8" fill="#FFFFFF" stroke="#99F6E4" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#134E4A">
+        <use href="#icon-graph" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="12" font-weight="700" fill="#134E4A">3-Level Hierarchical Code Mapping</text>
+      
+      <!-- Level 1: Pass Scope -->
+      <g transform="translate(10, 32)">
+        <rect x="0" y="0" width="326" height="40" rx="5" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="10" y="16" font-size="10.5" font-weight="700" fill="#0F766E">L1: Defense Pass Scope</text>
+        <text x="10" y="30" font-size="9.5" font-weight="500" fill="#475569" class="code-text">pass_prologue_and_epilogue (aarch64.cc)</text>
+      </g>
+
+      <!-- Level 2: Function Cluster -->
+      <g transform="translate(10, 78)">
+        <rect x="0" y="0" width="326" height="44" rx="5" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="10" y="16" font-size="10.5" font-weight="700" fill="#0F766E">L2: Function Call-Graph Cluster</text>
+        <text x="10" y="31" font-size="9.5" font-weight="500" fill="#475569" class="code-text">aarch64_layout_frame → assign_stack_local</text>
+      </g>
+
+      <!-- Level 3: Semantic Anchors -->
+      <g transform="translate(10, 128)">
+        <rect x="0" y="0" width="326" height="42" rx="5" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="10" y="16" font-size="10.5" font-weight="700" fill="#0F766E">L3: Structs &amp; Critical Conditions</text>
+        <text x="10" y="30" font-size="9.5" font-weight="500" fill="#334155" class="code-text">struct aarch64_frame, locals_offset &lt; canary</text>
+      </g>
+    </g>
+
+    <!-- Sub-block 3: ID-Prefixed Log Instrumentation & Rebuild -->
+    <g transform="translate(12, 370)">
+      <rect x="0" y="0" width="346" height="166" rx="8" fill="#134E4A" stroke="#042F2E" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#5EEAD4">
+        <use href="#icon-log" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="12" font-weight="700" fill="#5EEAD4">ID-Prefixed Log Injection &amp; Rebuild</text>
+      
+      <!-- Code Snippet Display -->
+      <g transform="translate(8, 30)">
+        <rect x="0" y="0" width="330" height="70" rx="5" fill="#042F2E"/>
+        <text x="10" y="18" font-size="9.5" font-weight="600" fill="#FDE047" class="code-text">// Injected Unique ID Prefix Logging</text>
+        <text x="10" y="35" font-size="9" font-weight="500" fill="#A5F3FC" class="code-text">fprintf(stderr, "[DEFUZZ-LOG-SP-042] frame: %ld
+",</text>
+        <text x="10" y="50" font-size="9" font-weight="500" fill="#A5F3FC" class="code-text">        frame.canary_offset);</text>
+      </g>
+
+      <!-- Compiler Rebuild Banner -->
+      <g transform="translate(8, 108)">
+        <rect x="0" y="0" width="330" height="46" rx="5" fill="#0F766E"/>
+        <g transform="translate(10, 14)" color="#FFFFFF">
+          <use href="#icon-compiler" width="18" height="18"/>
+        </g>
+        <text x="34" y="20" font-size="11" font-weight="700" fill="#FFFFFF">Rebuild Target Compilers</text>
+        <text x="34" y="34" font-size="9.5" font-weight="500" fill="#CCFBF1">GCC 13-17 &amp; LLVM 15-19 with Injected Probes</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Flow Arrow Phase 2 -> Phase 3 -->
+  <path d="M 754 240 H 770" stroke="#0D9488" stroke-width="2.5" fill="none" marker-end="url(#arrow-teal)"/>
+  <path d="M 754 450 H 770" stroke="#0D9488" stroke-width="2.5" fill="none" marker-end="url(#arrow-teal)"/>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 3: ISA ORACLES (CHECKERS) -->
+  <!-- Coordinates: x=774, y=78, w=290, h=550 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(774, 78)" class="card-shadow">
+    <rect x="0" y="0" width="290" height="550" rx="12" fill="url(#grad-phase3)" stroke="#86EFAC" stroke-width="1.8"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="12" y="12" width="266" height="40" rx="8" fill="#15803D"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-checker" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13.5" font-weight="800" fill="#FFFFFF">PHASE 3: ISA Oracles</text>
+    <rect x="186" y="21" width="84" height="22" rx="4" fill="#16A34A"/>
+    <text x="228" y="36" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Dual-Mode</text>
+
+    <!-- Sub-block 1: Target ISA Specialization Matrix -->
+    <g transform="translate(12, 64)">
+      <rect x="0" y="0" width="266" height="106" rx="8" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
+      <g transform="translate(10, 10)" color="#166534">
+        <use href="#icon-target-clock" width="16" height="16"/>
+      </g>
+      <text x="30" y="23" font-size="11.5" font-weight="700" fill="#166534">ISA Specialization</text>
+      
+      <!-- ISA Pills -->
+      <g transform="translate(10, 32)">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="118" height="28" rx="4" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="18" font-size="10" font-weight="700" fill="#15803D" text-anchor="middle">AArch64</text>
+        </g>
+
+        <g transform="translate(128, 0)">
+          <rect x="0" y="0" width="118" height="28" rx="4" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="18" font-size="10" font-weight="700" fill="#15803D" text-anchor="middle">x86_64</text>
+        </g>
+
+        <g transform="translate(0, 34)">
+          <rect x="0" y="0" width="118" height="28" rx="4" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="18" font-size="10" font-weight="700" fill="#15803D" text-anchor="middle">RISC-V (RV64)</text>
+        </g>
+
+        <g transform="translate(128, 34)">
+          <rect x="0" y="0" width="118" height="28" rx="4" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="18" font-size="10" font-weight="700" fill="#15803D" text-anchor="middle">ARM32 / Thumb</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Sub-block 2: Bifurcated Dual Checkers -->
+    <g transform="translate(12, 180)">
+      <rect x="0" y="0" width="266" height="180" rx="8" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
+      <g transform="translate(10, 10)" color="#166534">
+        <use href="#icon-checker" width="16" height="16"/>
+      </g>
+      <text x="30" y="23" font-size="11.5" font-weight="700" fill="#166534">Bifurcated Checkers</text>
+      
+      <!-- Static Checker -->
+      <g transform="translate(8, 30)">
+        <rect x="0" y="0" width="250" height="62" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <rect x="8" y="8" width="56" height="18" rx="3" fill="#3B82F6"/>
+        <text x="36" y="21" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">STATIC</text>
+        <text x="70" y="21" font-size="10.5" font-weight="700" fill="#1E293B">Binary Analyzer</text>
+        <text x="8" y="42" font-size="9.5" font-weight="500" fill="#475569">• Inspects ELF symbols &amp; sections</text>
+        <text x="8" y="55" font-size="9.5" font-weight="500" fill="#475569">• Disassembly &amp; frame layout</text>
+      </g>
+
+      <!-- Dynamic Checker -->
+      <g transform="translate(8, 102)">
+        <rect x="0" y="0" width="250" height="66" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <rect x="8" y="8" width="64" height="18" rx="3" fill="#10B981"/>
+        <text x="40" y="21" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">DYNAMIC</text>
+        <text x="78" y="21" font-size="10.5" font-weight="700" fill="#1E293B">Runtime Probe</text>
+        <text x="8" y="42" font-size="9.5" font-weight="500" fill="#475569">• Executes test harness &amp; probes</text>
+        <text x="8" y="55" font-size="9.5" font-weight="500" fill="#475569">• Register snapshots &amp; canary check</text>
+      </g>
+    </g>
+
+    <!-- Sub-block 3: Four-State Verdict Contract -->
+    <g transform="translate(12, 370)">
+      <rect x="0" y="0" width="266" height="166" rx="8" fill="#166534" stroke="#14532D" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#BBF7D0">
+        <use href="#icon-scale" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="11.5" font-weight="700" fill="#BBF7D0">Four-State Verdict Contract</text>
+      
+      <!-- Verdict Pills -->
+      <g transform="translate(8, 32)">
+        <!-- PASS -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="120" height="28" rx="4" fill="#22C55E"/>
+          <text x="60" y="18" font-size="10.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">PASS (Safe)</text>
+        </g>
+
+        <!-- FAIL -->
+        <g transform="translate(130, 0)">
+          <rect x="0" y="0" width="120" height="28" rx="4" fill="#EF4444" class="glow-red"/>
+          <text x="60" y="18" font-size="10.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">FAIL (Buggy!)</text>
+        </g>
+
+        <!-- NOT_APPLICABLE -->
+        <g transform="translate(0, 36)">
+          <rect x="0" y="0" width="120" height="28" rx="4" fill="#E2E8F0"/>
+          <text x="60" y="18" font-size="9.5" font-weight="700" fill="#475569" text-anchor="middle">N/A (Skip)</text>
+        </g>
+
+        <!-- ERROR -->
+        <g transform="translate(130, 36)">
+          <rect x="0" y="0" width="120" height="28" rx="4" fill="#E2E8F0"/>
+          <text x="60" y="18" font-size="9.5" font-weight="700" fill="#475569" text-anchor="middle">ERROR (Diag)</text>
+        </g>
+      </g>
+      
+      <text x="14" y="122" font-size="10" font-weight="600" fill="#86EFAC">Deterministic Evidence Adjudication</text>
+      <text x="14" y="140" font-size="9.5" font-weight="500" fill="#DCFCE7">LLM never acts as bug judge</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrow Phase 3 -> Phase 4 -->
+  <path d="M 1064 240 H 1080" stroke="#16A34A" stroke-width="2.5" fill="none" marker-end="url(#arrow-green)"/>
+  <path d="M 1064 450 H 1080" stroke="#16A34A" stroke-width="2.5" fill="none" marker-end="url(#arrow-green)"/>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 4: INVARIANT-DIRECTED AGENTIC FUZZING LOOP (ONLINE) -->
+  <!-- Coordinates: x=1084, y=78, w=572, h=874 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(1084, 78)" class="card-shadow-lg">
+    <rect x="0" y="0" width="572" height="874" rx="12" fill="url(#grad-phase4)" stroke="#C084FC" stroke-width="2"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="14" y="12" width="544" height="40" rx="8" fill="#6D28D9"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-refresh" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13.5" font-weight="800" fill="#FFFFFF">PHASE 4: Invariant-Directed Fuzzing Loop</text>
+    <rect x="446" y="21" width="102" height="22" rx="4" fill="#9333EA"/>
+    <text x="497" y="36" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Online Engine</text>
+
+    <!-- Sub-block 1: Target Lock & Fair Time Budget Scheduler -->
+    <g transform="translate(14, 62)">
+      <rect x="0" y="0" width="544" height="58" rx="8" fill="#FFFFFF" stroke="#E9D5FF" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#7C3AED">
+        <use href="#icon-target-clock" width="20" height="20"/>
+      </g>
+      <text x="38" y="22" font-size="12" font-weight="700" fill="#581C87">Target Lock &amp; Budget Allocator (Equal Budget T per Invariant)</text>
+      
+      <rect x="10" y="28" width="524" height="22" rx="4" fill="#FAF5FF" stroke="#DDD6FE"/>
+      <text x="16" y="44" font-size="10" font-weight="600" fill="#6D28D9">
+        Locks: <tspan font-weight="700" fill="#4338CA">[Invariant INV_k]</tspan> + <tspan font-weight="700" fill="#0D9488">[ISA Checker Suite]</tspan> + <tspan font-weight="700" fill="#EA580C">[Time Budget T = 30m]</tspan>
+      </text>
+    </g>
+
+    <!-- Flow Arrow: Target Locker -> Generator Agent -->
+    <path d="M 286 120 V 134" stroke="#7C3AED" stroke-width="2.5" fill="none" marker-end="url(#arrow-purple)"/>
+
+    <!-- Sub-block 2: Generator Agent (PBT Synthesizer) -->
+    <g transform="translate(14, 136)">
+      <rect x="0" y="0" width="544" height="130" rx="8" fill="#FFFFFF" stroke="#C084FC" stroke-width="1.5" class="card-shadow"/>
+      
+      <!-- Agent Badge -->
+      <rect x="10" y="8" width="524" height="28" rx="5" fill="url(#grad-agent-purple)"/>
+      <g transform="translate(18, 13)" color="#FFFFFF">
+        <use href="#icon-agent" width="18" height="18"/>
+      </g>
+      <text x="44" y="27" font-size="12" font-weight="800" fill="#FFFFFF">Generator Agent (Checker-Aware PBT Synthesizer)</text>
+      <rect x="428" y="12" width="98" height="20" rx="4" fill="#9333EA"/>
+      <text x="477" y="26" font-size="9.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">LLM Reasoning</text>
+
+      <!-- PBT Generation Techniques (Clean & Concise) -->
+      <g transform="translate(10, 42)">
+        <!-- Col 1 -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="168" height="76" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+          <text x="8" y="16" font-size="10.5" font-weight="700" fill="#6D28D9">1. Macro Switch Matrix</text>
+          <text x="8" y="34" font-size="9" font-weight="500" fill="#475569">-D BUF_SZ=... parameters</text>
+          <text x="8" y="50" font-size="9" font-weight="500" fill="#475569">Compile-time variances</text>
+          <text x="8" y="66" font-size="8.5" font-weight="600" fill="#7C3AED" class="code-text">#ifdef USE_VLA</text>
+        </g>
+
+        <!-- Col 2 -->
+        <g transform="translate(178, 0)">
+          <rect x="0" y="0" width="168" height="76" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+          <text x="8" y="16" font-size="10.5" font-weight="700" fill="#6D28D9">2. Anti-Optimization</text>
+          <text x="8" y="34" font-size="9" font-weight="500" fill="#475569">asm volatile memory</text>
+          <text x="8" y="50" font-size="9" font-weight="500" fill="#475569">Volatile sink escapes</text>
+          <text x="8" y="66" font-size="8.5" font-weight="600" fill="#7C3AED" class="code-text">__optnone / noinline</text>
+        </g>
+
+        <!-- Col 3 -->
+        <g transform="translate(356, 0)">
+          <rect x="0" y="0" width="168" height="76" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+          <text x="8" y="16" font-size="10.5" font-weight="700" fill="#6D28D9">3. Dynamic Probes</text>
+          <text x="8" y="34" font-size="9" font-weight="500" fill="#475569">argc/argv binary search</text>
+          <text x="8" y="50" font-size="9" font-weight="500" fill="#475569">Runtime probe hooks</text>
+          <text x="8" y="66" font-size="8.5" font-weight="600" fill="#7C3AED" class="code-text">target_vla_frame()</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Flow Arrow: Generator Agent -> Target Compiler -->
+    <path d="M 286 266 V 280" stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow-slate)"/>
+
+    <!-- Sub-block 3: Target Instrumented Compiler & Execution -->
+    <g transform="translate(14, 282)">
+      <rect x="0" y="0" width="544" height="110" rx="8" fill="#1E293B" stroke="#0F172A" stroke-width="1.5" class="card-shadow"/>
+      <g transform="translate(12, 10)" color="#60A5FA">
+        <use href="#icon-compiler" width="18" height="18"/>
+      </g>
+      <text x="36" y="24" font-size="12" font-weight="700" fill="#F8FAFC">Target Instrumented Compiler Execution &amp; Telemetry</text>
+      
+      <!-- Compilation Command & Diagnostics Capture -->
+      <g transform="translate(10, 32)">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="256" height="66" rx="4" fill="#0F172A"/>
+          <text x="8" y="16" font-size="10" font-weight="700" fill="#38BDF8">GCC 13-17 Instrumented</text>
+          <text x="8" y="32" font-size="9" font-weight="500" fill="#94A3B8" class="code-text">-fstack-protector -fstack-usage</text>
+          <text x="8" y="52" font-size="9" font-weight="600" fill="#4ADE80" class="code-text">Emits: [DEFUZZ-LOG-SP-042]</text>
+        </g>
+
+        <g transform="translate(268, 0)">
+          <rect x="0" y="0" width="256" height="66" rx="4" fill="#0F172A"/>
+          <text x="8" y="16" font-size="10" font-weight="700" fill="#A78BFA">LLVM 15-19 Instrumented</text>
+          <text x="8" y="32" font-size="9" font-weight="500" fill="#94A3B8" class="code-text">-fstack-size-section -Rpass-missed</text>
+          <text x="8" y="52" font-size="9" font-weight="600" fill="#4ADE80" class="code-text">Emits: [DEFUZZ-LOG-LLVM-019]</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Flow Arrow: Compiler -> Checker Adjudication -->
+    <path d="M 286 392 V 406" stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow-slate)"/>
+
+    <!-- Sub-block 4: Decision Diamond / Adjudication -->
+    <g transform="translate(156, 408)">
+      <polygon points="130,0 260,30 130,60 0,30" fill="#FFFFFF" stroke="#6D28D9" stroke-width="2" class="card-shadow"/>
+      <text x="130" y="26" font-size="11.5" font-weight="800" fill="#4C1D95" text-anchor="middle">Checker Adjudication</text>
+      <text x="130" y="42" font-size="10" font-weight="600" fill="#7C3AED" text-anchor="middle">Invariant Violated (FAIL)?</text>
+    </g>
+
+    <!-- Branch A: Left (FAIL - Bug Found) -->
+    <path d="M 156 438 H 80 V 480" stroke="#DC2626" stroke-width="2.5" fill="none" marker-end="url(#arrow-red)"/>
+    <rect x="62" y="450" width="70" height="20" rx="4" fill="#FEE2E2" stroke="#FCA5A5"/>
+    <text x="97" y="464" font-size="9" font-weight="800" fill="#DC2626" text-anchor="middle">YES [FAIL]</text>
+
+    <!-- Branch B: Right (PASS / NA / ERROR - Feedback & Refine) -->
+    <path d="M 416 438 H 490 V 480" stroke="#EA580C" stroke-width="2.5" fill="none" marker-end="url(#arrow-orange)"/>
+    <rect x="424" y="450" width="96" height="20" rx="4" fill="#FFEDD5" stroke="#FDBA74"/>
+    <text x="472" y="464" font-size="9" font-weight="800" fill="#C2410C" text-anchor="middle">NO [PASS/NA/ERR]</text>
+
+    <!-- ========================================================= -->
+    <!-- BRANCH 1 (LEFT COLUMN OF PHASE 4): VIOLATION & LATERAL MINING -->
+    <!-- ========================================================= -->
+    <g transform="translate(14, 482)">
+      <rect x="0" y="0" width="262" height="376" rx="8" fill="#FEF2F2" stroke="#F87171" stroke-width="1.5" class="card-shadow"/>
+      
+      <!-- Bug Found Header -->
+      <rect x="10" y="10" width="242" height="30" rx="5" fill="url(#grad-violation)"/>
+      <g transform="translate(18, 15)" color="#FFFFFF">
+        <use href="#icon-bug" width="18" height="18"/>
+      </g>
+      <text x="42" y="29" font-size="11.5" font-weight="800" fill="#FFFFFF">Invariant Violated (Bug Found!)</text>
+
+      <!-- PoC Minimizer -->
+      <g transform="translate(10, 48)">
+        <rect x="0" y="0" width="242" height="58" rx="5" fill="#FFFFFF" stroke="#FECACA"/>
+        <text x="10" y="18" font-size="10.5" font-weight="700" fill="#991B1B">1. C-Reduce PoC Minimizer</text>
+        <text x="10" y="34" font-size="9.5" font-weight="500" fill="#475569">Reduces to minimal triggering C code</text>
+        <text x="10" y="48" font-size="9.5" font-weight="600" fill="#DC2626">Re-validated against same checker</text>
+      </g>
+
+      <!-- Lateral Thinking & Divergent Exploration -->
+      <g transform="translate(10, 114)">
+        <rect x="0" y="0" width="242" height="168" rx="5" fill="#FFFFFF" stroke="#FCA5A5" class="glow-red"/>
+        <g transform="translate(10, 10)" color="#DC2626">
+          <use href="#icon-lateral" width="18" height="18"/>
+        </g>
+        <text x="32" y="24" font-size="11" font-weight="800" fill="#B91C1C">2. Lateral Divergent Mining</text>
+        <text x="10" y="44" font-size="9.5" font-weight="600" fill="#334155">Guides Generator to explore more bugs:</text>
+        <text x="10" y="62" font-size="9" font-weight="500" fill="#475569">• Mutate alternative buffer layouts</text>
+        <text x="10" y="78" font-size="9" font-weight="500" fill="#475569">• Diverse alloca/VLA nesting depths</text>
+        <text x="10" y="94" font-size="9" font-weight="500" fill="#475569">• Exploit sister struct alignments</text>
+        <text x="10" y="112" font-size="9.5" font-weight="600" fill="#4338CA">• Continues in same time budget T</text>
+        
+        <rect x="8" y="128" width="226" height="30" rx="4" fill="#FEE2E2"/>
+        <text x="121" y="147" font-size="10" font-weight="800" fill="#DC2626" text-anchor="middle">→ Maximize bugs in budget T!</text>
+      </g>
+
+      <!-- Feed into Probe Corpus -->
+      <g transform="translate(10, 290)">
+        <rect x="0" y="0" width="242" height="74" rx="5" fill="#991B1B"/>
+        <text x="10" y="20" font-size="11" font-weight="800" fill="#FEE2E2">3. Verified 0-Day / Patch PoV</text>
+        <text x="10" y="38" font-size="9.5" font-weight="500" fill="#FECACA">Deterministic proof artifact stored</text>
+        <text x="10" y="56" font-size="9.5" font-weight="700" fill="#FDE047">Feeds RAG Probe Pool (Bottom)</text>
+      </g>
+    </g>
+
+    <!-- Lateral Loop back to Generator -->
+    <path d="M 14 650 H -4 V 200 H 10" stroke="#DC2626" stroke-width="2" stroke-dasharray="4 3" fill="none" marker-end="url(#arrow-red)"/>
+    <g transform="translate(-16, 390)">
+      <rect x="0" y="0" width="22" height="90" rx="3" fill="#FEE2E2" stroke="#FCA5A5"/>
+      <text x="11" y="48" font-size="8" font-weight="800" fill="#DC2626" text-anchor="middle" transform="rotate(-90 11 48)">LATERAL LOOP</text>
+    </g>
+
+    <!-- ========================================================= -->
+    <!-- BRANCH 2 (RIGHT COLUMN OF PHASE 4): DIAGNOSTICS & ADAPTIVE CHECKER -->
+    <!-- ========================================================= -->
+    <g transform="translate(296, 482)">
+      <rect x="0" y="0" width="262" height="376" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5" class="card-shadow"/>
+      
+      <!-- Feedback Header -->
+      <rect x="10" y="10" width="242" height="30" rx="5" fill="url(#grad-feedback)"/>
+      <g transform="translate(18, 15)" color="#FFFFFF">
+        <use href="#icon-diagnostics" width="18" height="18"/>
+      </g>
+      <text x="42" y="29" font-size="11.5" font-weight="800" fill="#FFFFFF">Diagnostics &amp; Feedback Agent</text>
+
+      <!-- Diagnostic Parser via MCP -->
+      <g transform="translate(10, 48)">
+        <rect x="0" y="0" width="242" height="74" rx="5" fill="#FFFFFF" stroke="#FDE68A"/>
+        <text x="10" y="18" font-size="10.5" font-weight="700" fill="#92400E">1. Advanced Diagnostic MCP</text>
+        <text x="10" y="34" font-size="9" font-weight="500" fill="#475569">• Stack usage bytes (detect stack=0)</text>
+        <text x="10" y="48" font-size="9" font-weight="500" fill="#475569">• Optimization missed diagnostics</text>
+        <text x="10" y="62" font-size="9" font-weight="600" fill="#D97706">• Injected Log IDs execution hit rate</text>
+      </g>
+
+      <!-- Self-Healing Checker Rewrite Loop -->
+      <g transform="translate(10, 130)">
+        <rect x="0" y="0" width="242" height="126" rx="5" fill="#FEF3C7" stroke="#F59E0B" class="glow-amber"/>
+        <g transform="translate(10, 10)" color="#B45309">
+          <use href="#icon-refresh" width="18" height="18"/>
+        </g>
+        <text x="32" y="24" font-size="11" font-weight="800" fill="#92400E">2. Adaptive Checker Rewrite</text>
+        <text x="10" y="44" font-size="9.5" font-weight="600" fill="#B45309">If NA/Error decisions &gt; threshold K:</text>
+        <text x="10" y="60" font-size="9" font-weight="500" fill="#78350F">• Refinement Agent rewrites checker</text>
+        <text x="10" y="74" font-size="9" font-weight="500" fill="#78350F">• Re-verified via Tier 1 Baseline Gate</text>
+        <text x="10" y="88" font-size="9" font-weight="500" fill="#78350F">• Zero goalpost drift verified</text>
+        
+        <rect x="8" y="96" width="226" height="22" rx="3" fill="#F59E0B"/>
+        <text x="121" y="111" font-size="9.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">→ Hot-reloads patched Checker!</text>
+      </g>
+
+      <!-- Targeted Seed Guidance -->
+      <g transform="translate(10, 264)">
+        <rect x="0" y="0" width="242" height="100" rx="5" fill="#FFFFFF" stroke="#FDE68A"/>
+        <text x="10" y="18" font-size="10.5" font-weight="700" fill="#92400E">3. Anti-Optimization Guidance</text>
+        <text x="10" y="34" font-size="9" font-weight="600" fill="#475569">Actionable hints for next round:</text>
+        <text x="10" y="52" font-size="9" font-weight="500" fill="#64748B" class="code-text">• Add memory clobber barrier</text>
+        <text x="10" y="68" font-size="9" font-weight="500" fill="#64748B" class="code-text">• Force volatile escape sink</text>
+        <text x="10" y="84" font-size="9" font-weight="500" fill="#64748B" class="code-text">• Adjust frame layout switches</text>
+      </g>
+    </g>
+
+    <!-- Feedback Guidance Loop back to Generator -->
+    <path d="M 558 780 H 576 V 200 H 562" stroke="#EA580C" stroke-width="2" stroke-dasharray="4 3" fill="none" marker-end="url(#arrow-orange)"/>
+    <g transform="translate(566, 390)">
+      <rect x="0" y="0" width="22" height="90" rx="3" fill="#FFEDD5" stroke="#FDBA74"/>
+      <text x="11" y="48" font-size="8" font-weight="800" fill="#C2410C" text-anchor="middle" transform="rotate(90 11 48)">GUIDANCE LOOP</text>
+    </g>
+
+    <!-- Checker Rewrite Loop back to Phase 3 -->
+    <path d="M 296 660 H 280 V 866 H -300 V 360 H -294" stroke="#7C3AED" stroke-width="2.2" stroke-dasharray="5 3" fill="none" marker-end="url(#arrow-purple)"/>
+    <rect x="180" y="854" width="190" height="22" rx="4" fill="#7C3AED"/>
+    <text x="275" y="869" font-size="9.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Adaptive Checker Rewrite (Hot Reload)</text>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- BOTTOM SECTION: CONTINUOUS KNOWLEDGE BLACKBOARD & HISTORICAL PROBE POOL -->
+  <!-- Coordinates: x=24, y=642, w=1040, h=310 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(24, 642)" class="card-shadow">
+    <rect x="0" y="0" width="1040" height="310" rx="12" fill="url(#grad-blackboard)" stroke="#94A3B8" stroke-width="1.8"/>
+    
+    <!-- Section Header Badge -->
+    <rect x="12" y="10" width="1016" height="36" rx="8" fill="#334155"/>
+    <g transform="translate(20, 19)" color="#FFFFFF">
+      <use href="#icon-database" width="20" height="20"/>
+    </g>
+    <text x="46" y="33" font-size="13.5" font-weight="800" fill="#FFFFFF">
+      Continuous Knowledge Blackboard, Grounding Gates &amp; Historical Bug Probe Pool
+    </text>
+    <rect x="866" y="17" width="150" height="22" rx="4" fill="#475569"/>
+    <text x="941" y="32" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Auditable &amp; Replayable</text>
+
+    <!-- 3 Major Horizontal Panels in Blackboard -->
+    <g transform="translate(12, 54)">
+      <!-- Panel 1: Versioned Storage -->
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="326" height="242" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+        <g transform="translate(10, 10)" color="#1E293B">
+          <use href="#icon-database" width="16" height="16"/>
+        </g>
+        <text x="32" y="23" font-size="12" font-weight="700" fill="#1E293B">Versioned Storage Store</text>
+        
+        <g transform="translate(10, 32)">
+          <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="306" height="58" rx="4" fill="#F8FAFC" stroke="#E2E8F0"/>
+            <text x="8" y="16" font-size="10" font-weight="700" fill="#334155">• Invariant Queue &amp; Catalog</text>
+            <text x="8" y="32" font-size="9" font-weight="500" fill="#64748B">Structured specs: StackProtector, CET/IBT,</text>
+            <text x="8" y="46" font-size="9" font-weight="500" fill="#64748B">PAC, CFI, ASan, ShadowStack, Fortify</text>
+          </g>
+
+          <g transform="translate(0, 66)">
+            <rect x="0" y="0" width="306" height="58" rx="4" fill="#F8FAFC" stroke="#E2E8F0"/>
+            <text x="8" y="16" font-size="10" font-weight="700" fill="#334155">• Seed Mutation &amp; Telemetry</text>
+            <text x="8" y="32" font-size="9" font-weight="500" fill="#64748B">Branch coverage bitmaps, GIMPLE/RTL dumps,</text>
+            <text x="8" y="46" font-size="9" font-weight="500" fill="#64748B">and runtime probe telemetry logs</text>
+          </g>
+
+          <g transform="translate(0, 132)">
+            <rect x="0" y="0" width="306" height="66" rx="4" fill="#F8FAFC" stroke="#E2E8F0"/>
+            <text x="8" y="16" font-size="10" font-weight="700" fill="#334155">• Replay &amp; Ablation Infrastructure</text>
+            <text x="8" y="32" font-size="9" font-weight="500" fill="#64748B">Deterministic replay across compiler versions</text>
+            <text x="8" y="46" font-size="9" font-weight="600" fill="#2563EB">(GCC 13-17 / LLVM 15-19)</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Panel 2: Two-Tier Grounding Gates -->
+      <g transform="translate(345, 0)">
+        <rect x="0" y="0" width="326" height="242" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+        <g transform="translate(10, 10)" color="#1E293B">
+          <use href="#icon-shield" width="16" height="16"/>
+        </g>
+        <text x="32" y="23" font-size="12" font-weight="700" fill="#1E293B">Two-Tier Grounding Gates</text>
+        
+        <g transform="translate(10, 32)">
+          <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="306" height="58" rx="4" fill="#F0FDF4" stroke="#BBF7D0"/>
+            <text x="8" y="16" font-size="10" font-weight="700" fill="#15803D">Tier 1: Canonical Baseline Gate</text>
+            <text x="8" y="32" font-size="9" font-weight="500" fill="#475569">Replayed on canonical test suites</text>
+            <text x="8" y="46" font-size="9" font-weight="600" fill="#16A34A">Guarantees zero false-positive oracle drift</text>
+          </g>
+
+          <g transform="translate(0, 66)">
+            <rect x="0" y="0" width="306" height="58" rx="4" fill="#EFF6FF" stroke="#BFDBFE"/>
+            <text x="8" y="16" font-size="10" font-weight="700" fill="#1D4ED8">Tier 2: Novelty &amp; Entailment Filter</text>
+            <text x="8" y="32" font-size="9" font-weight="500" fill="#475569">Novelty score threshold &gt; 85.0 vs. manual rules</text>
+            <text x="8" y="46" font-size="9" font-weight="600" fill="#2563EB">Validates logical entailment from source</text>
+          </g>
+
+          <g transform="translate(0, 132)">
+            <rect x="0" y="0" width="306" height="66" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+            <text x="8" y="16" font-size="10" font-weight="700" fill="#7C3AED">Hot-Reload Gate for Patched Checkers</text>
+            <text x="8" y="32" font-size="9" font-weight="500" fill="#6D28D9">Patched checkers must re-pass Tier 1 gate</text>
+            <text x="8" y="46" font-size="9" font-weight="600" fill="#7C3AED">Enables continuous self-healing without regression</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Panel 3: Closed-Loop RAG Bug Probe Pool -->
+      <g transform="translate(690, 0)">
+        <rect x="0" y="0" width="326" height="242" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+        <g transform="translate(10, 10)" color="#991B1B">
+          <use href="#icon-refresh" width="16" height="16"/>
+        </g>
+        <text x="32" y="23" font-size="12" font-weight="700" fill="#991B1B">Closed-Loop RAG Probe Corpus</text>
+        
+        <g transform="translate(10, 32)">
+          <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="306" height="66" rx="4" fill="#FEF2F2" stroke="#FECACA"/>
+            <text x="8" y="16" font-size="10" font-weight="800" fill="#DC2626">0-Day Homologue Loop</text>
+            <text x="8" y="32" font-size="9" font-weight="500" fill="#475569">Confirmed root causes distilled into new probes</text>
+            <text x="8" y="48" font-size="9" font-weight="700" fill="#B91C1C">Searches sibling flaws in other backends!</text>
+          </g>
+
+          <g transform="translate(0, 74)">
+            <rect x="0" y="0" width="306" height="124" rx="4" fill="#0F172A"/>
+            <text x="8" y="16" font-size="10" font-weight="700" fill="#38BDF8">Homologue Transfer Yields:</text>
+            <text x="8" y="34" font-size="9" font-weight="500" fill="#F1F5F9" class="code-text">• AArch64 VLA bypass → RISC-V Frame</text>
+            <text x="8" y="50" font-size="9" font-weight="500" fill="#F1F5F9" class="code-text">• Temporary register leak → CET IBT</text>
+            <text x="8" y="66" font-size="9" font-weight="500" fill="#F1F5F9" class="code-text">• SRA optimization wipe → CFI check</text>
+            <text x="8" y="84" font-size="9" font-weight="600" fill="#4ADE80" class="code-text">→ Continuous evolutionary testing</text>
+            <text x="8" y="100" font-size="9" font-weight="500" fill="#60A5FA" class="code-text">  Feeds SpecGen RAG knowledge base</text>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connecting Arrows: Phase 4 Bug Found -> Bottom Probe Pool -->
+  <path d="M 1110 858 V 896 H 1020" stroke="#DC2626" stroke-width="2.5" fill="none" marker-end="url(#arrow-red)"/>
+  
+  <!-- Connecting Arrows: Bottom Probe Pool -> Phase 1 SpecGen (Routed safely along the outer perimeter) -->
+  <path d="M 710 958 H 14 V 360 H 20" stroke="#2563EB" stroke-width="2.2" stroke-dasharray="5 3" fill="none" marker-end="url(#arrow-blue)"/>
+  <rect x="360" y="946" width="240" height="22" rx="4" fill="#1E40AF"/>
+  <text x="480" y="961" font-size="10" font-weight="700" fill="#FFFFFF" text-anchor="middle">Homologue Probes Fed to SpecGen RAG</text>
+
+</svg>

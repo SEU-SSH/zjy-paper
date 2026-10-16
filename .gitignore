@@ -17,3 +17,22 @@
 *.swp
 *.swo
 *~
+
+# Local DeFuzz compiler mutation experiment: large/local data only
+.defuzz-experiment/cache/
+.defuzz-experiment/input/
+.defuzz-experiment/logs/
+.defuzz-experiment/sources/llvm-*
+.defuzz-experiment/sources/gcc-*
+.defuzz-experiment/work/
+.defuzz-experiment/implement_defuzz.py
+.defuzz-experiment/selector-test-logs/
+.defuzz-experiment/selector_smoke.cpp
+.defuzz-experiment/scripts/__pycache__/
+
+# Temporary page and diff previews
+*_page*.png
+paper_page*.png
+final_paper_page*.png
+check_*.png
+preview_page*.png

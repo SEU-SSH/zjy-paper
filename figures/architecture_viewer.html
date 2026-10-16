@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeFuzz 全文核心方法架构图</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      padding: 12px 20px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+    .header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      background: #2563eb;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+    .btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background: #475569;
+      border-color: #64748b;
+    }
+    .btn-primary {
+      background: #2563eb;
+      border-color: #3b82f6;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+    .canvas-container {
+      flex: 1;
+      position: relative;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #090d16;
+      padding: 20px;
+    }
+    .svg-wrapper {
+      max-width: 100%;
+      max-height: 100%;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+      transform-origin: center center;
+    }
+    .svg-wrapper svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>
+      <span>🛡️ DeFuzz: End-to-End Invariant-Driven Agentic Testing Architecture</span>
+      <span class="badge">Top-Tier Conf Ready</span>
+    </h1>
+    <div class="controls">
+      <button class="btn" onclick="zoomIn()">🔍 放大</button>
+      <button class="btn" onclick="zoomOut()">🔍 缩小</button>
+      <button class="btn" onclick="resetZoom()">🔄 重置</button>
+      <button class="btn btn-primary" onclick="window.open('figures/architecture.pdf', '_blank')">📄 打开 PDF</button>
+    </div>
+  </div>
+  <div class="canvas-container" id="container">
+    <div class="svg-wrapper" id="wrapper">
+      <?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1680 1000" width="1680" height="1000">
+  <defs>
+    <style><![CDATA[
+      text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .code-text {
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+      
+      /* Drop Shadows & Filters */
+      .card-shadow {
+        filter: drop-shadow(0px 3px 6px rgba(15, 23, 42, 0.06)) drop-shadow(0px 1px 2px rgba(15, 23, 42, 0.04));
+      }
+      .card-shadow-lg {
+        filter: drop-shadow(0px 6px 14px rgba(15, 23, 42, 0.09)) drop-shadow(0px 2px 4px rgba(15, 23, 42, 0.05));
+      }
+      .glow-purple {
+        filter: drop-shadow(0px 0px 8px rgba(147, 51, 234, 0.35));
+      }
+      .glow-red {
+        filter: drop-shadow(0px 0px 8px rgba(220, 38, 38, 0.35));
+      }
+      .glow-green {
+        filter: drop-shadow(0px 0px 8px rgba(22, 163, 74, 0.35));
+      }
+      .glow-amber {
+        filter: drop-shadow(0px 0px 8px rgba(217, 119, 6, 0.35));
+      }
+    ]]></style>
+
+    <!-- Gradients -->
+    <linearGradient id="bg-canvas" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="50%" stop-color="#F1F5F9" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+
+    <linearGradient id="grad-header" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#EFF6FF" />
+      <stop offset="100%" stop-color="#DBEAFE" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F0FDFA" />
+      <stop offset="100%" stop-color="#CCFBF1" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F0FDF4" />
+      <stop offset="100%" stop-color="#DCFCE7" />
+    </linearGradient>
+
+    <linearGradient id="grad-phase4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FAF5FF" />
+      <stop offset="100%" stop-color="#F3E8FF" />
+    </linearGradient>
+
+    <linearGradient id="grad-blackboard" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="100%" stop-color="#E2E8F0" />
+    </linearGradient>
+
+    <!-- Node Gradients -->
+    <linearGradient id="grad-agent-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#6D28D9" />
+    </linearGradient>
+    
+    <linearGradient id="grad-agent-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D9488" />
+      <stop offset="100%" stop-color="#0F766E" />
+    </linearGradient>
+
+    <linearGradient id="grad-agent-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+
+    <linearGradient id="grad-violation" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DC2626" />
+      <stop offset="100%" stop-color="#991B1B" />
+    </linearGradient>
+
+    <linearGradient id="grad-feedback" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EA580C" />
+      <stop offset="100%" stop-color="#C2410C" />
+    </linearGradient>
+
+    <!-- Marker Arrows -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#2563EB" />
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#0D9488" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#16A34A" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#7C3AED" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#DC2626" />
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#EA580C" />
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 8 5 L 0 9 z" fill="#475569" />
+    </marker>
+
+    <!-- Vector Icons Library -->
+    <!-- Robot / Agent Icon -->
+    <g id="icon-agent">
+      <rect x="2" y="5" width="16" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="7" cy="10" r="1.5" fill="currentColor"/>
+      <circle cx="13" cy="10" r="1.5" fill="currentColor"/>
+      <path d="M7 14 H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M10 2 V5" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="10" cy="2" r="1" fill="currentColor"/>
+      <path d="M0 9 H2 M18 9 H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Shield / Defense Icon -->
+    <g id="icon-shield">
+      <path d="M10 2 L3 5 V10 C3 14.5 6 18.5 10 20 C14 18.5 17 14.5 17 10 V5 L10 2 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M7 10 L9 12 L13 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Book / Corpus Icon -->
+    <g id="icon-book">
+      <path d="M4 19.5 A2.5 2.5 0 0 1 6.5 17 H20" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M6.5 2 H20 V22 H6.5 A2.5 2.5 0 0 1 4 19.5 V4.5 A2.5 2.5 0 0 1 6.5 2 z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+
+    <!-- Gears / Engine Icon -->
+    <g id="icon-gears">
+      <circle cx="10" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M10 2 V4 M10 16 V18 M2 10 H4 M16 10 H18 M4.9 4.9 L6.3 6.3 M13.7 13.7 L15.1 15.1 M4.9 15.1 L6.3 13.7 M13.7 6.3 L15.1 4.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </g>
+
+    <!-- Graph / Call-Graph Icon -->
+    <g id="icon-graph">
+      <circle cx="5" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="15" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="10" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M7.5 6.5 L8.5 12.5 M12.5 6.5 L11.5 12.5 M8 5 H12" stroke="currentColor" stroke-width="1.5"/>
+    </g>
+
+    <!-- Compiler / Processor Chip Icon -->
+    <g id="icon-compiler">
+      <rect x="3" y="3" width="14" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M7 8 L10 11 L7 14 M12 14 H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 1 V3 M12 1 V3 M8 17 V19 M12 17 V19 M1 8 H3 M1 12 H3 M17 8 H19 M17 12 H19" stroke="currentColor" stroke-width="1.5"/>
+    </g>
+
+    <!-- Log / Terminal Instrumentation Icon -->
+    <g id="icon-log">
+      <rect x="2" y="3" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M5 7 L8 10 L5 13 M10 13 H15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Checker / Microscope Icon -->
+    <g id="icon-checker">
+      <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M13.5 13.5 L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M7 9 H11 M9 7 V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- Scale / Verdict Balance Icon -->
+    <g id="icon-scale">
+      <path d="M10 3 V17 M4 7 H16 M10 17 H6 M10 17 H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4 7 L2 12 H6 Z M16 7 L14 12 H18 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    </g>
+
+    <!-- Bug / Exploit Icon -->
+    <g id="icon-bug">
+      <ellipse cx="10" cy="11" rx="5" ry="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M10 5 V3 M7 4 L5 2 M13 4 L15 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M5 9 H2 M15 9 H18 M5 12 H2 M15 12 H18 M6 15 L3 17 M14 15 L17 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="8" cy="9" r="1" fill="currentColor"/>
+      <circle cx="12" cy="9" r="1" fill="currentColor"/>
+    </g>
+
+    <!-- Diagnostics / Waveform Icon -->
+    <g id="icon-diagnostics">
+      <rect x="2" y="2" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M4 10 H7 L9 5 L11 15 L13 8 L14 10 H16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Target Lock / Clock Icon -->
+    <g id="icon-target-clock">
+      <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M10 5 V10 L13 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M10 1 V3 M10 17 V19 M1 10 H3 M17 10 H19" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+
+    <!-- Refresh / Self-Healing Loop Icon -->
+    <g id="icon-refresh">
+      <path d="M3 10 A7 7 0 1 1 10 17 M10 17 L7 14 M10 17 L13 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M17 10 A7 7 0 0 1 10 3 M10 3 L13 6 M10 3 L7 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Lateral Exploration / Branching Icon -->
+    <g id="icon-lateral">
+      <circle cx="4" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="16" cy="5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="16" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M6.5 9.5 C10 8 11 5 13.5 5 M6.5 10.5 C10 12 11 15 13.5 15" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+
+    <!-- Database / Storage Icon -->
+    <g id="icon-database">
+      <ellipse cx="10" cy="5" rx="7" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M3 5 V15 C3 16.5 6 17.5 10 17.5 C14 17.5 17 16.5 17 15 V5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M3 10 C3 11.5 6 12.5 10 12.5 C14 12.5 17 11.5 17 10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </g>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect x="0" y="0" width="1680" height="1000" fill="url(#bg-canvas)" rx="16"/>
+
+  <!-- ========================================================================= -->
+  <!-- TOP HEADER & TITLE BAR -->
+  <!-- ========================================================================= -->
+  <g transform="translate(24, 16)">
+    <rect x="0" y="0" width="1632" height="52" rx="10" fill="url(#grad-header)" class="card-shadow"/>
+    
+    <!-- Title Text -->
+    <text x="24" y="33" font-size="18.5" font-weight="800" fill="#FFFFFF" letter-spacing="0.2">
+      DeFuzz: Invariant-Guided Agentic Testing &amp; Adaptive Self-Healing Framework for Compiler Defenses
+    </text>
+    
+    <!-- Badges on the right -->
+    <g transform="translate(1160, 12)">
+      <rect x="0" y="0" width="135" height="28" rx="6" fill="#3B82F6" opacity="0.25"/>
+      <rect x="0" y="0" width="135" height="28" rx="6" fill="none" stroke="#60A5FA" stroke-width="1"/>
+      <text x="67" y="19" font-size="11.5" font-weight="700" fill="#93C5FD" text-anchor="middle">IEEE S&amp;P / CCS Style</text>
+    </g>
+    <g transform="translate(1310, 12)">
+      <rect x="0" y="0" width="155" height="28" rx="6" fill="#10B981" opacity="0.2"/>
+      <rect x="0" y="0" width="155" height="28" rx="6" fill="none" stroke="#34D399" stroke-width="1"/>
+      <text x="77" y="19" font-size="11.5" font-weight="700" fill="#6EE7B7" text-anchor="middle">GCC 13-17 &amp; LLVM 15-19</text>
+    </g>
+    <g transform="translate(1480, 12)">
+      <rect x="0" y="0" width="138" height="28" rx="6" fill="#8B5CF6" opacity="0.25"/>
+      <rect x="0" y="0" width="138" height="28" rx="6" fill="none" stroke="#A78BFA" stroke-width="1"/>
+      <text x="69" y="19" font-size="11.5" font-weight="700" fill="#C4B5FD" text-anchor="middle">Agentic Directed Fuzz</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 1: INVARIANT FORMULATION & SPECGEN (OFFLINE) -->
+  <!-- Coordinates: x=24, y=82, w=340, h=550 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(24, 82)" class="card-shadow">
+    <rect x="0" y="0" width="340" height="550" rx="12" fill="url(#grad-phase1)" stroke="#93C5FD" stroke-width="1.8"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="12" y="12" width="316" height="40" rx="8" fill="#1E40AF"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-shield" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13" font-weight="800" fill="#FFFFFF">PHASE 1: Invariant SpecGen</text>
+    <rect x="228" y="21" width="90" height="22" rx="4" fill="#3B82F6"/>
+    <text x="273" y="36" font-size="10" font-weight="700" fill="#FFFFFF" text-anchor="middle">Offline CoT+RAG</text>
+
+    <!-- Sub-block 1: Tri-Knowledge Sources -->
+    <g transform="translate(12, 62)">
+      <rect x="0" y="0" width="316" height="114" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.2"/>
+      <g transform="translate(12, 8)" color="#1E3A8A">
+        <use href="#icon-book" width="16" height="16"/>
+      </g>
+      <text x="32" y="21" font-size="11.5" font-weight="700" fill="#1E3A8A">Multi-Source Knowledge Corpus</text>
+      
+      <!-- Source Item 1 -->
+      <rect x="10" y="28" width="296" height="22" rx="4" fill="#F1F5F9"/>
+      <text x="16" y="43" font-size="10" font-weight="600" fill="#334155">• Compiler Source &amp; Comments</text>
+      <text x="238" y="43" font-size="9" font-weight="500" fill="#64748B" class="code-text">(gcc/llvm)</text>
+      
+      <!-- Source Item 2 -->
+      <rect x="10" y="54" width="296" height="22" rx="4" fill="#F1F5F9"/>
+      <text x="16" y="69" font-size="10" font-weight="600" fill="#334155">• ABI &amp; ISA Specifications</text>
+      <text x="205" y="69" font-size="9" font-weight="500" fill="#64748B" class="code-text">(AArch64, CET)</text>
+      
+      <!-- Source Item 3 -->
+      <rect x="10" y="80" width="296" height="22" rx="4" fill="#F1F5F9"/>
+      <text x="16" y="95" font-size="10" font-weight="600" fill="#334155">• Historical Security Vulnerabilities</text>
+      <text x="218" y="95" font-size="9" font-weight="600" fill="#DC2626" class="code-text">(CVE-2023-4039)</text>
+    </g>
+
+    <!-- Sub-block 2: SpecGen Extraction Engine -->
+    <g transform="translate(12, 186)">
+      <rect x="0" y="0" width="316" height="160" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.2"/>
+      <g transform="translate(12, 8)" color="#1E3A8A">
+        <use href="#icon-gears" width="16" height="16"/>
+      </g>
+      <text x="32" y="21" font-size="11.5" font-weight="700" fill="#1E3A8A">SpecGen Extraction &amp; Synthesis</text>
+      
+      <!-- Path A: Segmented CoT -->
+      <g transform="translate(10, 28)">
+        <rect x="0" y="0" width="296" height="54" rx="5" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+        <text x="10" y="18" font-size="10.5" font-weight="700" fill="#1D4ED8">Path A: Segmented CoT Review</text>
+        <text x="10" y="34" font-size="9.5" font-weight="500" fill="#475569">Partitions source by defense pass boundary;</text>
+        <text x="10" y="47" font-size="9.5" font-weight="500" fill="#475569">Isolates assets, conditions &amp; security bounds</text>
+      </g>
+
+      <!-- Path B: Historical-Bug RAG -->
+      <g transform="translate(10, 90)">
+        <rect x="0" y="0" width="296" height="60" rx="5" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1"/>
+        <text x="10" y="18" font-size="10.5" font-weight="700" fill="#1D4ED8">Path B: Historical-Bug Homologue RAG</text>
+        <text x="10" y="33" font-size="9" font-weight="500" fill="#475569">Dual-query: BM25 (tokens) + Dense Embed</text>
+        <text x="10" y="46" font-size="9" font-weight="600" fill="#0D9488" class="code-text">Cross-backend root-cause homology transfer</text>
+        <text x="10" y="56" font-size="8.5" font-weight="500" fill="#64748B">(e.g. AArch64 VLA flaw → RISC-V Frame)</text>
+      </g>
+    </g>
+
+    <!-- Sub-block 3: Formal Invariant Schema -->
+    <g transform="translate(12, 356)">
+      <rect x="0" y="0" width="316" height="180" rx="8" fill="#1E293B" stroke="#0F172A" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#60A5FA">
+        <use href="#icon-shield" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="11.5" font-weight="700" fill="#93C5FD">Formal Security Invariant Schema</text>
+      
+      <!-- Invariant Box Display -->
+      <g transform="translate(8, 30)">
+        <rect x="0" y="0" width="300" height="140" rx="5" fill="#0F172A"/>
+        <text x="10" y="18" font-size="9.5" font-weight="600" fill="#F87171" class="code-text">id: <tspan fill="#FDE047">"INV-SP-L02"</tspan> <tspan fill="#94A3B8">(Stack-Protector)</tspan></text>
+        <text x="10" y="34" font-size="9.5" font-weight="500" fill="#38BDF8" class="code-text">asset: <tspan fill="#F1F5F9">"Saved LR &amp; Frame Boundary"</tspan></text>
+        <text x="10" y="50" font-size="9.5" font-weight="500" fill="#38BDF8" class="code-text">precond: <tspan fill="#F1F5F9">"VLA / Dynamic alloca present"</tspan></text>
+        <text x="10" y="66" font-size="9.5" font-weight="700" fill="#4ADE80" class="code-text">guarantee: <tspan fill="#A7F3D0">"canary_offset &gt; max_buf_offset"</tspan></text>
+        <text x="10" y="82" font-size="9.5" font-weight="500" fill="#C084FC" class="code-text">observation: <tspan fill="#E2E8F0">"Guard intact on overflow"</tspan></text>
+        <text x="10" y="98" font-size="9" font-weight="500" fill="#94A3B8" class="code-text">grounding: <tspan fill="#6EE7B7">"PR-96191, aarch64.cc:6912"</tspan></text>
+        <text x="10" y="114" font-size="9" font-weight="600" fill="#F59E0B" class="code-text">budget: <tspan fill="#FDE68A">Fixed Window T (e.g. 30min)</tspan></text>
+        <text x="10" y="130" font-size="9" font-weight="500" fill="#60A5FA" class="code-text">verdict: <tspan fill="#F1F5F9">{PASS, FAIL, NA, ERROR}</tspan></text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Flow Arrow Phase 1 -> Phase 2 -->
+  <path d="M 364 240 H 380" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+  <path d="M 364 450 H 380" stroke="#2563EB" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 2: INVARIANT-TO-SOURCE MAPPING & INSTRUMENTATION (AGENTIC SETUP) -->
+  <!-- Coordinates: x=384, y=82, w=370, h=550 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(384, 82)" class="card-shadow">
+    <rect x="0" y="0" width="370" height="550" rx="12" fill="url(#grad-phase2)" stroke="#5EEAD4" stroke-width="1.8"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="12" y="12" width="346" height="40" rx="8" fill="#0F766E"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-graph" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13" font-weight="800" fill="#FFFFFF">PHASE 2: Source Mapping &amp; Log</text>
+    <rect x="256" y="21" width="92" height="22" rx="4" fill="#0D9488"/>
+    <text x="302" y="36" font-size="10" font-weight="700" fill="#FFFFFF" text-anchor="middle">Free Agent</text>
+
+    <!-- Sub-block 1: Autonomous Free Analysis Agent & Tool Suite -->
+    <g transform="translate(12, 62)">
+      <rect x="0" y="0" width="346" height="114" rx="8" fill="#FFFFFF" stroke="#99F6E4" stroke-width="1.2"/>
+      
+      <!-- Agent Badge -->
+      <rect x="10" y="10" width="326" height="28" rx="5" fill="url(#grad-agent-teal)"/>
+      <g transform="translate(18, 15)" color="#FFFFFF">
+        <use href="#icon-agent" width="18" height="18"/>
+      </g>
+      <text x="42" y="29" font-size="11.5" font-weight="700" fill="#FFFFFF">Source-Analysis Agent (Claude Code / Free Agent)</text>
+      
+      <!-- Tool Integrations & MCP -->
+      <g transform="translate(10, 46)">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="103" height="56" rx="4" fill="#F0FDFA" stroke="#99F6E4"/>
+          <text x="51" y="16" font-size="10" font-weight="700" fill="#0F766E" text-anchor="middle">CodeQL Engine</text>
+          <text x="51" y="30" font-size="8.5" font-weight="500" fill="#475569" text-anchor="middle">Points-to &amp; Devirt</text>
+          <text x="51" y="44" font-size="8.5" font-weight="600" fill="#0D9488" text-anchor="middle" class="code-text">AST queries</text>
+        </g>
+
+        <g transform="translate(111, 0)">
+          <rect x="0" y="0" width="104" height="56" rx="4" fill="#F0FDFA" stroke="#99F6E4"/>
+          <text x="52" y="16" font-size="10" font-weight="700" fill="#0F766E" text-anchor="middle">Native IPA Dump</text>
+          <text x="52" y="30" font-size="8.5" font-weight="500" fill="#475569" text-anchor="middle">-fdump-ipa-cgraph</text>
+          <text x="52" y="44" font-size="8.5" font-weight="600" fill="#0D9488" text-anchor="middle" class="code-text">opt dot-callgraph</text>
+        </g>
+
+        <g transform="translate(223, 0)">
+          <rect x="0" y="0" width="103" height="56" rx="4" fill="#F0FDFA" stroke="#99F6E4"/>
+          <text x="51" y="16" font-size="10" font-weight="700" fill="#0F766E" text-anchor="middle">File / Grep MCP</text>
+          <text x="51" y="30" font-size="8.5" font-weight="500" fill="#475569" text-anchor="middle">Exact line ranges</text>
+          <text x="51" y="44" font-size="8.5" font-weight="600" fill="#0D9488" text-anchor="middle" class="code-text">Source context</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Sub-block 2: 3-Level Invariant-to-Source Mapping -->
+    <g transform="translate(12, 186)">
+      <rect x="0" y="0" width="346" height="174" rx="8" fill="#FFFFFF" stroke="#99F6E4" stroke-width="1.2"/>
+      <g transform="translate(12, 8)" color="#134E4A">
+        <use href="#icon-graph" width="16" height="16"/>
+      </g>
+      <text x="32" y="21" font-size="11.5" font-weight="700" fill="#134E4A">3-Level Hierarchical Code Mapping</text>
+      
+      <!-- Level 1: Pass Scope -->
+      <g transform="translate(10, 28)">
+        <rect x="0" y="0" width="326" height="40" rx="5" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#0F766E">L1: Pipeline Pass Scope</text>
+        <text x="10" y="31" font-size="9" font-weight="500" fill="#475569" class="code-text">pass_thread_prologue_and_epilogue (aarch64.cc)</text>
+      </g>
+
+      <!-- Level 2: Function Cluster -->
+      <g transform="translate(10, 74)">
+        <rect x="0" y="0" width="326" height="48" rx="5" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="10" y="16" font-size="10" font-weight="700" fill="#0F766E">L2: Deep Function Cluster (Call Graph)</text>
+        <text x="10" y="30" font-size="9" font-weight="500" fill="#475569" class="code-text">aarch64_layout_frame → assign_stack_local_1</text>
+        <text x="10" y="42" font-size="8.5" font-weight="600" fill="#0D9488">(Penetrates virtual dispatch &amp; deep stacks: depth 6+)</text>
+      </g>
+
+      <!-- Level 3: Semantic Anchors -->
+      <g transform="translate(10, 128)">
+        <rect x="0" y="0" width="326" height="40" rx="5" fill="#F8FAFC" stroke="#E2E8F0"/>
+        <text x="10" y="15" font-size="10" font-weight="700" fill="#0F766E">L3: Semantic Anchors &amp; Critical Conditions</text>
+        <text x="10" y="30" font-size="8.5" font-weight="500" fill="#334155" class="code-text">struct aarch64_frame, locals_offset &lt; canary_offset</text>
+      </g>
+    </g>
+
+    <!-- Sub-block 3: ID-Prefixed Log Instrumentation & Rebuild -->
+    <g transform="translate(12, 368)">
+      <rect x="0" y="0" width="346" height="168" rx="8" fill="#134E4A" stroke="#042F2E" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#5EEAD4">
+        <use href="#icon-log" width="16" height="16"/>
+      </g>
+      <text x="34" y="23" font-size="11.5" font-weight="700" fill="#5EEAD4">ID-Prefixed Log Injection &amp; Rebuild</text>
+      
+      <!-- Code Snippet Display -->
+      <g transform="translate(8, 30)">
+        <rect x="0" y="0" width="330" height="72" rx="5" fill="#042F2E"/>
+        <text x="10" y="18" font-size="9" font-weight="600" fill="#FDE047" class="code-text">// Injected Unique ID Prefix Logging</text>
+        <text x="10" y="34" font-size="8.5" font-weight="500" fill="#E0E7FF" class="code-text">fprintf(stderr, <tspan fill="#A5F3FC">"[DEFUZZ-LOG-SP-042] frame: %ld
+"</tspan>,</text>
+        <text x="10" y="48" font-size="8.5" font-weight="500" fill="#E0E7FF" class="code-text">        frame.canary_offset);</text>
+        <text x="10" y="62" font-size="8" font-weight="500" fill="#94A3B8" class="code-text">// Captured by Diagnostic Parser via MCP</text>
+      </g>
+
+      <!-- Compiler Rebuild Banner -->
+      <g transform="translate(8, 110)">
+        <rect x="0" y="0" width="330" height="48" rx="5" fill="#0F766E"/>
+        <g transform="translate(10, 15)" color="#FFFFFF">
+          <use href="#icon-compiler" width="18" height="18"/>
+        </g>
+        <text x="34" y="21" font-size="10.5" font-weight="700" fill="#FFFFFF">Rebuild Target Instrumented Compilers</text>
+        <text x="34" y="36" font-size="9" font-weight="500" fill="#CCFBF1">GCC 13-17 &amp; LLVM 15-19 with Runtime Probes</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Flow Arrow Phase 2 -> Phase 3 -->
+  <path d="M 754 240 H 770" stroke="#0D9488" stroke-width="2.5" fill="none" marker-end="url(#arrow-teal)"/>
+  <path d="M 754 450 H 770" stroke="#0D9488" stroke-width="2.5" fill="none" marker-end="url(#arrow-teal)"/>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 3: ISA-SPECIALIZED CHECKER SYNTHESIS (ORACLES) -->
+  <!-- Coordinates: x=774, y=82, w=290, h=550 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(774, 82)" class="card-shadow">
+    <rect x="0" y="0" width="290" height="550" rx="12" fill="url(#grad-phase3)" stroke="#86EFAC" stroke-width="1.8"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="12" y="12" width="266" height="40" rx="8" fill="#15803D"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-checker" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13" font-weight="800" fill="#FFFFFF">PHASE 3: ISA Oracles</text>
+    <rect x="186" y="21" width="84" height="22" rx="4" fill="#16A34A"/>
+    <text x="228" y="36" font-size="10" font-weight="700" fill="#FFFFFF" text-anchor="middle">Dual-Mode</text>
+
+    <!-- Sub-block 1: Target ISA Specialization Matrix -->
+    <g transform="translate(12, 62)">
+      <rect x="0" y="0" width="266" height="108" rx="8" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
+      <g transform="translate(10, 8)" color="#166534">
+        <use href="#icon-target-clock" width="16" height="16"/>
+      </g>
+      <text x="30" y="21" font-size="11" font-weight="700" fill="#166534">Invariant × ISA Specialization</text>
+      
+      <!-- ISA Pills -->
+      <g transform="translate(10, 26)">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="118" height="32" rx="5" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="16" font-size="9.5" font-weight="700" fill="#15803D" text-anchor="middle">AArch64</text>
+          <text x="59" y="26" font-size="8" font-weight="500" fill="#64748B" text-anchor="middle">PAC, BTI, Frame</text>
+        </g>
+
+        <g transform="translate(128, 0)">
+          <rect x="0" y="0" width="118" height="32" rx="5" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="16" font-size="9.5" font-weight="700" fill="#15803D" text-anchor="middle">x86_64</text>
+          <text x="59" y="26" font-size="8" font-weight="500" fill="#64748B" text-anchor="middle">CET / IBT, Shadow</text>
+        </g>
+
+        <g transform="translate(0, 38)">
+          <rect x="0" y="0" width="118" height="32" rx="5" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="16" font-size="9.5" font-weight="700" fill="#15803D" text-anchor="middle">RISC-V (RV64)</text>
+          <text x="59" y="26" font-size="8" font-weight="500" fill="#64748B" text-anchor="middle">Zicfilp, Zicfiss</text>
+        </g>
+
+        <g transform="translate(128, 38)">
+          <rect x="0" y="0" width="118" height="32" rx="5" fill="#F0FDF4" stroke="#86EFAC"/>
+          <text x="59" y="16" font-size="9.5" font-weight="700" fill="#15803D" text-anchor="middle">ARM32 / Thumb</text>
+          <text x="59" y="26" font-size="8" font-weight="500" fill="#64748B" text-anchor="middle">CMSE, Hardening</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Sub-block 2: Bifurcated Dual Checkers -->
+    <g transform="translate(12, 180)">
+      <rect x="0" y="0" width="266" height="186" rx="8" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
+      <g transform="translate(10, 8)" color="#166534">
+        <use href="#icon-checker" width="16" height="16"/>
+      </g>
+      <text x="30" y="21" font-size="11" font-weight="700" fill="#166534">Bifurcated Checker Suite</text>
+      
+      <!-- Static Checker -->
+      <g transform="translate(8, 26)">
+        <rect x="0" y="0" width="250" height="68" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <rect x="8" y="8" width="56" height="18" rx="3" fill="#3B82F6"/>
+        <text x="36" y="21" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">STATIC</text>
+        <text x="70" y="21" font-size="10.5" font-weight="700" fill="#1E293B">Binary Analyzer</text>
+        <text x="8" y="42" font-size="9" font-weight="500" fill="#475569">• Inspects ELF symbols &amp; sections</text>
+        <text x="8" y="56" font-size="9" font-weight="500" fill="#475569">• Disassembly &amp; CFI/Canary layout</text>
+      </g>
+
+      <!-- Dynamic Checker -->
+      <g transform="translate(8, 104)">
+        <rect x="0" y="0" width="250" height="72" rx="6" fill="#F8FAFC" stroke="#CBD5E1"/>
+        <rect x="8" y="8" width="64" height="18" rx="3" fill="#10B981"/>
+        <text x="40" y="21" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">DYNAMIC</text>
+        <text x="78" y="21" font-size="10.5" font-weight="700" fill="#1E293B">Runtime Probe</text>
+        <text x="8" y="42" font-size="9" font-weight="500" fill="#475569">• Executes test harness &amp; probes</text>
+        <text x="8" y="56" font-size="9" font-weight="500" fill="#475569">• Register snapshots &amp; canary checks</text>
+      </g>
+    </g>
+
+    <!-- Sub-block 3: Four-State Verdict Contract -->
+    <g transform="translate(12, 374)">
+      <rect x="0" y="0" width="266" height="162" rx="8" fill="#166534" stroke="#14532D" stroke-width="1.2"/>
+      <g transform="translate(12, 8)" color="#BBF7D0">
+        <use href="#icon-scale" width="16" height="16"/>
+      </g>
+      <text x="32" y="21" font-size="11" font-weight="700" fill="#BBF7D0">Four-State Verdict Contract</text>
+      
+      <!-- Verdict Pills -->
+      <g transform="translate(8, 30)">
+        <!-- PASS -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="120" height="26" rx="4" fill="#22C55E"/>
+          <text x="60" y="17" font-size="10" font-weight="800" fill="#FFFFFF" text-anchor="middle">PASS (Protected)</text>
+        </g>
+
+        <!-- FAIL -->
+        <g transform="translate(130, 0)">
+          <rect x="0" y="0" width="120" height="26" rx="4" fill="#EF4444" class="glow-red"/>
+          <text x="60" y="17" font-size="10" font-weight="800" fill="#FFFFFF" text-anchor="middle">FAIL (Buggy!)</text>
+        </g>
+
+        <!-- NOT_APPLICABLE -->
+        <g transform="translate(0, 34)">
+          <rect x="0" y="0" width="120" height="26" rx="4" fill="#E2E8F0"/>
+          <text x="60" y="17" font-size="9" font-weight="700" fill="#475569" text-anchor="middle">NOT_APPLICABLE</text>
+        </g>
+
+        <!-- ERROR -->
+        <g transform="translate(130, 34)">
+          <rect x="0" y="0" width="120" height="26" rx="4" fill="#E2E8F0"/>
+          <text x="60" y="17" font-size="9" font-weight="700" fill="#475569" text-anchor="middle">ERROR (Diag)</text>
+        </g>
+      </g>
+      
+      <text x="12" y="112" font-size="9" font-weight="500" fill="#DCFCE7">Zero goalpost drift: Checkers enforce</text>
+      <text x="12" y="126" font-size="9" font-weight="600" fill="#86EFAC">deterministic evidence adjudication.</text>
+      <text x="12" y="140" font-size="8.5" font-weight="500" fill="#BBF7D0">LLM never acts as bug oracle judge.</text>
+    </g>
+  </g>
+
+  <!-- Flow Arrow Phase 3 -> Phase 4 -->
+  <path d="M 1064 240 H 1080" stroke="#16A34A" stroke-width="2.5" fill="none" marker-end="url(#arrow-green)"/>
+  <path d="M 1064 450 H 1080" stroke="#16A34A" stroke-width="2.5" fill="none" marker-end="url(#arrow-green)"/>
+
+  <!-- ========================================================================= -->
+  <!-- PHASE 4: INVARIANT-DIRECTED AGENTIC FUZZING & ADAPTIVE LOOP (ONLINE) -->
+  <!-- Coordinates: x=1084, y=82, w=572, h=874 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(1084, 82)" class="card-shadow-lg">
+    <rect x="0" y="0" width="572" height="874" rx="12" fill="url(#grad-phase4)" stroke="#C084FC" stroke-width="2"/>
+    
+    <!-- Stage Header Badge -->
+    <rect x="14" y="12" width="544" height="40" rx="8" fill="#6D28D9"/>
+    <g transform="translate(20, 22)" color="#FFFFFF">
+      <use href="#icon-refresh" width="20" height="20"/>
+    </g>
+    <text x="46" y="37" font-size="13" font-weight="800" fill="#FFFFFF">PHASE 4: Invariant-Directed Agentic Fuzzing Loop</text>
+    <rect x="446" y="21" width="102" height="22" rx="4" fill="#9333EA"/>
+    <text x="497" y="36" font-size="10" font-weight="700" fill="#FFFFFF" text-anchor="middle">Online Engine</text>
+
+    <!-- Sub-block 1: Target Lock & Fair Time Budget Scheduler -->
+    <g transform="translate(14, 60)">
+      <rect x="0" y="0" width="544" height="66" rx="8" fill="#FFFFFF" stroke="#E9D5FF" stroke-width="1.2"/>
+      <g transform="translate(12, 10)" color="#7C3AED">
+        <use href="#icon-target-clock" width="20" height="20"/>
+      </g>
+      <text x="38" y="22" font-size="11.5" font-weight="700" fill="#581C87">Target Lock &amp; Time Budget Allocator (Fair Equal Budget per Invariant)</text>
+      
+      <rect x="10" y="32" width="524" height="24" rx="4" fill="#FAF5FF" stroke="#DDD6FE"/>
+      <text x="16" y="48" font-size="10" font-weight="600" fill="#6D28D9">
+        Locks: <tspan font-weight="700" fill="#4338CA">[Current Invariant INV_k]</tspan> + <tspan font-weight="700" fill="#0D9488">[ISA Checker Suite]</tspan> + <tspan font-weight="700" fill="#EA580C">[Time Budget T = 30 min]</tspan>
+      </text>
+    </g>
+
+    <!-- Flow Arrow: Target Locker -> Generator Agent -->
+    <path d="M 286 126 V 140" stroke="#7C3AED" stroke-width="2.5" fill="none" marker-end="url(#arrow-purple)"/>
+
+    <!-- Sub-block 2: Invariant & Checker-Aware Generator Agent (PBT) -->
+    <g transform="translate(14, 142)">
+      <rect x="0" y="0" width="544" height="142" rx="8" fill="#FFFFFF" stroke="#C084FC" stroke-width="1.5" class="card-shadow"/>
+      
+      <!-- Agent Badge -->
+      <rect x="10" y="10" width="524" height="28" rx="5" fill="url(#grad-agent-purple)"/>
+      <g transform="translate(18, 15)" color="#FFFFFF">
+        <use href="#icon-agent" width="18" height="18"/>
+      </g>
+      <text x="44" y="29" font-size="12" font-weight="800" fill="#FFFFFF">Generator Agent (Checker-Aware PBT Synthesizer)</text>
+      <rect x="428" y="14" width="98" height="20" rx="4" fill="#9333EA"/>
+      <text x="477" y="28" font-size="9.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">LLM Reasoning</text>
+
+      <!-- PBT Generation Techniques -->
+      <g transform="translate(10, 46)">
+        <!-- Col 1 -->
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="168" height="82" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+          <text x="8" y="16" font-size="10" font-weight="700" fill="#6D28D9">1. Macro Switch Matrix</text>
+          <text x="8" y="32" font-size="8.5" font-weight="500" fill="#475569">-D BUF_SZ=... parameter</text>
+          <text x="8" y="46" font-size="8.5" font-weight="500" fill="#475569">Topology switches</text>
+          <text x="8" y="60" font-size="8.5" font-weight="500" fill="#475569">Compile-time variance</text>
+          <text x="8" y="74" font-size="8" font-weight="600" fill="#7C3AED" class="code-text">#ifdef USE_VLA</text>
+        </g>
+
+        <!-- Col 2 -->
+        <g transform="translate(178, 0)">
+          <rect x="0" y="0" width="168" height="82" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+          <text x="8" y="16" font-size="10" font-weight="700" fill="#6D28D9">2. Anti-Optimization</text>
+          <text x="8" y="32" font-size="8.5" font-weight="500" fill="#475569">asm volatile memory</text>
+          <text x="8" y="46" font-size="8.5" font-weight="500" fill="#475569">volatile sink escapes</text>
+          <text x="8" y="60" font-size="8.5" font-weight="500" fill="#475569">Prevents dead-code SRA</text>
+          <text x="8" y="74" font-size="8" font-weight="600" fill="#7C3AED" class="code-text">__optnone / noinline</text>
+        </g>
+
+        <!-- Col 3 -->
+        <g transform="translate(356, 0)">
+          <rect x="0" y="0" width="168" height="82" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+          <text x="8" y="16" font-size="10" font-weight="700" fill="#6D28D9">3. Dynamic Probes</text>
+          <text x="8" y="32" font-size="8.5" font-weight="500" fill="#475569">argc/argv binary search</text>
+          <text x="8" y="46" font-size="8.5" font-weight="500" fill="#475569">Runtime probe hooks</text>
+          <text x="8" y="60" font-size="8.5" font-weight="500" fill="#475569">Dynamic length mutation</text>
+          <text x="8" y="74" font-size="8" font-weight="600" fill="#7C3AED" class="code-text">target_vla_frame()</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Flow Arrow: Generator Agent -> Target Compiler -->
+    <path d="M 286 284 V 298" stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow-slate)"/>
+
+    <!-- Sub-block 3: Target Instrumented Compiler & Execution -->
+    <g transform="translate(14, 300)">
+      <rect x="0" y="0" width="544" height="116" rx="8" fill="#1E293B" stroke="#0F172A" stroke-width="1.5" class="card-shadow"/>
+      <g transform="translate(12, 10)" color="#60A5FA">
+        <use href="#icon-compiler" width="18" height="18"/>
+      </g>
+      <text x="36" y="24" font-size="11.5" font-weight="700" fill="#F8FAFC">Target Instrumented Compiler Execution &amp; Telemetry</text>
+      
+      <!-- Compilation Command & Diagnostics Capture -->
+      <g transform="translate(10, 34)">
+        <g transform="translate(0, 0)">
+          <rect x="0" y="0" width="256" height="70" rx="4" fill="#0F172A"/>
+          <text x="8" y="15" font-size="9.5" font-weight="700" fill="#38BDF8">GCC 13-17 Instrumented</text>
+          <text x="8" y="30" font-size="8.5" font-weight="500" fill="#94A3B8" class="code-text">-fstack-protector-strong -fstack-usage</text>
+          <text x="8" y="44" font-size="8.5" font-weight="500" fill="#94A3B8" class="code-text">-Wstack-protector -fopt-info-missed</text>
+          <text x="8" y="60" font-size="8.5" font-weight="600" fill="#4ADE80" class="code-text">Logs: [DEFUZZ-LOG-SP-042] emitted</text>
+        </g>
+
+        <g transform="translate(268, 0)">
+          <rect x="0" y="0" width="256" height="70" rx="4" fill="#0F172A"/>
+          <text x="8" y="15" font-size="9.5" font-weight="700" fill="#A78BFA">LLVM 15-19 Instrumented</text>
+          <text x="8" y="30" font-size="8.5" font-weight="500" fill="#94A3B8" class="code-text">-fstack-size-section -Rpass-missed</text>
+          <text x="8" y="44" font-size="8.5" font-weight="500" fill="#94A3B8" class="code-text">-mllvm -print-after=prologepilog</text>
+          <text x="8" y="60" font-size="8.5" font-weight="600" fill="#4ADE80" class="code-text">Logs: [DEFUZZ-LOG-LLVM-019] emitted</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Flow Arrow: Compiler -> Checker Adjudication -->
+    <path d="M 286 416 V 430" stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow-slate)"/>
+
+    <!-- Sub-block 4: Decision Diamond / Adjudication -->
+    <g transform="translate(156, 432)">
+      <polygon points="130,0 260,30 130,60 0,30" fill="#FFFFFF" stroke="#6D28D9" stroke-width="2" class="card-shadow"/>
+      <text x="130" y="26" font-size="11" font-weight="800" fill="#4C1D95" text-anchor="middle">Checker Adjudication</text>
+      <text x="130" y="42" font-size="10" font-weight="600" fill="#7C3AED" text-anchor="middle">Invariant Violated (FAIL)?</text>
+    </g>
+
+    <!-- Branch A: Left (FAIL - Bug Found) -->
+    <path d="M 156 462 H 80 V 500" stroke="#DC2626" stroke-width="2.5" fill="none" marker-end="url(#arrow-red)"/>
+    <rect x="62" y="472" width="70" height="20" rx="4" fill="#FEE2E2" stroke="#FCA5A5"/>
+    <text x="97" y="486" font-size="9" font-weight="800" fill="#DC2626" text-anchor="middle">YES [FAIL]</text>
+
+    <!-- Branch B: Right (PASS / NA / ERROR - Feedback & Refine) -->
+    <path d="M 416 462 H 490 V 500" stroke="#EA580C" stroke-width="2.5" fill="none" marker-end="url(#arrow-orange)"/>
+    <rect x="424" y="472" width="96" height="20" rx="4" fill="#FFEDD5" stroke="#FDBA74"/>
+    <text x="472" y="486" font-size="9" font-weight="800" fill="#C2410C" text-anchor="middle">NO [PASS/NA/ERR]</text>
+
+    <!-- ========================================================= -->
+    <!-- BRANCH 1 (LEFT COLUMN OF PHASE 4): VIOLATION & LATERAL MINING -->
+    <!-- ========================================================= -->
+    <g transform="translate(14, 502)">
+      <rect x="0" y="0" width="262" height="356" rx="8" fill="#FEF2F2" stroke="#F87171" stroke-width="1.5" class="card-shadow"/>
+      
+      <!-- Bug Found Header -->
+      <rect x="10" y="10" width="242" height="30" rx="5" fill="url(#grad-violation)"/>
+      <g transform="translate(18, 15)" color="#FFFFFF">
+        <use href="#icon-bug" width="18" height="18"/>
+      </g>
+      <text x="42" y="29" font-size="11" font-weight="800" fill="#FFFFFF">Invariant Violated (Bug Found!)</text>
+
+      <!-- PoC Minimizer -->
+      <g transform="translate(10, 48)">
+        <rect x="0" y="0" width="242" height="56" rx="5" fill="#FFFFFF" stroke="#FECACA"/>
+        <text x="8" y="16" font-size="10" font-weight="700" fill="#991B1B">1. C-Reduce PoC Minimizer</text>
+        <text x="8" y="32" font-size="9" font-weight="500" fill="#475569">Reduces to minimal triggering C code</text>
+        <text x="8" y="46" font-size="9" font-weight="600" fill="#DC2626">Re-validated against same checker</text>
+      </g>
+
+      <!-- Lateral Thinking & Divergent Exploration -->
+      <g transform="translate(10, 112)">
+        <rect x="0" y="0" width="242" height="154" rx="5" fill="#FFFFFF" stroke="#FCA5A5" class="glow-red"/>
+        <g transform="translate(8, 8)" color="#DC2626">
+          <use href="#icon-lateral" width="18" height="18"/>
+        </g>
+        <text x="30" y="22" font-size="10.5" font-weight="800" fill="#B91C1C">2. Lateral Divergent Mining</text>
+        <text x="8" y="40" font-size="9" font-weight="600" fill="#334155">Guides Generator to "think laterally":</text>
+        <text x="8" y="56" font-size="8.5" font-weight="500" fill="#475569">• Mutate alternative buffer layouts</text>
+        <text x="8" y="70" font-size="8.5" font-weight="500" fill="#475569">• Try diverse alloca/VLA nesting depths</text>
+        <text x="8" y="84" font-size="8.5" font-weight="500" fill="#475569">• Exploit sister structures &amp; alignments</text>
+        <text x="8" y="98" font-size="8.5" font-weight="500" fill="#475569">• Explore multiple distinct bug vectors</text>
+        <text x="8" y="112" font-size="8.5" font-weight="500" fill="#475569">• Continue within same time budget T</text>
+        <text x="8" y="132" font-size="9.5" font-weight="700" fill="#DC2626">→ Maximize bugs found in time budget T!</text>
+      </g>
+
+      <!-- Feed into Probe Corpus -->
+      <g transform="translate(10, 276)">
+        <rect x="0" y="0" width="242" height="66" rx="5" fill="#991B1B"/>
+        <text x="10" y="18" font-size="10" font-weight="800" fill="#FEE2E2">3. Verified 0-Day / Patch PoV</text>
+        <text x="10" y="34" font-size="8.5" font-weight="500" fill="#FECACA">Deterministic proof artifact stored</text>
+        <text x="10" y="50" font-size="9" font-weight="700" fill="#FDE047">Feeds RAG Probe Pool (Bottom)</text>
+      </g>
+    </g>
+
+    <!-- Lateral Loop back to Generator -->
+    <path d="M 14 650 H -4 V 210 H 10" stroke="#DC2626" stroke-width="2" stroke-dasharray="4 3" fill="none" marker-end="url(#arrow-red)"/>
+    <g transform="translate(-16, 420)">
+      <rect x="0" y="0" width="22" height="90" rx="3" fill="#FEE2E2" stroke="#FCA5A5"/>
+      <text x="11" y="48" font-size="8" font-weight="800" fill="#DC2626" text-anchor="middle" transform="rotate(-90 11 48)">LATERAL LOOP</text>
+    </g>
+
+    <!-- ========================================================= -->
+    <!-- BRANCH 2 (RIGHT COLUMN OF PHASE 4): DIAGNOSTICS & ADAPTIVE CHECKER -->
+    <!-- ========================================================= -->
+    <g transform="translate(296, 502)">
+      <rect x="0" y="0" width="262" height="356" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5" class="card-shadow"/>
+      
+      <!-- Feedback Header -->
+      <rect x="10" y="10" width="242" height="30" rx="5" fill="url(#grad-feedback)"/>
+      <g transform="translate(18, 15)" color="#FFFFFF">
+        <use href="#icon-diagnostics" width="18" height="18"/>
+      </g>
+      <text x="42" y="29" font-size="11" font-weight="800" fill="#FFFFFF">Diagnostics &amp; Feedback Agent</text>
+
+      <!-- Diagnostic Parser via MCP -->
+      <g transform="translate(10, 48)">
+        <rect x="0" y="0" width="242" height="74" rx="5" fill="#FFFFFF" stroke="#FDE68A"/>
+        <text x="8" y="15" font-size="9.5" font-weight="700" fill="#92400E">1. Advanced Diagnostic MCP</text>
+        <text x="8" y="29" font-size="8.5" font-weight="500" fill="#475569">• Stack usage bytes (detect stack=0)</text>
+        <text x="8" y="43" font-size="8.5" font-weight="500" fill="#475569">• Optimization missed / SRA eliminations</text>
+        <text x="8" y="57" font-size="8.5" font-weight="500" fill="#475569">• Injected Log IDs execution hit rate</text>
+        <text x="8" y="69" font-size="8.5" font-weight="600" fill="#D97706">• Critical condition branch tracking</text>
+      </g>
+
+      <!-- Self-Healing Checker Rewrite Loop -->
+      <g transform="translate(10, 128)">
+        <rect x="0" y="0" width="242" height="116" rx="5" fill="#FEF3C7" stroke="#F59E0B" class="glow-amber"/>
+        <g transform="translate(8, 8)" color="#B45309">
+          <use href="#icon-refresh" width="18" height="18"/>
+        </g>
+        <text x="30" y="22" font-size="10.5" font-weight="800" fill="#92400E">2. Adaptive Checker Rewrite</text>
+        <text x="8" y="38" font-size="8.5" font-weight="600" fill="#B45309">If NA/Error decisions &gt; threshold K:</text>
+        <text x="8" y="52" font-size="8.5" font-weight="500" fill="#78350F">• Checker Refinement Agent rewrites</text>
+        <text x="8" y="66" font-size="8.5" font-weight="500" fill="#78350F">• Re-verified via Tier 1 Grounding Gate</text>
+        <text x="8" y="80" font-size="8.5" font-weight="500" fill="#78350F">• Zero goalpost drift verified</text>
+        <text x="8" y="98" font-size="9" font-weight="800" fill="#B45309">→ Hot-reloads patched new Checker!</text>
+      </g>
+
+      <!-- Targeted Seed Guidance -->
+      <g transform="translate(10, 252)">
+        <rect x="0" y="0" width="242" height="92" rx="5" fill="#FFFFFF" stroke="#FDE68A"/>
+        <text x="8" y="16" font-size="10" font-weight="700" fill="#92400E">3. Anti-Optimization Seed Guidance</text>
+        <text x="8" y="32" font-size="8.5" font-weight="600" fill="#475569">Actionable hints to Generator for next round:</text>
+        <text x="8" y="48" font-size="8.5" font-weight="500" fill="#64748B" class="code-text">• Add memory clobber barrier</text>
+        <text x="8" y="62" font-size="8.5" font-weight="500" fill="#64748B" class="code-text">• Force volatile escape sink</text>
+        <text x="8" y="76" font-size="8.5" font-weight="500" fill="#64748B" class="code-text">• Adjust frame layout switches</text>
+      </g>
+    </g>
+
+    <!-- Feedback Guidance Loop back to Generator -->
+    <path d="M 558 780 H 576 V 210 H 562" stroke="#EA580C" stroke-width="2" stroke-dasharray="4 3" fill="none" marker-end="url(#arrow-orange)"/>
+    <g transform="translate(566, 420)">
+      <rect x="0" y="0" width="22" height="90" rx="3" fill="#FFEDD5" stroke="#FDBA74"/>
+      <text x="11" y="48" font-size="8" font-weight="800" fill="#C2410C" text-anchor="middle" transform="rotate(90 11 48)">GUIDANCE LOOP</text>
+    </g>
+
+    <!-- Checker Rewrite Loop back to Phase 3 (Routes cleanly in center channel between Branch 1 & Branch 2) -->
+    <path d="M 296 660 H 280 V 866 H -300 V 360 H -294" stroke="#7C3AED" stroke-width="2.2" stroke-dasharray="5 3" fill="none" marker-end="url(#arrow-purple)"/>
+    <rect x="180" y="854" width="190" height="22" rx="4" fill="#7C3AED"/>
+    <text x="275" y="869" font-size="9.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Adaptive Checker Rewrite (Hot Reload)</text>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- BOTTOM SECTION: CONTINUOUS KNOWLEDGE BLACKBOARD & HISTORICAL PROBE POOL -->
+  <!-- Coordinates: x=24, y=646, w=1040, h=310 -->
+  <!-- ========================================================================= -->
+  <g transform="translate(24, 646)" class="card-shadow">
+    <rect x="0" y="0" width="1040" height="310" rx="12" fill="url(#grad-blackboard)" stroke="#94A3B8" stroke-width="1.8"/>
+    
+    <!-- Section Header Badge -->
+    <rect x="12" y="10" width="1016" height="36" rx="8" fill="#334155"/>
+    <g transform="translate(20, 19)" color="#FFFFFF">
+      <use href="#icon-database" width="20" height="20"/>
+    </g>
+    <text x="46" y="33" font-size="13.5" font-weight="800" fill="#FFFFFF">
+      Continuous Knowledge Blackboard, Grounding Gates &amp; Historical Bug Probe Pool
+    </text>
+    <rect x="866" y="17" width="150" height="22" rx="4" fill="#475569"/>
+    <text x="941" y="32" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">Auditable &amp; Replayable</text>
+
+    <!-- 3 Major Horizontal Panels in Blackboard -->
+    <g transform="translate(12, 52)">
+      <!-- Panel 1: Invariant & Seed Versioned Storage -->
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="326" height="246" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+        <g transform="translate(10, 8)" color="#1E293B">
+          <use href="#icon-database" width="16" height="16"/>
+        </g>
+        <text x="30" y="21" font-size="11.5" font-weight="700" fill="#1E293B">Versioned Invariant &amp; Seed Store</text>
+        
+        <g transform="translate(10, 30)">
+          <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="306" height="60" rx="4" fill="#F8FAFC" stroke="#E2E8F0"/>
+            <text x="8" y="16" font-size="9.5" font-weight="700" fill="#334155">• Invariant Queue &amp; Catalog</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#64748B">Structured specs for StackProtector, CET/IBT,</text>
+            <text x="8" y="46" font-size="8.5" font-weight="500" fill="#64748B">PAC, CFI, ASan, ShadowStack, Fortify</text>
+          </g>
+
+          <g transform="translate(0, 68)">
+            <rect x="0" y="0" width="306" height="60" rx="4" fill="#F8FAFC" stroke="#E2E8F0"/>
+            <text x="8" y="16" font-size="9.5" font-weight="700" fill="#334155">• Seed Mutation History &amp; Coverage</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#64748B">Branch bitmaps, GIMPLE/RTL dumps,</text>
+            <text x="8" y="46" font-size="8.5" font-weight="500" fill="#64748B">and runtime probe telemetry logs</text>
+          </g>
+
+          <g transform="translate(0, 136)">
+            <rect x="0" y="0" width="306" height="68" rx="4" fill="#F8FAFC" stroke="#E2E8F0"/>
+            <text x="8" y="16" font-size="9.5" font-weight="700" fill="#334155">• Replay &amp; Ablation Infrastructure</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#64748B">Deterministic replay across compiler versions</text>
+            <text x="8" y="46" font-size="8.5" font-weight="600" fill="#2563EB">(GCC 13-17 / LLVM 15-19)</text>
+            <text x="8" y="58" font-size="8.5" font-weight="500" fill="#475569">Maintains audit logs for every state transition</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Panel 2: Two-Tier Grounding & Acceptance Gates -->
+      <g transform="translate(345, 0)">
+        <rect x="0" y="0" width="326" height="246" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+        <g transform="translate(10, 8)" color="#1E293B">
+          <use href="#icon-shield" width="16" height="16"/>
+        </g>
+        <text x="30" y="21" font-size="11.5" font-weight="700" fill="#1E293B">Two-Tier Grounding Gates</text>
+        
+        <g transform="translate(10, 30)">
+          <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="306" height="60" rx="4" fill="#F0FDF4" stroke="#BBF7D0"/>
+            <text x="8" y="16" font-size="9.5" font-weight="700" fill="#15803D">Tier 1: Canonical Baseline Gate</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#475569">Replayed on canonical pos/neg tests</text>
+            <text x="8" y="46" font-size="8.5" font-weight="600" fill="#16A34A">Guarantees zero false-positive oracle drift</text>
+          </g>
+
+          <g transform="translate(0, 68)">
+            <rect x="0" y="0" width="306" height="60" rx="4" fill="#EFF6FF" stroke="#BFDBFE"/>
+            <text x="8" y="16" font-size="9.5" font-weight="700" fill="#1D4ED8">Tier 2: Novelty &amp; Entailment Filter</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#475569">Novelty score threshold &gt; 85.0 vs. manual rules</text>
+            <text x="8" y="46" font-size="8.5" font-weight="600" fill="#2563EB">Validates logical entailment from cited source</text>
+          </g>
+
+          <g transform="translate(0, 136)">
+            <rect x="0" y="0" width="306" height="68" rx="4" fill="#FAF5FF" stroke="#E9D5FF"/>
+            <text x="8" y="16" font-size="9.5" font-weight="700" fill="#7C3AED">Hot-Reload Gate for Refined Checkers</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#6D28D9">Patched checkers must re-pass Tier 1 gate</text>
+            <text x="8" y="46" font-size="8.5" font-weight="500" fill="#475569">Prevents regression while enabling self-healing</text>
+            <text x="8" y="58" font-size="8.5" font-weight="600" fill="#7C3AED">Seamless runtime update into active testing</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Panel 3: Closed-Loop RAG Bug Probe Pool -->
+      <g transform="translate(690, 0)">
+        <rect x="0" y="0" width="326" height="246" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+        <g transform="translate(10, 8)" color="#991B1B">
+          <use href="#icon-refresh" width="16" height="16"/>
+        </g>
+        <text x="30" y="21" font-size="11.5" font-weight="700" fill="#991B1B">Closed-Loop RAG Probe Corpus</text>
+        
+        <g transform="translate(10, 30)">
+          <g transform="translate(0, 0)">
+            <rect x="0" y="0" width="306" height="74" rx="4" fill="#FEF2F2" stroke="#FECACA"/>
+            <text x="8" y="16" font-size="9.5" font-weight="800" fill="#DC2626">New Finding / 0-Day Homologue Loop</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#475569">Confirmed root causes distilled into new probes</text>
+            <text x="8" y="46" font-size="8.5" font-weight="600" fill="#991B1B">Dual query: Root cause phrase + tokens</text>
+            <text x="8" y="62" font-size="8.5" font-weight="700" fill="#B91C1C">Searches for sibling flaws in other backends!</text>
+          </g>
+
+          <g transform="translate(0, 82)">
+            <rect x="0" y="0" width="306" height="122" rx="4" fill="#0F172A"/>
+            <text x="8" y="16" font-size="9.5" font-weight="700" fill="#38BDF8">Homologue Transfer Yields:</text>
+            <text x="8" y="32" font-size="8.5" font-weight="500" fill="#F1F5F9" class="code-text">• AArch64 VLA bypass → RISC-V Frame</text>
+            <text x="8" y="48" font-size="8.5" font-weight="500" fill="#F1F5F9" class="code-text">• Temporary register leak → CET IBT</text>
+            <text x="8" y="64" font-size="8.5" font-weight="500" fill="#F1F5F9" class="code-text">• SRA optimization wipe → CFI check bypass</text>
+            <text x="8" y="80" font-size="8.5" font-weight="600" fill="#4ADE80" class="code-text">→ Continuous evolutionary testing</text>
+            <text x="8" y="96" font-size="8.5" font-weight="500" fill="#94A3B8" class="code-text">  Autonomous self-expanding corpus</text>
+            <text x="8" y="110" font-size="8.5" font-weight="500" fill="#60A5FA" class="code-text">  Feeds SpecGen RAG knowledge base</text>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connecting Arrows: Phase 4 Bug Found -> Bottom Probe Pool -->
+  <path d="M 1110 858 V 896 H 1020" stroke="#DC2626" stroke-width="2.5" fill="none" marker-end="url(#arrow-red)"/>
+  
+  <!-- Connecting Arrows: Bottom Probe Pool -> Phase 1 SpecGen (Routed safely along the outer perimeter) -->
+  <path d="M 710 976 H 14 V 360 H 20" stroke="#2563EB" stroke-width="2.2" stroke-dasharray="5 3" fill="none" marker-end="url(#arrow-blue)"/>
+  <rect x="360" y="964" width="240" height="22" rx="4" fill="#1E40AF"/>
+  <text x="480" y="979" font-size="10" font-weight="700" fill="#FFFFFF" text-anchor="middle">Homologue Probes Fed to SpecGen RAG</text>
+
+</svg>
+
+    </div>
+  </div>
+
+  <script>
+    let scale = 1.0;
+    const wrapper = document.getElementById('wrapper');
+    function zoomIn() { scale = Math.min(scale + 0.15, 3.0); updateTransform(); }
+    function zoomOut() { scale = Math.max(scale - 0.15, 0.4); updateTransform(); }
+    function resetZoom() { scale = 1.0; updateTransform(); }
+    function updateTransform() { wrapper.style.transform = `scale(${scale})`; }
+
+    // Load SVG dynamically
+    fetch('figures/architecture.svg')
+      .then(res => res.text())
+      .then(svgText => {
+        wrapper.innerHTML = svgText;
+      })
+      .catch(err => {
+        wrapper.innerHTML = '<img src="figures/architecture_preview-1.png" style="max-width: 100%; height: auto;" />';
+      });
+  </script>
+</body>
+</html>
