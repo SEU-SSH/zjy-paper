@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Generate a clean, streamlined, publication-grade vector diagram for Figure 2:
+Generate a clean, streamlined, publication-grade vector diagram for Figure:
 Multi-Source Security Invariant Extraction and Transfer Pipeline (Stage 1).
+No embedded top title (LaTeX caption handles description).
 Produces SVG, PDF, PNG, and JPG.
 """
 
@@ -10,7 +11,7 @@ import subprocess
 
 def create_fig2_svg(output_base="figures/method-invariant-gen"):
     width = 1000
-    height = 490
+    height = 430
 
     svg = []
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
@@ -27,15 +28,10 @@ def create_fig2_svg(output_base="figures/method-invariant-gen"):
   </defs>
 ''')
 
-    # Title
-    svg.append(f'''
-  <text x="{width/2}" y="36" fill="#0F172A" font-size="18" font-weight="700" text-anchor="middle">Stage 1: Multi-Source Security Invariant Extraction and Transfer Pipeline</text>
-''')
-
-    # Dimensions for 3 main cards
-    top_y = 58
+    # Dimensions for 3 main cards (No top title, starts near top)
+    top_y = 18
     card_w = 285
-    card_h = 330
+    card_h = 335
     gap = 42
     c1_x = 35
     c2_x = c1_x + card_w + gap
@@ -64,18 +60,18 @@ def create_fig2_svg(output_base="figures/method-invariant-gen"):
 
   <!-- Box 1B: Dual Extraction Paths -->
   <g transform="translate({c1_x + 15}, {top_y + 170})">
-    <rect x="0" y="0" width="{card_w - 30}" height="135" rx="6" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{card_w - 30}" height="142" rx="6" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
     <text x="12" y="22" fill="#15803D" font-size="11.5" font-weight="700">Dual Extraction Paths</text>
 
     <!-- Path A -->
-    <rect x="12" y="32" width="230" height="42" rx="4" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
-    <text x="20" y="48" fill="#14532D" font-size="10.5" font-weight="700">Segmented CoT Review</text>
-    <text x="20" y="64" fill="#475569" font-size="9.5">Partitioned pass &amp; function boundary slicing</text>
+    <rect x="12" y="32" width="230" height="45" rx="4" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+    <text x="20" y="50" fill="#14532D" font-size="10.5" font-weight="700">Segmented CoT Review</text>
+    <text x="20" y="66" fill="#475569" font-size="9.5">Partitioned pass &amp; function boundary slicing</text>
 
     <!-- Path B -->
-    <rect x="12" y="80" width="230" height="42" rx="4" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
-    <text x="20" y="96" fill="#14532D" font-size="10.5" font-weight="700">Historical Bug Probe Pool</text>
-    <text x="20" y="112" fill="#475569" font-size="9.5">Distilled root causes across compiler backends</text>
+    <rect x="12" y="85" width="230" height="45" rx="4" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+    <text x="20" y="103" fill="#14532D" font-size="10.5" font-weight="700">Historical Bug Probe Pool</text>
+    <text x="20" y="119" fill="#475569" font-size="9.5">Distilled root causes across compiler backends</text>
   </g>
 ''')
 
@@ -106,7 +102,7 @@ def create_fig2_svg(output_base="figures/method-invariant-gen"):
 
   <!-- Box 2B: Cross-Mechanism Transfer -->
   <g transform="translate({c2_x + 15}, {top_y + 170})">
-    <rect x="0" y="0" width="{card_w - 30}" height="135" rx="6" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{card_w - 30}" height="142" rx="6" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1.2"/>
     <text x="12" y="22" fill="#B45309" font-size="11.5" font-weight="700">Cross-Mechanism Transfer Pipeline</text>
 
     <g transform="translate(14, 38)">
@@ -127,8 +123,8 @@ def create_fig2_svg(output_base="figures/method-invariant-gen"):
       <text x="197" y="30" fill="#78350F" font-size="8" text-anchor="middle">Frame Map</text>
     </g>
 
-    <text x="14" y="102" fill="#64748B" font-size="9.5">&#x2022; Transfers across mechanisms (e.g. Canary &#8594; PAC)</text>
-    <text x="14" y="118" fill="#64748B" font-size="9.5">&#x2022; Yields candidate invariants for diverse backends</text>
+    <text x="14" y="104" fill="#64748B" font-size="9.5">&#x2022; Transfers across mechanisms (e.g. Canary &#8594; PAC)</text>
+    <text x="14" y="122" fill="#64748B" font-size="9.5">&#x2022; Yields candidate invariants for diverse backends</text>
   </g>
 ''')
 
@@ -162,7 +158,7 @@ def create_fig2_svg(output_base="figures/method-invariant-gen"):
 
   <!-- Box 3B: Invariant Catalog Φ -->
   <g transform="translate({c3_x + 15}, {top_y + 170})">
-    <rect x="0" y="0" width="{card_w - 30}" height="135" rx="6" fill="#FFFFFF" stroke="#E9D5FF" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{card_w - 30}" height="142" rx="6" fill="#FFFFFF" stroke="#E9D5FF" stroke-width="1.2"/>
     <text x="12" y="22" fill="#7E22CE" font-size="11.5" font-weight="700">Security Invariant Catalog &#934;</text>
 
     <g transform="translate(14, 35)">
@@ -171,8 +167,8 @@ def create_fig2_svg(output_base="figures/method-invariant-gen"):
       <text x="114" y="34" fill="#6B21A8" font-size="9" text-anchor="middle">Formal Security Invariant Contracts</text>
     </g>
 
-    <text x="14" y="98" fill="#475569" font-size="9.5">&#x2022; Formalized preconditions &amp; assertions</text>
-    <text x="14" y="116" fill="#475569" font-size="9.5">&#x2022; Readied for downstream machine oracles</text>
+    <text x="14" y="104" fill="#475569" font-size="9.5">&#x2022; Formalized preconditions &amp; assertions</text>
+    <text x="14" y="122" fill="#475569" font-size="9.5">&#x2022; Readied for downstream machine oracles</text>
   </g>
 ''')
 

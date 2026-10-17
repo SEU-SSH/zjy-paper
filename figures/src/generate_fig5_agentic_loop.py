@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Generate a clean, streamlined, publication-grade vector diagram for Figure 5:
+Generate a clean, streamlined, publication-grade vector diagram for Figure:
 Online Closed-Loop Agentic Fuzzing and Adaptive Feedback Loop (Stage 4).
+No embedded top title (LaTeX caption handles description).
 Produces SVG, PDF, PNG, and JPG.
 """
 
@@ -10,7 +11,7 @@ import subprocess
 
 def create_fig5_svg(output_base="figures/method-agentic-loop"):
     width = 1060
-    height = 560
+    height = 500
 
     svg = []
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
@@ -32,13 +33,8 @@ def create_fig5_svg(output_base="figures/method-agentic-loop"):
   </defs>
 ''')
 
-    # Title at very top
-    svg.append(f'''
-  <text x="{width/2}" y="28" fill="#0F172A" font-size="17" font-weight="700" text-anchor="middle">Stage 4: Online Closed-Loop Agentic Fuzzing and Adaptive Feedback Loop</text>
-''')
-
-    # Cards start at top_y = 80
-    top_y = 82
+    # Cards start at top_y = 52 (no embedded top title)
+    top_y = 52
     box_h = 370
 
     # 1. Left Container: Orchestration & Generator Agent (Width: 250)
@@ -143,9 +139,9 @@ def create_fig5_svg(output_base="figures/method-agentic-loop"):
 
   <!-- Decision Diamond -->
   <g transform="translate({c3_x + 40}, {top_y + 245})">
-    <polygon points="0,-24 45,0 0,24 -45,0" fill="#FFFFFF" stroke="#0284C7" stroke-width="2"/>
-    <text x="0" y="-3" fill="#0F172A" font-size="9.5" font-weight="700" text-anchor="middle">Invariant</text>
-    <text x="0" y="9" fill="#0F172A" font-size="9.5" font-weight="700" text-anchor="middle">Violated?</text>
+    <polygon points="0,-26 50,0 0,26 -50,0" fill="#FFFFFF" stroke="#0284C7" stroke-width="2"/>
+    <text x="0" y="-3" fill="#0F172A" font-size="8.5" font-weight="700" text-anchor="middle">Invariant</text>
+    <text x="0" y="9" fill="#0F172A" font-size="8.5" font-weight="700" text-anchor="middle">Violated?</text>
   </g>
 ''')
 
@@ -214,10 +210,10 @@ def create_fig5_svg(output_base="figures/method-agentic-loop"):
     svg.append(f'''
   <!-- Guidance Loop (Top) -->
   <path d="M {fb_x + fb_w/2} {top_y} 
-           C {fb_x + fb_w/2} {top_y - 30}, {c1_x + c1_w/2} {top_y - 30}, {c1_x + c1_w/2} {top_y}"
+           C {fb_x + fb_w/2} 18, {c1_x + c1_w/2} 18, {c1_x + c1_w/2} {top_y}"
         fill="none" stroke="#7C3AED" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr5-purple)"/>
-  <rect x="{width/2 - 130}" y="{top_y - 42}" width="260" height="24" rx="4" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1"/>
-  <text x="{width/2}" y="{top_y - 26}" fill="#6D28D9" font-size="10" font-weight="700" text-anchor="middle">Guidance Loop: Mutation Hints &#8594; Generator</text>
+  <rect x="{width/2 - 130}" y="6" width="260" height="24" rx="4" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1"/>
+  <text x="{width/2}" y="22" fill="#6D28D9" font-size="10" font-weight="700" text-anchor="middle">Guidance Loop: Mutation Hints &#8594; Generator</text>
 ''')
 
     # 2. Red: Checker Rewrite Loop (from Feedback Agent to Dual Oracle)

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Generate a clean, streamlined, publication-grade vector diagram for Figure 3:
+Generate a clean, streamlined, publication-grade vector diagram for Figure:
 Multi-ISA Static and Dynamic Deterministic Oracle Suite (Stage 2).
+No embedded top title or bottom caption (LaTeX handles them).
 Produces SVG, PDF, and high-res PNG.
 """
 
@@ -10,7 +11,7 @@ import subprocess
 
 def create_fig3_svg(output_base="figures/method-oracle-suite"):
     width = 1000
-    height = 470
+    height = 380
 
     svg = []
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
@@ -26,15 +27,10 @@ def create_fig3_svg(output_base="figures/method-oracle-suite"):
   </defs>
 ''')
 
-    # Title
-    svg.append(f'''
-  <text x="{width/2}" y="36" fill="#0F172A" font-size="18" font-weight="700" text-anchor="middle">Stage 2: Multi-ISA Static and Dynamic Deterministic Oracle Suite</text>
-''')
-
-    top_y = 60
+    top_y = 18
     card_h = 345
 
-    # 1. Left Card: Invariant Contract Specification (Width: 230)
+    # 1. Left Card: Invariant Contract Specification (Width: 225)
     c1_x = 35
     c1_w = 225
     svg.append(f'''
@@ -54,17 +50,17 @@ def create_fig3_svg(output_base="figures/method-oracle-suite"):
   </g>
 
   <g transform="translate({c1_x + 14}, {top_y + 180})">
-    <rect x="0" y="0" width="{c1_w - 28}" height="135" rx="6" fill="#FFFFFF" stroke="#5EEAD4" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{c1_w - 28}" height="145" rx="6" fill="#FFFFFF" stroke="#5EEAD4" stroke-width="1.2"/>
     <text x="12" y="22" fill="#115E59" font-size="11.5" font-weight="700">Multi-ISA Scope</text>
     
-    <rect x="12" y="32" width="{c1_w - 52}" height="28" rx="4" fill="#CCFBF1"/>
-    <text x="20" y="50" fill="#134E4A" font-size="10.5" font-weight="700">x86-64</text>
+    <rect x="12" y="34" width="{c1_w - 52}" height="30" rx="4" fill="#CCFBF1"/>
+    <text x="20" y="53" fill="#134E4A" font-size="10.5" font-weight="700">x86-64</text>
     
-    <rect x="12" y="66" width="{c1_w - 52}" height="28" rx="4" fill="#CCFBF1"/>
-    <text x="20" y="84" fill="#134E4A" font-size="10.5" font-weight="700">AArch64</text>
+    <rect x="12" y="70" width="{c1_w - 52}" height="30" rx="4" fill="#CCFBF1"/>
+    <text x="20" y="89" fill="#134E4A" font-size="10.5" font-weight="700">AArch64</text>
 
-    <rect x="12" y="100" width="{c1_w - 52}" height="28" rx="4" fill="#CCFBF1"/>
-    <text x="20" y="118" fill="#134E4A" font-size="10.5" font-weight="700">RISC-V</text>
+    <rect x="12" y="106" width="{c1_w - 52}" height="30" rx="4" fill="#CCFBF1"/>
+    <text x="20" y="125" fill="#134E4A" font-size="10.5" font-weight="700">RISC-V</text>
   </g>
 ''')
 
@@ -77,7 +73,7 @@ def create_fig3_svg(output_base="figures/method-oracle-suite"):
         fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
 ''')
 
-    # 2. Middle Card: Dual Deterministic Checkers (Width: 320)
+    # 2. Middle Card: Dual Deterministic Checkers (Width: 325)
     c2_x = c1_x + c1_w + 42
     c2_w = 325
     svg.append(f'''
@@ -99,14 +95,14 @@ def create_fig3_svg(output_base="figures/method-oracle-suite"):
 
   <!-- Dynamic Checker -->
   <g transform="translate({c2_x + 14}, {top_y + 185})">
-    <rect x="0" y="0" width="{c2_w - 28}" height="135" rx="6" fill="#FFFFFF" stroke="#7DD3FC" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{c2_w - 28}" height="140" rx="6" fill="#FFFFFF" stroke="#7DD3FC" stroke-width="1.2"/>
     <rect x="12" y="10" width="140" height="22" rx="3" fill="#E0F2FE"/>
     <text x="18" y="25" fill="#0369A1" font-size="11" font-weight="700">Dynamic Sandbox Probe</text>
 
     <text x="14" y="52" fill="#334155" font-size="10.5">&#x2022; Standalone probe binary execution</text>
     <text x="14" y="72" fill="#334155" font-size="10.5">&#x2022; Memory bounds &amp; runtime overflow trigger</text>
     <text x="14" y="92" fill="#334155" font-size="10.5">&#x2022; Hardware trap &amp; signal handler validation</text>
-    <text x="14" y="112" fill="#0284C7" font-size="9" font-style="italic">Deterministic runtime execution in sandbox</text>
+    <text x="14" y="114" fill="#0284C7" font-size="9" font-style="italic">Deterministic runtime execution in sandbox</text>
   </g>
 ''')
 
@@ -119,7 +115,7 @@ def create_fig3_svg(output_base="figures/method-oracle-suite"):
         fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
 ''')
 
-    # 3. Right Card: 4-State Verdict (Width: 320)
+    # 3. Right Card: 4-State Verdict (Width: 325)
     c3_x = c2_x + c2_w + 42
     c3_w = 325
     svg.append(f'''
@@ -156,18 +152,11 @@ def create_fig3_svg(output_base="figures/method-oracle-suite"):
 
   <!-- Grounding Banner at Bottom of Card 3 -->
   <g transform="translate({c3_x + 16}, {top_y + 252})">
-    <rect x="0" y="0" width="{c3_w - 32}" height="68" rx="6" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.2"/>
-    <text x="12" y="22" fill="#166534" font-size="11" font-weight="700">&#x2714; Zero LLM Hallucination in Oracle</text>
-    <text x="12" y="40" fill="#334155" font-size="9.5">Verdicts are computed 100% deterministically</text>
-    <text x="12" y="55" fill="#334155" font-size="9.5">from binary artifacts and sandbox telemetry.</text>
+    <rect x="0" y="0" width="{c3_w - 32}" height="76" rx="6" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.2"/>
+    <text x="12" y="24" fill="#166534" font-size="11" font-weight="700">&#x2714; Zero LLM Hallucination in Oracle</text>
+    <text x="12" y="44" fill="#334155" font-size="9.5">Verdicts are computed 100% deterministically</text>
+    <text x="12" y="60" fill="#334155" font-size="9.5">from binary artifacts and sandbox telemetry.</text>
   </g>
-''')
-
-    # Bottom summary caption
-    svg.append(f'''
-  <text x="{width/2}" y="{top_y + card_h + 26}" fill="#64748B" font-size="11" font-weight="500" text-anchor="middle">
-    Invariant contracts instantiate dedicated Static &amp; Dynamic Checkers across ISAs, generating deterministic verdicts without LLM adjudication.
-  </text>
 ''')
 
     svg.append('</svg>')

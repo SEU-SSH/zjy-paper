@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Generate a clean, streamlined, publication-grade vector diagram for Figure 4:
+Generate a clean, streamlined, publication-grade vector diagram for Figure:
 Hierarchical Source Mapping and Log Instrumentation Pipeline (Stage 3).
+No embedded top title or bottom caption (LaTeX handles them).
 Produces SVG, PDF, and high-res PNG.
 """
 
@@ -10,7 +11,7 @@ import subprocess
 
 def create_fig4_svg(output_base="figures/method-source-mapping"):
     width = 1000
-    height = 470
+    height = 380
 
     svg = []
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
@@ -26,12 +27,7 @@ def create_fig4_svg(output_base="figures/method-source-mapping"):
   </defs>
 ''')
 
-    # Title
-    svg.append(f'''
-  <text x="{width/2}" y="36" fill="#0F172A" font-size="18" font-weight="700" text-anchor="middle">Stage 3: Hierarchical Source Mapping and Log Instrumentation Pipeline</text>
-''')
-
-    top_y = 60
+    top_y = 18
     card_h = 345
 
     # 1. Left Card: Autonomous MCP Navigation (Width: 280)
@@ -53,19 +49,19 @@ def create_fig4_svg(output_base="figures/method-source-mapping"):
 
   <!-- MCP Tools Box -->
   <g transform="translate({c1_x + 14}, {top_y + 160})">
-    <rect x="0" y="0" width="{c1_w - 28}" height="160" rx="6" fill="#FFFFFF" stroke="#A5B4FC" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{c1_w - 28}" height="165" rx="6" fill="#FFFFFF" stroke="#A5B4FC" stroke-width="1.2"/>
     <text x="12" y="22" fill="#312E81" font-size="11.5" font-weight="700">Model Context Protocol (MCP) Tools</text>
 
-    <rect x="12" y="32" width="{c1_w - 52}" height="28" rx="4" fill="#E0E7FF"/>
-    <text x="20" y="50" fill="#1E1B4B" font-size="10"><tspan font-weight="700">CallGraph MCP:</tspan> Inter-procedural trace</text>
+    <rect x="12" y="32" width="{c1_w - 52}" height="30" rx="4" fill="#E0E7FF"/>
+    <text x="20" y="52" fill="#1E1B4B" font-size="10"><tspan font-weight="700">CallGraph MCP:</tspan> Inter-procedural trace</text>
 
-    <rect x="12" y="66" width="{c1_w - 52}" height="28" rx="4" fill="#E0E7FF"/>
-    <text x="20" y="84" fill="#1E1B4B" font-size="10"><tspan font-weight="700">AST Parser:</tspan> Struct &amp; condition inspection</text>
+    <rect x="12" y="70" width="{c1_w - 52}" height="30" rx="4" fill="#E0E7FF"/>
+    <text x="20" y="90" fill="#1E1B4B" font-size="10"><tspan font-weight="700">AST Parser:</tspan> Struct &amp; condition inspection</text>
 
-    <rect x="12" y="100" width="{c1_w - 52}" height="28" rx="4" fill="#E0E7FF"/>
-    <text x="20" y="118" fill="#1E1B4B" font-size="10"><tspan font-weight="700">Code Search:</tspan> Cross-file macro resolution</text>
+    <rect x="12" y="108" width="{c1_w - 52}" height="30" rx="4" fill="#E0E7FF"/>
+    <text x="20" y="128" fill="#1E1B4B" font-size="10"><tspan font-weight="700">Code Search:</tspan> Cross-file macro resolution</text>
 
-    <text x="12" y="146" fill="#64748B" font-size="9">Autonomous multi-step exploration</text>
+    <text x="12" y="154" fill="#64748B" font-size="9">Autonomous multi-step exploration</text>
   </g>
 ''')
 
@@ -110,11 +106,11 @@ def create_fig4_svg(output_base="figures/method-source-mapping"):
 
   <!-- Level 3: Conditions -->
   <g transform="translate({c2_x + 16}, {top_y + 231})">
-    <rect x="0" y="0" width="{c2_w - 32}" height="88" rx="6" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{c2_w - 32}" height="95" rx="6" fill="#FFFFFF" stroke="#F59E0B" stroke-width="1.2"/>
     <rect x="10" y="10" width="165" height="20" rx="3" fill="#FEF3C7"/>
     <text x="16" y="24" fill="#92400E" font-size="10.5" font-weight="700">Level 3: Critical Conditions</text>
     <text x="12" y="48" fill="#B45309" font-size="10.5" font-weight="600" font-family="monospace">has_vla, stack_protect_decl, canary_loc</text>
-    <text x="12" y="70" fill="#64748B" font-size="9.5">Pinpoints decision branches &amp; stack offset calculations</text>
+    <text x="12" y="72" fill="#64748B" font-size="9.5">Pinpoints decision branches &amp; stack offset calculations</text>
   </g>
 ''')
 
@@ -147,7 +143,7 @@ def create_fig4_svg(output_base="figures/method-source-mapping"):
 
   <!-- Rebuilt Compiler Driver Box -->
   <g transform="translate({c3_x + 14}, {top_y + 160})">
-    <rect x="0" y="0" width="{c3_w - 28}" height="160" rx="6" fill="#FFFFFF" stroke="#FB923C" stroke-width="1.2"/>
+    <rect x="0" y="0" width="{c3_w - 28}" height="165" rx="6" fill="#FFFFFF" stroke="#FB923C" stroke-width="1.2"/>
     <text x="12" y="22" fill="#C2410C" font-size="11.5" font-weight="700">Rebuilt Compiler Driver</text>
 
     <rect x="12" y="34" width="{c3_w - 52}" height="42" rx="4" fill="#FFEDD5" stroke="#F97316" stroke-width="1.5"/>
@@ -159,16 +155,9 @@ def create_fig4_svg(output_base="figures/method-source-mapping"):
       <text x="8" y="20" fill="#C2410C" font-size="10" font-weight="700">&#8669; UID Trace Stream</text>
     </g>
 
-    <text x="12" y="136" fill="#475569" font-size="9.5">&#x2022; Emits deterministic execution logs</text>
-    <text x="12" y="150" fill="#475569" font-size="9.5">&#x2022; Feeds condition hit counts to Feedback Agent</text>
+    <text x="12" y="138" fill="#475569" font-size="9.5">&#x2022; Emits deterministic execution logs</text>
+    <text x="12" y="152" fill="#475569" font-size="9.5">&#x2022; Feeds condition hit counts to Feedback Agent</text>
   </g>
-''')
-
-    # Bottom summary
-    svg.append(f'''
-  <text x="{width/2}" y="{top_y + card_h + 26}" fill="#64748B" font-size="11" font-weight="500" text-anchor="middle">
-    Autonomous MCP tools locate critical defense conditions, insert UID probes, and produce the independently executable driver GCC_INST.
-  </text>
 ''')
 
     svg.append('</svg>')
