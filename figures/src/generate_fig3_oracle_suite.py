@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+"""
+Generate a clean, streamlined, publication-grade vector diagram for Figure 3:
+Multi-ISA Static and Dynamic Deterministic Oracle Suite (Stage 2).
+Produces SVG, PDF, and high-res PNG.
+"""
+
+import os
+import subprocess
+
+def create_fig3_svg(output_base="figures/method-oracle-suite"):
+    width = 1000
+    height = 470
+
+    svg = []
+    svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
+
+    svg.append('''
+  <defs>
+    <marker id="arr3-gray" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#475569"/>
+    </marker>
+    <marker id="arr3-teal" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#0D9488"/>
+    </marker>
+  </defs>
+''')
+
+    # Title
+    svg.append(f'''
+  <text x="{width/2}" y="36" fill="#0F172A" font-size="18" font-weight="700" text-anchor="middle">Stage 2: Multi-ISA Static and Dynamic Deterministic Oracle Suite</text>
+''')
+
+    top_y = 60
+    card_h = 345
+
+    # 1. Left Card: Invariant Contract Specification (Width: 230)
+    c1_x = 35
+    c1_w = 225
+    svg.append(f'''
+  <!-- Card 1: Invariant Specification -->
+  <rect x="{c1_x}" y="{top_y}" width="{c1_w}" height="{card_h}" rx="8" fill="#F0FDFA" stroke="#99F6E4" stroke-width="1.5"/>
+  <text x="{c1_x + c1_w/2}" y="{top_y + 28}" fill="#0F766E" font-size="13.5" font-weight="700" text-anchor="middle">1. Invariant Specification</text>
+
+  <g transform="translate({c1_x + 14}, {top_y + 45})">
+    <rect x="0" y="0" width="{c1_w - 28}" height="120" rx="6" fill="#FFFFFF" stroke="#5EEAD4" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#115E59" font-size="11.5" font-weight="700">Security Invariant &#981;</text>
+    
+    <rect x="10" y="32" width="{c1_w - 48}" height="76" rx="4" fill="#F0FDFA"/>
+    <text x="18" y="50" fill="#334155" font-size="10">&#x2022; Target Asset (e.g. Canary)</text>
+    <text x="18" y="68" fill="#334155" font-size="10">&#x2022; Preconditions (has_vla)</text>
+    <text x="18" y="86" fill="#334155" font-size="10">&#x2022; Verifiable Invariant Rule</text>
+    <text x="18" y="102" fill="#0D9488" font-size="9.5" font-style="italic">Formal deterministic contract</text>
+  </g>
+
+  <g transform="translate({c1_x + 14}, {top_y + 180})">
+    <rect x="0" y="0" width="{c1_w - 28}" height="135" rx="6" fill="#FFFFFF" stroke="#5EEAD4" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#115E59" font-size="11.5" font-weight="700">Multi-ISA Scope</text>
+    
+    <rect x="12" y="32" width="{c1_w - 52}" height="28" rx="4" fill="#CCFBF1"/>
+    <text x="20" y="50" fill="#134E4A" font-size="10.5" font-weight="700">x86-64</text>
+    
+    <rect x="12" y="66" width="{c1_w - 52}" height="28" rx="4" fill="#CCFBF1"/>
+    <text x="20" y="84" fill="#134E4A" font-size="10.5" font-weight="700">AArch64</text>
+
+    <rect x="12" y="100" width="{c1_w - 52}" height="28" rx="4" fill="#CCFBF1"/>
+    <text x="20" y="118" fill="#134E4A" font-size="10.5" font-weight="700">RISC-V</text>
+  </g>
+''')
+
+    # Arrow 1 -> 2 (Splits into Static and Dynamic)
+    arr1_x = c1_x + c1_w + 4
+    svg.append(f'''
+  <path d="M {arr1_x} {top_y + 105} C {arr1_x + 20} {top_y + 105}, {arr1_x + 15} {top_y + 105}, {arr1_x + 36} {top_y + 105}" 
+        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
+  <path d="M {arr1_x} {top_y + 105} C {arr1_x + 15} {top_y + 105}, {arr1_x + 15} {top_y + 245}, {arr1_x + 36} {top_y + 245}" 
+        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
+''')
+
+    # 2. Middle Card: Dual Deterministic Checkers (Width: 320)
+    c2_x = c1_x + c1_w + 42
+    c2_w = 325
+    svg.append(f'''
+  <!-- Card 2: Dual Deterministic Checkers -->
+  <rect x="{c2_x}" y="{top_y}" width="{c2_w}" height="{card_h}" rx="8" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1.5"/>
+  <text x="{c2_x + c2_w/2}" y="{top_y + 28}" fill="#0369A1" font-size="13.5" font-weight="700" text-anchor="middle">2. Dual Deterministic Machine Checkers</text>
+
+  <!-- Static Checker -->
+  <g transform="translate({c2_x + 14}, {top_y + 45})">
+    <rect x="0" y="0" width="{c2_w - 28}" height="120" rx="6" fill="#FFFFFF" stroke="#7DD3FC" stroke-width="1.2"/>
+    <rect x="12" y="10" width="130" height="22" rx="3" fill="#E0F2FE"/>
+    <text x="18" y="25" fill="#0369A1" font-size="11" font-weight="700">Static Binary Audit</text>
+
+    <text x="14" y="52" fill="#334155" font-size="10.5">&#x2022; DWARF stack frame offset verification</text>
+    <text x="14" y="72" fill="#334155" font-size="10.5">&#x2022; Disassembly &amp; instruction scan</text>
+    <text x="14" y="92" fill="#334155" font-size="10.5">&#x2022; Inspects unexecuted binary layout</text>
+    <text x="14" y="110" fill="#0284C7" font-size="9" font-style="italic">Deterministic structural analysis</text>
+  </g>
+
+  <!-- Dynamic Checker -->
+  <g transform="translate({c2_x + 14}, {top_y + 185})">
+    <rect x="0" y="0" width="{c2_w - 28}" height="135" rx="6" fill="#FFFFFF" stroke="#7DD3FC" stroke-width="1.2"/>
+    <rect x="12" y="10" width="140" height="22" rx="3" fill="#E0F2FE"/>
+    <text x="18" y="25" fill="#0369A1" font-size="11" font-weight="700">Dynamic Sandbox Probe</text>
+
+    <text x="14" y="52" fill="#334155" font-size="10.5">&#x2022; Standalone probe binary execution</text>
+    <text x="14" y="72" fill="#334155" font-size="10.5">&#x2022; Memory bounds &amp; runtime overflow trigger</text>
+    <text x="14" y="92" fill="#334155" font-size="10.5">&#x2022; Hardware trap &amp; signal handler validation</text>
+    <text x="14" y="112" fill="#0284C7" font-size="9" font-style="italic">Deterministic runtime execution in sandbox</text>
+  </g>
+''')
+
+    # Arrow 2 -> 3 (Merge into Verdict)
+    arr2_x = c2_x + c2_w + 4
+    svg.append(f'''
+  <path d="M {arr2_x} {top_y + 105} C {arr2_x + 20} {top_y + 105}, {arr2_x + 15} {top_y + 175}, {arr2_x + 36} {top_y + 175}" 
+        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
+  <path d="M {arr2_x} {top_y + 245} C {arr2_x + 20} {top_y + 245}, {arr2_x + 15} {top_y + 175}, {arr2_x + 36} {top_y + 175}" 
+        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
+''')
+
+    # 3. Right Card: 4-State Verdict (Width: 320)
+    c3_x = c2_x + c2_w + 42
+    c3_w = 325
+    svg.append(f'''
+  <!-- Card 3: Deterministic Verdict Matrix -->
+  <rect x="{c3_x}" y="{top_y}" width="{c3_w}" height="{card_h}" rx="8" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="{c3_x + c3_w/2}" y="{top_y + 28}" fill="#1E293B" font-size="13.5" font-weight="700" text-anchor="middle">3. Deterministic 4-State Machine Verdict</text>
+
+  <!-- 4 Verdict Tiles in 2x2 Grid -->
+  <g transform="translate({c3_x + 16}, {top_y + 48})">
+    <!-- Tile 1: PASS -->
+    <rect x="0" y="0" width="138" height="85" rx="6" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1.5"/>
+    <text x="14" y="24" fill="#15803D" font-size="12" font-weight="800">&#x2713; PASS</text>
+    <text x="14" y="44" fill="#334155" font-size="10">Invariant Holds</text>
+    <text x="14" y="62" fill="#64748B" font-size="9">Defense active &amp; valid</text>
+
+    <!-- Tile 2: FAIL (Bug) -->
+    <rect x="154" y="0" width="138" height="85" rx="6" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+    <text x="168" y="24" fill="#B91C1C" font-size="12" font-weight="800">&#x2717; FAIL (Bug)</text>
+    <text x="168" y="44" fill="#991B1B" font-size="10" font-weight="600">Contract Violated!</text>
+    <text x="168" y="62" fill="#B91C1C" font-size="9">Confirmed silent defect</text>
+
+    <!-- Tile 3: N/A -->
+    <rect x="0" y="100" width="138" height="85" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="14" y="124" fill="#475569" font-size="12" font-weight="800">&#x2298; N/A</text>
+    <text x="14" y="144" fill="#334155" font-size="10">Feature Inactive</text>
+    <text x="14" y="162" fill="#64748B" font-size="9">Condition not triggered</text>
+
+    <!-- Tile 4: ERROR -->
+    <rect x="154" y="100" width="138" height="85" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+    <text x="168" y="124" fill="#B45309" font-size="12" font-weight="800">&#9888; ERROR</text>
+    <text x="168" y="144" fill="#334155" font-size="10">Build / Tool Crash</text>
+    <text x="168" y="162" fill="#64748B" font-size="9">Non-semantic failure</text>
+  </g>
+
+  <!-- Grounding Banner at Bottom of Card 3 -->
+  <g transform="translate({c3_x + 16}, {top_y + 252})">
+    <rect x="0" y="0" width="{c3_w - 32}" height="68" rx="6" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#166534" font-size="11" font-weight="700">&#x2714; Zero LLM Hallucination in Oracle</text>
+    <text x="12" y="40" fill="#334155" font-size="9.5">Verdicts are computed 100% deterministically</text>
+    <text x="12" y="55" fill="#334155" font-size="9.5">from binary artifacts and sandbox telemetry.</text>
+  </g>
+''')
+
+    # Bottom summary caption
+    svg.append(f'''
+  <text x="{width/2}" y="{top_y + card_h + 26}" fill="#64748B" font-size="11" font-weight="500" text-anchor="middle">
+    Invariant contracts instantiate dedicated Static &amp; Dynamic Checkers across ISAs, generating deterministic verdicts without LLM adjudication.
+  </text>
+''')
+
+    svg.append('</svg>')
+
+    os.makedirs(os.path.dirname(output_base), exist_ok=True)
+    svg_path = f"{output_base}.svg"
+    pdf_path = f"{output_base}.pdf"
+    png_path = f"{output_base}.png"
+
+    with open(svg_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(svg))
+    print(f"Generated {svg_path}")
+
+    subprocess.run(["/opt/homebrew/bin/rsvg-convert", "-f", "pdf", "-o", pdf_path, svg_path], check=True)
+    print(f"Compiled to {pdf_path}")
+
+    subprocess.run(["/opt/homebrew/bin/rsvg-convert", "-f", "png", "-d", "300", "-p", "300", "-o", png_path, svg_path], check=True)
+    print(f"Compiled to {png_path}")
+
+if __name__ == "__main__":
+    create_fig3_svg()

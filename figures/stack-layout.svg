@@ -1,204 +1,86 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 540" width="720" height="540" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 430" width="620" height="430" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
   <defs>
-    <!-- Drop Shadows -->
-    <filter id="shadow-card" x="-10%" y="-10%" width="125%" height="125%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
-    </filter>
-    <filter id="shadow-alert" x="-15%" y="-15%" width="130%" height="130%">
-      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#dc2626" flood-opacity="0.2"/>
-    </filter>
-
-    <!-- Gradients -->
-    <linearGradient id="grad-canary" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FEF3C7"/>
-      <stop offset="100%" stop-color="#FDE68A"/>
-    </linearGradient>
-    <linearGradient id="grad-lr" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FEE2E2"/>
-      <stop offset="100%" stop-color="#FECACA"/>
-    </linearGradient>
-    <linearGradient id="grad-vla" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFEDD5"/>
-      <stop offset="100%" stop-color="#FED7AA"/>
-    </linearGradient>
-    <linearGradient id="grad-neutral" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F8FAFC"/>
-      <stop offset="100%" stop-color="#F1F5F9"/>
-    </linearGradient>
-    <linearGradient id="grad-overflow" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" stop-color="#EA580C"/>
-      <stop offset="60%" stop-color="#DC2626"/>
-      <stop offset="100%" stop-color="#991B1B"/>
-    </linearGradient>
-
-    <!-- Arrow Markers -->
-    <marker id="arrow-axis-up" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 10 L 5 0 L 10 10 z" fill="#64748B"/>
+    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#64748B"/>
     </marker>
-    <marker id="arrow-axis-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 0 L 5 10 z" fill="#64748B"/>
+    <marker id="arrow-red-up" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#DC2626"/>
     </marker>
-    <marker id="arrow-overflow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#DC2626"/>
-    </marker>
-
-    <!-- Vector Icon: Shield -->
-    <g id="icon-shield">
-      <path d="M 8 1 L 1 4 C 1 9 4.5 13.5 8 15 C 11.5 13.5 15 9 15 4 Z" fill="#D97706" stroke="#92400E" stroke-width="1.2"/>
-      <path d="M 5 7.5 L 7 9.5 L 11 5" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-
-    <!-- Vector Icon: Alert Triangle -->
-    <g id="icon-alert">
-      <path d="M 8 1 L 15 14 L 1 14 Z" fill="#DC2626" stroke="#991B1B" stroke-width="1.2" stroke-linejoin="round"/>
-      <line x1="8" y1="5.5" x2="8" y2="9.5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="8" cy="11.8" r="0.9" fill="#FFFFFF"/>
-    </g>
-
-    <!-- Vector Icon: Origin Crosshair -->
-    <g id="icon-origin">
-      <circle cx="8" cy="8" r="6.5" fill="#EA580C" stroke="#C2410C" stroke-width="1.2"/>
-      <circle cx="8" cy="8" r="2.5" fill="#FFFFFF"/>
-    </g>
-
-    <!-- Vector Icon: Checkmark -->
-    <g id="icon-check">
-      <circle cx="7" cy="7" r="6" fill="#16A34A"/>
-      <path d="M 4 7 L 6 9 L 10 4.5" fill="none" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
   </defs>
 
 
-  <!-- Memory Address Axis (Leftmost) -->
-  <line x1="45" y1="490" x2="45" y2="45" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-axis-up)"/>
-  <text x="45" y="30" font-size="11.5" font-weight="700" fill="#334155" text-anchor="middle">High Address</text>
-  <text x="32" y="265" font-size="11" font-weight="600" fill="#64748B" text-anchor="middle" transform="rotate(-90 32 265)">Memory Address Grows</text>
-  <text x="45" y="515" font-size="11.5" font-weight="700" fill="#334155" text-anchor="middle">Low Address</text>
-
-  <!-- Stack Growth Axis -->
-  <line x1="80" y1="55" x2="80" y2="480" stroke="#64748B" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow-axis-down)"/>
-  <text x="92" y="265" font-size="11" font-weight="600" fill="#64748B" text-anchor="middle" transform="rotate(90 92 265)">Stack Grows Down</text>
+  <!-- Memory Address Axis -->
+  <line x1="42" y1="52" x2="42" y2="378" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="42" y1="370" x2="42" y2="384" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-down)"/>
+  <text x="42" y="36" fill="#64748B" font-size="11" font-weight="600" text-anchor="middle">High Address</text>
+  <text x="42" y="408" fill="#64748B" font-size="11" font-weight="600" text-anchor="middle">Low Address</text>
+  <text x="30" y="215" fill="#64748B" font-size="10" font-weight="500" text-anchor="middle" transform="rotate(-90 30 215)">Stack Grows Down</text>
 
 
-  <!-- Block: incoming -->
-  <g filter="url(#shadow-card)">
-    <rect x="125" y="45" width="335" height="50" rx="6" fill="url(#grad-neutral)" stroke="#94A3B8" stroke-width="1.5"/>
-    
-    <text x="141" y="69" font-size="13" font-weight="700" fill="#1E293B">Incoming Stack Arguments</text>
-    <text x="141" y="87" font-size="11" font-weight="500" fill="#64748B">Caller arguments passed on stack</text>
-    
-    <!-- Badge -->
-    <rect x="342" y="57" width="106" height="20" rx="4" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1"/>
-    <text x="395" y="71" font-size="9.5" font-weight="700" fill="#475569" text-anchor="middle">Caller Frame</text>
+  <g id="slot-0">
+    <rect x="88" y="52" width="232" height="44" rx="4" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="102" y="72" fill="#334155" font-size="12" font-weight="600">Incoming Stack Arguments</text>
+    <text x="102" y="87" fill="#64748B" font-size="10">Caller frame arguments</text>
   </g>
 
-
-  <!-- Block: canary -->
-  <g filter="url(#shadow-card)">
-    <rect x="125" y="105" width="335" height="56" rx="6" fill="url(#grad-canary)" stroke="#D97706" stroke-width="2.2"/>
-    <use href="#icon-shield" x="139" y="117"/>
-    <text x="161" y="129" font-size="13" font-weight="700" fill="#1E293B">Stack Canary (Guard Slot)</text>
-    <text x="141" y="147" font-size="11" font-weight="500" fill="#64748B">Intended to guard saved frame records</text>
-    
-    <!-- Badge -->
-    <rect x="342" y="117" width="106" height="20" rx="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1"/>
-    <text x="395" y="131" font-size="9.5" font-weight="700" fill="#B45309" text-anchor="middle">Epilogue Checked</text>
+  <g id="slot-1">
+    <rect x="88" y="102" width="232" height="44" rx="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+    <text x="102" y="122" fill="#92400E" font-size="12" font-weight="600">Stack Canary</text>
+    <text x="102" y="137" fill="#64748B" font-size="10">Checked at function epilogue</text>
   </g>
 
-
-  <!-- Block: locals -->
-  <g filter="url(#shadow-card)">
-    <rect x="125" y="171" width="335" height="50" rx="6" fill="url(#grad-neutral)" stroke="#94A3B8" stroke-width="1.5"/>
-    
-    <text x="141" y="195" font-size="13" font-weight="700" fill="#1E293B">Local Variables &amp; Spills</text>
-    <text x="141" y="213" font-size="11" font-weight="500" fill="#64748B">Static scalar &amp; array local allocations</text>
-    
-    <!-- Badge -->
-    <rect x="342" y="183" width="106" height="20" rx="4" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1"/>
-    <text x="395" y="197" font-size="9.5" font-weight="700" fill="#475569" text-anchor="middle">frame_pointer_rtx</text>
+  <g id="slot-2">
+    <rect x="88" y="152" width="232" height="44" rx="4" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="102" y="172" fill="#334155" font-size="12" font-weight="600">Local Variables &amp; Spills</text>
+    <text x="102" y="187" fill="#64748B" font-size="10">Static arrays &amp; scalars</text>
   </g>
 
-
-  <!-- Block: retaddr -->
-  <g filter="url(#shadow-card)">
-    <rect x="125" y="231" width="335" height="56" rx="6" fill="url(#grad-lr)" stroke="#DC2626" stroke-width="2.2"/>
-    <use href="#icon-alert" x="139" y="243"/>
-    <text x="161" y="255" font-size="13" font-weight="700" fill="#1E293B">Saved Return Address (LR')</text>
-    <text x="141" y="273" font-size="11" font-weight="500" fill="#64748B">Corrupted before canary is reached!</text>
-    
-    <!-- Badge -->
-    <rect x="342" y="243" width="106" height="20" rx="4" fill="#FEE2E2" stroke="#DC2626" stroke-width="1"/>
-    <text x="395" y="257" font-size="9.5" font-weight="700" fill="#B91C1C" text-anchor="middle">ATTACK TARGET</text>
+  <g id="slot-3">
+    <rect x="88" y="202" width="232" height="44" rx="4" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+    <text x="102" y="222" fill="#991B1B" font-size="12" font-weight="600">Saved Return Address (LR')</text>
+    <text x="102" y="237" fill="#64748B" font-size="10">Target of control-flow hijack</text>
   </g>
 
-
-  <!-- Block: fpsve -->
-  <g filter="url(#shadow-card)">
-    <rect x="125" y="297" width="335" height="50" rx="6" fill="url(#grad-neutral)" stroke="#94A3B8" stroke-width="1.5"/>
-    
-    <text x="141" y="321" font-size="13" font-weight="700" fill="#1E293B">Saved FP' / SVE Registers</text>
-    <text x="141" y="339" font-size="11" font-weight="500" fill="#64748B">Frame pointer and vector registers</text>
-    
-    <!-- Badge -->
-    <rect x="342" y="309" width="106" height="20" rx="4" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1"/>
-    <text x="395" y="323" font-size="9.5" font-weight="700" fill="#475569" text-anchor="middle">Callee-Saved</text>
+  <g id="slot-4">
+    <rect x="88" y="252" width="232" height="44" rx="4" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="102" y="272" fill="#334155" font-size="12" font-weight="600">Callee-Saved Regs (FP', SVE)</text>
+    <text x="102" y="287" fill="#64748B" font-size="10">Frame pointer &amp; vector regs</text>
   </g>
 
-
-  <!-- Block: vla -->
-  <g filter="url(#shadow-card)">
-    <rect x="125" y="357" width="335" height="60" rx="6" fill="url(#grad-vla)" stroke="#EA580C" stroke-width="2.2"/>
-    <use href="#icon-origin" x="139" y="369"/>
-    <text x="161" y="381" font-size="13" font-weight="700" fill="#1E293B">VLA Buffer (alloca / Dynamic)</text>
-    <text x="141" y="399" font-size="11" font-weight="500" fill="#64748B">Dynamic array allocated below saved LR'</text>
-    
-    <!-- Badge -->
-    <rect x="342" y="369" width="106" height="20" rx="4" fill="#FFEDD5" stroke="#EA580C" stroke-width="1"/>
-    <text x="395" y="383" font-size="9.5" font-weight="700" fill="#C2410C" text-anchor="middle">OVERFLOW ORIGIN</text>
+  <g id="slot-5">
+    <rect x="88" y="302" width="232" height="44" rx="4" fill="#FFEDD5" stroke="#F97316" stroke-width="1.5"/>
+    <text x="102" y="322" fill="#9A3412" font-size="12" font-weight="600">VLA / Dynamic Buffer</text>
+    <text x="102" y="337" fill="#64748B" font-size="10">Allocated below saved registers</text>
   </g>
 
-
-  <!-- Block: outgoing -->
-  <g filter="url(#shadow-card)">
-    <rect x="125" y="427" width="335" height="50" rx="6" fill="url(#grad-neutral)" stroke="#CBD5E1" stroke-width="1.5"/>
-    
-    <text x="141" y="451" font-size="13" font-weight="700" fill="#1E293B">Outgoing Stack Arguments</text>
-    <text x="141" y="469" font-size="11" font-weight="500" fill="#64748B">Space reserved for outgoing calls</text>
-    
-    <!-- Badge -->
-    <rect x="342" y="439" width="106" height="20" rx="4" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="1"/>
-    <text x="395" y="453" font-size="9.5" font-weight="700" fill="#475569" text-anchor="middle">Callee Args</text>
+  <g id="slot-6">
+    <rect x="88" y="352" width="232" height="44" rx="4" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="102" y="372" fill="#334155" font-size="12" font-weight="600">Outgoing Stack Arguments</text>
+    <text x="102" y="387" fill="#64748B" font-size="10">Space reserved for callees</text>
   </g>
 
+  <!-- Overflow trajectory from VLA up to Saved LR' -->
+  <path d="M 332 324 C 364 324, 364 224, 338 224" 
+        fill="none" stroke="#DC2626" stroke-width="2.5" stroke-dasharray="5,3" marker-end="url(#arrow-red-up)"/>
+  
+  <text x="380" y="306" fill="#DC2626" font-size="11.5" font-weight="700">1. Buffer Overflow</text>
+  <text x="380" y="320" fill="#991B1B" font-size="10">Grows toward higher addresses</text>
+  <text x="380" y="228" fill="#DC2626" font-size="11.5" font-weight="700">Corrupts LR' directly!</text>
 
-  <!-- Overflow Trajectory (Red curved dashed line) -->
-  <g filter="url(#shadow-alert)">
-    <path d="M 460 387 C 520 387, 525 330, 525 259 L 467 259" 
-          fill="none" stroke="url(#grad-overflow)" stroke-width="3.5" stroke-dasharray="6 3"
-          marker-end="url(#arrow-overflow)"/>
-    
-    <!-- Pulse dot at overflow origin -->
-    <circle cx="460" cy="387" r="5" fill="#EA580C" stroke="#FFFFFF" stroke-width="2"/>
-  </g>
 
-  <!-- Explanatory Callout Card for Vulnerability -->
-  <g filter="url(#shadow-alert)">
-    <rect x="510" y="190" width="195" height="138" rx="8" fill="#FFF1F2" stroke="#F43F5E" stroke-width="1.8"/>
-    
-    <!-- Callout Header -->
-    <rect x="510" y="190" width="195" height="28" rx="8" fill="#FFE4E6"/>
-    <use href="#icon-alert" x="522" y="196"/>
-    <text x="618" y="209" font-size="11.5" font-weight="800" fill="#BE123C" text-anchor="middle">SILENT DEFENSE FAILURE</text>
-    
-    <text x="522" y="238" font-size="10.5" font-weight="700" fill="#881337">• Overflow grows UP</text>
-    <text x="522" y="254" font-size="10" font-weight="600" fill="#9F1239">  from VLA into saved LR'</text>
-    
-    <text x="522" y="278" font-size="10.5" font-weight="700" fill="#881337">• LR' corrupted &amp; hijacked!</text>
-    
-    <text x="522" y="300" font-size="10" font-weight="600" fill="#4C1D95">• Canary sits HIGHER above</text>
-    <use href="#icon-check" x="522" y="307"/>
-    <text x="540" y="318" font-size="10" font-weight="700" fill="#15803D">Canary check PASSES!</text>
+  <!-- Canary untouched indicator -->
+  <line x1="332" y1="124" x2="378" y2="124" stroke="#D97706" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <rect x="380" y="109" width="200" height="30" rx="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="392" y="128" fill="#92400E" font-size="10.5" font-weight="600">2. Canary Sits Above (Intact)</text>
+
+
+  <!-- Silent Failure Verdict Box -->
+  <g transform="translate(380, 336)">
+    <rect x="0" y="0" width="200" height="56" rx="5" fill="#FEF2F2" stroke="#EF4444" stroke-width="1.5"/>
+    <text x="12" y="20" fill="#991B1B" font-size="11.5" font-weight="700">&#9888; Silent Defense Failure</text>
+    <text x="12" y="36" fill="#64748B" font-size="9.5">&#x2022; LR' hijacked without crash</text>
+    <text x="12" y="48" fill="#64748B" font-size="9.5">&#x2022; Epilogue canary check PASSES</text>
   </g>
 
 </svg>

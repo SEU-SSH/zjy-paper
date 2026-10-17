@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 490" width="1000" height="490" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+
+  <defs>
+    <marker id="arr-gray" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#475569"/>
+    </marker>
+    <marker id="arr-dash" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#64748B"/>
+    </marker>
+  </defs>
+
+
+  <text x="500.0" y="36" fill="#0F172A" font-size="18" font-weight="700" text-anchor="middle">Stage 1: Multi-Source Security Invariant Extraction and Transfer Pipeline</text>
+
+
+  <!-- Card 1: Knowledge Corpora & Extraction -->
+  <rect x="35" y="58" width="285" height="330" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="177.5" y="86" fill="#166534" font-size="14" font-weight="700" text-anchor="middle">1. Knowledge Corpora &amp; Extraction</text>
+
+  <!-- Box 1A: Multi-Source Corpora -->
+  <g transform="translate(50, 103)">
+    <rect x="0" y="0" width="255" height="110" rx="6" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#15803D" font-size="11.5" font-weight="700">Multi-Source Corpora</text>
+    
+    <rect x="12" y="32" width="230" height="20" rx="3" fill="#F0FDF4"/>
+    <text x="18" y="46" fill="#334155" font-size="10">&#x2022; Compiler Source &amp; Assertions (GCC/LLVM)</text>
+
+    <rect x="12" y="56" width="230" height="20" rx="3" fill="#F0FDF4"/>
+    <text x="18" y="70" fill="#334155" font-size="10">&#x2022; ISA &amp; ABI Specifications (x86, ARM, RV)</text>
+
+    <rect x="12" y="80" width="230" height="20" rx="3" fill="#F0FDF4"/>
+    <text x="18" y="94" fill="#334155" font-size="10">&#x2022; Historical Bug Patches (e.g. CVE-2023-4039)</text>
+  </g>
+
+  <!-- Box 1B: Dual Extraction Paths -->
+  <g transform="translate(50, 228)">
+    <rect x="0" y="0" width="255" height="135" rx="6" fill="#FFFFFF" stroke="#BBF7D0" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#15803D" font-size="11.5" font-weight="700">Dual Extraction Paths</text>
+
+    <!-- Path A -->
+    <rect x="12" y="32" width="230" height="42" rx="4" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+    <text x="20" y="48" fill="#14532D" font-size="10.5" font-weight="700">Segmented CoT Review</text>
+    <text x="20" y="64" fill="#475569" font-size="9.5">Partitioned pass &amp; function boundary slicing</text>
+
+    <!-- Path B -->
+    <rect x="12" y="80" width="230" height="42" rx="4" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+    <text x="20" y="96" fill="#14532D" font-size="10.5" font-weight="700">Historical Bug Probe Pool</text>
+    <text x="20" y="112" fill="#475569" font-size="9.5">Distilled root causes across compiler backends</text>
+  </g>
+
+
+  <line x1="325" y1="223.0" x2="357" y2="223.0" 
+        stroke="#475569" stroke-width="2.5" marker-end="url(#arr-gray)"/>
+
+
+  <!-- Card 2: Hybrid RAG & Generalization -->
+  <rect x="362" y="58" width="285" height="330" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="504.5" y="86" fill="#92400E" font-size="14" font-weight="700" text-anchor="middle">2. Hybrid RAG &amp; Generalization</text>
+
+  <!-- Box 2A: Dual-Aspect Query -->
+  <g transform="translate(377, 103)">
+    <rect x="0" y="0" width="255" height="110" rx="6" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#B45309" font-size="11.5" font-weight="700">Dual-Aspect Query Formulation</text>
+
+    <rect x="12" y="34" width="230" height="30" rx="4" fill="#FEF3C7"/>
+    <text x="18" y="52" fill="#78350F" font-size="10"><tspan font-weight="700">Sparse BM25:</tspan> Critical code tokens &amp; ASTs</text>
+
+    <rect x="12" y="70" width="230" height="30" rx="4" fill="#FEF3C7"/>
+    <text x="18" y="88" fill="#78350F" font-size="10"><tspan font-weight="700">Dense Vector:</tspan> Semantic root cause embeddings</text>
+  </g>
+
+  <!-- Box 2B: Cross-Mechanism Transfer -->
+  <g transform="translate(377, 228)">
+    <rect x="0" y="0" width="255" height="135" rx="6" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#B45309" font-size="11.5" font-weight="700">Cross-Mechanism Transfer Pipeline</text>
+
+    <g transform="translate(14, 38)">
+      <rect x="0" y="0" width="66" height="38" rx="4" fill="#FDE68A" stroke="#F59E0B" stroke-width="1"/>
+      <text x="33" y="18" fill="#92400E" font-size="9.5" font-weight="700" text-anchor="middle">Distill</text>
+      <text x="33" y="30" fill="#78350F" font-size="8" text-anchor="middle">Root Cause</text>
+
+      <line x1="68" y1="19" x2="78" y2="19" stroke="#78350F" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+      <rect x="82" y="0" width="66" height="38" rx="4" fill="#FDE68A" stroke="#F59E0B" stroke-width="1"/>
+      <text x="115" y="18" fill="#92400E" font-size="9.5" font-weight="700" text-anchor="middle">Filter</text>
+      <text x="115" y="30" fill="#78350F" font-size="8" text-anchor="middle">Structural</text>
+
+      <line x1="150" y1="19" x2="160" y2="19" stroke="#78350F" stroke-width="1.5" marker-end="url(#arr-gray)"/>
+
+      <rect x="164" y="0" width="66" height="38" rx="4" fill="#FDE68A" stroke="#F59E0B" stroke-width="1"/>
+      <text x="197" y="18" fill="#92400E" font-size="9.5" font-weight="700" text-anchor="middle">Specialize</text>
+      <text x="197" y="30" fill="#78350F" font-size="8" text-anchor="middle">Frame Map</text>
+    </g>
+
+    <text x="14" y="102" fill="#64748B" font-size="9.5">&#x2022; Transfers across mechanisms (e.g. Canary &#8594; PAC)</text>
+    <text x="14" y="118" fill="#64748B" font-size="9.5">&#x2022; Yields candidate invariants for diverse backends</text>
+  </g>
+
+
+  <line x1="652" y1="223.0" x2="684" y2="223.0" 
+        stroke="#475569" stroke-width="2.5" marker-end="url(#arr-gray)"/>
+
+
+  <!-- Card 3: Acceptance Gates & Catalog -->
+  <rect x="689" y="58" width="285" height="330" rx="8" fill="#FAF5FF" stroke="#D8B4FE" stroke-width="1.5"/>
+  <text x="831.5" y="86" fill="#6B21A8" font-size="14" font-weight="700" text-anchor="middle">3. Acceptance Gates &amp; Catalog</text>
+
+  <!-- Box 3A: Acceptance Gates -->
+  <g transform="translate(704, 103)">
+    <rect x="0" y="0" width="255" height="110" rx="6" fill="#FFFFFF" stroke="#E9D5FF" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#7E22CE" font-size="11.5" font-weight="700">Triple Acceptance Screening</text>
+
+    <rect x="12" y="32" width="230" height="20" rx="3" fill="#FAF5FF"/>
+    <text x="18" y="46" fill="#334155" font-size="10"><tspan font-weight="700">1. Grounding Gate:</tspan> Source evidence &amp; assertions</text>
+
+    <rect x="12" y="56" width="230" height="20" rx="3" fill="#FAF5FF"/>
+    <text x="18" y="70" fill="#334155" font-size="10"><tspan font-weight="700">2. Observability Gate:</tspan> Binary or runtime check</text>
+
+    <rect x="12" y="80" width="230" height="20" rx="3" fill="#FAF5FF"/>
+    <text x="18" y="94" fill="#334155" font-size="10"><tspan font-weight="700">3. Novelty Gate:</tspan> Deduplication threshold &#8805; 85%</text>
+  </g>
+
+  <!-- Box 3B: Invariant Catalog Φ -->
+  <g transform="translate(704, 228)">
+    <rect x="0" y="0" width="255" height="135" rx="6" fill="#FFFFFF" stroke="#E9D5FF" stroke-width="1.2"/>
+    <text x="12" y="22" fill="#7E22CE" font-size="11.5" font-weight="700">Security Invariant Catalog &#934;</text>
+
+    <g transform="translate(14, 35)">
+      <rect x="0" y="0" width="228" height="42" rx="4" fill="#F3E8FF" stroke="#C084FC" stroke-width="1.2"/>
+      <text x="114" y="20" fill="#581C87" font-size="11" font-weight="700" text-anchor="middle">&#934; = { &#966;1, &#966;2, ..., &#966;n }</text>
+      <text x="114" y="34" fill="#6B21A8" font-size="9" text-anchor="middle">Formal Security Invariant Contracts</text>
+    </g>
+
+    <text x="14" y="98" fill="#475569" font-size="9.5">&#x2022; Formalized preconditions &amp; assertions</text>
+    <text x="14" y="116" fill="#475569" font-size="9.5">&#x2022; Readied for downstream machine oracles</text>
+  </g>
+
+
+  <!-- Feedback Arrow Loop -->
+  <path d="M 831.5 388 
+           C 831.5 434, 177.5 434, 177.5 388 "
+        fill="none" stroke="#64748B" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arr-dash)"/>
+  
+  <rect x="335.0" y="418" width="330" height="26" rx="4" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="500.0" y="435" fill="#334155" font-size="10.5" font-weight="600" text-anchor="middle">&#8635; Confirmed Bug Feedback (Iterative Corpus Enrichment)</text>
+
+</svg>
