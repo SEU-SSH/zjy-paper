@@ -248,26 +248,30 @@ defense requirement.
 
 DeFuzz addresses the oracle gap in compiler-instrumented defenses by establishing an invariant-directed, agentic testing framework. As established in \S\ref{sec:bg}, traditional crash and differential testing cannot detect silent defense failures because the compiled binaries execute correctly and pass standard functional tests despite violated security guarantees. To bridge this gap, DeFuzz systematically extracts security invariants from multi-source compiler knowledge, operationalizes them into target-specific programmatic checkers, instruments compiler internals for deterministic execution tracking, and drives an adaptive agentic loop to uncover latent vulnerabilities.
 
-The methodology of DeFuzz is structured into two macroscopic phases encompassing four coordinated stages (Figure~\ref{fig:method-invariant-gen}, Figure~\ref{fig:method-oracle-suite}, Figure~\ref{fig:method-source-mapping}, and Figure~\ref{fig:method-agentic-loop}):
+The methodology of DeFuzz is structured into two macroscopic phases encompassing four coordinated components (Figure~\ref{fig:method-invariant-gen}, Figure~\ref{fig:method-oracle-suite}, Figure~\ref{fig:method-source-mapping}, and Figure~\ref{fig:method-agentic-loop}):
 \begin{itemize}
-    \item \textbf{Phase I: Offline Testing Infrastructure and Compiler Instrumentation:}
+    \item \textbf{Phase I: Offline Testing Infrastructure and Compiler Instrumentation (\S\ref{sec:offline}):}
     \begin{enumerate}
-        \item \emph{Stage 1: Invariant Extraction and Transfer (\S\ref{sec:invariants}):} DeFuzz mines compiler source code, architectural specifications, and historical bug reports to derive formal security invariants. It pairs segmented Chain-of-Thought (CoT) review for broad coverage with hybrid Retrieval-Augmented Generation (RAG) for cross-mechanism transfer, validating all candidates through rigorous grounding and novelty gates (Figure~\ref{fig:method-invariant-gen}).
-        \item \emph{Stage 2: Multi-ISA Deterministic Oracle Suite (\S\ref{sec:oracle}):} Each accepted invariant is formalized into a deterministic machine oracle contract and instantiated as separate static audit and dynamic test checkers for each applicable ISA (x86-64, AArch64, RISC-V), producing a deterministic four-state verdict without LLM involvement in bug adjudication (Figure~\ref{fig:method-oracle-suite}).
-        \item \emph{Stage 3: Hierarchical Source Mapping and Log Instrumentation Pipeline (\S\ref{sec:mapping}):} An autonomous coding agent navigates compiler internals using Model Context Protocol (MCP) analysis tools to build a 3-level hierarchical mapping (\texttt{Pass} $\rightarrow$ \texttt{Functions} $\rightarrow$ \texttt{Critical Structs \& Conditions}). Lightweight unique-identifier (UID) log probes are inserted at critical decision points, and the compiler is rebuilt from source into a standalone, independently executable instrumented compiler driver (\texttt{GCC\_INST}) that emits deterministic execution traces (Figure~\ref{fig:method-source-mapping}).
+        \item \emph{Security Invariant Extraction and Transfer (\S\ref{sec:invariants}):} DeFuzz mines compiler source code, architectural specifications, and historical bug reports to derive formal security invariants. It pairs segmented Chain-of-Thought (CoT) review for broad coverage with hybrid Retrieval-Augmented Generation (RAG) for cross-mechanism transfer, validating all candidates through rigorous grounding and novelty gates (Figure~\ref{fig:method-invariant-gen}).
+        \item \emph{Multi-ISA Deterministic Oracle Formulation (\S\ref{sec:oracle}):} Each accepted invariant is formalized into a deterministic machine oracle contract and instantiated as separate static audit and dynamic test checkers for each applicable ISA (x86-64, AArch64, RISC-V), producing a deterministic four-state verdict without LLM involvement in bug adjudication (Figure~\ref{fig:method-oracle-suite}).
+        \item \emph{Hierarchical Source Mapping and Log Instrumentation (\S\ref{sec:mapping}):} An autonomous coding agent navigates compiler internals using Model Context Protocol (MCP) analysis tools to build a 3-level hierarchical mapping (\texttt{Pass} $\rightarrow$ \texttt{Functions} $\rightarrow$ \texttt{Critical Structs \& Conditions}). Lightweight unique-identifier (UID) log probes are inserted at critical decision points, and the compiler is rebuilt from source into a standalone, independently executable instrumented compiler driver (\texttt{GCC\_INST}) that emits deterministic execution traces (Figure~\ref{fig:method-source-mapping}).
     \end{enumerate}
-    \item \textbf{Phase II: Online Directed Agentic Fuzzing Closed Loop:}
+    \item \textbf{Phase II: Online Directed Agentic Fuzzing Closed Loop (\S\ref{sec:online}):}
     \begin{enumerate}
         \setcounter{enumi}{3}
-        \item \emph{Stage 4: Closed-Loop Agentic Fuzzing and Adaptive Feedback (\S\ref{sec:loop}):} The orchestrator schedules targets under fixed, uniform time slices per invariant. A Generator Agent synthesizes checker-aware C/C++ probe seeds engineered to evade Dead Code Elimination (DCE). The instrumented compiler driver \texttt{GCC\_INST} compiles the seeds, the oracle suite adjudicates verdicts, and a Feedback Agent analyzes compiler diagnostics, probe logs, and condition hit counts to drive mutation hints. Persistent rule ambiguities trigger checker evolution with historical seed pool re-evaluation, while confirmed violations trigger automated C-Reduce minimization and lateral bug amplification (Figure~\ref{fig:method-agentic-loop}).
+        \item \emph{Closed-Loop Agentic Fuzzing and Adaptive Feedback (\S\ref{sec:loop}):} The orchestrator schedules targets under fixed, uniform time slices per invariant. A Generator Agent synthesizes checker-aware C/C++ probe seeds engineered to evade Dead Code Elimination (DCE). The instrumented compiler driver \texttt{GCC\_INST} compiles the seeds, the oracle suite adjudicates verdicts, and a Feedback Agent analyzes compiler diagnostics, probe logs, and condition hit counts to drive mutation hints. Persistent rule ambiguities trigger checker evolution with historical seed pool re-evaluation, while confirmed violations trigger automated C-Reduce minimization and lateral bug amplification (Figure~\ref{fig:method-agentic-loop}).
     \end{enumerate}
 \end{itemize}
 
-\section{Stage 1: Evidence-Grounded Invariant Extraction and Transfer}\label{sec:invariants}
+\section{Offline Testing Infrastructure and Compiler Instrumentation}\label{sec:offline}
 
-\wincfig{method-invariant-gen}{Stage 1: Multi-source security invariant extraction and transfer pipeline. Offline corpora from compiler sources, specifications, and historical patches feed both a broad-coverage segmented CoT review and a targeted cross-mechanism RAG transfer. Rigorous acceptance gates enforce provenance grounding and novelty before candidate invariants enter the catalog $\Phi$. Confirmed findings loop back to seed subsequent discovery campaigns.}
+The offline preparation phase establishes the formal ground-truth contracts and the observability foundation required for autonomous fuzzing. It systematically transforms unstructured compiler corpora into a catalog of verifiable invariants, synthesizes deterministic ISA-specialized test checkers, and instruments production compilers to expose execution trace telemetry.
 
-\subsection{Security Invariants: Definition and Schema}
+\subsection{Evidence-Grounded Invariant Extraction and Transfer}\label{sec:invariants}
+
+\wincfig{method-invariant-gen}{Multi-source security invariant extraction and transfer pipeline. Offline corpora from compiler sources, specifications, and historical patches feed both a broad-coverage segmented CoT review and a targeted cross-mechanism RAG transfer. Rigorous acceptance gates enforce provenance grounding and novelty before candidate invariants enter the catalog $\Phi$. Confirmed findings loop back to seed subsequent discovery campaigns.}
+
+\subsubsection{Invariant Definition and Formal Schema}
 A \emph{security invariant} is a property that a compiler-instrumented defense must satisfy under its designated threat model to preserve its security guarantees. Violating a security invariant indicates that the defense has been silently weakened or bypassed in the emitted machine code or at run time, regardless of whether compilation completes successfully or functional test suites pass.
 
 To ensure deterministic evaluation and downstream toolchain integration, every invariant $\phi$ is formalized under a uniform schema:
@@ -278,12 +282,12 @@ where $\mathcal{M}$ denotes the target defense mechanism (e.g., Stack Canary, Sa
 
 Crucially, DeFuzz strictly separates the observable phenomenon $\mathcal{O}_{\text{phenom}}$ from the concrete detection recipe. For example, ``the canary guard does not precede the saved frame pointer on the stack overwrite trajectory'' is an observable phenomenon, whereas ``inspect the stack layout offsets in the DWARF debug frame or binary disassembly'' is a target-specific detection recipe implemented by the oracle suite (\S\ref{sec:oracle}).
 
-\subsection{Candidate Extraction via Segmented CoT Review}
+\subsubsection{Candidate Extraction via Segmented CoT Review}
 The invariant corpus is synthesized from three primary knowledge domains: (1) compiler source code, including developer comments, internal AST/IR lowering logic, and runtime assertions; (2) official architectural and ABI specifications; and (3) historical vulnerability reports (CVEs) and their corresponding compiler patches.
 
 Due to the scale of production compilers, semantic requirements for a single defense are often fragmented across middle-end transformations (e.g., GIMPLE or LLVM IR passes) and target-specific backend lowering files (e.g., machine descriptions and frame layout calculations). To extract candidates systematically, DeFuzz partitions compiler source trees along mechanism and function boundaries. A segmented Chain-of-Thought (CoT) prompting strategy~\cite{wei2022chain} then guides the language model to examine each partition independently, isolating the protected asset, required preconditions, and security guarantee. This phase produces \emph{candidate invariants}, each tagged with its source file and line-level evidence to eliminate hallucination before downstream validation.
 
-\subsection{Cross-Mechanism Invariant Transfer via Hybrid RAG}\label{sec:specgen}
+\subsubsection{Cross-Mechanism Invariant Transfer via Hybrid RAG}\label{sec:specgen}
 Segmented CoT review provides broad coverage within known mechanism boundaries, but it cannot readily cluster isolated code fragments that share an identical underlying failure mode across different defenses or compiler backends. To bridge this divide, DeFuzz incorporates a complementary Retrieval-Augmented Generation (RAG)~\cite{lewis2020retrieval} pipeline centered on \emph{abstract-failure-mode transfer}.
 
 Rather than performing entity-centric retrieval based on variable or API names (which confines search results to the original defense), DeFuzz distills confirmed historical bugs into abstract semantic signatures. As depicted in Figure~\ref{fig:method-invariant-gen}, the transfer pipeline executes across four formal stages:
@@ -317,7 +321,7 @@ Embedding-only                   & 2  & BM25 missed; dense retrieval added \\
 \end{tabular}
 \end{table}
 
-\subsection{Grounding Gates and Catalog Maintenance}
+\subsubsection{Grounding Gates and Catalog Maintenance}
 Candidates from both segmented CoT review and cross-mechanism RAG must pass two static grounding gates before entering the catalog $\Phi$:
 \begin{itemize}
     \item \textbf{Gate 1 (Source Evidence Verification):} Verifies that the cited source files, AST structures, or specification sections explicitly corroborate the stated precondition and guarantee.
@@ -327,11 +331,11 @@ Candidates from both segmented CoT review and cross-mechanism RAG must pass two 
 
 Accepted invariants are stored in the persistent catalog $\Phi = \{\phi_1, \phi_2, \dots, \phi_n\}$. Furthermore, whenever the online fuzzing campaign confirms a new zero-day vulnerability, its verified root cause is distilled and serialized back into the probe pool, enabling continuous reinforcement of the invariant catalog across successive testing cycles.
 
-\section{Stage 2: Multi-ISA Deterministic Oracle Suite}\label{sec:oracle}
+\subsection{Multi-ISA Deterministic Oracle Suite}\label{sec:oracle}
 
-\wincfig{method-oracle-suite}{Stage 2: Multi-ISA static and dynamic deterministic oracle suite. Accepted invariants are operationalized into deterministic contracts. For each invariant and supported ISA, DeFuzz generates specialized static checkers (analyzing AST, IR, and disassembly of unexecuted binaries) and dynamic checkers (evaluating execution probes in sandboxed environments). Results are aggregated into a deterministic four-state verdict matrix without LLM involvement.}
+\wincfig{method-oracle-suite}{Multi-ISA static and dynamic deterministic oracle suite. Accepted invariants are operationalized into deterministic contracts. For each invariant and supported ISA, DeFuzz generates specialized static checkers (analyzing AST, IR, and disassembly of unexecuted binaries) and dynamic checkers (evaluating execution probes in sandboxed environments). Results are aggregated into a deterministic four-state verdict matrix without LLM involvement.}
 
-\subsection{Formal Oracle Contract and 4-State Verdict Matrix}
+\subsubsection{Formal Oracle Contract and 4-State Verdict Matrix}
 To evaluate compiler-instrumented defenses without human intervention or LLM adjudication bias, DeFuzz formalizes the oracle as a deterministic contract. Let $\mathcal{P}$ denote the space of compiled program binaries, $\mathcal{I} = \{\text{x86-64}, \text{AArch64}, \text{RISC-V}\}$ be the set of target ISAs, and $\mathcal{S} \subseteq \Phi$ be the set of accepted security invariants. The oracle is defined as a deterministic function:
 \begin{equation}
 \mathcal{O}: \mathcal{P} \times \mathcal{I} \times \mathcal{S} \longrightarrow \{\text{PASS}, \text{FAIL}, \text{NA}, \text{ERROR}\}
@@ -347,7 +351,7 @@ Each verdict carries strict semantic guarantees:
 
 Crucially, LLM agents are strictly barred from adjudicating or overriding verdicts. All bug claims require programmatic verification by the oracle function $\mathcal{O}$, eliminating false positives stemming from model hallucination.
 
-\subsection{Dual Static and Dynamic Deterministic Checkers}
+\subsubsection{Dual Static and Dynamic Deterministic Checkers}
 As illustrated in Figure~\ref{fig:method-oracle-suite}, DeFuzz constructs dual checker implementations tailored to the observability requirements of each invariant:
 \begin{itemize}
     \item \textbf{Static Checkers:} Inspect unexecuted compiler outputs, including AST dumps, GIMPLE representations, LLVM IR, assembly listings, stack frame layouts, and ELF symbol tables. For stack canaries, the static checker audits whether the canary allocation slot precedes all local buffers on the stack overwrite path and checks the presence of guard symbols (e.g., \texttt{\_\_stack\_chk\_fail}).
@@ -355,24 +359,24 @@ As illustrated in Figure~\ref{fig:method-oracle-suite}, DeFuzz constructs dual c
 \end{itemize}
 Invariants whose violation signals can be observed both statically and dynamically are implemented with redundant checkers to cross-validate results.
 
-\subsection{Target-Specific Specialization Across ISAs}
+\subsubsection{Target-Specific Specialization Across ISAs}
 Although a security invariant expresses a universal defense guarantee, its machine-level enforcement depends fundamentally on target-specific instruction semantics, register conventions, and stack layout rules. For each invariant $s \in \mathcal{S}$ and each applicable ISA $i \in \mathcal{I}$, DeFuzz synthesizes a specialized checker implementation $C_{s,i}$.
 
 On x86-64, return addresses are pushed directly onto the stack by the \texttt{call} instruction, placing the return slot immediately above the saved frame pointer. In contrast, on AArch64 and RISC-V, the return address is held in a dedicated link register (\texttt{x30} or \texttt{ra}) and saved onto the stack only during non-leaf function prologues. Consequently, an AArch64 stack protector checker must track whether dynamic frame adjustments (e.g., for VLAs) place buffers above the saved link register slot, whereas an x86-64 checker focuses on displacement relative to the base pointer. By generating specialized checkers tagged with ISA metadata, DeFuzz prevents valid architectural variations from being misclassified as defense failures.
 
-\subsection{Mechanism Aggregator and Flag Profiles}
+\subsubsection{Mechanism Aggregator and Flag Profiles}
 The oracle suite incorporates a mechanism-level aggregator that combines verdicts across checkers and compilation flag profiles. Checkers execute under both defense-enabled flags (e.g., \texttt{-fstack-protector-strong}, \texttt{-fcf-protection}) and baseline configurations (defense disabled). This differential profiling ensures that detected layout properties or symbol changes are attributable specifically to the defense instrumentation rather than general backend optimization passes. Any verified \text{FAIL} across the checker suite triggers a mechanism-level alert carrying full binary and trace evidence.
 
-\section{Stage 3: Hierarchical Source Mapping and Log Instrumentation Pipeline}\label{sec:mapping}
+\subsection{Hierarchical Source Mapping and Log Instrumentation}\label{sec:mapping}
 
-\wincfig{method-source-mapping}{Stage 3: Hierarchical source mapping and log instrumentation pipeline. An autonomous coding agent navigates compiler internals using an MCP toolchain to establish a 3-level hierarchical mapping (Pass $\rightarrow$ Function $\rightarrow$ Critical Condition). Lightweight UID log probes are inserted into compiler sources, and the compiler is rebuilt into an instrumented artifact $\mathcal{IC}$ that emits deterministic trace streams during test seed compilation.}
+\wincfig{method-source-mapping}{Hierarchical source mapping and log instrumentation pipeline. An autonomous coding agent navigates compiler internals using an MCP toolchain to establish a 3-level hierarchical mapping (Pass $\rightarrow$ Function $\rightarrow$ Critical Condition). Lightweight UID log probes are inserted into compiler sources, and the compiler is rebuilt into an instrumented artifact $\mathcal{IC}$ that emits deterministic trace streams during test seed compilation.}
 
-\subsection{MCP-Guided Compiler Codebase Navigation}
+\subsubsection{MCP-Guided Compiler Codebase Navigation}
 Production compilers such as GCC and LLVM comprise millions of lines of complex C/C++ code. Localizing the exact routines where security defense decisions are made presents a severe scalability challenge for automated testing. To navigate this code surface, DeFuzz deploys an autonomous coding agent equipped with a Model Context Protocol (MCP) toolchain.
 
 The MCP toolchain exposes four specialized analysis capabilities: (1) \texttt{call-graph} to trace invocation paths across optimization passes; (2) \texttt{ast-parser} to inspect compiler abstract syntax trees; (3) \texttt{alia ast} for intermediate representation audits; and (4) \texttt{ripgrep} for rapid symbol and macro indexing. The agent uses these tools in a read-only environment, formulating hypotheses regarding where defense logic is lowered and validating them against compiler source definitions.
 
-\subsection{3-Level Hierarchical Mapping}
+\subsubsection{3-Level Hierarchical Mapping}
 Using CallGraph MCP and code retrieval tools, the agent resolves each invariant $\phi$ into a 3-level hierarchical mapping within the compiler source tree:
 \begin{itemize}
     \item \textbf{Level 1: Compiler Pass:} Identifies the high-level middle-end or backend pass governing the defense mechanism (e.g., \texttt{pass\_stack\_protect} in GCC, or \texttt{StackProtectorPass} in LLVM).
@@ -382,7 +386,7 @@ Using CallGraph MCP and code retrieval tools, the agent resolves each invariant 
 
 This 3-level hierarchy establishes an exact correspondence between abstract invariant preconditions and concrete compiler decision branches.
 
-\subsection{Deterministic Log Probing and Compiler Driver Rebuild (\texttt{GCC\_INST})}
+\subsubsection{Deterministic Log Probing and Compiler Driver Rebuild (\texttt{GCC\_INST})}
 Once the Level-3 critical conditions are mapped, the coding agent automatically instruments the compiler source by inserting deterministic logging probes. Each probe is instantiated using a standardized compile-time macro:
 \begin{lstlisting}[language=C]
 DEFUZZ_LOG("SP#a3f2:hit", slot);
@@ -391,11 +395,13 @@ where \texttt{"SP\#a3f2"} represents a globally unique identifier (UID) encoding
 
 Following probe insertion, the compiler is fully rebuilt from source into an independently executable instrumented compiler driver, denoted \texttt{GCC\_INST} (or \texttt{CLANG\_INST} for LLVM). When \texttt{GCC\_INST} compiles a test seed, it writes a deterministic UID trace stream to disk, providing the fuzzing loop with precise visibility into whether internal defense predicates were exercised.
 
-\section{Stage 4: Online Closed-Loop Agentic Fuzzing and Adaptive Feedback Loop}\label{sec:loop}
+\section{Online Directed Agentic Fuzzing}\label{sec:online}
 
-\wincfig{method-agentic-loop}{Stage 4: Online closed-loop agentic fuzzing and adaptive feedback loop. The orchestrator locks an invariant $\phi_i$ and manages the budget. The LLM Generator Agent synthesizes checker-aware C/C++ seeds designed to evade DCE. The instrumented compiler $\mathcal{IC}$ compiles seeds and emits UID trace streams for dual oracle evaluation. The Feedback Agent drives both guidance and checker rewrite loops on non-violations, while confirmed violations trigger automated C-Reduce minimization and lateral exploration.}
+With the offline invariant catalog, deterministic oracles, and instrumented compiler driver established, DeFuzz executes its online testing campaign. The online phase operates as a closed-loop agentic exploration engine that schedules invariants under uniform time slices, generates semantically targeted seeds engineered to survive compiler optimizations, and continuously adapts based on execution telemetry.
 
-\subsection{Deterministic Orchestration and Per-Invariant Scheduling}
+\wincfig{method-agentic-loop}{Online closed-loop agentic fuzzing and adaptive feedback loop. The orchestrator locks an invariant $\phi_i$ and manages the budget. The LLM Generator Agent synthesizes checker-aware C/C++ seeds designed to evade DCE. The instrumented compiler $\mathcal{IC}$ compiles seeds and emits UID trace streams for dual oracle evaluation. The Feedback Agent drives both guidance and checker rewrite loops on non-violations, while confirmed violations trigger automated C-Reduce minimization and lateral exploration.}
+
+\subsection{Deterministic Orchestration and Invariant Scheduling}\label{sec:loop}
 The online fuzzing process is governed by a deterministic orchestrator rather than an autonomous agent. At campaign startup, the orchestrator initializes a target queue $Q$ from the invariant catalog $\Phi$. The orchestrator locks one target invariant $\phi_i$ at a time alongside its dedicated ISA-specific checker suite, allocating a fixed, uniform time and execution budget $T$ (ensuring equal exploration opportunity across all invariants).
 
 All interactions follow a strict topological order: seed generation $\rightarrow$ instrumented build with \texttt{GCC\_INST} $\rightarrow$ UID trace collection $\rightarrow$ dual oracle evaluation $\rightarrow$ feedback dispatch. To guarantee reproducibility and auditability, all inter-agent communications and intermediate states flow through a versioned blackboard $\mathcal{B}$. Pinning a blackboard version deterministically reproduces agent inputs, test seeds, compiler traces, and checker results. Algorithm~\ref{alg:orchestration} details the complete control flow.
@@ -434,7 +440,7 @@ All interactions follow a strict topological order: seed generation $\rightarrow
 \subsection{Checker-Aware Seed Synthesis and DCE Evasion}
 Generic random program generators frequently produce test inputs whose security-sensitive constructs are optimized away by compiler transformations. In particular, Dead Code Elimination (DCE) routinely removes unused buffer allocations or ineffectual pointer writes before backend defense passes execute.
 
-To overcome this, DeFuzz employs an LLM-based Generator Agent that synthesizes \emph{checker-aware} C/C++ probe seeds (e.g., \texttt{seed\_sp\_probe.c}). The agent is conditioned on the formal invariant statement $\phi_i$, the target ISA, and the Level-3 compiler predicates identified in Stage 3. It systematically incorporates anti-DCE patterns into generated seeds:
+To overcome this, DeFuzz employs an LLM-based Generator Agent that synthesizes \emph{checker-aware} C/C++ probe seeds (e.g., \texttt{seed\_sp\_probe.c}). The agent is conditioned on the formal invariant statement $\phi_i$, the target ISA, and the Level-3 compiler predicates identified through hierarchical source mapping (\S\ref{sec:mapping}). It systematically incorporates anti-DCE patterns into generated seeds:
 \begin{itemize}
     \item Dynamically sized arrays (VLAs) with run-time dimension bounds passed via command-line arguments (\texttt{argc}).
     \item Escaping buffer pointers through volatile qualifiers and \texttt{asm volatile} barriers.
