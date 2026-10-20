@@ -65,7 +65,7 @@
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,frame=single,xleftmargin=2pt}
 
 \makeatletter
-\def\abstract{\normalfont\@IEEEabskeysecsize\textbf{Abstract}---\relax}
+\def\abstract{\normalfont\@IEEEabskeysecsize\textbf{Abstract}---\relax\bfseries}
 \makeatother
 
 \begin{document}
@@ -85,14 +85,15 @@ zhangjingyao@seu.edu.cn}
 \pagestyle{plain}     % Force page numbers on subsequent pages for review
 
 \begin{abstract}
-Compiler-instrumented defenses, such as stack canaries, Control-Flow Integrity (CFI), and Pointer Authentication (PAC), provide an essential line of defense against memory-safety exploits. Yet these defenses can fail \textbf{silently}---leaving emitted binaries functionally normal but security-compromised without causing compiler crashes or execution divergence. CVE-2023-4039 exemplifies this vulnerability, where a dynamically allocated buffer bypasses the GCC stack protector on AArch64. Such failures expose a fundamental \textbf{oracle gap}: conventional crash and differential testing cannot detect whether an optimization pass has silently weakened or stripped an intended defense contract.
+Compiler-instrumented defenses, such as stack canaries, Control-Flow Integrity (CFI), and Pointer Authentication (PAC), are vital for mitigating memory-safety exploits. However, these defenses can \textbf{fail silently}---leaving compiled binaries functionally intact but security-compromised, without causing any compiler crashes or execution divergence. For instance, in \textbf{CVE-2023-4039}, dynamic stack allocation silently bypassed the GCC stack protector on AArch64. Such failures expose a fundamental \textbf{oracle gap}: conventional crash and differential testing only check functional correctness, making them completely blind when an optimization pass silently weakens or removes a defense contract.
 
-In this paper, we present \textbf{DeFuzz}, an invariant-directed agentic framework for discovering silent compiler defense failures. DeFuzz systematically addresses three coupled challenges:
-\textbf{(1) Evidence-Grounded Invariant Extraction:} DeFuzz mines formal security contracts from compiler corpora, architectural specifications, and historical patches, coupling segmented Chain-of-Thought (CoT) with cross-mechanism abstract-failure transfer.
-\textbf{(2) Multi-ISA Deterministic Oracle Formulation:} For each invariant, DeFuzz synthesizes separate static audit and dynamic sandbox checkers specialized across target ISAs (x86-64, AArch64, RISC-V), producing a deterministic four-state verdict (PASS, FAIL, NA, ERROR) with zero LLM involvement in bug adjudication.
-\textbf{(3) Invariant-Directed Closed-Loop Fuzzing:} Governed by a deterministic orchestrator, an LLM Generator synthesizes anti-DCE probe seeds, while an adaptive Feedback Agent analyzes compiler execution logs and condition hits to drive seed mutation and checker evolution. Confirmed violations trigger automated delta-debugging and lateral bug amplification.
+In this paper, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agentic framework for discovering silent compiler defense failures. Following a transparent and verifiable pipeline, \textsc{DeFuzz} organizes testing into \textbf{four core steps}:
+\textbf{(1) Invariant Generation:} We extract formal security invariants from compiler corpora, architectural specifications, and historical patches using a hybrid CoT and RAG pipeline.
+\textbf{(2) Compiler Source Mapping:} With these invariants established, we map them directly to relevant compiler passes and decision branches, identifying where defenses are implemented and which conditions govern their execution.
+\textbf{(3) Programmatic Oracle Construction:} Next, we turn this mapped logic into target-specific static and dynamic checkers across target ISAs (x86-64, AArch64, RISC-V), strictly enforcing \textbf{zero LLM involvement in bug adjudication} to eliminate false positives from model hallucination.
+\textbf{(4) Agentic Directed Fuzzing:} Finally, our agentic directed fuzzing coordinates specialized agents: a generator agent synthesizes program seeds designed to violate target invariants, while a feedback agent analyzes execution feedback to guide iterative mutations under deterministic oracle evaluation.
 
-Evaluated on GCC and LLVM across multiple architectures, DeFuzz discovered \textbf{\tbd{N}} previously unknown silent compiler defense failures, of which \textbf{\tbd{M}} have been confirmed upstream. These findings underscore the necessity of integrating rigorous, invariant-grounded oracles into compiler testing pipelines.
+Evaluated on GCC and LLVM across multiple architectures, \textsc{DeFuzz} discovered \textbf{\tbd{N} previously unknown silent compiler defense failures}, of which \textbf{\tbd{M} have been confirmed upstream}. These results underscore the necessity of integrating rigorous, invariant-grounded oracles into compiler testing pipelines.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
