@@ -1,133 +1,243 @@
-# 论文修订意见整理
+# DeFuzz 论文修订意见与写作参考指南 (Revision Notes & Writing Guide)
 
-## 2026-09-11：同一不变量的 ISA 专属 checker
+> **文档说明**：本文档汇总并整理了围绕 IEEE S&P (Oakland) 顶级安全会议标准进行的多次导师指导、线上研讨以及微信专项讨论（包括 8月31日会议录音、9月4日截图意见、9月8日与9月11日修改纪要）。
+> 
+> **重要状态声明**：**摘要（Abstract）现已正式定稿并锁定，禁止随意修改**。本文档全面收录定稿摘要范本及所有关键论证逻辑、挑战重构、术语规范与避坑指南，作为后续正文撰写、修改与投稿的最高权威参考。
 
-- 原文仅强调 ISA-aware 和适用性元数据，路由描述及图示仍容易被理解成跨 ISA 复用同一 checker。
-- 已明确：每个不变量针对各适用 ISA 分别生成 checker，组成 checker suite；安全要求相同，指令语义、寄存器和栈布局的检查实现不同。
-- 同步摘要、挑战、Oracle 和调度表述及相关图示标签；GCC/LLVM 的 checker 复用限定在同一 ISA 内。保留已有 checker suite 图示改动，并修复挑战段落的文本错位。
+---
 
-## 2026-09-08：截图意见落实（标题、摘要与前两章）
+## 目录
+1. [已定稿摘要（Abstract 权威范本与解析）](#一-已定稿摘要abstract-权威范本与解析)
+2. [微信专项讨论与截图意见核心提炼 (9月4日)](#二-微信专项讨论与截图意见核心提炼-9月4日)
+3. [核心论据与学术论点深度阐释](#三-核心论据与学术论点深度阐释)
+   - [为什么必须引入 Agent？（核心动机）](#1-为什么必须引入-agent核心动机)
+   - [编译器防御实现是否 match ISA 的假设？（底层失效本质）](#2-编译器防御实现是否-match-isa-的假设底层失效本质)
+   - [Invariants 究竟从哪里来？（知识溯源与防自证）](#3-invariants-究竟从哪里来知识溯源与防自证)
+   - [Security vs. Safety 严格学术界限](#4-security-vs-safety-严格学术界限)
+4. [三大耦合挑战与四大独立贡献对照体系](#四-三大耦合挑战与四大独立贡献对照体系)
+5. [论文全篇“安全顶会八股”写作参考骨架](#五-论文全篇安全顶会八股写作参考骨架)
+   - [Introduction 标准六步推进法](#1-introduction-标准六步推进法)
+   - [Background & Motivation 案例讲透法](#2-background--motivation-案例讲透法)
+   - [Threat Model 边界定义](#3-threat-model-边界定义)
+6. [图表设计规范与学术品位（去流程化）](#六-图表设计规范与学术品位去流程化)
+7. [历史核验记录与技术事实溯源](#七-历史核验记录与技术事实溯源)
+8. [导师元建议与学术写作戒律](#八-导师元建议与学术写作戒律)
 
-本轮以截图最后一组意见为准，将挑战改为“不变量提炼、checker 与种子的协同构造、跨 ISA 语义适配”。下文“近期提交落实情况”保留为历史记录，不代表本轮修订后的状态。
+---
 
-| 意见 | 本轮处理 |
-| --- | --- |
-| 使用 `compiler-instrumented defenses`，重构标题 | 标题改为 `DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses`；摘要、前两章及 defense-role 图统一术语，正文定义 `compiler defenses` 为简称。 |
-| 减少摘要中的枚举和原因解释 | 仅保留 stack canaries 与 CFI 两个例子；删除 `on a particular backend`，直接描述 CVE-2023-4039 导致的保护绕过；摘要由约 366 词缩至约 223 词。 |
-| 体现 invariants 从哪里来 | 首次使用时给出定义；第二章新增来源说明，区分编译器源码与文档、ISA/ABI 规范、历史漏洞及补丁，并说明当前实现行为不能直接当作规范。 |
-| 将生成 checker 与生成种子合为一个挑战 | 第二项挑战围绕同一个不变量的可观测违例与触发条件组织，贡献列表与其对应。 |
-| 体现编译器防御实现与 ISA 假设是否匹配 | 第三项挑战明确指令语义、寄存器约定和栈布局；checker 需要解释这些语义，ISA 元数据路由只是适用性控制。 |
-| 说明为何引入 Agent | 动机改为利用源码上下文生成有特定语义结构的种子，并根据 coverage/checker 反馈迭代；不再把 free agent 的不可复现性当成领域固有挑战。 |
-| 参考近期 invariant 研究 | 引用已核验的 PropertyGPT（NDSS 2025）与 CIll（2026 年 arXiv 预印本），借鉴“候选生成与独立检查分离”，不将本文的 security invariants 等同于归纳循环不变量。 |
-| 保留必要技术细节与图 | 保留 VLA/alloca、动态栈调整和关键图；defense-matrix 与 stack-layout 各保留第二章的一份，消除重复图及标签。 |
+## 一、已定稿摘要（Abstract 权威范本与解析）
 
-### 随文核实
+### 1. 定稿英文原文（锁定，禁止再修改）
 
-- PR-96191 实际是 AArch64 `stack_protect_test` 后 canary 值残留于寄存器，不是 CVE-2023-4039 的栈布局同源漏洞。已修正文献标题和第二章描述，并用该案例说明如何从 machine-description 要求提炼不变量。
-- CVE-2023-4039 的地址关系改为明确的“动态缓冲区 < 保存的返回地址 < canary”；违例是覆盖返回地址而不改变 guard，不是 canary 比较没有执行。
-- Threat Model 明确防御已启用且所需运行环境成立；不把超出机制威胁模型的任意写入当作防御缺陷。GCC 16.1 限定为不变量提炼语料，避免与 GCC/LLVM 测试范围冲突。
-- 不再把确定性证据等同于形式化 soundness 或零误报保证。漏洞数及上游确认数保留占位符，未补造实验结果。
+```latex
+Compiler-instrumented defenses, such as stack canaries, Control-Flow Integrity (CFI), 
+and Pointer Authentication (PAC), provide an essential line of defense against memory-safety 
+exploits. Yet these defenses can fail silently---leaving emitted binaries functionally 
+normal but security-compromised without causing compiler crashes or execution divergence. 
+CVE-2023-4039 exemplifies this vulnerability, where a dynamically allocated buffer bypasses 
+the GCC stack protector on AArch64. Such failures expose a fundamental oracle gap: conventional 
+crash and differential testing cannot detect whether an optimization pass has silently 
+weakened or stripped an intended defense contract.
 
-核验来源：[CVE 原始报告](https://rtx.meta.security/mitigation/2023/09/12/CVE-2023-4039.html)、[GCC PR-96191](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96191)、[PropertyGPT 官方页面](https://www.ndss-symposium.org/ndss-paper/propertygpt-llm-driven-formal-verification-of-smart-contracts-through-retrieval-augmented-property-generation/)、[CIll 预印本](https://arxiv.org/abs/2602.23389)。
+In this paper, we present DeFuzz, an invariant-directed agentic framework for discovering 
+silent compiler defense failures. DeFuzz systematically addresses three coupled challenges:
+(1) Evidence-Grounded Invariant Extraction: DeFuzz mines formal security contracts from 
+compiler corpora, architectural specifications, and historical patches, coupling segmented 
+Chain-of-Thought (CoT) with cross-mechanism abstract-failure transfer.
+(2) Multi-ISA Deterministic Oracle Formulation: For each invariant, DeFuzz synthesizes separate 
+static audit and dynamic sandbox checkers specialized across target ISAs (x86-64, AArch64, RISC-V), 
+producing a deterministic four-state verdict (PASS, FAIL, NA, ERROR) with zero LLM involvement in bug adjudication.
+(3) Invariant-Directed Closed-Loop Fuzzing: Governed by a deterministic orchestrator, an LLM Generator 
+synthesizes anti-DCE probe seeds, while an adaptive Feedback Agent analyzes compiler execution logs 
+and condition hits to drive seed mutation and checker evolution. Confirmed violations trigger 
+automated delta-debugging and lateral bug amplification.
 
-### 后续范围
+Evaluated on GCC and LLVM across multiple architectures, DeFuzz discovered [N] previously unknown 
+silent compiler defense failures, of which [M] have been confirmed upstream. These findings underscore 
+the necessity of integrating rigorous, invariant-grounded oracles into compiler testing pipelines.
+```
 
-- 第三章及之后正文未改；后续需同步术语和挑战主线，并核实关于 soundness、复现保证和现有方法不足的绝对化表述。
-- `refs.bib` 原有 SpecAuditor 条目本轮未找到可核验的原始来源；保留其现状，待修改 Related Work 时确认，不用于前两章论证。
-- 实验数据、确认状态及图中结果标记仍需与实验记录核对；本轮未改变这些数据。
+### 2. 定稿摘要如何全面落实讨论意见
 
-## 标题与核心术语
-- 调研并统一 compiler defense 的通用命名，避免使用文献中不常见的表述。
-- 修改标题中的 `cross-mechanism invariants`，因为最终不变量仍与具体机制绑定。
-- 全文统一使用 `security invariants`，不要与 `safety invariants` 混用。
-- 核心术语首次出现时定义，后文保持一致，避免概念漂移。
+| 导师与讨论意见 | 定稿摘要的对应落实处理 |
+| :--- | :--- |
+| **使用 `compiler-instrumented defenses`** | 首句正式定名，不再使用不规范的 `compiler inserted defense`。 |
+| **`including` 改少一点** | 删除了原稿中堆砌的 `including...` 长句，精简为 `such as stack canaries, CFI, and PAC` 三个经典代表。 |
+| **不要解释太多原因，直接讲 CVE 后果** | 不纠缠于复杂的中间过程，直接点出 `CVE-2023-4039` 的核心安全后果：动态分配缓冲区完全旁路栈保护。 |
+| **不要 `on a particular backend`** | 删除了狭隘的修饰限定，提升问题高度为广泛存在的后端静默失效。 |
+| **体现 invariants 从哪里来** | 挑战 (1) 明确指出来源：*compiler corpora, architectural specifications, and historical patches*。 |
+| **剔除执行流水账，按三大挑战展开** | 第二段彻底摒弃 `First... Second...` 的执行步骤流水账，重组为三大挑战与对应解决方案。 |
+| **明确判定无 LLM 介入** | 挑战 (2) 强调四态判定：*producing a deterministic four-state verdict with zero LLM involvement in bug adjudication*。 |
 
-## Abstract (摘要)
-- 将篇幅压缩约一半，删除重复内容和次要实现细节。
-- 按“问题、挑战、方案、结果、意义”重写，避免按执行流程介绍系统。
-- 删除将 ISA 写成唯一失效根因的表述，因为实际问题还包括实现错误和机制交互。
-- 补充实验结果的意义，不能只报告漏洞数量。
+---
 
-## Introduction (引言) 与 Research Gap
-- 按 `Scope -> Problem -> Research Gap -> Insight -> Approach -> Results -> Contributions` 重组，使主线更清晰。
-- 补充现有方法的不足，并明确 oracle、多 ISA 和搜索空间带来的挑战。
-- 新增由 Agent 解决的独立挑战，否则标题中的 Agent 缺少必要动机。
-- 修正“所有防御都分析 AST”的错误表述，因为部分防御工作在 IR 等层级。
-- 明确不覆盖编译优化选项与防御机制的交互，避免扩大论文声明范围。
+## 二、微信专项讨论与截图意见核心提炼 (9月4日)
 
-## Background 与 Threat Model
-- 定义 compiler defense，介绍防御实现模型和相关历史漏洞。
-- 新增 Threat Model，保持与被研究防御机制自身的威胁模型一致。
-- 明确 Scope，将研究范围限定为 compiler defense 的静默失效。
+微信专项讨论重点聚焦于**标题重构、摘要瘦身、Agent 的真正动机以及三大挑战的科学切分**：
 
-## Contributions (贡献提炼)
-- 按挑战组织贡献，避免按执行步骤拆分或重复计数。
-- 不将 `LLM-driven fuzzing` 作为主体贡献，因为 fuzzing 只是实现手段。
-- 突出 Agentic Framework、Oracle/Invariant、跨 ISA Checker 和漏洞发现结果。
-- 将 `silent failures` 明确为 compiler defense failures，避免范围含糊。
+```
+[讨论原稿要点]
+1. compiler-instrumented defense
+2. including 改少一点
+3. 标题重构下 -> DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses
+4. 体现下 invariants 从哪来
+5. 不要 on a particular backend 了
+6. 摘要不要解释太多原因，直接讲 cve 后果
+7. 编译器防御实现是否 match ISA 的假设
+8. 第二点挑战缩短：生成 Checker 时需要考虑 ISAs 的语义，针对 ISA 能否多做一些事情
+9. 为什么必须引入 Agent？传统方法无法生成违背不变量的、有特定语义的输入
+10. 三大挑战重构：
+    - 不变量生成本身是一个挑战
+    - 基于不变量做测试也是一个挑战，生成 checker 和生成种子合成一个挑战
+    - 不同 ISA 作用与语义适配也是一个挑战
+```
 
-## 图示设计 (Figures)
-- 减少纯流程图，因为其对核心问题的解释力有限。
-- 保留能够解释问题本质、关键设计或结果分布的图。
-- 将 defense-matrix 放在 Background 或结果章节，使其服务于问题空间或结果分析。
+---
 
-## 近期提交落实情况
+## 三、核心论据与学术论点深度阐释
 
-相关提交：
+### 1. 为什么必须引入 Agent？（核心动机）
 
-- `073ab93`：落实标题、摘要、引言、研究缺口、威胁模型和贡献表述等主要修改。
-- `e9cb83e`：精修摘要，恢复关键图示及必要技术细节。
-- `14f607b`、`447691b`：仅重新编译或更新 `main.pdf`。
+在审稿过程中，审稿人最常提出的质疑是：*“为什么传统 Fuzzing 不行？为什么要大费周章引入 Agent？”* 本次讨论给出了强有力的学术论证：
 
-### 标题与核心术语
+* **传统变异/生成方法的根本局限（语义鸿沟）**：
+  - 编译器防御静默失效的触发条件极其苛刻，往往需要极其精准的底层内存布局和语法结构（例如：必须在特定作用域内引入 VLA/alloca、必须配合特定指针转换打破逃逸分析、必须构造符合 ABI 约束的控制流跳转）。
+  - 传统的语法引导或随机变异 Fuzzing（如 Csmith、YARPGen）完全是盲目的，其变异算子**无法感知并生成能够针对性触碰安全不变量边界的特定语义结构代码**，生成的测试用例绝大多数在前端或早早期就被 DCE（死代码消除）或常规优化剔除。
+* **自由运行 Agent（Free-Running Agent）的缺陷**：
+  - 若单纯让 LLM 自主写代码并自主判断是否有 Bug，会产生海量的**幻觉（Hallucination）与不可复现性**，安全顶会审稿人对此极度反感。
+* **DeFuzz 的 Agent 定位与闭环价值**：
+  - **生成端**：利用 LLM 的代码理解能力，以 Invariant 违例条件为引导，合成具备 Anti-DCE 探针和深层底层语义结构的种子输入；
+  - **判定端**：**LLM 绝不参与 Bug 裁决**！裁决完全交由确定性的机器 Checker；
+  - **反馈端**：Feedback Agent 根据编译日志、汇编指令模式和覆盖率反馈，指导下一轮变异与生成。
 
-| 审阅意见 | 状态 | 处理方式 |
-| --- | --- | --- |
-| 统一 compiler defense 的通用命名 | 部分完成 | `073ab93` 引入并定义 `compiler security defense`；但当前仍混用 `compiler defenses`、`compiler security defenses` 和 `compiler-inserted security defenses`。 |
-| 修改标题中的 `cross-mechanism invariants` | 已完成 | 标题改为 `Cross-Mechanism Invariant Transfer`，强调跨机制迁移历史根因和不变量知识，不再声称不变量本身跨机制通用。 |
-| 统一使用 `security invariants` | 已完成 | 摘要中的 `safety invariants` 已改为 `security invariants`，正文无 `safety invariant` 残留。 |
-| 首次出现时定义核心术语并保持一致 | 部分完成 | Background 定义了 compiler security defense，Section IV 定义了 security invariant；但术语在 Abstract 和 Introduction 中先于正式定义出现，compiler defense 命名仍有漂移。 |
+### 2. 编译器防御实现是否 match ISA 的假设？（底层失效本质）
 
-### Abstract
+* 很多编译器开发者潜意识认为前端/中端 IR 插入了保护逻辑，防御就完成了；
+* 但编译器防御的最终承载体是**目标架构的机器指令与运行时栈/寄存器状态**；
+* 后端 Lowering 阶段必须依赖对底层 ISA/ABI 的一系列假设（如栈增长方向、Callee/Caller 保存寄存器约定、帧指针与基指针布局、对齐规则等）。
+* **失效的深层根因**：后端代码生成逻辑往往未能完全匹配当前目标 ISA 的具体语义或特殊寻址模式，导致在特定指令重排或栈调整下，防御逻辑被静默破坏（例如：AArch64 下寄存器传参约束导致的 Canary 残留、RISC-V 动态帧调整下的偏移量误算）。
 
-| 审阅意见 | 状态 | 处理方式 |
-| --- | --- | --- |
-| 将篇幅压缩约一半 | 部分完成 | `073ab93` 将摘要从 387 词压缩至 220 词，`e9cb83e` 为恢复逻辑和必要信息扩展至 259 词，最终缩短约 33%。 |
-| 按“问题、挑战、方案、结果、意义”重写 | 已完成 | 第一段说明问题、oracle gap 和搜索空间，第二段说明方案、结果与意义，不再按系统执行流程展开。 |
-| 不将 ISA 写成唯一失效根因 | 已完成 | 摘要改为 `complex backend lowering and other root causes`；引言补充 ISA 差异、设计与实现不匹配、栈布局假设错误等原因。 |
-| 补充实验结果的意义 | 基本完成 | 增加“揭示 compiler defense 的脆弱性”和“证明 grounded agent fuzzing 可系统化保护 backend”的结论；漏洞数和 CVE 数仍为占位符。 |
+### 3. Invariants 究竟从哪里来？（知识溯源与防自证）
 
-### Introduction 与 Research Gap
+论文必须严密阐述安全不变量的来源，杜绝“拿待测编译器现有的行为作为正确标准”的循环自证（Self-referential Fallacy）：
+1. **编译器源码注释与内部架构文档**（Compiler Source Comments & Internal Architecture Docs，如 GCC `cfgexpand.cc`、LLVM `StackProtector.cpp` 明确宣称的保护契约）；
+2. **硬件体系结构与 ABI 官方规范**（Hardware ISA & ABI Specifications，如 ARMv8-A Architecture Reference Manual、System V ABI 对栈布局和寄存器使用的硬性约束）；
+3. **权威历史漏洞披露报告与修复补丁**（Historical CVE Reports & Upstream Fix Patches，从以往已确认的失效案例中抽象通用的安全守则）；
+4. **原则声明**：待测编译器当前的编译产物仅作为被测对象，**不能直接充当不变量规范**。
 
-| 审阅意见 | 状态 | 处理方式 |
-| --- | --- | --- |
-| 按 Scope 到 Contributions 重组 | 基本完成 | 当前依次介绍研究范围、Silent Defense Failures、Research Gap、Insight、Approach 和 Contributions；Results 尚未形成独立段落。 |
-| 补充现有方法不足及 oracle、多 ISA、搜索空间挑战 | 已完成 | 说明传统 fuzzing 缺少有效 oracle、静态分析难以覆盖异构 backend，以及机制乘 ISA 矩阵带来的搜索空间。 |
-| 新增由 Agent 解决的独立挑战 | 已完成 | 增加 free-running agent 的幻觉、不可复现等问题，并在 Introduction 中通过 "First... Second... Third..." 的句式将其与 Oracle Gap、Search Space 明确并列为三大挑战。 |
-| 修正“所有防御都分析 AST” | 已完成 | 改为分析不同中间表示，并列举 AST、GIMPLE 和 LLVM IR。 |
-| 排除优化选项与防御机制的交互 | 已完成 | 明确当前只研究 standard defense emissions，不覆盖 defense 与 compilation optimization flags 的交互。 |
+### 4. Security vs. Safety 严格学术界限
 
-### Background 与 Threat Model
+* **Security（安全防护）**：针对存在**主动恶意对抗攻击者**的场景。攻击者利用输入操纵执行流、越权访问或劫持控制流。编译器防御机制（Canary、CFI、PAC）属于典型的 Security 防线。
+* **Safety（功能安全性/可靠性）**：针对非对抗环境下的偶发故障、并发死锁或内存越界导致的意外崩溃。
+* **写作铁律**：全文严格统一使用 `security invariants`、`security contracts`，除引用特定标准名词（如 memory safety）外，严禁在方法论中滥用 `safety invariants`。
 
-| 审阅意见 | 状态 | 处理方式 |
-| --- | --- | --- |
-| 定义 compiler defense 并介绍实现模型和历史漏洞 | 已完成 | 新增 compiler security defense 定义、IR 到 backend lowering 的实现模型，以及 CVE-2023-4039 和 PR-96191 案例。 |
-| 新增 Threat Model | 已完成 | 给出攻击者能力、研究范围和排除项，并明确与被研究防御机制自身的假设一致。 |
-| 将 Scope 限定为 compiler defense 的静默失效 | 部分完成 | 全文主线已限定为 silent defense failures；但 Threat Model 的 `In-Scope` 仅写防御未按预期工作，未再次明确其必须静默通过编译和功能测试。 |
+---
 
-### Contributions
+## 四、三大耦合挑战与四大独立贡献对照体系
 
-| 审阅意见 | 状态 | 处理方式 |
-| --- | --- | --- |
-| 按挑战组织贡献 | 已完成 | 重组为 deterministic oracle、invariant transfer、agentic framework 和 empirical discovery 四项。 |
-| 不将 `LLM-driven fuzzing` 作为主体贡献 | 已完成 | LLM 仅作为 agentic framework 中的生成和反馈手段，不再单列为主体贡献。 |
-| 突出 Agentic Framework、Oracle/Invariant、跨 ISA Checker 和结果 | 已完成 | 四项内容均已进入贡献列表，其中跨 ISA 能力表述为 ISA-bound checker routing。 |
-| 将 `silent failures` 明确为 compiler defense failures | 部分完成 | Contributions 已改为 `silent compiler defense failures`；Abstract 和 Conclusion 仍存在泛化的 `silent failures` 或 `silent-failure defects`。 |
+### 1. 三大耦合挑战（Three Coupled Challenges）
 
-### 图示设计
+根据 9月4日讨论，挑战体系经过精炼与合并，形成互为支撑的有机整体：
 
-| 审阅意见 | 状态 | 处理方式 |
-| --- | --- | --- |
-| 减少解释力有限的纯流程图 | 部分完成 | `073ab93` 删除了部分图，但同时误删了帮助理解关键设计的图。 |
-| 保留解释问题、设计或结果的关键图 | 已完成 | `e9cb83e` 恢复 `oracle-flow`、`blackboard` 和 `checker-routing`。 |
-| 将 defense-matrix 放入 Background 或结果章节 | 已完成 | `defense-matrix` 已移至 Background，用于解释 defense mechanism 乘 ISA 的问题空间。 |
+```mermaid
+flowchart LR
+    C1["<b>Challenge 1: 不变量提炼</b><br/>Evidence-Grounded Invariant Extraction<br/>(异构文档/规范中挖掘形式化安全契约)"] --> C2["<b>Challenge 2: 闭环协同测试</b><br/>Co-construction of Checkers & Seeds<br/>(解决传统方法无法生成特定语义输入难题)"]
+    C2 --> C3["<b>Challenge 3: 多 ISA 语义适配</b><br/>Multi-ISA Semantic Adaptation & Routing<br/>(针对不同架构指令与布局定制专属 Oracle)"]
+```
+
+1. **Challenge 1: Evidence-Grounded Invariant Extraction（知识提炼挑战）**  
+   如何从非结构化、分散的编译器源码、历史补丁和 ISA 规范中，提炼出跨机制适用、形式化且机器可检查的底层安全不变量。
+2. **Challenge 2: Invariant-Directed Closed-Loop Fuzzing（种子与 Checker 协同测试挑战）**  
+   传统 Fuzzing 无法生成违背不变量的特定语义输入，而 Free Agent 存在幻觉；必须解决将 Invariant 转化为可执行静态/动态 Checker，同时引导 Agent 生成具备特定深层语义结构输入的闭环挑战。
+3. **Challenge 3: Multi-ISA Semantic Adaptation & Routing（多架构底层适配挑战）**  
+   同一个不变量在不同 ISA 下的指令语义、寄存器约定和栈布局完全不同；必须解决为每个适用 ISA 生成专属 Checker Suite 并进行精准路由分发的挑战。
+
+---
+
+### 2. 四大独立贡献（Four Disjoint Contributions）
+
+彻底消除流程内的重叠邀功，形成 1:1 对应的贡献列表：
+
+* **Contribution 1 (Deterministic Invariant Oracle)**：首次系统性地为编译器底层防御建立了基于安全不变量的形式化 Oracle 规范，摆脱了传统测试对崩溃（Crash）的盲目依赖。
+* **Contribution 2 (Cross-Mechanism Invariant Transfer)**：提出跨机制抽象失效迁移管道（Abstract-Failure Transfer），实现了从已知漏洞模式向新机制的主动泛化。
+* **Contribution 3 (Grounded Agentic Testing Loop)**：设计了由确定性 Orchestrator 严格管制的 Agentic Fuzzing 闭环，实现复杂语义种子的定向合成与 Checker 自适应演进，保证 100% 确定性判定。
+* **Contribution 4 (Empirical Discovery & Upstream Confirmation)**：在主流工业级编译器（GCC、LLVM）中揭示了多项未知的静默防御缺陷，获得了官方确认与 CVE 分配。
+
+---
+
+## 五、论文全篇“安全顶会八股”写作参考骨架
+
+### 1. Introduction 标准六步推进法
+
+导师强调的“把 Reviewer 当傻瓜”，要求引言每段开门见山，首句即为该段核心主旨：
+
+1. **Paragraph 1: Scope & Context**  
+   内存破坏漏洞依然严峻，编译器插桩防御（Canary, CFI, PAC）是终端系统对抗利用的最后防线。
+2. **Paragraph 2: The Core Problem (Silent Defense Failures)**  
+   这些防御在后端优化与指令下沉过程中会**静默失效**。程序表现出正常的功能语义，但底层的安全保护契约已被完全剥离或绕过（以 CVE-2023-4039 为标志性事实支撑）。
+3. **Paragraph 3: Research Gap & Fundamental Bottlenecks**  
+   现有基于 Crash 和差异测试（Differential Testing）的编译器模糊测试无法检测静默防御破坏（Oracle Gap）；而静态分析由于跨架构后端 lowering 的复杂性无法有效建模。
+4. **Paragraph 4: Key Insights & Our Approach (DeFuzz)**  
+   核心思路：将底层防御契约形式化为不变量 Oracle，并引入 Invariant-Directed Agentic Loop，利用 Agent 合成具备特定底层语义结构的探针输入。
+5. **Paragraph 5: Summary of Results**  
+   实证结果总结：发现漏洞数量、CVE 编号、上游确认情况及对编译器生态的保护价值。
+6. **Paragraph 6: List of Contributions**  
+   清晰列出上述四大贡献点，并在括号内标注对应章节索引（如 `(Section IV)`）。
+
+---
+
+### 2. Background & Motivation 案例讲透法
+
+* **单核心贯穿案例（Running Example）**：统一选用 **CVE-2023-4039**。
+* **讲解要点**：
+  1. 源代码中声明了局部数组与动态缓冲区（`alloca` / VLA）；
+  2. 前端正常识别并插入了 `__stack_chk_guard` 检查；
+  3. 后端 AArch64 下沉时，动态栈调整逻辑错误地将缓冲区直接放置在 Canary 保护区域之外、且紧邻保存的返回地址（`Saved LR`）；
+  4. 攻击者只需线性溢出动态缓冲区，即可在完全不触碰 Canary 的情况下直接覆写返回地址；
+  5. 整个编译过程零告警，运行测试正常通过，造成致命的静默旁路。
+
+---
+
+### 3. Threat Model 边界定义
+
+* **In-Scope**：
+  - 编译器防御已显式开启（如 `-fstack-protector-all`、`-fsanitize=cfi`）；
+  - 目标程序存在符合该防御旨在抵御的内存安全漏洞前提；
+  - 编译器在后端 Lowering、寄存器分配或优化 Pass 中破坏了防御承诺，导致防御静默失效。
+* **Out-of-Scope**：
+  - 攻击者具备直接破坏硬件寄存器或内核特权的超强能力；
+  - 不符合防御机制自身威胁模型前提的攻击向量；
+  - 编译优化 Flag 之间极为罕见的激进未定义行为交互（本论文限定在标准编译与常规优化层级）。
+
+---
+
+## 六、图表设计规范与学术品位（去流程化）
+
+导师在会议中严厉痛批了“通篇全是廉价流程图”的浮夸做法。全篇图表设计必须遵守以下硬性规范：
+
+| 图表类型 | 处置原则 | 规范做法 |
+| :--- | :--- | :--- |
+| **纯操作步骤流程图** | **坚决删除** | 诸如“第一步点击、第二步生成、第三步判定”的工程流程图全部剔除，极其廉价且缺乏学术解释力。 |
+| **系统架构概览图 (Overview)** | **重点保留并升格** | 采用高端矢量风格，清晰展示双支柱架构（离线不变量提炼 vs 在线 Agentic 闭环），突出 Orchestrator 与四态确定性判定。 |
+| **内存/栈布局对比图 (Stack Layout)** | **核心保留** | 形象对比“预期正确布局” vs “CVE-2023-4039 破坏后的错位布局”，直观展示缓冲区、返回地址与 Canary 的相对位置。 |
+| **机制 $\times$ ISA 矩阵图 (Defense Matrix)** | **合理归位** | 严禁塞在方法论章节充数！放置在 Background 说明问题空间的复杂性，或放在 Evaluation 展示漏洞发现分布。 |
+
+---
+
+## 七、历史核验记录与技术事实溯源
+
+为确保全篇学术论证的 100% 真实可靠，严禁补造虚假文献或捏造数据。关键引证来源核验清单：
+
+* **CVE-2023-4039**：[Meta Security Advisory (2023-09-12)](https://rtx.meta.security/mitigation/2023/09/12/CVE-2023-4039.html)。确认栈布局地址关系为：`动态缓冲区 < 保存的返回地址 < Canary`。
+* **GCC PR-96191**：[GCC Bugzilla PR-96191](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96191)。技术本质为 AArch64 架构下 `stack_protect_test` 比较指令后 Canary 敏感值残留于临时寄存器中，非栈错位同源漏洞，用于论证机器描述层（Machine Description）提炼寄存器擦除不变量。
+* **PropertyGPT**：[NDSS 2025 官方收录页面](https://www.ndss-symposium.org/ndss-paper/propertygpt-llm-driven-formal-verification-of-smart-contracts-through-retrieval-augmented-property-generation/)。借鉴“候选生成与独立机器验证解耦”的方法学。
+* **CIll 预印本**：[arXiv:2602.23389](https://arxiv.org/abs/2602.23389)。提供不变量提炼与独立检查分离的对比依据。
+
+---
+
+## 八、导师元建议与学术写作戒律
+
+> 1. **“把 Reviewer 当傻瓜”**：审稿人时间极其宝贵，看文章往往走马观花。绝不能拐弯抹角，段落首句必须是毫无争议的结论性句子。
+> 2. **“大作都是简练的”**：摘要与引言写得越冗长、细节塞得越琐碎，越向审稿人释放“工作极其微小、属于工程拼凑”的负面信号。
+> 3. **“AI 是发动机，方向和品位在学者手里”**：AI 能大幅降低码字与体力负担，但它给不了“什么是重要的科学问题”，也给不了“顶级会议的审美品位”。盲目放任 AI 会导致全篇浮夸假大空。
+> 4. **“先有严密逻辑，再有漂亮文字”**：用清晰的学术八股框架筑底，确保每一个结论都有不可辩驳的技术事实与代码证据支撑。

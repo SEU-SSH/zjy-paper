@@ -1,123 +1,125 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 380" width="1000" height="380" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 165" width="460" height="165" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
   <defs>
-    <marker id="arr3-gray" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#475569"/>
+    <!-- Markers -->
+    <marker id="orc-teal" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0D9488"/>
     </marker>
-    <marker id="arr3-teal" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 10 5 L 0 8.5 z" fill="#0D9488"/>
+    <marker id="orc-gray" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748B"/>
     </marker>
+
+    <!-- Subtle Shadows -->
+    <filter id="orc-shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#0F172A" flood-opacity="0.05"/>
+    </filter>
   </defs>
 
 
-  <!-- Card 1: Invariant Specification -->
-  <rect x="35" y="18" width="225" height="345" rx="8" fill="#F0FDFA" stroke="#99F6E4" stroke-width="1.5"/>
-  <text x="147.5" y="46" fill="#0F766E" font-size="13.5" font-weight="700" text-anchor="middle">1. Invariant Specification</text>
+  <!-- Panel 1: Invariant Specification -->
+  <g transform="translate(6, 6)">
+    <rect x="0" y="0" width="122" height="153" rx="7" fill="#F0FDFA" stroke="#CCFBF1" stroke-width="1.2"/>
+    <rect x="0" y="0" width="122" height="22" rx="7" fill="#CCFBF1"/>
+    <rect x="0" y="14" width="122" height="8" fill="#CCFBF1"/>
+    <text x="61.0" y="15" fill="#0F766E" font-size="10.5" font-weight="700" text-anchor="middle">Invariant Specification</text>
 
-  <g transform="translate(49, 63)">
-    <rect x="0" y="0" width="197" height="120" rx="6" fill="#FFFFFF" stroke="#5EEAD4" stroke-width="1.2"/>
-    <text x="12" y="22" fill="#115E59" font-size="11.5" font-weight="700">Security Invariant &#981;</text>
-    
-    <rect x="10" y="32" width="177" height="76" rx="4" fill="#F0FDFA"/>
-    <text x="18" y="50" fill="#334155" font-size="10">&#x2022; Target Asset (e.g. Canary)</text>
-    <text x="18" y="68" fill="#334155" font-size="10">&#x2022; Preconditions (has_vla)</text>
-    <text x="18" y="86" fill="#334155" font-size="10">&#x2022; Verifiable Invariant Rule</text>
-    <text x="18" y="102" fill="#0D9488" font-size="9.5" font-style="italic">Formal deterministic contract</text>
-  </g>
+    <!-- Box 1: Contract φ -->
+    <g transform="translate(6, 28)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="110" height="56" rx="5" fill="#FFFFFF" stroke="#99F6E4" stroke-width="1"/>
+      <text x="8" y="16" fill="#115E59" font-size="10.5" font-weight="700">Contract (Φ)</text>
+      <text x="8" y="32" fill="#64748B" font-size="9.5">Preconditions</text>
+      <text x="8" y="47" fill="#0D9488" font-size="9" font-weight="600">Observable Signal</text>
+    </g>
 
-  <g transform="translate(49, 198)">
-    <rect x="0" y="0" width="197" height="145" rx="6" fill="#FFFFFF" stroke="#5EEAD4" stroke-width="1.2"/>
-    <text x="12" y="22" fill="#115E59" font-size="11.5" font-weight="700">Multi-ISA Scope</text>
-    
-    <rect x="12" y="34" width="173" height="30" rx="4" fill="#CCFBF1"/>
-    <text x="20" y="53" fill="#134E4A" font-size="10.5" font-weight="700">x86-64</text>
-    
-    <rect x="12" y="70" width="173" height="30" rx="4" fill="#CCFBF1"/>
-    <text x="20" y="89" fill="#134E4A" font-size="10.5" font-weight="700">AArch64</text>
-
-    <rect x="12" y="106" width="173" height="30" rx="4" fill="#CCFBF1"/>
-    <text x="20" y="125" fill="#134E4A" font-size="10.5" font-weight="700">RISC-V</text>
+    <!-- Box 2: Target ISAs -->
+    <g transform="translate(6, 90)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="110" height="55" rx="5" fill="#FFFFFF" stroke="#99F6E4" stroke-width="1"/>
+      <text x="8" y="16" fill="#115E59" font-size="10" font-weight="700">Target ISAs (I)</text>
+      <rect x="6" y="24" width="98" height="15" rx="3" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="55" y="35" fill="#334155" font-size="8.5" font-weight="700" text-anchor="middle">x86 · ARM · RISC-V</text>
+      <text x="8" y="49" fill="#64748B" font-size="8.5">Lowering Semantics</text>
+    </g>
   </g>
 
 
-  <path d="M 264 123 C 284 123, 279 123, 300 123" 
-        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
-  <path d="M 264 123 C 279 123, 279 263, 300 263" 
-        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
+  <path d="M 130 82 L 152 82" fill="none" stroke="#0D9488" stroke-width="1.6" marker-end="url(#orc-teal)"/>
+  <text x="141" y="75" fill="#0D9488" font-size="8.5" font-style="italic" text-anchor="middle">Contract</text>
 
 
-  <!-- Card 2: Dual Deterministic Checkers -->
-  <rect x="302" y="18" width="325" height="345" rx="8" fill="#F0F9FF" stroke="#BAE6FD" stroke-width="1.5"/>
-  <text x="464.5" y="46" fill="#0369A1" font-size="13.5" font-weight="700" text-anchor="middle">2. Dual Deterministic Machine Checkers</text>
+  <!-- Panel 2: Dual Checkers -->
+  <g transform="translate(154, 6)">
+    <rect x="0" y="0" width="188" height="153" rx="7" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="0" y="0" width="188" height="22" rx="7" fill="#F1F5F9"/>
+    <rect x="0" y="14" width="188" height="8" fill="#F1F5F9"/>
+    <text x="94.0" y="15" fill="#334155" font-size="10.5" font-weight="700" text-anchor="middle">Dual Deterministic Checkers</text>
 
-  <!-- Static Checker -->
-  <g transform="translate(316, 63)">
-    <rect x="0" y="0" width="297" height="120" rx="6" fill="#FFFFFF" stroke="#7DD3FC" stroke-width="1.2"/>
-    <rect x="12" y="10" width="130" height="22" rx="3" fill="#E0F2FE"/>
-    <text x="18" y="25" fill="#0369A1" font-size="11" font-weight="700">Static Binary Audit</text>
+    <!-- Checker 1: Static Audit -->
+    <g transform="translate(6, 26)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="176" height="36" rx="5" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+      <text x="8" y="15" fill="#0F172A" font-size="10" font-weight="700">Static Audit Checkers</text>
+      <text x="8" y="28" fill="#64748B" font-size="8.5">AST, DWARF frames &amp; asm layout</text>
+    </g>
 
-    <text x="14" y="52" fill="#334155" font-size="10.5">&#x2022; DWARF stack frame offset verification</text>
-    <text x="14" y="72" fill="#334155" font-size="10.5">&#x2022; Disassembly &amp; instruction scan</text>
-    <text x="14" y="92" fill="#334155" font-size="10.5">&#x2022; Inspects unexecuted binary layout</text>
-    <text x="14" y="110" fill="#0284C7" font-size="9" font-style="italic">Deterministic structural analysis</text>
+    <!-- Checker 2: Dynamic Sandbox -->
+    <g transform="translate(6, 68)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="176" height="36" rx="5" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1"/>
+      <text x="8" y="15" fill="#0F172A" font-size="10" font-weight="700">Dynamic Sandbox Checkers</text>
+      <text x="8" y="28" fill="#64748B" font-size="8.5">Memory traps, canary alerts &amp; signals</text>
+    </g>
+
+    <!-- Profiler -->
+    <g transform="translate(6, 110)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="176" height="36" rx="5" fill="#F0FDFA" stroke="#99F6E4" stroke-width="1"/>
+      <text x="8" y="15" fill="#0F766E" font-size="10" font-weight="700">Differential Configuration Profiler</text>
+      <text x="8" y="28" fill="#475569" font-size="8.5">Defense-enabled (-O2) vs. Baseline</text>
+    </g>
   </g>
 
-  <!-- Dynamic Checker -->
-  <g transform="translate(316, 203)">
-    <rect x="0" y="0" width="297" height="140" rx="6" fill="#FFFFFF" stroke="#7DD3FC" stroke-width="1.2"/>
-    <rect x="12" y="10" width="140" height="22" rx="3" fill="#E0F2FE"/>
-    <text x="18" y="25" fill="#0369A1" font-size="11" font-weight="700">Dynamic Sandbox Probe</text>
 
-    <text x="14" y="52" fill="#334155" font-size="10.5">&#x2022; Standalone probe binary execution</text>
-    <text x="14" y="72" fill="#334155" font-size="10.5">&#x2022; Memory bounds &amp; runtime overflow trigger</text>
-    <text x="14" y="92" fill="#334155" font-size="10.5">&#x2022; Hardware trap &amp; signal handler validation</text>
-    <text x="14" y="114" fill="#0284C7" font-size="9" font-style="italic">Deterministic runtime execution in sandbox</text>
-  </g>
+  <path d="M 344 82 L 362 82" fill="none" stroke="#0D9488" stroke-width="1.6" marker-end="url(#orc-teal)"/>
+  <text x="353" y="75" fill="#0D9488" font-size="8.5" font-style="italic" text-anchor="middle">Verdict</text>
 
 
-  <path d="M 631 123 C 651 123, 646 193, 667 193" 
-        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
-  <path d="M 631 263 C 651 263, 646 193, 667 193" 
-        fill="none" stroke="#475569" stroke-width="2.5" marker-end="url(#arr3-gray)"/>
+  <!-- Panel 3: Verdict Matrix -->
+  <g transform="translate(364, 6)">
+    <rect x="0" y="0" width="90" height="153" rx="7" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.2"/>
+    <rect x="0" y="0" width="90" height="22" rx="7" fill="#F1F5F9"/>
+    <rect x="0" y="14" width="90" height="8" fill="#F1F5F9"/>
+    <text x="45.0" y="15" fill="#334155" font-size="10.5" font-weight="700" text-anchor="middle">4-State Verdict</text>
 
+    <!-- PASS -->
+    <g transform="translate(6, 26)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="78" height="22" rx="4" fill="#D1FAE5" stroke="#10B981" stroke-width="1"/>
+      <text x="8" y="15" fill="#065F46" font-size="9.5" font-weight="800">PASS</text>
+      <text x="42" y="15" fill="#047857" font-size="8">Invariant</text>
+    </g>
 
-  <!-- Card 3: Deterministic Verdict Matrix -->
-  <rect x="669" y="18" width="325" height="345" rx="8" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
-  <text x="831.5" y="46" fill="#1E293B" font-size="13.5" font-weight="700" text-anchor="middle">3. Deterministic 4-State Machine Verdict</text>
+    <!-- FAIL -->
+    <g transform="translate(6, 52)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="78" height="22" rx="4" fill="#FFE4E6" stroke="#F43F5E" stroke-width="1.2"/>
+      <text x="8" y="15" fill="#9F1239" font-size="9.5" font-weight="800">FAIL</text>
+      <text x="38" y="15" fill="#BE123C" font-size="8" font-weight="700">Silent Bug</text>
+    </g>
 
-  <!-- 4 Verdict Tiles in 2x2 Grid -->
-  <g transform="translate(685, 66)">
-    <!-- Tile 1: PASS -->
-    <rect x="0" y="0" width="138" height="85" rx="6" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1.5"/>
-    <text x="14" y="24" fill="#15803D" font-size="12" font-weight="800">&#x2713; PASS</text>
-    <text x="14" y="44" fill="#334155" font-size="10">Invariant Holds</text>
-    <text x="14" y="62" fill="#64748B" font-size="9">Defense active &amp; valid</text>
+    <!-- NA -->
+    <g transform="translate(6, 78)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="78" height="22" rx="4" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1"/>
+      <text x="8" y="15" fill="#334155" font-size="9.5" font-weight="800">NA</text>
+      <text x="30" y="15" fill="#64748B" font-size="7.5">Precond. Unmet</text>
+    </g>
 
-    <!-- Tile 2: FAIL (Bug) -->
-    <rect x="154" y="0" width="138" height="85" rx="6" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
-    <text x="168" y="24" fill="#B91C1C" font-size="12" font-weight="800">&#x2717; FAIL (Bug)</text>
-    <text x="168" y="44" fill="#991B1B" font-size="10" font-weight="600">Contract Violated!</text>
-    <text x="168" y="62" fill="#B91C1C" font-size="9">Confirmed silent defect</text>
+    <!-- ERROR -->
+    <g transform="translate(6, 104)" filter="url(#orc-shadow)">
+      <rect x="0" y="0" width="78" height="22" rx="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+      <text x="6" y="15" fill="#92400E" font-size="8.5" font-weight="800">ERROR</text>
+      <text x="45" y="15" fill="#B45309" font-size="7.5">Build Fault</text>
+    </g>
 
-    <!-- Tile 3: N/A -->
-    <rect x="0" y="100" width="138" height="85" rx="6" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5"/>
-    <text x="14" y="124" fill="#475569" font-size="12" font-weight="800">&#x2298; N/A</text>
-    <text x="14" y="144" fill="#334155" font-size="10">Feature Inactive</text>
-    <text x="14" y="162" fill="#64748B" font-size="9">Condition not triggered</text>
-
-    <!-- Tile 4: ERROR -->
-    <rect x="154" y="100" width="138" height="85" rx="6" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
-    <text x="168" y="124" fill="#B45309" font-size="12" font-weight="800">&#9888; ERROR</text>
-    <text x="168" y="144" fill="#334155" font-size="10">Build / Tool Crash</text>
-    <text x="168" y="162" fill="#64748B" font-size="9">Non-semantic failure</text>
-  </g>
-
-  <!-- Grounding Banner at Bottom of Card 3 -->
-  <g transform="translate(685, 270)">
-    <rect x="0" y="0" width="293" height="76" rx="6" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.2"/>
-    <text x="12" y="24" fill="#166534" font-size="11" font-weight="700">&#x2714; Zero LLM Hallucination in Oracle</text>
-    <text x="12" y="44" fill="#334155" font-size="9.5">Verdicts are computed 100% deterministically</text>
-    <text x="12" y="60" fill="#334155" font-size="9.5">from binary artifacts and sandbox telemetry.</text>
+    <!-- Zero LLM Badge -->
+    <g transform="translate(6, 131)">
+      <rect x="0" y="0" width="78" height="16" rx="3" fill="#ECFDF5" stroke="#A7F3D0"/>
+      <text x="39.0" y="11.5" fill="#059669" font-size="7.5" font-weight="700" text-anchor="middle">0 LLM in Verdict</text>
+    </g>
   </g>
 
 </svg>
