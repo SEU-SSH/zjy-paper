@@ -1,85 +1,86 @@
-# Fig: defense mechanism x ISA research-space matrix (academic monochrome)
-# render: d2 --theme=0 --pad=8 defense-matrix.d2 ../defense-matrix.svg
-# Four states shown by grayscale fill level rather than color.
-
-classes: {
-  hdr: { style: { fill: transparent; stroke: transparent; font-color: "#1A1A1A"; bold: true } }
-  rlbl: { style: { fill: transparent; stroke: transparent; font-color: "#1A1A1A"; bold: true } }
-  ell: { style: { fill: transparent; stroke: transparent; font-color: "#888888" } }
-  s-unexplored: { style: { fill: white;    stroke: "#1A1A1A"; stroke-width: 1 } }
-  s-historical: { style: { fill: "#D9D9D9"; stroke: "#1A1A1A"; stroke-width: 1 } }
-  s-reported:   { style: { fill: "#9A9A9A"; stroke: "#1A1A1A"; stroke-width: 1 } }
-  s-confirmed:  { style: { fill: "#4D4D4D"; stroke: "#1A1A1A"; stroke-width: 1; font-color: white } }
-  leg-un: { style: { fill: white;    stroke: "#1A1A1A"; stroke-width: 1; font-color: "#1A1A1A" } }
-  leg-hi: { style: { fill: "#D9D9D9"; stroke: "#1A1A1A"; stroke-width: 1; font-color: "#1A1A1A" } }
-  leg-re: { style: { fill: "#9A9A9A"; stroke: "#1A1A1A"; stroke-width: 1; font-color: "#1A1A1A" } }
-  leg-co: { style: { fill: "#4D4D4D"; stroke: "#1A1A1A"; stroke-width: 1; font-color: white } }
-}
+# Figure 2 — Defense × ISA research-space matrix (English)
+# render: d2 --layout=dagre --pad=24 defense-matrix.en.d2 defense-matrix.en.svg
 
 direction: down
 
 outer: "" {
   grid-rows: 2
   grid-columns: 1
-  grid-gap: 14
+  grid-gap: 12
   style: { fill: transparent; stroke: transparent }
 
   matrix: "" {
-    grid-rows: 4
+    grid-rows: 5
     grid-columns: 7
-    grid-gap: 4
-    style: { fill: transparent; stroke: transparent }
+    grid-gap: 6
+    style: { fill: white; stroke: transparent }
 
-    hdr-corner: "" { width: 150; height: 26; style: { fill: transparent; stroke: transparent } }
-    hdr-x86:  "x86-64"    { width: 84; height: 26; class: hdr }
-    hdr-arm:  "AArch64"   { width: 84; height: 26; class: hdr }
-    hdr-rv:   "RISC-V"    { width: 84; height: 26; class: hdr }
-    hdr-la:   "LoongArch" { width: 84; height: 26; class: hdr }
-    hdr-mips: "MIPS"      { width: 84; height: 26; class: hdr }
-    hdr-more: "..."       { width: 30; height: 26; class: ell }
+    # ===== Row 0: column headers =====
+    hdr-corner: "" { width: 1; height: 1; style: { fill: transparent; stroke: transparent } }
+    hdr-x86:   "x86-64"     { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    hdr-arm:   "AArch64"    { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    hdr-rv:    "RISC-V"     { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    hdr-la:    "LoongArch"  { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    hdr-mips:  "MIPS"       { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    hdr-more1: "…"          { width: 30; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF"; bold: true } }
 
-    row1-lbl: "Stack Canary" { width: 150; height: 42; class: rlbl }
-    r1c1: "" { width: 84; height: 42; class: s-unexplored }
-    r1c2: "" { width: 84; height: 42; class: s-historical }
-    r1c3: "" { width: 84; height: 42; class: s-unexplored }
-    r1c4: "" { width: 84; height: 42; class: s-confirmed }
-    r1c5: "" { width: 84; height: 42; class: s-confirmed }
-    r1c6: "..." { width: 30; height: 42; class: ell }
+    # ===== Row 1: Stack Canary =====
+    row1-lbl: "Stack Canary" { width: 160; height: 48; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    r1c1: "" { width: 90; height: 48; style: { fill: "#E5E7EB"; stroke: white } }
+    r1c2: "" { width: 90; height: 48; style: { fill: "#FFF8E1"; stroke: white } }
+    r1c3: "" { width: 90; height: 48; style: { fill: "#E5E7EB"; stroke: white } }
+    r1c4: "" { width: 90; height: 48; style: { fill: "#228833"; stroke: white } }
+    r1c5: "" { width: 90; height: 48; style: { fill: "#228833"; stroke: white } }
+    r1c6: "…" { width: 30; height: 48; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
 
-    row2-lbl: "_FORTIFY_SOURCE" { width: 150; height: 42; class: rlbl }
-    r2c1: "" { width: 84; height: 42; class: s-confirmed }
-    r2c2: "" { width: 84; height: 42; class: s-confirmed }
-    r2c3: "" { width: 84; height: 42; class: s-confirmed }
-    r2c4: "" { width: 84; height: 42; class: s-confirmed }
-    r2c5: "" { width: 84; height: 42; class: s-confirmed }
-    r2c6: "..." { width: 30; height: 42; class: ell }
+    # ===== Row 2: _FORTIFY_SOURCE =====
+    row2-lbl: "_FORTIFY_SOURCE" { width: 160; height: 48; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    r2c1: "" { width: 90; height: 48; style: { fill: "#228833"; stroke: white } }
+    r2c2: "" { width: 90; height: 48; style: { fill: "#228833"; stroke: white } }
+    r2c3: "" { width: 90; height: 48; style: { fill: "#228833"; stroke: white } }
+    r2c4: "" { width: 90; height: 48; style: { fill: "#228833"; stroke: white } }
+    r2c5: "" { width: 90; height: 48; style: { fill: "#228833"; stroke: white } }
+    r2c6: "…" { width: 30; height: 48; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
 
-    row3-lbl: "IBT / SHSTK" { width: 150; height: 42; class: rlbl }
-    r3c1: "" { width: 84; height: 42; class: s-reported }
-    r3c2: "" { width: 84; height: 42; class: s-unexplored }
-    r3c3: "" { width: 84; height: 42; class: s-unexplored }
-    r3c4: "" { width: 84; height: 42; class: s-unexplored }
-    r3c5: "" { width: 84; height: 42; class: s-unexplored }
-    r3c6: "..." { width: 30; height: 42; class: ell }
+    # ===== Row 3: IBT · SHSTK =====
+    row3-lbl: "IBT · SHSTK" { width: 160; height: 48; style: { fill: transparent; stroke: transparent; font-color: "#374151"; bold: true } }
+    r3c1: "" { width: 90; height: 48; style: { fill: "#E3F1E7"; stroke: white } }
+    r3c2: "" { width: 90; height: 48; style: { fill: "#E5E7EB"; stroke: white } }
+    r3c3: "" { width: 90; height: 48; style: { fill: "#E5E7EB"; stroke: white } }
+    r3c4: "" { width: 90; height: 48; style: { fill: "#E5E7EB"; stroke: white } }
+    r3c5: "" { width: 90; height: 48; style: { fill: "#E5E7EB"; stroke: white } }
+    r3c6: "…" { width: 30; height: 48; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
 
-    row4-lbl: "..." { width: 150; height: 24; class: ell }
-    r4c1: "..." { width: 84; height: 24; class: ell }
-    r4c2: "..." { width: 84; height: 24; class: ell }
-    r4c3: "..." { width: 84; height: 24; class: ell }
-    r4c4: "..." { width: 84; height: 24; class: ell }
-    r4c5: "..." { width: 84; height: 24; class: ell }
-    r4c6: "" { width: 30; height: 24; style: { fill: transparent; stroke: transparent } }
+    # ===== Row 4: ellipsis =====
+    row4-lbl: "…" { width: 160; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF"; bold: true } }
+    r4c1: "…" { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
+    r4c2: "…" { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
+    r4c3: "…" { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
+    r4c4: "…" { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
+    r4c5: "…" { width: 90; height: 28; style: { fill: transparent; stroke: transparent; font-color: "#9CA3AF" } }
+    r4c6: "" { width: 1; height: 1; style: { fill: transparent; stroke: transparent } }
   }
 
   legend: "" {
-    grid-rows: 1
     grid-columns: 4
-    grid-gap: 10
-    style: { fill: transparent; stroke: transparent }
+    grid-gap: 12
+    style: { fill: white; stroke: transparent }
 
-    l1: "Unexplored"        { width: 150; height: 28; class: leg-un }
-    l2: "Historical CVE"    { width: 150; height: 28; class: leg-hi }
-    l3: "Reported (pending)"{ width: 150; height: 28; class: leg-re }
-    l4: "Confirmed & merged"{ width: 150; height: 28; class: leg-co }
+    l1: "Unexplored" {
+      width: 160; height: 32
+      style: { fill: "#E5E7EB"; stroke: white; font-color: "#111827" }
+    }
+    l2: "Historical CVE" {
+      width: 160; height: 32
+      style: { fill: "#FFF8E1"; stroke: white; font-color: "#111827" }
+    }
+    l3: "Reported (pending)" {
+      width: 160; height: 32
+      style: { fill: "#E3F1E7"; stroke: white; font-color: "#111827" }
+    }
+    l4: "Confirmed & merged" {
+      width: 160; height: 32
+      style: { fill: "#228833"; stroke: white; font-color: white }
+    }
   }
 }
