@@ -1,93 +1,79 @@
-# DeFuzz - IEEE S&P Paper Outline Status
+# DeFuzz - IEEE S&P 论文撰写与精校进度追踪 (Paper Writing Status)
 
-This document tracks the completion status of the DeFuzz paper outline, ensuring alignment with the IEEE S&P (Oakland) target structure.
-
-**Legend:**
-- [x] **Completed:** Drafted, academically refined, and technically grounded.
-- [ ] **Pending/Placeholder:** Requires experimental data or further writing.
+> **状态定义说明**：
+> 本文档严格执行**二值状态**规范——全篇仅存在 **`[ready]`** 与 **`[不 ready]`** 两种状态，坚决杜绝模糊中间态。
+> - **`[ready]`**：已精校定稿，具备最高权威性，作为后续撰写与全篇对齐的基准参考。
+> - **`[不 ready]`**：未精校 / 未定稿 / 待修改 / 草稿 / 待补充数据状态。
+>
+> **当前状态汇总**：
+> - **`[ready]` (仅以下 2 处)**：
+>   1. **Abstract（摘要）**
+>   2. **Section 3 Overview（第三章 系统概览）**
+> - **`[不 ready]`**：其余所有章节与子章节均处于 `不 ready` 状态。
 
 ---
 
-## 0. Abstract
-- [x] Abstract
-  - [x] Context: Compiler defenses as the last line of memory safety.
-  - [x] Problem: Silent failures and the oracle gap across the mechanism × ISA matrix.
-  - [x] Solution: Machine-checkable oracle, cross-mechanism RAG pipeline, explicitly orchestrated agentic loop.
+## 逐章节精校状态列表
 
-## 1. Introduction
-- [x] 1.1 Silent failure
-- [x] 1.2 Two coupled challenges
-- [x] 1.3 Our approach
-- [x] 1.4 Contributions
-  - *Added strong hooks, formalized the 'double-silent' definition, and inserted [DEFERRED: N] placeholders for final quantitative claims.*
+### 0. Abstract
+- [ready] **Abstract** (已精校锁定，确立核心问题、Oracle Gap、四步工作流与零 LLM 裁决基准)
 
-## 2. Background and Motivation
-- [x] 2.1 Compiler Defenses in the Backend Lowering Pipeline
-  - *Added deep compiler backend theory (IR vs. RTL/SelectionDAG).*
-- [x] 2.2 Silent Failure: A Representative Case
-- [x] 2.3 Why Existing Methods Miss It
-- [x] 2.4 Threat Model and Scope
-  - *Added formal Assumptions, In-scope, and Out-of-scope boundaries.*
+### 1. Introduction
+- [不 ready] 1.1 Scope & Context
+- [不 ready] 1.2 The Core Problem (Silent Defense Failures & CVE-2023-4039)
+- [不 ready] 1.3 Research Gap & Fundamental Bottlenecks
+- [不 ready] 1.4 Key Insights & Our Approach
+- [不 ready] 1.5 Summary of Results
+- [不 ready] 1.6 Contributions (Four Disjoint Contributions)
 
-## 3. System Overview
-- [x] System Overview
-  - *Decoupled offline knowledge construction vs. online compiler evaluation.*
+### 2. Background and Motivation
+- [不 ready] Section 2 整体内容已清空（仅保留章节标题），等待后续重构
 
-## 4. Security Invariants for Compiler Defenses
-- [x] 4.1 What is a security invariant
-- [x] 4.2 Corpus Construction and Candidate Extraction
-- [x] 4.3 Machine-Checkable Form: Static vs. Dynamic
+### 3. Design of DeFuzz (System Overview & Methodology)
+- [ready] **3.0 Section 3 Overview & Architecture** (第三章概览正文与系统架构总图，已精校锁定，明确四步核心流程)
+- [不 ready] 3.1 Security Invariant Generation
+  - [不 ready] 3.1.1 Formal Invariant Contract
+  - [不 ready] 3.1.2 Candidate Extraction via Segmented CoT
+  - [不 ready] 3.1.3 Cross-Mechanism Transfer via Hybrid RAG
+  - [不 ready] 3.1.4 Grounding Gates and Catalog Maintenance
+- [不 ready] 3.2 Compiler Source Mapping
+  - [不 ready] 3.2.1 MCP-Guided Codebase Navigation
+  - [不 ready] 3.2.2 Three-Level Decision Hierarchy (Pass / Function / Branches)
+  - [不 ready] 3.2.3 Compile-Time Branch Probing (`GCC_INST`)
+- [不 ready] 3.3 Programmatic Oracle Construction
+  - [不 ready] 3.3.1 Oracle Contract and Four-State Verdict Matrix
+  - [不 ready] 3.3.2 Dual Static and Dynamic Checkers (Canary Register Leak & `_FORTIFY_SOURCE` Bounds)
+  - [不 ready] 3.3.3 Target-Specific Specialization Across ISAs
+  - [不 ready] 3.3.4 Differential Configuration Profiling
+- [不 ready] 3.4 Agentic Directed Fuzzing
+  - [不 ready] 3.4.1 Deterministic Orchestration Pipeline & Versioned Blackboard
+  - [不 ready] 3.4.2 Checker-Aware Seed Synthesis and DCE Evasion
+  - [不 ready] 3.4.3 Adaptive Telemetry Feedback and Checker Evolution
+  - [不 ready] 3.4.4 Automated Bug Minimization and Lateral Amplification
 
-## 5. Cross-Mechanism Invariant Generation
-- [x] 5.1 Motivation: abstract-failure-mode transfer
-- [x] 5.2 Pipeline: distill → analogy → specialize → entailment
-  - *Includes CVE-2023-4039 running example.*
-- [x] 5.3 Retrieval: BM25 and embedding are complementary
-  - *Includes hybrid query design (`root_cause_phrase` & `critical_tokens`).*
-- [x] 5.4 Grounding gates and reproducibility
+### 4. Implementation
+- [不 ready] 4.1 Go Core & Deterministic Evaluation Service
+- [不 ready] 4.2 Python Agent Orchestrator & MCP/gRPC Integration
+- [不 ready] 4.3 Artifact Bundle & Deterministic Replay Pipeline
 
-## 6. Oracle: From Invariants to Verdicts
-- [x] 6.1 Checker design
-  - *Includes formal mathematical definition of the Oracle function.*
-- [x] 6.2 Mechanism aggregator and flag profiles
-- [x] 6.3 Checker metadata as a single source of truth
+### 5. Evaluation
+- [不 ready] 5.1 Experimental Setup & Evaluation Matrix
+- [不 ready] 5.2 RQ1: Silent Defense Vulnerability Discovery (Real Bugs & CVEs)
+- [不 ready] 5.3 RQ2: Invariant Extraction & Transfer Quality
+- [不 ready] 5.4 RQ3: Ablation Study (Explicit Orchestration vs. Free-Running Agent)
+- [不 ready] 5.5 RQ4: Multi-ISA Checker Cross-Validation & Generalization
+- [不 ready] 5.6 RQ5: Anti-DCE Probe Efficiency & Telemetry Feedback Impact
 
-## 7. Agentic Loop
-- [x] 7.1 Design principles
-- [x] 7.2 Explicit orchestration and the blackboard
-  - *Includes `Algorithm 1: Explicitly Orchestrated Agentic Loop`.*
-- [x] 7.3 Three agents
-- [x] 7.4 Checker-routed seeds, ISA-bound checkers
+### 6. Discussion and Limitations
+- [不 ready] 6.1 Manual Effort & Human-in-the-Loop Boundaries
+- [不 ready] 6.2 Token Costs & Computational Budget
+- [不 ready] 6.3 False Positive and Oracle Divergence Analysis
 
-## 8. Implementation
-- [x] Implementation
-  - *Architectural description (Go core + Python orchestrator, gRPC/MCP) replacing code paths.*
+### 7. Related Work
+- [不 ready] 7.1 Compiler Bug Finding and the Oracle Gap
+- [不 ready] 7.2 Silent and Security Bugs in Compilers
+- [不 ready] 7.3 LLM and RAG-based Property Generation
+- [不 ready] 7.4 LLM-Agent Fuzzing: Hallucination vs. Determinism
 
-## 9. Evaluation
-- [ ] Setup
-  - *DEFERRED: Needs LLM parameters, baseline configs, and exact computational budget.*
-- [ ] RQ1 — Real bugs
-  - *DEFERRED: Needs confirmed bug counts and CVE IDs.*
-- [ ] RQ2 — Invariant generation quality
-  - *DEFERRED: Needs expert grading and Cohen's Kappa.*
-- [ ] RQ3 — Ablation
-  - *DEFERRED: Needs numbers for explicit orchestration vs. free-running.*
-- [ ] RQ4 — Cross-ISA generalization
-  - *DEFERRED: Needs numbers.*
-
-## 10. Discussion and Limitations
-- [ ] Discussion and Limitations
-  - *DEFERRED: Needs manual effort, LLM cost, and false positive analysis.*
-
-## 11. Related Work
-- [x] Compiler Bug Finding and The Oracle Gap
-  - *Critiqued Csmith/YARPGen's structural blind spots.*
-- [x] Silent and Security Bugs in Compilers
-- [x] LLM and RAG-based Property Generation
-  - *Contrasted entity-centric retrieval vs. our abstract-failure-mode transfer.*
-- [x] LLM-Agent Fuzzing: Hallucination vs. Determinism
-  - *Critiqued free-running agent hallucinations.*
-
-## 12. Conclusion
-- [x] Conclusion
-  - *Rewritten to summarize the oracle gap, the deterministic orchestration solution, and the final impact placeholders.*
+### 8. Conclusion
+- [不 ready] 8.1 Summary of Findings and Contributions

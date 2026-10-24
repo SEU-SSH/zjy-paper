@@ -9,80 +9,92 @@ import os
 import subprocess
 
 def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
-    # Target single column: width 480, height 230
-    w = 480
-    h = 226
+    # Target single column: compact 5 ISAs (rows) x 7 Defense Mechanisms (columns)
+    w = 520
+    h = 232
     
     svg = []
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
     
-    # Title / Headers
-    cols = ["x86-64", "AArch64", "RISC-V", "LoongArch", "MIPS", "..."]
-    rows = [
-        ("Stack Canary", ["#F3F4F6", "#FFF8E1", "#F3F4F6", "#228833", "#228833"]),
-        ("_FORTIFY_SOURCE", ["#228833", "#228833", "#228833", "#228833", "#228833"]),
-        ("IBT / SHSTK", ["#E3F1E7", "#F3F4F6", "#F3F4F6", "#F3F4F6", "#F3F4F6"])
+    # Colors
+    C_HIST = "#FFF8E1"   # Historical
+    C_REP  = "#E3F1E7"   # Reported
+    C_CONF = "#228833"   # Confirmed
+    C_NONE = "#FFFFFF"   # Empty (white, no gray fill)
+    
+    # Horizontal: Defense Mechanisms (7 columns)
+    cols = [
+        ("Stack", "Canary"),
+        ("FORTIFY", "SOURCE"),
+        ("Stack", "Clash"),
+        ("IBT /", "Zicfilp"),
+        ("SHSTK /", "PAC"),
+        ("Zero-", "Regs"),
+        ("ASan /", "SafeStack"),
     ]
     
-    start_x = 135
-    col_w = 54
+    # Vertical: ISAs (5 rows)
+    rows = [
+        ("x86-64",    [C_REP,  C_CONF, C_REP,  C_REP,  C_HIST, C_CONF, C_CONF]),
+        ("AArch64",   [C_HIST, C_CONF, C_HIST, C_CONF, C_CONF, C_REP,  C_CONF]),
+        ("RISC-V",    [C_CONF, C_CONF, C_CONF, C_CONF, C_REP,  C_REP,  C_CONF]),
+        ("LoongArch", [C_CONF, C_CONF, C_REP,  C_NONE, C_NONE, C_REP,  C_REP]),
+        ("MIPS",      [C_REP,  C_CONF, C_NONE, C_NONE, C_NONE, C_REP,  C_CONF]),
+    ]
+    
+    start_x = 82
+    col_w = 56
     gap_x = 5
     
-    start_y = 16
-    row_h = 36
-    gap_y = 6
+    start_y = 14
+    row_h = 26
+    gap_y = 5
     
-    # Draw Column Headers
-    for j, col in enumerate(cols):
+    # Draw Column Headers (2 lines for neatness)
+    for j, (line1, line2) in enumerate(cols):
         cx = start_x + j * (col_w + gap_x) + col_w / 2
-        if col == "...":
-            cx -= 10
-            svg.append(f'<text x="{cx}" y="{start_y + 12}" fill="#9CA3AF" font-size="12" font-weight="700" text-anchor="middle">...</text>')
-        else:
-            svg.append(f'<text x="{cx}" y="{start_y + 12}" fill="#374151" font-size="11" font-weight="600" text-anchor="middle">{col}</text>')
+        svg.append(f'<text x="{cx}" y="{start_y + 8}" fill="#374151" font-size="9.5" font-weight="600" text-anchor="middle">{line1}</text>')
+        svg.append(f'<text x="{cx}" y="{start_y + 19}" fill="#374151" font-size="9.5" font-weight="600" text-anchor="middle">{line2}</text>')
             
-    # Draw Matrix Rows
-    y = start_y + 22
+    # Draw Matrix Rows (ISAs)
+    y = start_y + 27
     for row_name, cells in rows:
-        # Row Label
-        svg.append(f'<text x="{start_x - 12}" y="{y + row_h/2 + 4}" fill="#1F2937" font-size="11.5" font-weight="600" text-anchor="end">{row_name}</text>')
+        # Row Label (ISA)
+        svg.append(f'<text x="{start_x - 10}" y="{y + row_h/2 + 4}" fill="#1F2937" font-size="10.5" font-weight="600" text-anchor="end">{row_name}</text>')
         
         # Cells
         for j, color in enumerate(cells):
             cx = start_x + j * (col_w + gap_x)
-            border_color = "#15803D" if color == "#228833" else ("#F59E0B" if color == "#FFF8E1" else ("#86EFAC" if color == "#E3F1E7" else "#E5E7EB"))
-            stroke_w = "1.5" if color != "#F3F4F6" else "1"
+            if color == C_CONF:
+                border_color, stroke_w = "#15803D", "1.4"
+            elif color == C_HIST:
+                border_color, stroke_w = "#F59E0B", "1.4"
+            elif color == C_REP:
+                border_color, stroke_w = "#86EFAC", "1.4"
+            else:
+                border_color, stroke_w = "#E5E7EB", "1.0"
             svg.append(f'<rect x="{cx}" y="{y}" width="{col_w}" height="{row_h}" rx="4" fill="{color}" stroke="{border_color}" stroke-width="{stroke_w}"/>')
             
-        # Ellipsis column
-        ex = start_x + 5 * (col_w + gap_x) + 8
-        svg.append(f'<text x="{ex}" y="{y + row_h/2 + 4}" fill="#9CA3AF" font-size="12" font-weight="700" text-anchor="middle">...</text>')
         y += row_h + gap_y
 
-    # Ellipsis Row
-    svg.append(f'<text x="{start_x - 12}" y="{y + 16}" fill="#9CA3AF" font-size="12" font-weight="700" text-anchor="end">...</text>')
-    for j in range(5):
-        cx = start_x + j * (col_w + gap_x) + col_w / 2
-        svg.append(f'<text x="{cx}" y="{y + 16}" fill="#9CA3AF" font-size="12" font-weight="700" text-anchor="middle">...</text>')
-
-    # Legend at Bottom - Single Words as requested!
-    legend_y = y + 34
+    # Legend at Bottom - 3 items only (no gray Unexplored box)
+    legend_y = y + 10
     legend_items = [
-        ("Unexplored", "#F3F4F6", "#E5E7EB", "#4B5563"),
-        ("Historical", "#FFF8E1", "#F59E0B", "#92400E"),
-        ("Reported", "#E3F1E7", "#86EFAC", "#166534"),
-        ("Confirmed", "#228833", "#15803D", "#FFFFFF")
+        ("Historical", C_HIST, "#F59E0B", "#92400E"),
+        ("Reported",   C_REP,  "#86EFAC", "#166534"),
+        ("Confirmed",  C_CONF, "#15803D", "#FFFFFF"),
     ]
     
-    leg_start_x = 24
-    badge_w = 98
-    badge_h = 24
-    badge_gap = 14
+    badge_w = 106
+    badge_h = 22
+    badge_gap = 18
+    total_leg_w = len(legend_items) * badge_w + (len(legend_items) - 1) * badge_gap
+    leg_start_x = start_x + (len(cols) * (col_w + gap_x) - gap_x - total_leg_w) / 2
     
     for k, (label, bg, border, txt) in enumerate(legend_items):
         bx = leg_start_x + k * (badge_w + badge_gap)
         svg.append(f'<rect x="{bx}" y="{legend_y}" width="{badge_w}" height="{badge_h}" rx="4" fill="{bg}" stroke="{border}" stroke-width="1.2"/>')
-        svg.append(f'<text x="{bx + badge_w/2}" y="{legend_y + 16}" fill="{txt}" font-size="10.5" font-weight="600" text-anchor="middle">{label}</text>')
+        svg.append(f'<text x="{bx + badge_w/2}" y="{legend_y + 15}" fill="{txt}" font-size="10" font-weight="600" text-anchor="middle">{label}</text>')
         
     svg.append('</svg>')
     

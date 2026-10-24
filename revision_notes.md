@@ -2,12 +2,15 @@
 
 > **文档说明**：本文档汇总并整理了围绕 IEEE S&P (Oakland) 顶级安全会议标准进行的多次导师指导、线上研讨以及微信专项讨论（包括 8月31日会议录音、9月4日截图意见、9月8日与9月11日修改纪要）。
 > 
-> **重要状态声明**：**摘要（Abstract）现已正式定稿并锁定，禁止随意修改**。本文档全面收录定稿摘要范本及所有关键论证逻辑、挑战重构、术语规范与避坑指南，作为后续正文撰写、修改与投稿的最高权威参考。
+> **重要状态声明**：**摘要（Abstract）与第三章概览（Section 3 Overview）现已正式精校定稿并锁定（Ready），禁止随意修改，作为全篇正文统一的最高权威参考基准**。在全篇进度追踪中，目前仅这两个部分处于 `ready` 状态，其余章节均为 `不 ready`。后续所有章节撰写、修改与对齐必须严格以这两个精校基准为参照。
 
 ---
 
 ## 目录
-1. [已定稿摘要（Abstract 权威范本与解析）](#一-已定稿摘要abstract-权威范本与解析)
+1. [已精校定稿基准（Abstract 与 Section 3 Overview 权威范本）](#一-已精校定稿基准abstract-与-section-3-overview-权威范本)
+   - [精校定稿摘要（Abstract 范本）](#1-精校定稿摘要abstract-权威范本)
+   - [精校定稿第三章概览（Section 3 Overview 范本）](#2-精校定稿第三章概览section-3-overview-权威范本)
+   - [双基准核心落实与四步技术体系解析](#3-双基准核心落实与四步技术体系解析)
 2. [微信专项讨论与截图意见核心提炼 (9月4日)](#二-微信专项讨论与截图意见核心提炼-9月4日)
 3. [核心论据与学术论点深度阐释](#三-核心论据与学术论点深度阐释)
    - [为什么必须引入 Agent？（核心动机）](#1-为什么必须引入-agent核心动机)
@@ -25,49 +28,75 @@
 
 ---
 
-## 一、已定稿摘要（Abstract 权威范本与解析）
+## 一、已精校定稿基准（Abstract 与 Section 3 Overview 权威范本）
 
-### 1. 定稿英文原文（锁定，禁止再修改）
+### 1. 精校定稿摘要（Abstract 权威范本，已锁定参考）
+
+> **状态**：`[ready]`（以最新 `main.tex` 为准，禁止随意改动）
 
 ```latex
 Compiler-instrumented defenses, such as stack canaries, Control-Flow Integrity (CFI), 
-and Pointer Authentication (PAC), provide an essential line of defense against memory-safety 
-exploits. Yet these defenses can fail silently---leaving emitted binaries functionally 
-normal but security-compromised without causing compiler crashes or execution divergence. 
-CVE-2023-4039 exemplifies this vulnerability, where a dynamically allocated buffer bypasses 
-the GCC stack protector on AArch64. Such failures expose a fundamental oracle gap: conventional 
-crash and differential testing cannot detect whether an optimization pass has silently 
-weakened or stripped an intended defense contract.
+and \texttt{\_FORTIFY\_SOURCE}, protect software against memory errors and control-flow hijacking. 
+However, these defenses can \textbf{fail silently}---the compiler produces a working binary without 
+any warnings or crashes, but the security protection is quietly weakened or broken. For example, 
+in \textbf{CVE-2023-4039}, dynamic stack allocation allowed an overflow to bypass the GCC stack canary 
+on AArch64. Such failures expose a fundamental \textbf{oracle gap}: conventional crash and differential 
+testing only check whether a program produces correct outputs, making them completely blind when 
+compilers silently weaken or break a defense.
 
-In this paper, we present DeFuzz, an invariant-directed agentic framework for discovering 
-silent compiler defense failures. DeFuzz systematically addresses three coupled challenges:
-(1) Evidence-Grounded Invariant Extraction: DeFuzz mines formal security contracts from 
-compiler corpora, architectural specifications, and historical patches, coupling segmented 
-Chain-of-Thought (CoT) with cross-mechanism abstract-failure transfer.
-(2) Multi-ISA Deterministic Oracle Formulation: For each invariant, DeFuzz synthesizes separate 
-static audit and dynamic sandbox checkers specialized across target ISAs (x86-64, AArch64, RISC-V), 
-producing a deterministic four-state verdict (PASS, FAIL, NA, ERROR) with zero LLM involvement in bug adjudication.
-(3) Invariant-Directed Closed-Loop Fuzzing: Governed by a deterministic orchestrator, an LLM Generator 
-synthesizes anti-DCE probe seeds, while an adaptive Feedback Agent analyzes compiler execution logs 
-and condition hits to drive seed mutation and checker evolution. Confirmed violations trigger 
-automated delta-debugging and lateral bug amplification.
-
-Evaluated on GCC and LLVM across multiple architectures, DeFuzz discovered [N] previously unknown 
-silent compiler defense failures, of which [M] have been confirmed upstream. These findings underscore 
-the necessity of integrating rigorous, invariant-grounded oracles into compiler testing pipelines.
+In this paper, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agentic framework for discovering 
+silent failures in compiler-instrumented defenses. \textsc{DeFuzz} first extracts formal security invariants 
+from compiler source code, ISA specifications, and historical bug fixes using a hybrid CoT and RAG pipeline. 
+It then maps these invariants to compiler passes and decision branches, locating where defenses are implemented 
+and controlled. To detect violations, \textsc{DeFuzz} turns this mapped logic into programmatic bug oracles, 
+implemented as static and dynamic checkers across target ISAs. All bug verdicts are decided strictly by these checkers, 
+with \textbf{zero LLM involvement in bug adjudication}. Guided by the mapped compiler locations, specialized 
+LLM agents perform directed fuzzing to hit targeted defense branches, synthesizing and mutating seeds to trigger 
+invariant violations under oracle evaluation. We evaluated \textsc{DeFuzz} on GCC and LLVM across multiple architectures. 
+\textsc{DeFuzz} discovered \textbf{\tbd{N} previously unknown silent failures in compiler-instrumented defenses}, 
+of which \textbf{\tbd{M} have been confirmed upstream}. Some of these bugs were rated as high-severity vulnerabilities. 
+These results show that \textsc{DeFuzz} effectively uncovers critical silent defense bugs that evade existing compiler 
+testing techniques.
 ```
 
-### 2. 定稿摘要如何全面落实讨论意见
+### 2. 精校定稿第三章概览（Section 3 Overview 权威范本，已锁定参考）
 
-| 导师与讨论意见 | 定稿摘要的对应落实处理 |
-| :--- | :--- |
-| **使用 `compiler-instrumented defenses`** | 首句正式定名，不再使用不规范的 `compiler inserted defense`。 |
-| **`including` 改少一点** | 删除了原稿中堆砌的 `including...` 长句，精简为 `such as stack canaries, CFI, and PAC` 三个经典代表。 |
-| **不要解释太多原因，直接讲 CVE 后果** | 不纠缠于复杂的中间过程，直接点出 `CVE-2023-4039` 的核心安全后果：动态分配缓冲区完全旁路栈保护。 |
-| **不要 `on a particular backend`** | 删除了狭隘的修饰限定，提升问题高度为广泛存在的后端静默失效。 |
-| **体现 invariants 从哪里来** | 挑战 (1) 明确指出来源：*compiler corpora, architectural specifications, and historical patches*。 |
-| **剔除执行流水账，按三大挑战展开** | 第二段彻底摒弃 `First... Second...` 的执行步骤流水账，重组为三大挑战与对应解决方案。 |
-| **明确判定无 LLM 介入** | 挑战 (2) 强调四态判定：*producing a deterministic four-state verdict with zero LLM involvement in bug adjudication*。 |
+> **状态**：`[ready]`（以最新 `main.tex` 为准，确立全篇技术体系的四步工作流骨架）
+
+```latex
+\section{Design of DeFuzz}\label{sec:design}\label{sec:overview}
+
+\wincfig{method-overview}{Overview of \textsc{DeFuzz}. The framework operates across four core steps: 
+(1) extracting security invariants from compiler corpora and historical defects via a hybrid CoT and RAG pipeline; 
+(2) mapping invariant logic to compiler passes and decision branches; 
+(3) constructing programmatic static and dynamic oracles across target ISAs; and 
+(4) performing agentic directed fuzzing, where a generator agent synthesizes probe seeds and a feedback agent steers 
+iterative exploration under programmatic oracle verification.}
+
+In this section, we present the design of \textsc{DeFuzz}, an invariant-directed framework for discovering 
+silent failures in compiler-instrumented defenses. Figure~\ref{fig:method-overview} illustrates its overall 
+workflow, which consists of four core steps: invariant generation, compiler source mapping, programmatic oracle 
+construction, and agentic directed fuzzing. First, we extract formal security invariants from compiler corpora and 
+historical defects using a hybrid CoT and RAG pipeline. With these invariants established, we map them to the 
+relevant compiler passes and decision branches, identifying where defenses are implemented and which conditions 
+govern their execution. Next, we turn this mapped logic into programmatic bug oracles. We implement these oracles 
+as static and dynamic checkers across target ISAs to determine whether program seeds expose defense failures, 
+mitigating false positives from model hallucination. Finally, our agentic directed fuzzing coordinates multiple 
+specialized agents: a generator agent synthesizes program seeds designed to violate target invariants, while a 
+feedback agent analyzes execution feedback to guide iterative mutations, with our programmatic oracles evaluating 
+and verifying each candidate. We discuss each step in detail in the following subsections.
+```
+
+### 3. 双基准核心落实与四步技术体系解析
+
+精校后的 Abstract 与 Section 3 Overview 互相印证、高度咬合，确立了全篇论文技术展开的四步核心主线（Four Core Steps）：
+
+| 核心步骤 | Abstract 表述与定位 | Section 3 Overview 表述与职能 | 核心技术亮点与审稿防线 |
+| :--- | :--- | :--- | :--- |
+| **Step 1: Invariant Generation** | extracts formal security invariants from compiler source code, ISA specifications, and historical bug fixes using a hybrid CoT and RAG pipeline | extract formal security invariants from compiler corpora and historical defects using a hybrid CoT and RAG pipeline | **防知识循环自证**：不以待测编译产物为标准，而是融合源码注释、ISA/ABI 规范与历史补丁；结合 CoT 与跨机制抽象迁移 RAG。 |
+| **Step 2: Source Mapping** | maps these invariants to compiler passes and decision branches, locating where defenses are implemented and controlled | map them to the relevant compiler passes and decision branches, identifying where defenses are implemented and which conditions govern their execution | **精准定位防御决策点**：利用 MCP 工具链与三层决策体系（Pass $\to$ Function $\to$ Critical Structs/Conditions），为后续定向插桩与种子生成打靶提供坐标。 |
+| **Step 3: Programmatic Oracles** | turns this mapped logic into programmatic bug oracles, implemented as static and dynamic checkers across target ISAs; **zero LLM involvement in bug adjudication** | turn this mapped logic into programmatic bug oracles... static and dynamic checkers across target ISAs... mitigating false positives from model hallucination | **彻底杜绝 LLM 幻觉**：Bug 判定完全由机器静态（AST/GIMPLE/DWARF/汇编）和动态（沙箱/Trap）Checker 决断，输出确定性四态裁决（PASS/FAIL/NA/ERROR）。 |
+| **Step 4: Agentic Directed Fuzzing** | specialized LLM agents perform directed fuzzing to hit targeted defense branches, synthesizing and mutating seeds to trigger invariant violations under oracle evaluation | agentic directed fuzzing coordinates multiple specialized agents: generator agent synthesizes seeds... feedback agent analyzes execution feedback to guide iterative mutations | **突破语义鸿沟与 Anti-DCE**：传统变异无法生成违反不变量的深层结构代码且易被 DCE 消除；Generator 针对防御分支生成探针种子，Feedback Agent 结合编译日志闭环引导变异与 Checker 演进。 |
 
 ---
 
