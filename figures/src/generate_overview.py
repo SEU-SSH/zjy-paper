@@ -53,11 +53,6 @@ def generate_svg():
       <path d="M 0 1.5 L 9.2 5 L 0 8.5 z" fill="#DC2626"/>
     </marker>
 
-    <!-- Subtle academic card elevation -->
-    <filter id="card-shadow" x="-4%" y="-6%" width="108%" height="116%" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="1.2" stdDeviation="1.5" flood-color="#0F172A" flood-opacity="0.06"/>
-    </filter>
-
     <!-- Minimalist vector bot icon (15x15) in deep steel-indigo -->
     <g id="bot-logo">
       <line x1="7.5" y1="1.2" x2="7.5" y2="3.4" stroke="#1E3A8A" stroke-width="1.2" stroke-linecap="round"/>
@@ -107,7 +102,7 @@ def generate_svg():
     # Top Input icon: center y=48 (matches Step 1 card y=26..70, center y=48)
     svg.append(f'''
   <!-- Top Input: Specs, Docs and Patches -->
-  <g transform="translate(14, 31)" filter="url(#card-shadow)">
+  <g transform="translate(14, 31)">
     <path d="M 10 0 L 26 0 L 35 9 L 35 34 L 10 34 Z" fill="#FFFFFF" stroke="#1E293B" stroke-width="1.3" stroke-linejoin="round"/>
     <path d="M 26 0 L 26 9 L 35 9 Z" fill="#E2E8F0" stroke="#1E293B" stroke-width="1.2" stroke-linejoin="round"/>
     <line x1="14" y1="13" x2="30" y2="13" stroke="#475569" stroke-width="1.15"/>
@@ -120,7 +115,7 @@ def generate_svg():
   <text x="36.5" y="91.5" font-size="10" font-weight="500" fill="{text_color}" text-anchor="middle">and Patches</text>
 
   <!-- Bottom Input icon: center y=134 (matches Card 2a y=115..153, center y=134) -->
-  <g transform="translate(14, 118)" filter="url(#card-shadow)">
+  <g transform="translate(14, 118)">
     <rect x="9" y="0" width="27" height="32" rx="3" fill="#FFFFFF"/>
     <path d="M 12 0 L 33 0 Q 36 0 36 3 L 36 7.5 L 9 7.5 L 9 3 Q 9 0 12 0 Z" fill="#E2E8F0"/>
     <line x1="9" y1="7.5" x2="36" y2="7.5" stroke="#1E293B" stroke-width="1"/>
@@ -137,7 +132,7 @@ def generate_svg():
     # =========================================================================
     svg.append(f'''
   <!-- Step 1: Security Invariant Extraction -->
-  <g transform="translate(94, 26)" filter="url(#card-shadow)">
+  <g transform="translate(94, 26)">
     <rect x="0" y="0" width="234" height="44" rx="4" fill="{llm_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 44 L 4 44 Q 0 44 0 40 L 0 4 Q 0 0 4 0 Z" fill="{llm_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="44" stroke="{llm_well_div}" stroke-width="1"/>
@@ -172,7 +167,7 @@ def generate_svg():
   </g>
 
   <!-- Card 2a: Call-Graph Analysis (x=96..326, y=115..153, center y=134) -->
-  <g transform="translate(96, 115)" filter="url(#card-shadow)">
+  <g transform="translate(96, 115)">
     <rect x="0" y="0" width="230" height="38" rx="4" fill="{llm_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{llm_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="38" stroke="{llm_well_div}" stroke-width="1"/>
@@ -194,7 +189,7 @@ def generate_svg():
   </g>
 
   <!-- Card 2b: Hierarchical Branch Mapping (x=96..326, y=167..209) -->
-  <g transform="translate(96, 167)" filter="url(#card-shadow)">
+  <g transform="translate(96, 167)">
     <rect x="0" y="0" width="230" height="42" rx="4" fill="{llm_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 42 L 4 42 Q 0 42 0 38 L 0 4 Q 0 0 4 0 Z" fill="{llm_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="42" stroke="{llm_well_div}" stroke-width="1"/>
@@ -225,7 +220,7 @@ def generate_svg():
     # =========================================================================
     svg.append(f'''
   <!-- Step 3: Programmatic Oracle Construction Container -->
-  <g filter="url(#card-shadow)">
+  <g>
     <rect x="386" y="26" width="242" height="220" rx="8" fill="{orc_panel_fill}"/>
     <path d="M 394 26 L 620 26 Q 628 26 628 34 L 628 70 L 386 70 L 386 34 Q 386 26 394 26 Z" fill="{orc_hdr_fill}"/>
     <line x1="386" y1="70" x2="628" y2="70" stroke="#CBD5E1" stroke-width="1.1"/>
@@ -236,7 +231,7 @@ def generate_svg():
   </g>
 
   <!-- 3a: Static Audit Checkers (Stack Frame Layout schematic) -->
-  <g transform="translate(397, 84)" filter="url(#card-shadow)">
+  <g transform="translate(397, 84)">
     <rect x="0" y="0" width="220" height="38" rx="4" fill="#FFFFFF"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{det_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="38" stroke="{det_well_div}" stroke-width="1"/>
@@ -251,7 +246,7 @@ def generate_svg():
   </g>
 
   <!-- 3b: Dynamic Sandbox Checkers (Sandbox + Runtime Trap Pulse schematic) -->
-  <g transform="translate(397, 134)" filter="url(#card-shadow)">
+  <g transform="translate(397, 134)">
     <rect x="0" y="0" width="220" height="38" rx="4" fill="#FFFFFF"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{det_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="38" stroke="{det_well_div}" stroke-width="1"/>
@@ -264,7 +259,7 @@ def generate_svg():
   </g>
 
   <!-- 3c: Distinct Rounded Emerald Capsule for Zero LLM in Adjudication -->
-  <g transform="translate(403, 190)" filter="url(#card-shadow)">
+  <g transform="translate(403, 190)">
     <rect x="0" y="0" width="208" height="32" rx="16" fill="{zllm_fill}" stroke="{zllm_stroke}" stroke-width="1.4"/>
     <!-- Deterministic Shield-Check Emblem -->
     <path d="M 26 8 L 32.5 10.5 L 32.5 16.3 C 32.5 20.3 29.6 23.1 26 24.5 C 22.4 23.1 19.5 20.3 19.5 16.3 L 19.5 10.5 Z" fill="#FFFFFF" stroke="#15803D" stroke-width="1.25"/>
@@ -292,7 +287,7 @@ def generate_svg():
   </g>
 
   <!-- Top Card: Targeted Seed Synthesis (x=697..945, y=27..69) -->
-  <g transform="translate(697, 27)" filter="url(#card-shadow)">
+  <g transform="translate(697, 27)">
     <rect x="0" y="0" width="248" height="42" rx="4" fill="{llm_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 42 L 4 42 Q 0 42 0 38 L 0 4 Q 0 0 4 0 Z" fill="{llm_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="42" stroke="{llm_well_div}" stroke-width="1"/>
@@ -310,7 +305,7 @@ def generate_svg():
   </g>
 
   <!-- Middle Card: Compilation & Oracle Checking (x=697..945, y=96..134, center y=115) -->
-  <g transform="translate(697, 96)" filter="url(#card-shadow)">
+  <g transform="translate(697, 96)">
     <rect x="0" y="0" width="248" height="38" rx="4" fill="{exec_fill}"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{exec_well}"/>
     <line x1="42" y1="0" x2="42" y2="38" stroke="#CBD5E1" stroke-width="1"/>
@@ -323,7 +318,7 @@ def generate_svg():
   </g>
 
   <!-- Bottom Card: Guided Seed Mutation (x=697..945, y=161..203) -->
-  <g transform="translate(697, 161)" filter="url(#card-shadow)">
+  <g transform="translate(697, 161)">
     <rect x="0" y="0" width="248" height="42" rx="4" fill="{llm_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 42 L 4 42 Q 0 42 0 38 L 0 4 Q 0 0 4 0 Z" fill="{llm_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="42" stroke="{llm_well_div}" stroke-width="1"/>
@@ -375,7 +370,7 @@ def generate_svg():
   <line x1="945" y1="115" x2="1000" y2="115" stroke="#DC2626" stroke-width="1.3" marker-end="url(#arr-crimson)"/>
   <text x="972.5" y="107" font-size="9.4" font-weight="700" fill="#DC2626" text-anchor="middle">FAIL</text>
 
-  <g transform="translate(1002, 96)" filter="url(#card-shadow)">
+  <g transform="translate(1002, 96)">
     <path d="M 12 0 L 26 0 L 35 9 L 35 38 L 12 38 Z" fill="#FEF2F2" stroke="#991B1B" stroke-width="1.3" stroke-linejoin="round"/>
     <path d="M 26 0 L 26 9 L 35 9 Z" fill="#FECACA" stroke="#991B1B" stroke-width="1.2" stroke-linejoin="round"/>
     <ellipse cx="23.5" cy="22.5" rx="4.5" ry="5.5" fill="#DC2626"/>
