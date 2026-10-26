@@ -254,19 +254,24 @@ def generate_svg():
     <text x="131" y="23" font-size="10.5" font-weight="700" fill="{text_color}" text-anchor="middle">Static Audit Checkers</text>
   </g>
 
-  <!-- 3b: Dynamic Sandbox Checkers (Sandbox Enclosure [ ⛶ ] + Run ▶ & Fault Trap ⚡) -->
+  <!-- 3b: Dynamic Sandbox Checkers (Sandbox Terminal Window >_ + Runtime Verification Shield) -->
   <g transform="translate(397, 134)">
     <rect x="0" y="0" width="220" height="38" rx="4" fill="{det_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{det_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="38" stroke="{det_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="220" height="38" rx="4" fill="none" stroke="{det_stroke}" stroke-width="1.15"/>
     
-    <!-- Mini-schematic: Sandbox Box Enclosure (dashed boundary) -->
-    <rect x="7" y="7" width="28" height="24" rx="2.5" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.1" stroke-dasharray="3,2"/>
-    <!-- Runtime Execution Play Symbol (▶) -->
-    <polygon points="12,13 12,23 20,18" fill="{accent_amber}"/>
-    <!-- Runtime Trap Lightning Bolt (⚡) -->
-    <path d="M 25 10 L 29.5 10 L 26.5 17 L 31 17 L 23.5 27 L 25.5 19 L 22 19 Z" fill="#DC2626"/>
+    <!-- Mini-schematic: Isolated Terminal Window (>_ ) + Verification Shield -->
+    <rect x="6.5" y="7.5" width="21" height="19" rx="2" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.05"/>
+    <line x1="6.5" y1="12" x2="27.5" y2="12" stroke="{accent_dark}" stroke-width="0.95"/>
+    <circle cx="9.5" cy="9.8" r="0.8" fill="{accent_dark}"/>
+    <circle cx="12.2" cy="9.8" r="0.8" fill="{accent_dark}"/>
+    <!-- Terminal prompt >_ -->
+    <polyline points="10.5,16 13.5,18.5 10.5,21" fill="none" stroke="{accent_dark}" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="15" y1="21" x2="19.5" y2="21" stroke="{accent_dark}" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- Bottom-right runtime shield badge with checkmark -->
+    <path d="M 28.5 16.5 L 34.5 18.7 L 34.5 23.8 C 34.5 27.2 31.8 29.7 28.5 31 C 25.2 29.7 22.5 27.2 22.5 23.8 L 22.5 18.7 Z" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.2"/>
+    <polyline points="26.2,23.8 27.9,25.5 31.2,21.8" fill="none" stroke="#15803D" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
 
     <text x="131" y="23" font-size="10.5" font-weight="700" fill="{text_color}" text-anchor="middle">Dynamic Sandbox Checkers</text>
   </g>
@@ -362,7 +367,7 @@ def generate_svg():
   <text x="828" y="85" font-size="9.4" font-weight="500" fill="{edge_color}">Seeds</text>
 
   <line x1="781" y1="134" x2="781" y2="159" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
-  <text x="774" y="150" font-size="9.2" font-weight="500" fill="{edge_color}" text-anchor="end">Branch Traces</text>
+  <text x="774" y="150" font-size="9.2" font-weight="500" fill="{edge_color}" text-anchor="end">Coverage Delta</text>
 
   <line x1="861" y1="161" x2="861" y2="136" stroke="#B45309" stroke-width="1.25" marker-end="url(#arr-amber)"/>
   <text x="868" y="150" font-size="9.2" font-weight="600" fill="#B45309">Mutated Seeds</text>
