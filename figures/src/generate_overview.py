@@ -2,16 +2,15 @@
 """
 Generate a high-prestige IEEE S&P / CCS style system overview diagram for DeFuzz
 (Worktree branch: style/overview-v2):
-- Refined Steel-Navy, Cool Slate, and Emerald academic palette (zero yellow fill).
-- Crisp border layering over left-hand schematic wells.
-- Domain-specific compiler-security mini-schematics inside every module card
-  (spec-to-phi contract, call-graph DAG, 3-tier branch funnel + CFG diamond,
-  stack frame layout, sandbox runtime trap, seed code block, 8-tooth compiler gear
-  + check, and branch-flip guided mutation).
-- Crisp sans-serif typography ('Helvetica Neue', Helvetica, Arial) with Plain Drawing
-  conciseness (only 2 '&' across the entire diagram).
-- Minimalist bot badge on LLM-assisted stages/agents; distinct rounded emerald capsule
-  for 'Zero LLM in Adjudication'.
+- Elegant Pale Warm Yellow / Amber-Cream academic palette (zero tech-AI-blue).
+- Crisp vector outlines (zero SVG filter rasterization).
+- Upgraded domain-specific mini-schematics:
+  * Static Audit Checkers: Code/binary audit sheet with inspection magnifying glass (🔍).
+  * Dynamic Sandbox Checkers: Isolated sandbox enclosure with execution play (▶) and runtime fault trap (⚡).
+  * Targeted Seed Synthesis: Synthesized C probe seed snippet.
+  * Compilation & Oracle Checking: Precision compiler gear + dual oracle checkmark.
+  * Guided Seed Mutation: Branch-flip directed mutation arc.
+  * Zero LLM in Adjudication: Distinct emerald rounded capsule with shield-checkmark.
 """
 
 import math
@@ -30,10 +29,10 @@ def gear_svg(cx: float, cy: float, r_outer: float, r_inner: float, r_hole: float
         y2 = cy + r_outer * math.sin(angle)
         lines.append(
             f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" '
-            f'stroke="#1E293B" stroke-width="1.6" stroke-linecap="round"/>'
+            f'stroke="#292524" stroke-width="1.6" stroke-linecap="round"/>'
         )
-    lines.append(f'<circle cx="{cx}" cy="{cy}" r="{r_inner}" fill="#FFFFFF" stroke="#1E293B" stroke-width="1.2"/>')
-    lines.append(f'<circle cx="{cx}" cy="{cy}" r="{r_hole}" fill="{hole_fill}" stroke="#1E293B" stroke-width="1.05"/>')
+    lines.append(f'<circle cx="{cx}" cy="{cy}" r="{r_inner}" fill="#FFFFFF" stroke="#292524" stroke-width="1.2"/>')
+    lines.append(f'<circle cx="{cx}" cy="{cy}" r="{r_hole}" fill="{hole_fill}" stroke="#292524" stroke-width="1.05"/>')
     return "\n    ".join(lines)
 
 
@@ -44,69 +43,71 @@ def generate_svg():
   <defs>
     <!-- Crisp arrowheads -->
     <marker id="arr" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="5.8" markerHeight="5.8" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 9.2 5 L 0 8.5 z" fill="#1E293B"/>
+      <path d="M 0 1.5 L 9.2 5 L 0 8.5 z" fill="#1C1917"/>
     </marker>
-    <marker id="arr-indigo" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="5.8" markerHeight="5.8" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 9.2 5 L 0 8.5 z" fill="#2563EB"/>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="5.8" markerHeight="5.8" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9.2 5 L 0 8.5 z" fill="#B45309"/>
     </marker>
     <marker id="arr-crimson" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="5.8" markerHeight="5.8" orient="auto-start-reverse">
       <path d="M 0 1.5 L 9.2 5 L 0 8.5 z" fill="#DC2626"/>
     </marker>
 
-    <!-- Minimalist vector bot icon (15x15) in deep steel-indigo -->
+    <!-- Minimalist vector bot icon (15x15) in warm bronze/amber -->
     <g id="bot-logo">
-      <line x1="7.5" y1="1.2" x2="7.5" y2="3.4" stroke="#1E3A8A" stroke-width="1.2" stroke-linecap="round"/>
-      <circle cx="7.5" cy="1.0" r="1.0" fill="#1E3A8A"/>
-      <line x1="0.8" y1="7.8" x2="2.3" y2="7.8" stroke="#1E3A8A" stroke-width="1.2" stroke-linecap="round"/>
-      <line x1="12.7" y1="7.8" x2="14.2" y2="7.8" stroke="#1E3A8A" stroke-width="1.2" stroke-linecap="round"/>
-      <rect x="2.3" y="3.4" width="10.4" height="8.8" rx="2.1" fill="#EEF2FF" stroke="#1E3A8A" stroke-width="1.2"/>
-      <circle cx="5.5" cy="7.2" r="1.0" fill="#1E3A8A"/>
-      <circle cx="9.5" cy="7.2" r="1.0" fill="#1E3A8A"/>
-      <line x1="5.4" y1="9.8" x2="9.6" y2="9.8" stroke="#1E3A8A" stroke-width="1.05" stroke-linecap="round"/>
+      <line x1="7.5" y1="1.2" x2="7.5" y2="3.4" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="7.5" cy="1.0" r="1.0" fill="#92400E"/>
+      <line x1="0.8" y1="7.8" x2="2.3" y2="7.8" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="12.7" y1="7.8" x2="14.2" y2="7.8" stroke="#92400E" stroke-width="1.2" stroke-linecap="round"/>
+      <rect x="2.3" y="3.4" width="10.4" height="8.8" rx="2.1" fill="#FEF3C7" stroke="#92400E" stroke-width="1.2"/>
+      <circle cx="5.5" cy="7.2" r="1.0" fill="#92400E"/>
+      <circle cx="9.5" cy="7.2" r="1.0" fill="#92400E"/>
+      <line x1="5.4" y1="9.8" x2="9.6" y2="9.8" stroke="#92400E" stroke-width="1.05" stroke-linecap="round"/>
     </g>
   </defs>
 ''')
 
-    # Sober, high-prestige Steel-Navy + Cool Slate + Emerald academic palette
-    stage_tint = "#F8FAFC"        # Subtle alabaster slate for dashed group backgrounds
-    dashed_stroke = "#64748B"     # Refined cool slate dashed border
+    # Elegant Pale Warm Yellow / Amber-Cream Academic Palette (No AI-Blue)
+    stage_tint = "#FAFAF9"        # Subtle warm off-white container fill
+    dashed_stroke = "#78716C"     # Warm stone-slate dashed boundary
 
-    llm_card_fill = "#FFFFFF"     # Crisp white card body
-    llm_card_stroke = "#3B5998"   # Refined steel-navy border
-    llm_well_fill = "#EEF2FF"     # Soft ice-indigo schematic well
-    llm_well_div = "#C7D2FE"      # Subtle indigo divider
+    llm_card_fill = "#FEFCE8"     # Soft pale yellow card body
+    llm_card_stroke = "#B45309"   # Warm amber/bronze card border
+    llm_well_fill = "#FEF3C7"     # Warm honey-cream schematic well
+    llm_well_div = "#FDE68A"      # Amber hairline divider
 
-    orc_panel_fill = "#F1F5F9"    # Cool architectural slate panel for Step 3
-    orc_hdr_fill = "#E2E8F0"      # Crisp header band for Step 3
-    orc_stroke = "#334155"
+    orc_panel_fill = "#FFFDF5"    # Warm alabaster ivory panel for Step 3
+    orc_hdr_fill = "#FEF9C3"      # Soft pale-yellow header band
+    orc_stroke = "#92400E"        # Deep amber/bronze panel border
 
-    det_well_fill = "#F1F5F9"     # Cool slate well for deterministic checkers
-    det_well_div = "#CBD5E1"
-    det_stroke = "#475569"
+    det_card_fill = "#FFFFFF"     # Crisp white checker body
+    det_well_fill = "#FEF3C7"     # Warm honey-cream well for checkers
+    det_well_div = "#FDE68A"
+    det_stroke = "#78350F"        # Deep bronze border for checkers
 
-    exec_fill = "#E8EEF5"         # Cool steel-slate for Compilation & Oracle Checking
-    exec_well = "#DCE5F0"
-    exec_stroke = "#1E293B"
+    exec_fill = "#F5F5F4"         # Warm neutral stone for Compilation & Oracle Checking
+    exec_well = "#E7E5E4"
+    exec_stroke = "#292524"
 
-    zllm_fill = "#DCFCE7"         # Emerald green capsule for Zero LLM
+    zllm_fill = "#DCFCE7"         # Distinct Emerald green capsule for Zero LLM
     zllm_stroke = "#15803D"
     zllm_text = "#14532D"
 
-    text_color = "#0F172A"
-    subtext_color = "#475569"
-    edge_color = "#334155"
+    text_color = "#1C1917"        # Dark warm charcoal text
+    subtext_color = "#78716C"     # Warm stone-gray subtitle
+    edge_color = "#292524"        # Dark stone for arrow labels
+    accent_amber = "#D97706"      # Warm amber for visual highlights
+    accent_dark = "#92400E"
 
     # =========================================================================
     # 1. INPUT ICONS (Left Column — exact vertical alignment)
     # =========================================================================
-    # Top Input icon: center y=48 (matches Step 1 card y=26..70, center y=48)
     svg.append(f'''
   <!-- Top Input: Specs, Docs and Patches -->
   <g transform="translate(14, 31)">
-    <path d="M 10 0 L 26 0 L 35 9 L 35 34 L 10 34 Z" fill="#FFFFFF" stroke="#1E293B" stroke-width="1.3" stroke-linejoin="round"/>
-    <path d="M 26 0 L 26 9 L 35 9 Z" fill="#E2E8F0" stroke="#1E293B" stroke-width="1.2" stroke-linejoin="round"/>
-    <line x1="14" y1="13" x2="30" y2="13" stroke="#475569" stroke-width="1.15"/>
-    <line x1="14" y1="18.5" x2="30" y2="18.5" stroke="#475569" stroke-width="1.15"/>
+    <path d="M 10 0 L 26 0 L 35 9 L 35 34 L 10 34 Z" fill="#FFFFFF" stroke="#1C1917" stroke-width="1.3" stroke-linejoin="round"/>
+    <path d="M 26 0 L 26 9 L 35 9 Z" fill="#FEF3C7" stroke="#1C1917" stroke-width="1.2" stroke-linejoin="round"/>
+    <line x1="14" y1="13" x2="30" y2="13" stroke="#78716C" stroke-width="1.15"/>
+    <line x1="14" y1="18.5" x2="30" y2="18.5" stroke="#78716C" stroke-width="1.15"/>
     <!-- Subtle +/- patch diff motif inside input doc -->
     <line x1="14" y1="24.5" x2="25" y2="24.5" stroke="#16A34A" stroke-width="1.4"/>
     <line x1="14" y1="28.5" x2="22" y2="28.5" stroke="#DC2626" stroke-width="1.4"/>
@@ -117,10 +118,10 @@ def generate_svg():
   <!-- Bottom Input icon: center y=134 (matches Card 2a y=115..153, center y=134) -->
   <g transform="translate(14, 118)">
     <rect x="9" y="0" width="27" height="32" rx="3" fill="#FFFFFF"/>
-    <path d="M 12 0 L 33 0 Q 36 0 36 3 L 36 7.5 L 9 7.5 L 9 3 Q 9 0 12 0 Z" fill="#E2E8F0"/>
-    <line x1="9" y1="7.5" x2="36" y2="7.5" stroke="#1E293B" stroke-width="1"/>
-    <rect x="9" y="0" width="27" height="32" rx="3" fill="none" stroke="#1E293B" stroke-width="1.3"/>
-    <text x="22.5" y="23.5" font-family="Menlo, Monaco, 'Courier New', monospace" font-size="12" font-weight="700" fill="#1E293B" text-anchor="middle">&#123;&#125;</text>
+    <path d="M 12 0 L 33 0 Q 36 0 36 3 L 36 7.5 L 9 7.5 L 9 3 Q 9 0 12 0 Z" fill="#FEF3C7"/>
+    <line x1="9" y1="7.5" x2="36" y2="7.5" stroke="#1C1917" stroke-width="1"/>
+    <rect x="9" y="0" width="27" height="32" rx="3" fill="none" stroke="#1C1917" stroke-width="1.3"/>
+    <text x="22.5" y="23.5" font-family="Menlo, Monaco, 'Courier New', monospace" font-size="12" font-weight="700" fill="#1C1917" text-anchor="middle">&#123;&#125;</text>
   </g>
   <text x="36.5" y="164" font-size="10" font-weight="500" fill="{text_color}" text-anchor="middle">Compiler</text>
   <text x="36.5" y="176.5" font-size="10" font-weight="500" fill="{text_color}" text-anchor="middle">Source Code</text>
@@ -128,7 +129,7 @@ def generate_svg():
 
     # =========================================================================
     # 2. STEP 1: Security Invariant Extraction (x=94..328, y=26..70, center y=48)
-    #    Left well schematic: Doc/Diff -> Shield Contract Φ
+    #    Left well schematic: Rule Doc -> Contract Shield Φ
     # =========================================================================
     svg.append(f'''
   <!-- Step 1: Security Invariant Extraction -->
@@ -137,33 +138,33 @@ def generate_svg():
     <path d="M 4 0 L 42 0 L 42 44 L 4 44 Q 0 44 0 40 L 0 4 Q 0 0 4 0 Z" fill="{llm_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="44" stroke="{llm_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="234" height="44" rx="4" fill="none" stroke="{llm_card_stroke}" stroke-width="1.25"/>
-    <!-- Mini-schematic: Rule lines -> Shield Φ -->
-    <rect x="6" y="12" width="11" height="19" rx="1.5" fill="#FFFFFF" stroke="#3B5998" stroke-width="1"/>
-    <line x1="8.5" y1="16.5" x2="14.5" y2="16.5" stroke="#3B5998" stroke-width="1"/>
+    <!-- Mini-schematic: Rule lines -> Contract Shield Φ -->
+    <rect x="6" y="12" width="11" height="19" rx="1.5" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1"/>
+    <line x1="8.5" y1="16.5" x2="14.5" y2="16.5" stroke="{accent_dark}" stroke-width="1"/>
     <line x1="8.5" y1="20.5" x2="14.5" y2="20.5" stroke="#16A34A" stroke-width="1.15"/>
-    <line x1="8.5" y1="24.5" x2="13" y2="24.5" stroke="#3B5998" stroke-width="1"/>
-    <line x1="18.5" y1="21.5" x2="22" y2="21.5" stroke="#3B5998" stroke-width="1.1"/>
-    <path d="M 29.5 11.5 L 36.5 14.2 L 36.5 21.5 C 36.5 26.2 33.2 29.5 29.5 31.2 C 25.8 29.5 22.5 26.2 22.5 21.5 L 22.5 14.2 Z" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.15"/>
-    <text x="29.5" y="24" font-size="8.5" font-weight="700" fill="#1E3A8A" text-anchor="middle">&#934;</text>
+    <line x1="8.5" y1="24.5" x2="13" y2="24.5" stroke="{accent_dark}" stroke-width="1"/>
+    <line x1="18.5" y1="21.5" x2="22" y2="21.5" stroke="{accent_amber}" stroke-width="1.1"/>
+    <path d="M 29.5 11.5 L 36.5 14.2 L 36.5 21.5 C 36.5 26.2 33.2 29.5 29.5 31.2 C 25.8 29.5 22.5 26.2 22.5 21.5 L 22.5 14.2 Z" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.15"/>
+    <text x="29.5" y="24" font-size="8.5" font-weight="700" fill="{accent_dark}" text-anchor="middle">&#934;</text>
 
     <text x="128" y="18.5" font-size="10.6" font-weight="700" fill="{text_color}" text-anchor="middle">Security Invariant Extraction</text>
     <text x="128" y="33" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">CoT + RAG</text>
     <use href="#bot-logo" x="213" y="5"/>
   </g>
-  <line x1="51" y1="48" x2="92" y2="48" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="51" y1="48" x2="92" y2="48" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
 ''')
 
     # =========================================================================
     # 3. STEP 2: Compiler Source Mapping (x=84..338, y=100..246, center x=211)
-    #    Card 2a schematic: Call-Graph DAG
-    #    Card 2b schematic: 3-tier Hierarchy / CFG Branch Diamond
+    #    Card 2a schematic: Directed Call-Graph DAG
+    #    Card 2b schematic: 3-tier Funnel -> CFG Branch Diamond
     # =========================================================================
     svg.append(f'''
   <!-- Step 2: Compiler Source Mapping Container -->
   <g>
     <rect x="84" y="100" width="254" height="146" rx="8" fill="{stage_tint}" stroke="{dashed_stroke}" stroke-width="1.25" stroke-dasharray="5,3.5"/>
     <use href="#bot-logo" x="132" y="222"/>
-    <text x="221" y="234" font-size="10.8" font-weight="700" fill="#0F172A" text-anchor="middle">Compiler Source Mapping</text>
+    <text x="221" y="234" font-size="10.8" font-weight="700" fill="#1C1917" text-anchor="middle">Compiler Source Mapping</text>
   </g>
 
   <!-- Card 2a: Call-Graph Analysis (x=96..326, y=115..153, center y=134) -->
@@ -173,17 +174,17 @@ def generate_svg():
     <line x1="42" y1="0" x2="42" y2="38" stroke="{llm_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="230" height="38" rx="4" fill="none" stroke="{llm_card_stroke}" stroke-width="1.2"/>
     <!-- Mini-schematic: Directed Call-Graph DAG with highlighted path -->
-    <line x1="21" y1="9" x2="12" y2="19" stroke="#94A3B8" stroke-width="1.1"/>
-    <line x1="21" y1="9" x2="30" y2="19" stroke="#2563EB" stroke-width="1.35"/>
-    <line x1="12" y1="19" x2="12" y2="29" stroke="#94A3B8" stroke-width="1.1"/>
-    <line x1="30" y1="19" x2="23" y2="29" stroke="#2563EB" stroke-width="1.35"/>
-    <line x1="30" y1="19" x2="35" y2="29" stroke="#94A3B8" stroke-width="1.1"/>
-    <circle cx="21" cy="9" r="2.6" fill="#2563EB"/>
-    <circle cx="12" cy="19" r="2.4" fill="#FFFFFF" stroke="#64748B" stroke-width="1.1"/>
-    <circle cx="30" cy="19" r="2.6" fill="#2563EB"/>
-    <circle cx="12" cy="29" r="2.2" fill="#FFFFFF" stroke="#64748B" stroke-width="1.1"/>
-    <circle cx="23" cy="29" r="2.5" fill="#1D4ED8"/>
-    <circle cx="35" cy="29" r="2.2" fill="#FFFFFF" stroke="#64748B" stroke-width="1.1"/>
+    <line x1="21" y1="9" x2="12" y2="19" stroke="#A8A29E" stroke-width="1.1"/>
+    <line x1="21" y1="9" x2="30" y2="19" stroke="{accent_amber}" stroke-width="1.4"/>
+    <line x1="12" y1="19" x2="12" y2="29" stroke="#A8A29E" stroke-width="1.1"/>
+    <line x1="30" y1="19" x2="23" y2="29" stroke="{accent_amber}" stroke-width="1.4"/>
+    <line x1="30" y1="19" x2="35" y2="29" stroke="#A8A29E" stroke-width="1.1"/>
+    <circle cx="21" cy="9" r="2.6" fill="{accent_amber}"/>
+    <circle cx="12" cy="19" r="2.4" fill="#FFFFFF" stroke="#78716C" stroke-width="1.1"/>
+    <circle cx="30" cy="19" r="2.6" fill="{accent_amber}"/>
+    <circle cx="12" cy="29" r="2.2" fill="#FFFFFF" stroke="#78716C" stroke-width="1.1"/>
+    <circle cx="23" cy="29" r="2.5" fill="{accent_dark}"/>
+    <circle cx="35" cy="29" r="2.2" fill="#FFFFFF" stroke="#78716C" stroke-width="1.1"/>
 
     <text x="136" y="23" font-size="10.6" font-weight="700" fill="{text_color}" text-anchor="middle">Call-Graph Analysis</text>
   </g>
@@ -195,27 +196,28 @@ def generate_svg():
     <line x1="42" y1="0" x2="42" y2="42" stroke="{llm_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="230" height="42" rx="4" fill="none" stroke="{llm_card_stroke}" stroke-width="1.2"/>
     <!-- Mini-schematic: 3-level Funnel -> CFG Branch Diamond -->
-    <rect x="9" y="6.5" width="24" height="5" rx="1" fill="#93C5FD" stroke="#1E3A8A" stroke-width="0.9"/>
-    <rect x="13" y="14" width="16" height="5" rx="1" fill="#60A5FA" stroke="#1E3A8A" stroke-width="0.9"/>
-    <line x1="21" y1="19" x2="21" y2="22.5" stroke="#1E3A8A" stroke-width="1"/>
-    <polygon points="21,22.5 27.5,28 21,33.5 14.5,28" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.15"/>
-    <line x1="27.5" y1="28" x2="34" y2="35" stroke="#2563EB" stroke-width="1.35"/>
-    <line x1="14.5" y1="28" x2="9" y2="35" stroke="#94A3B8" stroke-width="1"/>
+    <rect x="9" y="6.5" width="24" height="5" rx="1" fill="#FDE68A" stroke="{accent_dark}" stroke-width="0.9"/>
+    <rect x="13" y="14" width="16" height="5" rx="1" fill="#F59E0B" stroke="{accent_dark}" stroke-width="0.9"/>
+    <line x1="21" y1="19" x2="21" y2="22.5" stroke="{accent_dark}" stroke-width="1"/>
+    <polygon points="21,22.5 27.5,28 21,33.5 14.5,28" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.15"/>
+    <line x1="27.5" y1="28" x2="34" y2="35" stroke="{accent_amber}" stroke-width="1.35"/>
+    <line x1="14.5" y1="28" x2="9" y2="35" stroke="#A8A29E" stroke-width="1"/>
 
     <text x="136" y="17.5" font-size="10.5" font-weight="700" fill="{text_color}" text-anchor="middle">Hierarchical Branch Mapping</text>
     <text x="136" y="31.5" font-size="9.2" font-weight="400" fill="{subtext_color}" text-anchor="middle">Pass &#8594; Function &#8594; Branch</text>
   </g>
 
-  <line x1="51" y1="134" x2="94" y2="134" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
-  <line x1="211" y1="70" x2="211" y2="113" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="51" y1="134" x2="94" y2="134" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="211" y1="70" x2="211" y2="113" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="218" y="92" font-size="9.4" font-weight="500" fill="{edge_color}">Invariants</text>
-  <line x1="211" y1="153" x2="211" y2="165" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="211" y1="153" x2="211" y2="165" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
 ''')
 
     # =========================================================================
     # 4. STEP 3: Programmatic Oracle Construction (x=386..628, y=26..246)
-    #    3a schematic: Stack Frame Layout [Buf | Can | RA]
-    #    3b schematic: Sandbox + Trap Pulse
+    #    Upgraded Checker Logos:
+    #    3a schematic: Static Audit -> Disassembly/binary sheet inspected by Magnifying Glass (🔍)
+    #    3b schematic: Dynamic Sandbox -> Isolated container enclosure [ ⛶ ] with run (▶) & trap bolt (⚡)
     #    3c: Emerald Rounded Capsule with Shield-Check emblem
     # =========================================================================
     svg.append(f'''
@@ -223,37 +225,48 @@ def generate_svg():
   <g>
     <rect x="386" y="26" width="242" height="220" rx="8" fill="{orc_panel_fill}"/>
     <path d="M 394 26 L 620 26 Q 628 26 628 34 L 628 70 L 386 70 L 386 34 Q 386 26 394 26 Z" fill="{orc_hdr_fill}"/>
-    <line x1="386" y1="70" x2="628" y2="70" stroke="#CBD5E1" stroke-width="1.1"/>
+    <line x1="386" y1="70" x2="628" y2="70" stroke="#FDE68A" stroke-width="1.1"/>
     <rect x="386" y="26" width="242" height="220" rx="8" fill="none" stroke="{orc_stroke}" stroke-width="1.3"/>
     <text x="500" y="45.5" font-size="10.8" font-weight="700" fill="{text_color}" text-anchor="middle">Programmatic Oracle Construction</text>
     <text x="500" y="60" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Formally Validated Checkers</text>
     <use href="#bot-logo" x="607" y="31"/>
   </g>
 
-  <!-- 3a: Static Audit Checkers (Stack Frame Layout schematic) -->
+  <!-- 3a: Static Audit Checkers (Code/Binary Audit Sheet + Inspection Magnifying Glass 🔍) -->
   <g transform="translate(397, 84)">
-    <rect x="0" y="0" width="220" height="38" rx="4" fill="#FFFFFF"/>
+    <rect x="0" y="0" width="220" height="38" rx="4" fill="{det_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{det_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="38" stroke="{det_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="220" height="38" rx="4" fill="none" stroke="{det_stroke}" stroke-width="1.15"/>
-    <!-- Mini-schematic: Stack slots [Buf | Canary | RA] -->
-    <rect x="8" y="6" width="26" height="8" rx="1" fill="#FFFFFF" stroke="#475569" stroke-width="1"/>
-    <rect x="8" y="15" width="26" height="8" rx="1" fill="#DCFCE7" stroke="#15803D" stroke-width="1"/>
-    <rect x="8" y="24" width="26" height="8" rx="1" fill="#E2E8F0" stroke="#475569" stroke-width="1"/>
-    <line x1="13" y1="19" x2="29" y2="19" stroke="#15803D" stroke-width="1.15" stroke-dasharray="2,1.5"/>
+    
+    <!-- Mini-schematic: Binary/Code Audit Sheet + Magnifying Glass (🔍) -->
+    <rect x="7" y="8" width="16" height="22" rx="1.5" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1"/>
+    <line x1="10" y1="12.5" x2="19" y2="12.5" stroke="#78716C" stroke-width="1"/>
+    <line x1="10" y1="16.5" x2="16" y2="16.5" stroke="#78716C" stroke-width="1"/>
+    <line x1="10" y1="20.5" x2="18" y2="20.5" stroke="#78716C" stroke-width="1"/>
+    <line x1="10" y1="24.5" x2="15" y2="24.5" stroke="#78716C" stroke-width="1"/>
+    
+    <!-- Inspection Lens with audit checkmark inside -->
+    <circle cx="26" cy="18" r="5.6" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.3"/>
+    <polyline points="24,18 25.5,19.5 28.5,16.5" fill="none" stroke="#15803D" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="30" y1="22" x2="35.5" y2="27.5" stroke="{accent_dark}" stroke-width="1.8" stroke-linecap="round"/>
 
     <text x="131" y="23" font-size="10.5" font-weight="700" fill="{text_color}" text-anchor="middle">Static Audit Checkers</text>
   </g>
 
-  <!-- 3b: Dynamic Sandbox Checkers (Sandbox + Runtime Trap Pulse schematic) -->
+  <!-- 3b: Dynamic Sandbox Checkers (Sandbox Enclosure [ ⛶ ] + Run ▶ & Fault Trap ⚡) -->
   <g transform="translate(397, 134)">
-    <rect x="0" y="0" width="220" height="38" rx="4" fill="#FFFFFF"/>
+    <rect x="0" y="0" width="220" height="38" rx="4" fill="{det_card_fill}"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{det_well_fill}"/>
     <line x1="42" y1="0" x2="42" y2="38" stroke="{det_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="220" height="38" rx="4" fill="none" stroke="{det_stroke}" stroke-width="1.15"/>
-    <!-- Mini-schematic: Isolated Sandbox Box + Signal Trap Waveform -->
-    <rect x="7.5" y="7" width="27" height="24" rx="2.5" fill="#FFFFFF" stroke="#475569" stroke-width="1.1" stroke-dasharray="3,2"/>
-    <polyline points="10.5,21 15.5,21 18,12.5 21.5,26.5 24,18 27,21 31.5,21" fill="none" stroke="#0F766E" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Mini-schematic: Sandbox Box Enclosure (dashed boundary) -->
+    <rect x="7" y="7" width="28" height="24" rx="2.5" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.1" stroke-dasharray="3,2"/>
+    <!-- Runtime Execution Play Symbol (▶) -->
+    <polygon points="12,13 12,23 20,18" fill="{accent_amber}"/>
+    <!-- Runtime Trap Lightning Bolt (⚡) -->
+    <path d="M 25 10 L 29.5 10 L 26.5 17 L 31 17 L 23.5 27 L 25.5 19 L 22 19 Z" fill="#DC2626"/>
 
     <text x="131" y="23" font-size="10.5" font-weight="700" fill="{text_color}" text-anchor="middle">Dynamic Sandbox Checkers</text>
   </g>
@@ -267,13 +280,13 @@ def generate_svg():
     <text x="115" y="20" font-size="10.6" font-weight="700" fill="{zllm_text}" text-anchor="middle">Zero LLM in Adjudication</text>
   </g>
 
-  <line x1="328" y1="48" x2="384" y2="48" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="328" y1="48" x2="384" y2="48" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="357" y="40.5" font-size="9.4" font-weight="500" fill="{edge_color}" text-anchor="middle">Invariants</text>
 ''')
 
     # =========================================================================
     # 5. STEP 4: Agentic Directed Fuzzing (x=686..956, y=14..246, center x=821)
-    #    4a schematic: C Seed Code Block
+    #    4a schematic: Synthesized Seed Code Block
     #    4b schematic: 8-tooth Compiler Gear + Deterministic Verdict Check
     #    4c schematic: Branch Flip Mutation Motif
     # =========================================================================
@@ -283,7 +296,7 @@ def generate_svg():
   <!-- Step 4: Agentic Directed Fuzzing Container -->
   <g>
     <rect x="686" y="14" width="270" height="232" rx="8" fill="{stage_tint}" stroke="{dashed_stroke}" stroke-width="1.25" stroke-dasharray="5,3.5"/>
-    <text x="821" y="234" font-size="11" font-weight="700" fill="#0F172A" text-anchor="middle">Agentic Directed Fuzzing</text>
+    <text x="821" y="234" font-size="11" font-weight="700" fill="#1C1917" text-anchor="middle">Agentic Directed Fuzzing</text>
   </g>
 
   <!-- Top Card: Targeted Seed Synthesis (x=697..945, y=27..69) -->
@@ -293,11 +306,11 @@ def generate_svg():
     <line x1="42" y1="0" x2="42" y2="42" stroke="{llm_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="248" height="42" rx="4" fill="none" stroke="{llm_card_stroke}" stroke-width="1.2"/>
     <!-- Mini-schematic: Synthesized Seed Code Snippet -->
-    <rect x="8" y="8" width="26" height="26" rx="2" fill="#FFFFFF" stroke="#3B5998" stroke-width="1.1"/>
-    <line x1="12" y1="14" x2="24" y2="14" stroke="#64748B" stroke-width="1.2"/>
-    <line x1="15" y1="19.5" x2="30" y2="19.5" stroke="#2563EB" stroke-width="1.4"/>
-    <line x1="15" y1="25" x2="27" y2="25" stroke="#2563EB" stroke-width="1.4"/>
-    <line x1="12" y1="29.5" x2="19" y2="29.5" stroke="#64748B" stroke-width="1.2"/>
+    <rect x="8" y="8" width="26" height="26" rx="2" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.1"/>
+    <line x1="12" y1="14" x2="24" y2="14" stroke="#78716C" stroke-width="1.2"/>
+    <line x1="15" y1="19.5" x2="30" y2="19.5" stroke="{accent_amber}" stroke-width="1.4"/>
+    <line x1="15" y1="25" x2="27" y2="25" stroke="{accent_amber}" stroke-width="1.4"/>
+    <line x1="12" y1="29.5" x2="19" y2="29.5" stroke="#78716C" stroke-width="1.2"/>
 
     <text x="136" y="17.5" font-size="10.6" font-weight="700" fill="{text_color}" text-anchor="middle">Targeted Seed Synthesis</text>
     <text x="136" y="31.5" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Generator Agent</text>
@@ -308,7 +321,7 @@ def generate_svg():
   <g transform="translate(697, 96)">
     <rect x="0" y="0" width="248" height="38" rx="4" fill="{exec_fill}"/>
     <path d="M 4 0 L 42 0 L 42 38 L 4 38 Q 0 38 0 34 L 0 4 Q 0 0 4 0 Z" fill="{exec_well}"/>
-    <line x1="42" y1="0" x2="42" y2="38" stroke="#CBD5E1" stroke-width="1"/>
+    <line x1="42" y1="0" x2="42" y2="38" stroke="#D6D3D1" stroke-width="1"/>
     <rect x="0" y="0" width="248" height="38" rx="4" fill="none" stroke="{exec_stroke}" stroke-width="1.25"/>
     <!-- Mini-schematic: 8-tooth Compiler Gear + Binary Verdict Check -->
     {gear_markup}
@@ -324,13 +337,13 @@ def generate_svg():
     <line x1="42" y1="0" x2="42" y2="42" stroke="{llm_well_div}" stroke-width="1"/>
     <rect x="0" y="0" width="248" height="42" rx="4" fill="none" stroke="{llm_card_stroke}" stroke-width="1.2"/>
     <!-- Mini-schematic: Branch Flip / Guided Mutation Path -->
-    <circle cx="11.5" cy="21" r="2.5" fill="#1E3A8A"/>
-    <path d="M 14 21 L 20.5 21 L 31 11.5" fill="none" stroke="#94A3B8" stroke-width="1.15" stroke-dasharray="2,1.5"/>
-    <path d="M 20.5 21 L 31 30.5" fill="none" stroke="#2563EB" stroke-width="1.5"/>
-    <circle cx="32" cy="11" r="2.2" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1"/>
-    <circle cx="32" cy="31" r="2.6" fill="#2563EB"/>
-    <path d="M 27.5 15.5 A 7.5 7.5 0 0 1 27.5 25.5" fill="none" stroke="#2563EB" stroke-width="1.15"/>
-    <polyline points="25.7,24.2 27.6,26.1 29.3,23.9" fill="none" stroke="#2563EB" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="11.5" cy="21" r="2.5" fill="{accent_dark}"/>
+    <path d="M 14 21 L 20.5 21 L 31 11.5" fill="none" stroke="#A8A29E" stroke-width="1.15" stroke-dasharray="2,1.5"/>
+    <path d="M 20.5 21 L 31 30.5" fill="none" stroke="{accent_amber}" stroke-width="1.5"/>
+    <circle cx="32" cy="11" r="2.2" fill="#FFFFFF" stroke="#A8A29E" stroke-width="1"/>
+    <circle cx="32" cy="31" r="2.6" fill="{accent_amber}"/>
+    <path d="M 27.5 15.5 A 7.5 7.5 0 0 1 27.5 25.5" fill="none" stroke="{accent_amber}" stroke-width="1.15"/>
+    <polyline points="25.7,24.2 27.6,26.1 29.3,23.9" fill="none" stroke="{accent_amber}" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"/>
 
     <text x="136" y="17.5" font-size="10.6" font-weight="700" fill="{text_color}" text-anchor="middle">Guided Seed Mutation</text>
     <text x="136" y="31.5" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Feedback Agent</text>
@@ -338,28 +351,28 @@ def generate_svg():
   </g>
 
   <!-- Arrows entering Step 4 -->
-  <line x1="628" y1="48" x2="695" y2="48" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="628" y1="48" x2="695" y2="48" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="657" y="40.5" font-size="9.4" font-weight="500" fill="{edge_color}" text-anchor="middle">Invariants</text>
 
-  <line x1="628" y1="115" x2="695" y2="115" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="628" y1="115" x2="695" y2="115" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="657" y="107.5" font-size="9.4" font-weight="500" fill="{edge_color}" text-anchor="middle">Checkers</text>
 
   <!-- Internal Fuzzing Flow -->
-  <line x1="821" y1="69" x2="821" y2="94" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="821" y1="69" x2="821" y2="94" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="828" y="85" font-size="9.4" font-weight="500" fill="{edge_color}">Seeds</text>
 
-  <line x1="781" y1="134" x2="781" y2="159" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="781" y1="134" x2="781" y2="159" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="774" y="150" font-size="9.2" font-weight="500" fill="{edge_color}" text-anchor="end">Branch Traces</text>
 
-  <line x1="861" y1="161" x2="861" y2="136" stroke="#2563EB" stroke-width="1.25" marker-end="url(#arr-indigo)"/>
-  <text x="868" y="150" font-size="9.2" font-weight="600" fill="#1D4ED8">Mutated Seeds</text>
+  <line x1="861" y1="161" x2="861" y2="136" stroke="#B45309" stroke-width="1.25" marker-end="url(#arr-amber)"/>
+  <text x="868" y="150" font-size="9.2" font-weight="600" fill="#B45309">Mutated Seeds</text>
 ''')
 
     # =========================================================================
     # 6. BOTTOM CONNECTOR: Call Graph & Mapped Branches (Step 2 -> Step 4)
     # =========================================================================
     svg.append(f'''
-  <path d="M 211 246 L 211 268 L 821 268 L 821 248" fill="none" stroke="#1E293B" stroke-width="1.2" marker-end="url(#arr)"/>
+  <path d="M 211 246 L 211 268 L 821 268 L 821 248" fill="none" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
   <text x="516" y="262" font-size="9.5" font-weight="500" fill="{edge_color}" text-anchor="middle">Call Graph &amp; Mapped Branches</text>
 ''')
 
