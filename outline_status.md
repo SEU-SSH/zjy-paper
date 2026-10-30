@@ -26,8 +26,8 @@
 - [不 ready] 1.5 Summary of Results
 - [不 ready] 1.6 Contributions (Four Disjoint Contributions)
 
-### 2. Background and Motivation
-- [不 ready] Section 2 整体内容已清空（仅保留章节标题），等待后续重构
+### 2. Motivation
+- [ready] **Section 2 Motivation** (已精校锁定：2.1 编译器防御跨阶段机制、2.2 单一案例 GCC PR 125079 逻辑透析与代码块高亮排版、2.3 现有方法局限与破局要求；符合 plain writing 规范与导师意见)
 
 ### 3. Design of DeFuzz (System Overview & Methodology)
 - [ready] **3.0 Section 3 Overview & Architecture** (第三章概览正文与系统架构总图，已精校锁定，明确四步核心流程)
