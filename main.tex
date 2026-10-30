@@ -62,7 +62,36 @@
 }
 \newcommand{\tbd}[1]{{\color{red}\textbf{[TBD:~#1]}}}
 
-\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,frame=single,xleftmargin=2pt}
+\definecolor{codekw}{RGB}{0,51,179}
+\definecolor{codecom}{RGB}{34,139,34}
+\definecolor{codestr}{RGB}{163,21,21}
+\definecolor{codebg}{RGB}{250,251,253}
+\definecolor{codeframe}{RGB}{180,186,196}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{codekw}\bfseries,
+  commentstyle=\color{codecom}\itshape,
+  stringstyle=\color{codestr},
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{codeframe},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  xleftmargin=12pt,
+  framexleftmargin=10pt,
+  framexrightmargin=2pt,
+  framesep=3pt,
+  aboveskip=6pt,
+  belowskip=4pt,
+  belowcaptionskip=4pt,
+  captionpos=b,
+  showstringspaces=false,
+  breaklines=true,
+  columns=fullflexible,
+  frame=single,
+  morekeywords={size_t,uintptr_t}
+}
 
 \makeatletter
 \def\abstract{\normalfont\@IEEEabskeysecsize\textbf{Abstract}---\relax\bfseries}
@@ -94,11 +123,11 @@ In this paper, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agenti
 
 Compilers deploy a wide range of compiler-instrumented defenses to harden software against security threats, such as memory corruption, control-flow hijacking, and sensitive data leakage. During compilation, these defenses insert runtime bounds checks, enforce stack layout rules, or clear registers to block exploit primitives. However, implementing these defenses accurately inside production compilers like GCC and LLVM is difficult. Defense code must interact with complex optimization passes and translate abstract protection rules into machine instructions across diverse target ISAs. This translation relies on strict assumptions about object bounds, instruction semantics, register conventions, and stack frame layouts. When the implementation of a defense mechanism fails to match these ISA or optimization assumptions, its security protection breaks from within.
 
-When a defense implementation goes wrong, it often causes \textbf{silent defense failures}: the compiler produces a working binary without any warnings or crashes, yet the security protection is quietly weakened or broken. Because the compiled program still runs normally on benign inputs, standard functional tests pass completely, leaving the software exposed to attack. For example, in \textbf{CVE-2023-4039}, GCC on AArch64 placed the saved frame pointer and return address at the bottom of the fixed stack frame, below the stack canary. When a function used \texttt{alloca} or a variable-length array, GCC allocated that dynamic buffer at a lower stack address right below the saved return address. An upward buffer overflow from the dynamic region could then overwrite the saved return address without ever touching the canary.
+When a defense implementation goes wrong, it often causes \textbf{silent defense failures}: the compiler produces a working binary without any warnings or crashes, yet the security protection is quietly weakened or broken. Because the compiled program still runs normally on benign inputs, standard functional tests pass completely, leaving the software exposed to attack. For example, in \textbf{CVE-2023-4039}~\cite{cve20234039}, GCC on AArch64 placed the saved frame pointer and return address at the bottom of the fixed stack frame, below the stack canary. When a function used \texttt{alloca} or a variable-length array, GCC allocated that dynamic buffer at a lower stack address right below the saved return address. An upward buffer overflow from the dynamic region could then overwrite the saved return address without ever touching the canary.
 
-Existing compiler testing approaches fail to catch such silent bugs due to two fundamental barriers in prior work. The first barrier of existing fuzzers is the \textbf{oracle gap}. Widely used compiler fuzzers (e.g., Csmith~\cite{yang2011csmith} and YARPGen~\cite{livinskii2020yarpgen}) check for compiler crashes or output mismatches across optimization levels. Because a binary with a broken defense still produces correct outputs on benign inputs, crash and differential oracles remain blind when a defense is weakened or broken. The second barrier in prior tools is locating defense-governing compiler branches and satisfying their triggering conditions. Reaching general compiler branches is straightforward, but existing fuzzers cannot tell which branches inside millions of lines of compiler code control a defense. Even after reaching a defense branch, exposing a silent failure requires satisfying defense-specific semantic conditions, such as opaque object bounds or cross-pass length propagation, rather than generic control-flow or data-flow coverage. For instance, in a GCC bug we uncovered (PR~125079), triggering silent \texttt{\_FORTIFY\_SOURCE} relaxation in the \texttt{strlen} pass requires pairing \texttt{\_\_strcat\_chk} on an unknown-length buffer with a subsequent \texttt{strlen} call. Random mutators rarely synthesize such coupled defense semantics. Meanwhile, building static analyzers demands heavy manual effort from experts to model defense rules across compiler passes and ISAs, while unconstrained LLM agents suffer from severe hallucinations and false bug reports.
+Existing compiler testing approaches fail to catch such silent bugs due to two fundamental barriers in prior work. The first barrier of existing fuzzers is the \textbf{oracle gap}. Widely used compiler fuzzers (e.g., Csmith~\cite{yang2011csmith} and YARPGen~\cite{livinskii2020yarpgen}) check for compiler crashes or output mismatches across optimization levels. Because a binary with a broken defense still produces correct outputs on benign inputs, crash and differential oracles remain blind when a defense is weakened or broken. The second barrier in prior tools is locating defense-related compiler branches and satisfying their triggering conditions. Traditional directed fuzzers can reach given target branches, but they cannot tell which branches inside millions of lines of compiler code control a defense. Even after reaching a defense branch, exposing a silent failure requires satisfying defense-specific semantic conditions, such as opaque object bounds or cross-pass length propagation, rather than generic control-flow or data-flow coverage. For instance, in a GCC bug we uncovered (PR~125079~\cite{gccpr125079}), triggering silent \texttt{\_FORTIFY\_SOURCE} relaxation in the \texttt{strlen} pass requires pairing \texttt{\_\_strcat\_chk(dst, src, objsize)} on an unknown-length buffer with a subsequent \texttt{strlen(dst)} call that triggers the rewrite into \texttt{\_\_stpcpy\_chk}. Random mutators rarely synthesize such coupled defense semantics. Meanwhile, building static analyzers demands heavy manual effort from experts to craft custom rules for each defense mechanism and target ISA, while unconstrained LLM agents suffer from severe hallucinations and false bug reports.
 
-These barriers raise a central question: how can we systematically detect silent defense failures when neither the buggy compiler nor direct LLM judgment provides a reliable oracle? To answer this question, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agentic framework for testing compiler-instrumented defenses. Our core insight is that although defense implementations vary across backends, their intended security guarantees follow target-independent \emph{security invariants}. \textsc{DeFuzz} translates these invariants into programmatic bug oracles implemented as ISA-specific static and dynamic checkers, closing the oracle gap. Because LLM-assisted translation can introduce errors, \textsc{DeFuzz} combines formal validation in oracle construction with offline sampling audits to ensure that the checkers faithfully enforce each invariant. To trigger defense-critical logic, \textsc{DeFuzz} maps each invariant to its governing compiler branches and guides LLM agents to synthesize inputs that satisfy both branch conditions and invariant preconditions. All bug verdicts remain strictly with deterministic checkers, avoiding both the blind spots of random mutators and LLM adjudication hallucinations.
+These barriers raise a central question: how can we systematically detect silent defense failures when neither the buggy compiler nor direct LLM judgment provides a reliable oracle? To answer this question, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agentic framework for testing compiler-instrumented defenses. Our core insight is that although defense implementations vary across backends, their intended security guarantees follow target-independent \emph{security invariants}. \textsc{DeFuzz} translates these invariants into programmatic bug oracles implemented as ISA-specific static and dynamic checkers, closing the oracle gap. Because LLM-assisted translation can introduce errors, \textsc{DeFuzz} combines formal validation in oracle construction with offline sampling audits to ensure that the checkers faithfully enforce each invariant. To trigger defense-critical logic, \textsc{DeFuzz} maps each invariant to its corresponding defense-related compiler branches and guides LLM agents to synthesize inputs that satisfy both branch conditions and invariant preconditions. All bug verdicts remain strictly with deterministic checkers, avoiding both the blind spots of random mutators and LLM adjudication hallucinations.
 
 Building \textsc{DeFuzz} requires solving three main challenges. The first challenge is establishing reliable security invariants: because the compiler itself has bugs, we cannot trust it. Relying on a compiler's own behavior or implementation code as the ground truth creates circular self-validation. Our key idea is to separate intended security contracts from buggy compiler implementations by anchoring invariants in external ISA manuals, documented design assertions, and confirmed security patches, while abstracting past fixes into transferable failure patterns across defenses. The second challenge is checking these invariants with high accuracy across diverse ISAs, where distinct registers and stack layouts cause direct LLM judgment to hallucinate. \textsc{DeFuzz} addresses this by translating each invariant into ISA-specific static and dynamic checkers backed by formal validation. Dual static-dynamic cross-checking and differential baseline builds further verify each target, ensuring reliable verdicts with \textbf{zero LLM involvement in bug adjudication}. The final challenge is steering test generation to both locate defense branches and satisfy their semantic preconditions without being stripped by early optimizations. \textsc{DeFuzz} maps each invariant to its controlling compiler passes and branches via call-graph and AST analysis, inserting compile-time probes to trace branch execution. Guided by branch traces and invariant preconditions, LLM agents iteratively synthesize and mutate seeds to expose deep defense flaws.
 
@@ -110,11 +139,49 @@ In answering this central question, this paper makes the following contributions
 \begin{itemize}
   \item \textbf{Automated Invariant Extraction:} We decouple security contracts from buggy compiler outputs by extracting security invariants from ISA specifications, design assertions, and historical bug fixes, transferring failure patterns across defenses.
   \item \textbf{Validated Translation into Multi-ISA Programmatic Oracles:} We translate security invariants into formally validated static and dynamic checkers across target ISAs, verifying compiled code with high accuracy and zero LLM involvement in bug adjudication.
-  \item \textbf{Call-Graph-Guided Agentic Fuzzing:} We map invariants to defense-governing compiler passes and branches, and guide specialized LLM agents with compile-time branch traces to synthesize seeds that satisfy defense triggering conditions.
+  \item \textbf{Call-Graph-Guided Agentic Fuzzing:} We map invariants to defense-related compiler passes and branches, and guide specialized LLM agents with compile-time branch traces to synthesize seeds that satisfy defense triggering conditions.
   \item \textbf{New Silent Defense Bug Discovery:} We evaluate \textsc{DeFuzz} on GCC and LLVM across multiple ISAs and discover \tbd{N} previously unknown silent failures in compiler-instrumented defenses, with \tbd{M} confirmed upstream.
 \end{itemize}
 
-\section{Background and Motivation}\label{sec:bg}
+\section{Motivation}\label{sec:bg}\label{sec:motivation}
+
+\subsection{Compiler-Instrumented Defenses}\label{sec:bg-defenses}
+
+Compilers deploy automated defenses to protect software against security threats. Unlike standalone binary rewriters, compiler-instrumented defenses span both middle-end and backend stages of compilation. Middle-end passes analyze object bounds and control flow to insert or optimize high-level checks on the intermediate representation (IR). Backend passes enforce low-level protections by controlling stack frame layouts, register assignments, and machine instructions across target ISAs.
+
+Preserving security guarantees across this multi-stage pipeline is error-prone. A middle-end optimization can rewrite a defense check under flawed size assumptions, or a backend pass can misplace a stack guard slot. When such bugs occur, the compiler neither crashes nor emits warnings. Instead, it produces a working binary whose security protection is quietly weakened or broken.
+
+\subsection{Motivating Example}\label{sec:motivating-example}
+
+Listing~\ref{lst:motivating-fortify} shows a silent defense failure in GCC's \texttt{\_FORTIFY\_SOURCE} implementation (PR~125079~\cite{gccpr125079}) discovered by \textsc{DeFuzz}. This bug had remained hidden for 14 years before upstream maintainers fixed it in the GCC mainline. Under \texttt{-D\_FORTIFY\_SOURCE=2}, GCC replaces unsafe string calls such as \texttt{strcat(dst, src)} on the 64-byte buffer \texttt{dst} with the bounds-checked builtin \texttt{\_\_strcat\_chk(dst, src, 64)}. At runtime, this builtin checks that the existing string in \texttt{dst} plus the appended \texttt{src} fits within 64 bytes, aborting execution on overflow.
+
+\par\vspace{6pt}\noindent\begin{minipage}{\columnwidth}
+\begin{lstlisting}[language=C, caption={Silent \texttt{\_FORTIFY\_SOURCE} relaxation in GCC (PR~125079).}, label={lst:motivating-fortify}]
+char dst[64];
+
+size_t append_and_measure(const char *src) {
+  init_opaque(dst); // hides prefix len k (k = 8)
+
+  // 1. Fortified call: __strcat_chk(dst, src, 64)
+  strcat(dst, src);
+
+  // 2. get_string_length() rewrites call to:
+  //    __stpcpy_chk(dst + k, src, 64)
+  //    BUG: bound stays 64 instead of 64 - k!
+  return strlen(dst);
+}
+\end{lstlisting}
+\end{minipage}\par\vspace{6pt}
+
+In Listing~\ref{lst:motivating-fortify}, \texttt{init\_opaque(dst)} initializes the 64-byte buffer \texttt{dst} with an 8-byte string ($k = 8$) whose length is unknown at compile time, followed by \texttt{strcat(dst, src)} and \texttt{strlen(dst)}. Executing \texttt{strcat(dst, src)} and \texttt{strlen(dst)} naively would scan \texttt{dst} twice: once to find the end of the prefix, and again to measure the combined string. To avoid this redundant scan, GCC's \texttt{tree-ssa-strlen} pass invokes \texttt{get\_string\_length()} in \texttt{tree-ssa-strlen.cc} when it processes the trailing \texttt{strlen(dst)} call. Inside \texttt{get\_string\_length()}, the \texttt{BUILT\_IN\_STRCAT\_CHK} branch rewrites the earlier \texttt{\_\_strcat\_chk(dst, src, 64)} into \texttt{\_\_stpcpy\_chk(dst + k, src, 64)}, which copies \texttt{src} to \texttt{dst + k} and returns the end pointer to compute \texttt{strlen(dst)} directly. However, while GCC advances the destination pointer by $k$ bytes, it fails to subtract $k$ from the size bound, passing 64 instead of $64 - k = 56$. As a result, the runtime check still permits writing 64 bytes starting from \texttt{dst + 8}, allowing an 8-byte buffer overflow without triggering an abort.
+
+\subsection{Limitations of Existing Approaches}\label{sec:limitations}
+
+Existing compiler testing tools fail to detect this vulnerability due to two fundamental barriers in prior work. The first barrier of existing fuzzers is the \textbf{oracle gap}. Widely used compiler fuzzers such as Csmith~\cite{yang2011csmith}, YARPGen~\cite{livinskii2020yarpgen}, and EMI~\cite{le2014emi} only check whether the compiler crashes or whether compiled binaries produce consistent outputs on benign inputs. In Listing~\ref{lst:motivating-fortify}, GCC compiles the code cleanly, and any benign string \texttt{src} produces the exact same return value across all optimization levels. Because crash and differential testing do not check whether the binary enforces the reduced bound ($64 - k$), they remain blind when the defense is weakened.
+
+The second barrier in prior tools is locating defense-related compiler branches and satisfying their triggering conditions. Traditional directed fuzzers can steer execution toward given target branches, but they cannot tell which branches inside millions of lines of compiler source code control a defense, such as the \texttt{BUILT\_IN\_STRCAT\_CHK} branch in \texttt{get\_string\_length()}. Even after reaching that branch, triggering the bug in Listing~\ref{lst:motivating-fortify} requires three coupled conditions on \texttt{dst}: the buffer must have a known allocation size so GCC emits \texttt{\_\_strcat\_chk(dst, src, 64)}, its prefix length $k$ must remain unknown at the append site so folding is deferred, and a subsequent \texttt{strlen(dst)} call must query the length to trigger the rewrite into \texttt{\_\_stpcpy\_chk(dst + k, src, 64)}. Random mutators rarely chain an opaque initialization, a fortified append, and a subsequent \texttt{strlen} call on the same buffer.
+
+Beyond fuzzing, static analysis requires heavy manual effort from human experts to craft custom rules for each defense mechanism and target ISA. Meanwhile, using LLMs to audit compiler source code end-to-end causes severe hallucinations and false bug reports. To overcome these limitations, a testing framework must locate defense-related compiler branches and guide seed generation toward them. The generated seeds must satisfy the branch conditions so the compiler emits the defense code in the binary. The framework must then run the compiled binary with defense-triggering inputs and use deterministic oracles to check whether the protection is silently weakened or broken.
 
 \section{Design of DeFuzz}\label{sec:design}\label{sec:overview}
 
@@ -207,7 +274,7 @@ This three-level mapping links abstract invariant preconditions directly to conc
 
 \subsubsection{Compile-Time Branch Probing (\texttt{GCC\_INST})}
 Once the Level-3 decision branches are mapped, the coding agent instruments the compiler source code by inserting lightweight logging probes:
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[language=C, numbers=none, xleftmargin=2pt, framexleftmargin=2pt]
 DEFUZZ_LOG("SP#a3f2:hit", slot);
 \end{lstlisting}
 Here, \texttt{"SP\#a3f2"} is a unique identifier (UID) that encodes the defense mechanism, source file, function, and branch index. These probes run during compilation passes, recording which defense branches were taken and logging internal values such as stack slot offsets. Because the probes only record compiler-internal states at build time, they never alter the generated machine code or add runtime overhead to the emitted target binary.
@@ -244,16 +311,18 @@ Static checkers inspect unexecuted compiler outputs, including assembly listings
 
 Consider stack canary protection in GCC as an example. When checking a canary at function return, the compiler loads the reference canary into a scratch register and compares it against the stack guard slot. In vulnerable compiler versions, the compiler forgot to clear this scratch register before returning to the caller. This flaw allowed the secret canary value to leak through caller-accessible registers, enabling attackers to read the canary and bypass stack protection entirely.
 
-\noindent\begin{minipage}{\columnwidth}
+\par\vspace{6pt}\noindent\begin{minipage}{\columnwidth}
 \begin{lstlisting}[language=C, caption={Static/inline checker for canary register leakage.}, label={lst:static-checker}]
 // Scan registers right after return
 void audit_canary_leak(uintptr_t canary) {
   uintptr_t r0, r1, r2 /* ... */;
+
   asm volatile(
-    "mov %%rax, %0; mov %%rbx, %1; mov %%rcx, %2\n\t"
+    "mov %%rax, %0; mov %%rbx, %1; mov %%rcx, %2"
     // ... (for all target ISA registers)
     : "=r"(r0), "=r"(r1), "=r"(r2)
   );
+
   // FAIL if any register retains canary
   if (r0 == canary || r1 == canary /* ... */)
     emit_verdict(FAIL, "Canary leaked");
@@ -261,28 +330,26 @@ void audit_canary_leak(uintptr_t canary) {
     emit_verdict(PASS, "Canary cleared");
 }
 \end{lstlisting}
-\end{minipage}
+\end{minipage}\par\vspace{6pt}
 
 Listing~\ref{lst:static-checker} shows how DeFuzz detects this flaw. The checker audits the emitted assembly and executes an inline probe right after the epilogue, scanning all general-purpose registers for the canary secret. If any register still holds the canary value, the checker records a \textsc{Fail} verdict. Otherwise, it records a \textsc{Pass}.
 
 \paragraph{Dynamic Checkers (Runtime Sandbox Verification)}
 Dynamic checkers execute compiled test binaries inside an isolated sandbox with dedicated signal handlers and memory fault traps. They evaluate runtime security guarantees that static layout analysis cannot reliably verify.
 
-As an example, consider \texttt{\_FORTIFY\_SOURCE} in GCC (PR~125079). Under this defense, \texttt{strcat} is rewritten into the bounds-checked \texttt{\_\_strcat\_chk(dst, src, objsize)}. When \texttt{dst} has an unknown initial string length and is later passed to \texttt{strlen(dst)}, GCC's \texttt{tree-ssa-strlen} pass (\texttt{get\_string\_length}) optimizes \texttt{\_\_strcat\_chk} into \texttt{\_\_stpcpy\_chk(dst + strlen(dst), src, objsize)}. Although GCC advances the destination pointer by \texttt{strlen(dst)} bytes, it forgets to subtract \texttt{strlen(dst)} from \texttt{objsize}. As a result, the runtime check still allows writing a full \texttt{objsize} bytes starting from the shifted pointer, silently permitting an overflow of up to \texttt{strlen(dst)} bytes past the end of \texttt{dst}.
+Recall our motivating example in GCC (PR~125079~\cite{gccpr125079}, \S\ref{sec:motivating-example}), where \texttt{tree-ssa-strlen} rewrites \texttt{\_\_strcat\_chk(dst, src, 64)} into \texttt{\_\_stpcpy\_chk(dst + k, src, 64)} without subtracting the prefix length $k$ from the remaining bound. Listing~\ref{lst:dynamic-checker} shows the dynamic verification harness for this invariant. After initializing a 64-byte buffer with an 8-byte prefix via an opaque helper, the test appends a 60-byte string via \texttt{\_\_strcat\_chk(buf, src60, 64)} followed by \texttt{strlen(buf)}. Because $8 + 60$ exceeds the 64-byte buffer, a working defense must abort with \texttt{SIGABRT}, which the harness catches to record \textsc{Pass}. Because GCC leaves the bound at 64 instead of $64 - 8 = 56$, the 60-byte write finishes without aborting and reaches the failure sentinel, flagging a deterministic \textsc{Fail}.
 
-Listing~\ref{lst:dynamic-checker} shows the dynamic verification harness for this invariant. After initializing a 64-byte buffer with an 8-byte prefix via an opaque helper, the test appends a 60-byte string via \texttt{\_\_strcat\_chk} followed by \texttt{strlen}. Because $8 + 60$ exceeds the 64-byte buffer, a working defense must abort with \texttt{SIGABRT}, which the harness catches to record \textsc{Pass}. Because GCC leaves the bound at 64 instead of $64 - 8 = 56$, the 60-byte write finishes without aborting and reaches the failure sentinel, flagging a deterministic \textsc{Fail}.
-
-\noindent\begin{minipage}{\columnwidth}
+\par\vspace{6pt}\noindent\begin{minipage}{\columnwidth}
 \begin{lstlisting}[language=C, caption={Dynamic checker for \texttt{\_FORTIFY\_SOURCE} bounds.}, label={lst:dynamic-checker}]
 void test_fortify_strcat(const char *src60) {
   char buf[64];
-  init_opaque_8bytes(buf); // strlen(buf)==8, unknown to pass
-  setup_sigabrt_handler(); // Trap on fortify abort
+  init_opaque_8bytes(buf); // opaque strlen == 8
+  setup_sigabrt_handler(); // trap fortify abort
 
   // Rewritten to __stpcpy_chk(buf + 8, src60, 64)
-  // Missing bound subtraction allows 8-byte overflow
+  // Missing subtraction allows 8-byte overflow
   __builtin___strcat_chk(buf, src60, sizeof(buf));
-  sink = __builtin_strlen(buf); // Triggers strlen fold
+  sink = __builtin_strlen(buf); // triggers fold
 
   emit_verdict(FAIL, "Overflow unchecked");
 }
@@ -292,7 +359,7 @@ void sigabrt_handler(int sig) {
   _exit(0);
 }
 \end{lstlisting}
-\end{minipage}
+\end{minipage}\par\vspace{6pt}
 
 \paragraph{Redundant Cross-Validation}
 When an invariant can be observed both statically and dynamically, DeFuzz generates dual checkers to cross-validate results. For example, the static checker inspects the compiler IR and assembly to verify that \texttt{\_\_stpcpy\_chk} receives a decremented size argument (\texttt{objsize - strlen(dst)}). Meanwhile, the dynamic checker confirms that an overflowing append triggers a runtime abort. This dual design prevents false negatives where the compiler emits defense calls with stale or permissive bounds. Every reported bug represents a deterministic, reproducible compiler defense failure without human or LLM bias.
