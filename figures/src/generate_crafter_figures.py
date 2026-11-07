@@ -9,80 +9,138 @@ import os
 import subprocess
 
 def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
-    # Target single column: compact 5 ISAs (rows) x 7 Defense Mechanisms (columns)
+    # Target single column: compact 5 ISAs (rows) x 9 single Defense Mechanisms (columns)
     w = 520
     h = 232
     
     svg = []
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
     
-    # Colors
-    C_HIST = "#FFF8E1"   # Historical
-    C_REP  = "#E3F1E7"   # Reported
-    C_CONF = "#228833"   # Confirmed
-    C_NONE = "#FFFFFF"   # Empty (white, no gray fill)
+    # Fill colors (DeFuzz status: Confirmed / Reported / None)
+    C_REP  = "#E3F1E7"   # Reported (light green fill)
+    C_CONF = "#228833"   # Confirmed (dark green fill)
+    C_NONE = "#FFFFFF"   # Empty (white fill)
     
-    # Horizontal: Defense Mechanisms (7 columns)
+    # Border color for Historical bugs (orthogonal soft coral-red frame, keeps interior fill intact)
+    B_HIST = "#E57373"   # Soft muted red border for cells with prior historical bugs
+    
+    # Horizontal: 9 Single Defense Mechanisms (each column is strictly one mechanism)
     cols = [
         ("Stack", "Canary"),
         ("FORTIFY", "SOURCE"),
         ("Stack", "Clash"),
-        ("IBT /", "Zicfilp"),
-        ("SHSTK /", "PAC"),
+        ("IBT", ""),
+        ("Shadow", "Stack"),
+        ("PAC", ""),
         ("Zero-", "Regs"),
-        ("ASan /", "SafeStack"),
+        ("ASan", ""),
+        ("Safe-", "Stack"),
     ]
     
-    # Vertical: ISAs (5 rows)
+    # Vertical: ISAs (5 rows) -> each cell is (fill_color, has_historical_red_border)
+    # Updated to match the 2026-11-06 bug ledger (126 discovered, 34 confirmed / 11 fixed)
     rows = [
-        ("x86-64",    [C_REP,  C_CONF, C_REP,  C_REP,  C_HIST, C_CONF, C_CONF]),
-        ("AArch64",   [C_HIST, C_CONF, C_HIST, C_CONF, C_CONF, C_REP,  C_CONF]),
-        ("RISC-V",    [C_CONF, C_CONF, C_CONF, C_CONF, C_REP,  C_REP,  C_CONF]),
-        ("LoongArch", [C_CONF, C_CONF, C_REP,  C_NONE, C_NONE, C_REP,  C_REP]),
-        ("MIPS",      [C_REP,  C_CONF, C_NONE, C_NONE, C_NONE, C_REP,  C_CONF]),
+        ("x86-64", [
+            (C_CONF, False), # Stack Canary: DF-L-007, DF-L-036 (confirmed)
+            (C_CONF, True),  # FORTIFY_SOURCE: DF-G-002 (fixed), DF-G-013 (confirmed) + Hist (PR 101836)
+            (C_REP,  True),  # Stack Clash: DF-G-014 (reported) + Hist (CVE-2017-1000364)
+            (C_CONF, True),  # IBT: DF-G-004 (confirmed), DF-G-043 (fixed), DF-L-001 (fixed) + Hist (#44527)
+            (C_CONF, True),  # Shadow Stack: DF-G-025 (fixed), DF-G-050 (fixed), DF-L-029 (confirmed) + Hist
+            (C_NONE, False), # PAC: N/A on x86-64
+            (C_CONF, True),  # Zero-Regs: DF-G-041, DF-L-009, DF-L-010 (confirmed) + Hist (PR 104666)
+            (C_REP,  False), # ASan: DF-L-011, DF-L-016, DF-L-017, DF-L-027, DF-L-028, DF-L-030 (reported)
+            (C_REP,  False), # SafeStack: DF-L-012, DF-L-033 (reported)
+        ]),
+        ("AArch64", [
+            (C_CONF, True),  # Stack Canary: DF-L-007, DF-L-036 (confirmed) + Hist (CVE-2023-4039, PR 96191)
+            (C_CONF, False), # FORTIFY_SOURCE: DF-G-002 (fixed), DF-G-013 (confirmed)
+            (C_REP,  True),  # Stack Clash: DF-L-031 (reported) + Hist (PR 91458)
+            (C_NONE, False), # IBT: x86/RISC-V specific
+            (C_REP,  False), # Shadow Stack: DF-G-027, DF-G-031 (reported)
+            (C_CONF, True),  # PAC: DF-G-028, DF-L-034, DF-L-035 (confirmed) + Hist (PR 93423 / PR 111703)
+            (C_CONF, False), # Zero-Regs: DF-G-041, DF-L-009, DF-L-010 (confirmed)
+            (C_REP,  False), # ASan: DF-G-022, DF-L-011, DF-L-016, DF-L-017, DF-L-027, DF-L-030 (reported)
+            (C_CONF, False), # SafeStack: DF-L-026 (confirmed), DF-L-012, DF-L-033 (reported)
+        ]),
+        ("RISC-V", [
+            (C_CONF, False), # Stack Canary: DF-L-036 (confirmed), DF-G-030, DF-L-018 (reported)
+            (C_CONF, False), # FORTIFY_SOURCE: DF-G-002 (fixed), DF-G-013 (confirmed)
+            (C_CONF, False), # Stack Clash: DF-G-010 (fixed), DF-G-016 (reported)
+            (C_REP,  False), # IBT: DF-G-019 (reported)
+            (C_CONF, False), # Shadow Stack: DF-G-020, DF-G-029 (confirmed), DF-G-018 (reported)
+            (C_NONE, False), # PAC: N/A on RISC-V
+            (C_REP,  False), # Zero-Regs: DF-G-063 (ready)
+            (C_REP,  False), # ASan: DF-G-022, DF-L-016 (reported)
+            (C_NONE, False), # SafeStack: N/A on RISC-V
+        ]),
+        ("LoongArch", [
+            (C_CONF, False), # Stack Canary: DF-G-001 / PR 125049 (fixed)
+            (C_CONF, False), # FORTIFY_SOURCE: DF-G-002 (fixed), DF-G-013 (confirmed)
+            (C_CONF, False), # Stack Clash: DF-G-015 / PR 128036 (confirmed)
+            (C_NONE, False), # IBT
+            (C_NONE, False), # Shadow Stack
+            (C_NONE, False), # PAC
+            (C_REP,  False), # Zero-Regs: generic LTO / middle-end
+            (C_REP,  False), # ASan: DF-G-022 (reported)
+            (C_NONE, False), # SafeStack
+        ]),
+        ("MIPS", [
+            (C_REP,  False), # Stack Canary: DF-G-001 / PR 125077 (reported)
+            (C_CONF, False), # FORTIFY_SOURCE: DF-G-002 (fixed), DF-G-013 (confirmed)
+            (C_NONE, False), # Stack Clash
+            (C_NONE, False), # IBT
+            (C_NONE, False), # Shadow Stack
+            (C_NONE, False), # PAC
+            (C_REP,  False), # Zero-Regs: generic LTO / middle-end
+            (C_REP,  False), # ASan: generic middle-end
+            (C_NONE, False), # SafeStack
+        ]),
     ]
     
-    start_x = 82
-    col_w = 56
+    start_x = 74
+    col_w = 44
     gap_x = 5
     
     start_y = 14
     row_h = 26
     gap_y = 5
     
-    # Draw Column Headers (2 lines for neatness)
+    # Draw Column Headers (1 or 2 lines centered cleanly)
     for j, (line1, line2) in enumerate(cols):
         cx = start_x + j * (col_w + gap_x) + col_w / 2
-        svg.append(f'<text x="{cx}" y="{start_y + 8}" fill="#374151" font-size="9.5" font-weight="600" text-anchor="middle">{line1}</text>')
-        svg.append(f'<text x="{cx}" y="{start_y + 19}" fill="#374151" font-size="9.5" font-weight="600" text-anchor="middle">{line2}</text>')
+        if line2:
+            svg.append(f'<text x="{cx}" y="{start_y + 8}" fill="#374151" font-size="8.8" font-weight="600" text-anchor="middle">{line1}</text>')
+            svg.append(f'<text x="{cx}" y="{start_y + 19}" fill="#374151" font-size="8.8" font-weight="600" text-anchor="middle">{line2}</text>')
+        else:
+            svg.append(f'<text x="{cx}" y="{start_y + 14}" fill="#374151" font-size="9.0" font-weight="600" text-anchor="middle">{line1}</text>')
             
     # Draw Matrix Rows (ISAs)
     y = start_y + 27
     for row_name, cells in rows:
         # Row Label (ISA)
-        svg.append(f'<text x="{start_x - 10}" y="{y + row_h/2 + 4}" fill="#1F2937" font-size="10.5" font-weight="600" text-anchor="end">{row_name}</text>')
+        svg.append(f'<text x="{start_x - 8}" y="{y + row_h/2 + 4}" fill="#1F2937" font-size="10.0" font-weight="600" text-anchor="end">{row_name}</text>')
         
         # Cells
-        for j, color in enumerate(cells):
+        for j, (fill_color, is_hist) in enumerate(cells):
             cx = start_x + j * (col_w + gap_x)
-            if color == C_CONF:
-                border_color, stroke_w = "#15803D", "1.4"
-            elif color == C_HIST:
-                border_color, stroke_w = "#F59E0B", "1.4"
-            elif color == C_REP:
-                border_color, stroke_w = "#86EFAC", "1.4"
+            if is_hist:
+                border_color, stroke_w = B_HIST, "1.35"
+            elif fill_color == C_CONF:
+                border_color, stroke_w = "#15803D", "1.0"
+            elif fill_color == C_REP:
+                border_color, stroke_w = "#86EFAC", "1.0"
             else:
                 border_color, stroke_w = "#E5E7EB", "1.0"
-            svg.append(f'<rect x="{cx}" y="{y}" width="{col_w}" height="{row_h}" rx="4" fill="{color}" stroke="{border_color}" stroke-width="{stroke_w}"/>')
+            svg.append(f'<rect x="{cx}" y="{y}" width="{col_w}" height="{row_h}" rx="4" fill="{fill_color}" stroke="{border_color}" stroke-width="{stroke_w}"/>')
             
         y += row_h + gap_y
 
-    # Legend at Bottom - 3 items only (no gray Unexplored box)
+    # Legend at Bottom: Historical is shown with hollow interior + soft red border
     legend_y = y + 10
     legend_items = [
-        ("Historical", C_HIST, "#F59E0B", "#92400E"),
-        ("Reported",   C_REP,  "#86EFAC", "#166534"),
-        ("Confirmed",  C_CONF, "#15803D", "#FFFFFF"),
+        ("Historical", "#FFFFFF", B_HIST,    "1.35", "#C53030"),
+        ("Reported",   C_REP,     "#86EFAC", "1.0",  "#166534"),
+        ("Confirmed",  C_CONF,    "#15803D", "1.0",  "#FFFFFF"),
     ]
     
     badge_w = 106
@@ -91,9 +149,9 @@ def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
     total_leg_w = len(legend_items) * badge_w + (len(legend_items) - 1) * badge_gap
     leg_start_x = start_x + (len(cols) * (col_w + gap_x) - gap_x - total_leg_w) / 2
     
-    for k, (label, bg, border, txt) in enumerate(legend_items):
+    for k, (label, bg, border, sw, txt) in enumerate(legend_items):
         bx = leg_start_x + k * (badge_w + badge_gap)
-        svg.append(f'<rect x="{bx}" y="{legend_y}" width="{badge_w}" height="{badge_h}" rx="4" fill="{bg}" stroke="{border}" stroke-width="1.2"/>')
+        svg.append(f'<rect x="{bx}" y="{legend_y}" width="{badge_w}" height="{badge_h}" rx="4" fill="{bg}" stroke="{border}" stroke-width="{sw}"/>')
         svg.append(f'<text x="{bx + badge_w/2}" y="{legend_y + 15}" fill="{txt}" font-size="10" font-weight="600" text-anchor="middle">{label}</text>')
         
     svg.append('</svg>')

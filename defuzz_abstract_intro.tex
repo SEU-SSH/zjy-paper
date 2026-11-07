@@ -1,0 +1,76 @@
+%% DeFuzz — Standalone Abstract & Introduction draft
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{pifont}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{figures/}}
+
+\newcommand{\incfig}[2]{%
+  \begin{figure}[t]\centering
+  \includegraphics[width=\columnwidth]{#1}%
+  \caption{#2}\label{fig:#1}
+  \end{figure}%
+}
+\newcommand{\tbd}[1]{{\color{red}\textbf{[TBD:~#1]}}}
+
+\makeatletter
+\def\abstract{\normalfont\@IEEEabskeysecsize\textbf{Abstract}---\relax\bfseries}
+% Keep inline citation numbers [1]--[4] resolved without printing a References section
+\AtBeginDocument{%
+  \bibcite{cve20234039}{1}%
+  \bibcite{yang2011csmith}{2}%
+  \bibcite{livinskii2020yarpgen}{3}%
+  \bibcite{gccpr125079}{4}%
+}
+\makeatother
+
+\begin{document}
+
+\title{DeFuzz: Invariant-Guided Agentic Testing\\of Compiler-Instrumented Defenses}
+
+\author{\IEEEauthorblockN{\mbox{}}\IEEEauthorblockA{\mbox{}}}
+
+\maketitle
+\thispagestyle{plain}
+\pagestyle{plain}
+
+\begin{abstract}
+Compiler-instrumented defenses (e.g., stack canaries, Control-Flow Integrity (CFI), and \texttt{\_FORTIFY\_SOURCE}) protect software against security threats, such as memory corruption, control-flow hijacking, and data leakage. However, these defenses can \textbf{fail silently}: the compiler produces a working binary without any warnings or crashes, yet the security protection is quietly weakened or broken. For example, in \textbf{CVE-2023-4039}, dynamic stack allocation allowed an overflow to bypass the GCC stack canary on AArch64. Existing compiler testing tools fail to detect such bugs. Conventional crash and differential testing only check whether a program produces correct outputs, leaving a fundamental \textbf{oracle gap} when a defense is silently weakened or broken.
+
+In this paper, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agentic framework for discovering silent failures in compiler-instrumented defenses. \textsc{DeFuzz} first extracts security invariants from compiler source code, Instruction Set Architecture (ISA) specifications, and historical bug fixes using a hybrid CoT and RAG pipeline. It then maps these invariants to compiler passes and decision branches, locating where defenses are implemented and controlled. To detect violations reliably, \textsc{DeFuzz} formalizes these invariants in a predicate IR and lowers them into programmatic bug oracles, implementing them as static and dynamic checkers across target ISAs. All bug verdicts are decided strictly by these checkers, with \textbf{zero LLM involvement in bug adjudication}. Guided by the mapped compiler locations, specialized LLM agents perform directed fuzzing to hit targeted defense branches, synthesizing and mutating seeds to trigger invariant violations under oracle evaluation. We evaluated \textsc{DeFuzz} on GCC and LLVM across multiple ISAs. \textsc{DeFuzz} discovered \textbf{126 previously unknown silent failures in compiler-instrumented defenses}, of which \textbf{34 have been confirmed upstream, including 11 fixed}. Some of these bugs were rated as high-severity vulnerabilities. These results show that \textsc{DeFuzz} effectively uncovers critical silent defense bugs that evade existing compiler testing techniques.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Compilers deploy a wide range of compiler-instrumented defenses to harden software against security threats, such as memory corruption, control-flow hijacking, and sensitive data leakage. During compilation, these defenses insert runtime bounds checks, enforce stack layout rules, or clear registers to block exploit primitives. However, implementing these defenses accurately inside production compilers like GCC and LLVM is difficult. Defense code must interact with complex optimization passes and translate abstract protection rules into machine instructions across diverse target ISAs. This translation relies on strict assumptions about object bounds, instruction semantics, register conventions, and stack frame layouts. When the implementation of a defense mechanism fails to match these ISA or optimization assumptions, its security protection breaks from within.
+
+When a defense implementation goes wrong, it often causes \textbf{silent defense failures}: the compiler produces a working binary without any warnings or crashes, yet the security protection is quietly weakened or broken. Because the compiled program still runs normally on benign inputs, standard functional tests pass completely, leaving the software exposed to attack. For example, in \textbf{CVE-2023-4039}~\cite{cve20234039}, GCC on AArch64 placed the saved frame pointer and return address at the bottom of the fixed stack frame, below the stack canary. When a function used \texttt{alloca} or a variable-length array, GCC allocated that dynamic buffer at a lower stack address right below the saved return address. An upward buffer overflow from the dynamic region could then overwrite the saved return address without ever touching the canary.
+
+Existing compiler testing approaches fail to catch such silent bugs due to two fundamental barriers in prior work. The first barrier of existing fuzzers is the \textbf{oracle gap}. Widely used compiler fuzzers (e.g., Csmith~\cite{yang2011csmith} and YARPGen~\cite{livinskii2020yarpgen}) check for compiler crashes or output mismatches across optimization levels. Because a binary with a broken defense still produces correct outputs on benign inputs, crash and differential oracles remain blind when a defense is weakened or broken. The second barrier in prior tools is locating defense-related compiler branches and satisfying their triggering conditions. Traditional directed fuzzers can reach given target branches, but they cannot tell which branches inside millions of lines of compiler code control a defense. Even after reaching a defense branch, exposing a silent failure requires satisfying defense-specific semantic conditions, such as opaque object bounds or cross-pass length propagation, rather than generic control-flow or data-flow coverage. For instance, in a GCC bug we uncovered (PR~125079~\cite{gccpr125079}), triggering silent \texttt{\_FORTIFY\_SOURCE} relaxation in the \texttt{strlen} pass requires pairing \texttt{\_\_strcat\_chk(dst, src, objsize)} on an unknown-length buffer with a subsequent \texttt{strlen(dst)} call that triggers the rewrite into \texttt{\_\_stpcpy\_chk}. Random mutators rarely synthesize such coupled defense semantics. Meanwhile, building static analyzers demands heavy manual effort from experts to craft custom rules for each defense mechanism and target ISA, while unconstrained LLM agents suffer from severe hallucinations and false bug reports.
+
+These barriers raise a central question: how can we systematically detect silent defense failures when neither the buggy compiler nor direct LLM judgment provides a reliable oracle? To answer this question, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agentic framework for testing compiler-instrumented defenses. Our core insight is that although defense implementations vary across backends, their intended security guarantees follow target-independent \emph{security invariants}. \textsc{DeFuzz} translates these invariants into programmatic bug oracles implemented as ISA-specific static and dynamic checkers, closing the oracle gap. Because LLM-assisted translation can introduce errors, \textsc{DeFuzz} formalizes each invariant in a predicate IR with explicit applicability and safety semantics, deterministically lowering validated specifications into executable checkers. To trigger defense-critical logic, \textsc{DeFuzz} maps each invariant to its corresponding defense-related compiler branches and guides LLM agents to synthesize inputs that satisfy both branch conditions and invariant preconditions. All bug verdicts remain strictly with deterministic checkers, avoiding both the blind spots of random mutators and LLM adjudication hallucinations.
+
+Building \textsc{DeFuzz} requires solving three main challenges. The first challenge is establishing reliable security invariants: because the compiler itself has bugs, we cannot trust it. Relying on a compiler's own behavior or implementation code as the ground truth creates circular self-validation. Our key idea is to separate intended security contracts from buggy compiler implementations by anchoring invariants in external ISA manuals, documented design assertions, and confirmed security patches, while abstracting past fixes into transferable failure patterns across defenses. The second challenge is checking these invariants with high accuracy across diverse ISAs, where distinct registers and stack layouts cause direct LLM judgment to hallucinate. \textsc{DeFuzz} addresses this by formalizing each invariant in a predicate IR parameterized by target ISA specifications, lowering it into ISA-specific static and dynamic checkers. Dual static-dynamic cross-checking and differential baseline builds further verify each target, ensuring reliable verdicts with \textbf{zero LLM involvement in bug adjudication}. The final challenge is steering test generation to both locate defense branches and satisfy their semantic preconditions without being stripped by early optimizations. \textsc{DeFuzz} maps each invariant to its controlling compiler passes and branches via call-graph and AST analysis, inserting compile-time probes to trace branch execution. Guided by branch traces and invariant preconditions, LLM agents iteratively synthesize and mutate seeds to expose deep defense flaws.
+
+\incfig{defense-matrix}{Partial matrix of silent compiler defense bugs across representative defense mechanisms and target ISAs.}
+
+We evaluated \textsc{DeFuzz} on GCC and LLVM across x86-64, AArch64, and RISC-V, spanning diverse defenses such as stack canaries, CFI, shadow stacks, register scrubbing, and \texttt{\_FORTIFY\_SOURCE}. \textsc{DeFuzz} extracted 915 validated security invariants and transferred historical failure patterns across defense mechanisms and backends. During fuzzing, branch-guided seed synthesis hit substantially more target defense branches than unguided baselines, while our formally specified checkers identified violations with high accuracy and avoided the false reports produced by unconstrained LLM agents. Overall, \textsc{DeFuzz} discovered \textbf{126 previously unknown silent failures in compiler-instrumented defenses}, of which \textbf{34 have already been confirmed upstream, with 11 fixed} (Figure~\ref{fig:defense-matrix}), including bugs rated as high-severity vulnerabilities. These results show that \textsc{DeFuzz} effectively uncovers critical silent defense bugs that evade existing compiler testing techniques.
+
+In answering this central question, this paper makes the following contributions:
+\begin{itemize}
+  \item \textbf{Automated Invariant Extraction:} We decouple security contracts from buggy compiler outputs by extracting security invariants from ISA specifications, design assertions, and historical bug fixes, transferring failure patterns across defenses.
+  \item \textbf{Validated Translation into Multi-ISA Programmatic Oracles:} We formalize security invariants in a predicate IR and lower them into formally specified static and dynamic checkers across target ISAs, verifying compiled code with high accuracy and zero LLM involvement in bug adjudication.
+  \item \textbf{Branch-Guided Agentic Fuzzing:} We map invariants to defense-related compiler passes and branches, and guide specialized LLM agents with compile-time branch traces to synthesize seeds that satisfy defense triggering conditions.
+  \item \textbf{New Silent Defense Bug Discovery:} We evaluate \textsc{DeFuzz} on GCC and LLVM across multiple ISAs and discover 126 previously unknown silent failures in compiler-instrumented defenses, with 34 confirmed upstream, including 11 fixed.
+\end{itemize}
+
+\end{document}
