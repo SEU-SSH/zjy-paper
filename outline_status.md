@@ -6,9 +6,11 @@
 > - **`[不 ready]`**：未精校 / 未定稿 / 待修改 / 草稿 / 待补充数据状态。
 >
 > **当前状态汇总**：
-> - **`[ready]` (仅以下 2 处)**：
+> - **`[ready]` (共 4 处)**：
 >   1. **Abstract（摘要）**
->   2. **Section 3 Overview（第三章 系统概览）**
+>   2. **Section 2 Motivation（第二章 动机与背景）**
+>   3. **Section 3 Overview（第三章 系统概览）**
+>   4. **Section 3.1 / 3.A Security Invariant Generation（第三章 3.A 安全不变量生成）**
 > - **`[不 ready]`**：其余所有章节与子章节均处于 `不 ready` 状态。
 
 ---
@@ -31,11 +33,11 @@
 
 ### 3. Design of DeFuzz (System Overview & Methodology)
 - [ready] **3.0 Section 3 Overview & Architecture** (第三章概览正文与系统架构总图，已精校锁定，明确四步核心流程)
-- [不 ready] 3.1 Security Invariant Generation
-  - [不 ready] 3.1.1 Formal Invariant Contract
-  - [不 ready] 3.1.2 Candidate Extraction via Segmented CoT
-  - [不 ready] 3.1.3 Cross-Mechanism Transfer via Hybrid RAG
-  - [不 ready] 3.1.4 Grounding Gates and Catalog Maintenance
+- [ready] **3.1 Security Invariant Generation (Section 3.A)** (已精校锁定：CoT 切片提取、去除专属符号的混合 RAG 跨防御迁移与通用不变量 Catalog，大白话叙事符合 plain writing 规范)
+  - [ready] 3.1.1 Formal Invariant Contract
+  - [ready] 3.1.2 Candidate Extraction via Segmented CoT
+  - [ready] 3.1.3 Cross-Mechanism Transfer via Hybrid RAG
+  - [ready] 3.1.4 Grounding Gates and Catalog Maintenance
 - [不 ready] 3.2 Compiler Source Mapping
   - [不 ready] 3.2.1 MCP-Guided Codebase Navigation
   - [不 ready] 3.2.2 Three-Level Decision Hierarchy (Pass / Function / Branches)
@@ -57,12 +59,11 @@
 - [不 ready] 4.3 Artifact Bundle & Deterministic Replay Pipeline
 
 ### 5. Evaluation
-- [不 ready] 5.1 Experimental Setup & Evaluation Matrix
-- [不 ready] 5.2 RQ1: Silent Defense Vulnerability Discovery (Real Bugs & CVEs)
-- [不 ready] 5.3 RQ2: Invariant Extraction & Transfer Quality
-- [不 ready] 5.4 RQ3: Ablation Study (Explicit Orchestration vs. Free-Running Agent)
-- [不 ready] 5.5 RQ4: Multi-ISA Checker Cross-Validation & Generalization
-- [不 ready] 5.6 RQ5: Anti-DCE Probe Efficiency & Telemetry Feedback Impact
+- [不 ready] 5.1 Experimental Setup
+- [不 ready] 5.2 RQ1: Silent Defense Bug Discovery (126 Bugs, Case Studies & Upstream Triage)
+- [不 ready] 5.3 RQ2: Invariant Extraction and Formal Oracle Quality (Two-Gate Check IR Funnel)
+- [不 ready] 5.4 RQ3: Ablation Study (Formal Check IR Completed; Remaining Variants Reserved as TBD)
+- [不 ready] 5.5 RQ4: Agent Telemetry, Token Usage, and Overhead
 
 ### 6. Discussion and Limitations
 - [不 ready] 6.1 Manual Effort & Human-in-the-Loop Boundaries
