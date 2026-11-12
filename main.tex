@@ -592,6 +592,53 @@ Figure~\ref{fig:eval-tool-calls} breaks down 99,236 tool calls across 6,798 agen
 \vspace{3pt}\noindent\textbf{Token Efficiency, Build Overhead, and Runtime.}
 Table~\ref{tab:token-overhead} reports LLM token usage and wall-clock time across all stages. One-time offline preparation (Steps~1--3) takes 709.17M tokens and 34.52~h, led by GCC source mapping (28.23~h versus 1.27~h on LLVM). Both the mapped branch hierarchies and compiled Check~IR checkers are reusable across fuzzing runs and point releases. Deterministic AST instrumentation (Step~2b) rewrites 747 files with zero LLM calls. Building the instrumented compilers on 16 ARM Neoverse-N2 vCPUs takes 4.6~min (277.1~s) for \texttt{GCC\_INST} and 25.8~min (1,550.8~s) for \texttt{CLANG\_INST}. Because \texttt{DEFUZZ\_HIT} probes stay dormant unless \texttt{DEFUZZ\_LOG} is set, compiled target binaries incur zero runtime overhead. Online directed fuzzing (Step~4) completes in \textbf{10.16~h} (7.43~h GCC, 2.73~h LLVM) and consumes 900.84M tokens. Step~4 reaches its first verified silent defense bug after 31.9~min on GCC and 157.6~min on LLVM. Keeping invariant schemas, $\Omega$ signatures, and $\mathcal{T}_i$ fixed in prompt prefixes achieves a \textbf{92.4\% overall KV-cache hit rate} (1,427.42M cached input tokens). As a result, online fuzzing costs an average of \textbf{4.8~min of wall-clock time and 7.15M tokens per discovered silent defense bug}.
 
+\section{Related Work}\label{sec:related-work}
+
+\noindent\textbf{Compiler testing and validation.}
+Differential testing and translation validation remain the primary approaches for finding compiler defects.
+Csmith~\cite{yang2011csmith} generates well-formed C programs to detect miscompilations by comparing execution results across multiple compilers.
+YARPGen~\cite{livinskii2020yarpgen,livinskii2023loops} uses generation policies to trigger optimizations, validating outputs against precomputed values or differential checksums.
+Equivalence Modulo Inputs (EMI)~\cite{le2014emi} constructs semantics-preserving variants on chosen inputs, enabling differential testing within a single compiler.
+Alive2~\cite{lopes2021alive2} checks refinement between LLVM IR transformations using SMT solvers, bounded within loop unrolling limits.
+These techniques establish confidence in computational correctness, aiming to detect whether program transformations alter functional outputs.
+However, functional output equivalence cannot determine whether the compiler satisfies security obligations.
+When optimizations silently eliminate required protection---such as dead-store elimination stripping memory scrubbing or inlining omitting stack-canary instrumentation---output checks remain blind.
+\textsc{DeFuzz} shifts the testing target from computational output equivalence to explicit defense invariants within compiled artifacts.
+
+\medskip\noindent\textbf{Security-relevant optimization and sanitizer testing.}
+Another line of research studies how compiler transformations affect software security checks.
+STACK~\cite{wang2013stack} identifies unstable application code where compiler optimizations eliminate security checks by exploiting undefined behavior.
+This approach analyzes flawed assumptions in application code rather than defects in the compiler itself.
+UBfuzz~\cite{li2024ubfuzz} directly tests sanitizer implementations by injecting undefined behavior into test cases.
+It uses a crash-site mapping oracle to distinguish missed sanitizer checks from differences caused by optimization.
+However, this mapping oracle requires observable discrepancies in sanitizer reports across executions.
+Without such reporting differences, it cannot determine whether emitted defenses satisfy their contracts.
+\textsc{DeFuzz} avoids relying on runtime reporting discrepancies by evaluating compiled artifacts directly.
+It uses tailored static and dynamic predicates to verify protection for control-flow integrity, stack canaries, and state scrubbing.
+
+\medskip\noindent\textbf{Test generation and directed exploration.}
+Evaluating compiler defenses requires generating expressive inputs that exercise complex compiler optimizations.
+Recent fuzzers leverage LLMs to expand input diversity.
+Fuzz4All~\cite{xia2024fuzz4all} distills documentation into prompts for multilingual generation, while leaving the bug oracle configurable.
+MetaMut~\cite{ou2024metamut} uses LLMs to synthesize reusable, semantic-aware mutators, refining them through automated and manual validation.
+Beyond general input synthesis, targeted techniques guide testing toward specific program locations.
+AFLGo~\cite{bohme2017aflgo} steers inputs toward target code regions using distance-based power schedules over control-flow graphs.
+WhiteFox~\cite{yang2024whitefox} extracts optimization requirements from compiler source code to trigger specific passes, using differential testing and crashes as bug oracles.
+Bulbasaur~\cite{wang2026bulbasaur} uses source context and dynamic feedback to synthesize branch-specific mutators for hard-to-reach branches in general software.
+While these techniques effectively reach targeted code and detect crashes, they do not verify whether emitted security defenses are correctly preserved.
+\textsc{DeFuzz} connects directed exploration directly to defense requirements, guiding inputs toward relevant compiler passes.
+
+\medskip\noindent\textbf{Property generation and checker synthesis.}
+Beyond reaching target code locations, detecting defense failures requires executable specifications and checkers to judge the emitted output.
+Recent research explores using LLMs to infer specifications and build program analyses.
+PropertyGPT~\cite{liu2025propertygpt} retrieves human-written smart-contract specifications to guide property generation, verifying contracts with external formal provers.
+KNighter~\cite{yang2025knighter} synthesizes Clang Static Analyzer checkers from historical Linux kernel patches, validating them across pre-patch and post-patch commits.
+These systems show that LLM-generated rules require careful independent validation to filter out incorrect specifications.
+Unlike source-level static analysis for operating systems, compiler defenses involve lowering high-level protection requirements down to machine instructions.
+\textsc{DeFuzz} extracts structured defense requirements from documentation and defect histories, mapping them to compiler passes.
+It then instantiates these requirements as executable static and dynamic checkers over compiled artifacts.
+To avoid relying on online LLM reasoning during testing, bug verdicts are determined strictly by these programmatic checkers, with zero LLM involvement in bug adjudication.
+
 \bibliographystyle{IEEEtran}
 \bibliography{refs}
 
