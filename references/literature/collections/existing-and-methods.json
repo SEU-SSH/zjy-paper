@@ -1,0 +1,682 @@
+[
+  {
+    "key": "livinskii2020yarpgen",
+    "title": "Random Testing for C and C++ Compilers with YARPGen",
+    "authors": [
+      "Vsevolod Livinskii",
+      "Dmitry Babokin",
+      "John Regehr"
+    ],
+    "year": 2020,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Programming Languages",
+    "doi": "10.1145/3428264",
+    "url": "https://doi.org/10.1145/3428264",
+    "source_urls": [
+      "https://raw.githubusercontent.com/intel/yarpgen/main/papers/yarpgen-ooplsa-2020.pdf",
+      "https://doi.org/10.1145/3428264"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §2.1，p2；§3，pp3–4。未通读全文逐句审核或复现实验。",
+    "use": "随机程序生成与差分测试基线；生成策略如何触发优化。",
+    "limits": "不能推广为所有版本仅使用差分 oracle；不能声称覆盖所有防御语义。",
+    "tags": [
+      "compiler-testing",
+      "baseline"
+    ],
+    "priority": "core",
+    "bibtex": "@article{livinskii2020yarpgen,\n  author = {Livinskii, Vsevolod and Babokin, Dmitry and Regehr, John},\n  title = {Random Testing for {C} and {C++} Compilers with {YARPGen}},\n  journal = {Proceedings of the ACM on Programming Languages},\n  volume = {4},\n  number = {OOPSLA},\n  pages = {196:1--196:25},\n  articleno = {196},\n  numpages = {25},\n  year = {2020},\n  doi = {10.1145/3428264},\n  url = {https://doi.org/10.1145/3428264}\n}\n"
+  },
+  {
+    "key": "livinskii2023loops",
+    "title": "Fuzzing Loop Optimizations in Compilers for C++ and Data-Parallel Languages",
+    "authors": [
+      "Vsevolod Livinskii",
+      "Dmitry Babokin",
+      "John Regehr"
+    ],
+    "year": 2023,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Programming Languages",
+    "doi": "10.1145/3591295",
+    "url": "https://doi.org/10.1145/3591295",
+    "source_urls": [
+      "https://raw.githubusercontent.com/intel/yarpgen/main/papers/yarpgen-pldi-2023.pdf",
+      "https://doi.org/10.1145/3591295"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.1，p4。未通读全文逐句审核或复现实验。",
+    "use": "循环优化测试、预计算结果与差分两类判定。",
+    "limits": "适用范围和语言/版本需按论文区分，不能把 v1 的判定描述套到 v2。",
+    "tags": [
+      "compiler-testing",
+      "baseline"
+    ],
+    "priority": "core",
+    "bibtex": "@article{livinskii2023loops,\n  author = {Livinskii, Vsevolod and Babokin, Dmitry and Regehr, John},\n  title = {Fuzzing Loop Optimizations in Compilers for {C++} and Data-Parallel Languages},\n  journal = {Proceedings of the ACM on Programming Languages},\n  volume = {7},\n  number = {PLDI},\n  pages = {1826--1847},\n  articleno = {181},\n  numpages = {22},\n  year = {2023},\n  doi = {10.1145/3591295},\n  url = {https://doi.org/10.1145/3591295}\n}\n"
+  },
+  {
+    "key": "xia2024fuzz4all",
+    "title": "Fuzz4All: Universal Fuzzing with Large Language Models",
+    "authors": [
+      "Chunqiu Steven Xia",
+      "Matteo Paltenghi",
+      "Jia Le Tian",
+      "Michael Pradel",
+      "Lingming Zhang"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the IEEE/ACM 46th International Conference on Software Engineering",
+    "doi": "10.1145/3597503.3639121",
+    "url": "https://doi.org/10.1145/3597503.3639121",
+    "source_urls": [
+      "https://arxiv.org/abs/2308.04748",
+      "https://doi.org/10.1145/3597503.3639121"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.1–3.2.3，pp4–6。未通读全文逐句审核或复现实验。",
+    "use": "文档 autoprompting、LLM 输入生成与变异以及用户可配置 oracle。",
+    "limits": "不能写成完全不能使用自定义 oracle，或由 universal 推断覆盖任何安全属性。",
+    "tags": [
+      "LLM-fuzzing",
+      "baseline"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{xia2024fuzz4all,\n  author = {Xia, Chunqiu Steven and Paltenghi, Matteo and Tian, Jia Le and Pradel, Michael and Zhang, Lingming},\n  title = {{Fuzz4All}: Universal Fuzzing with Large Language Models},\n  booktitle = {Proceedings of the IEEE/ACM 46th International Conference on Software Engineering},\n  series = {ICSE '24},\n  pages = {1--13},\n  year = {2024},\n  doi = {10.1145/3597503.3639121},\n  url = {https://doi.org/10.1145/3597503.3639121}\n}\n"
+  },
+  {
+    "key": "ou2024metamut",
+    "title": "The Mutators Reloaded: Fuzzing Compilers with Large Language Model Generated Mutation Operators",
+    "authors": [
+      "Xianfei Ou",
+      "Cong Li",
+      "Yanyan Jiang",
+      "Chang Xu"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 4",
+    "doi": "10.1145/3622781.3674171",
+    "url": "https://doi.org/10.1145/3622781.3674171",
+    "source_urls": [
+      "https://connglli.github.io/pdfs/metamut_asplos24.pdf",
+      "https://doi.org/10.1145/3622781.3674171"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §2–3.4，pp2–6。未通读全文逐句审核或复现实验。",
+    "use": "用 LLM 合成可复用、semantic-aware 的编译器变异算子。",
+    "limits": "验证/修复步骤不等于每个算子都保持语义或经过充分形式化证明。",
+    "tags": [
+      "compiler-testing",
+      "LLM-fuzzing",
+      "baseline"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{ou2024metamut,\n  author = {Ou, Xianfei and Li, Cong and Jiang, Yanyan and Xu, Chang},\n  title = {The Mutators Reloaded: Fuzzing Compilers with Large Language Model Generated Mutation Operators},\n  booktitle = {Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 4},\n  series = {ASPLOS '24},\n  pages = {298--312},\n  year = {2024},\n  doi = {10.1145/3622781.3674171},\n  url = {https://doi.org/10.1145/3622781.3674171}\n}\n"
+  },
+  {
+    "key": "li2024ubfuzz",
+    "title": "UBFuzz: Finding Bugs in Sanitizer Implementations",
+    "authors": [
+      "Shaohua Li",
+      "Zhendong Su"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 1",
+    "doi": "10.1145/3617232.3624874",
+    "url": "https://doi.org/10.1145/3617232.3624874",
+    "source_urls": [
+      "https://arxiv.org/pdf/2401.04538",
+      "https://doi.org/10.1145/3617232.3624874"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.3，pp7–8；§4.1，p8。未通读全文逐句审核或复现实验。",
+    "use": "主动引入 UB 测试 sanitizer，并用 crash-site mapping 区分优化效应与漏报。",
+    "limits": "不能称其没有 oracle；测试 sanitizer 的范围不能自动外推到全部编译器防御。",
+    "tags": [
+      "sanitizer-testing",
+      "baseline"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{li2024ubfuzz,\n  author = {Li, Shaohua and Su, Zhendong},\n  title = {{UBFuzz}: Finding Bugs in Sanitizer Implementations},\n  booktitle = {Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 1},\n  series = {ASPLOS '24},\n  pages = {435--449},\n  year = {2024},\n  doi = {10.1145/3617232.3624874},\n  url = {https://doi.org/10.1145/3617232.3624874}\n}\n"
+  },
+  {
+    "key": "yang2011csmith",
+    "title": "Finding and Understanding Bugs in C Compilers",
+    "authors": [
+      "Xuejun Yang",
+      "Yang Chen",
+      "Eric Eide",
+      "John Regehr"
+    ],
+    "year": 2011,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 32nd ACM SIGPLAN Conference on Programming Language Design and Implementation",
+    "doi": "10.1145/1993498.1993532",
+    "url": "https://doi.org/10.1145/1993498.1993532",
+    "source_urls": [
+      "https://users.cs.utah.edu/~regehr/papers/pldi11-preprint.pdf",
+      "https://doi.org/10.1145/1993498.1993532"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §2.1–2.2，p2。未通读全文逐句审核或复现实验。",
+    "use": "避免 UB 的随机 C 程序生成和差分执行。",
+    "limits": "程序生成约束及执行差异判定不等同于防御机制的安全语义契约。",
+    "tags": [
+      "compiler-testing",
+      "baseline"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{yang2011csmith,\n  author = {Yang, Xuejun and Chen, Yang and Eide, Eric and Regehr, John},\n  title = {Finding and Understanding Bugs in {C} Compilers},\n  booktitle = {Proceedings of the 32nd ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  year = {2011},\n  pages = {283--294},\n  doi = {10.1145/1993498.1993532},\n  url = {https://doi.org/10.1145/1993498.1993532}\n}\n"
+  },
+  {
+    "key": "le2014emi",
+    "title": "Compiler Validation via Equivalence Modulo Inputs",
+    "authors": [
+      "Vu Le",
+      "Mehrdad Afshari",
+      "Zhendong Su"
+    ],
+    "year": 2014,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 35th ACM SIGPLAN Conference on Programming Language Design and Implementation",
+    "doi": "10.1145/2594291.2594334",
+    "url": "https://doi.org/10.1145/2594291.2594334",
+    "source_urls": [
+      "https://web.cs.ucdavis.edu/~su/publications/emi.pdf",
+      "https://doi.org/10.1145/2594291.2594334"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.1–3.2，pp4–5。未通读全文逐句审核或复现实验。",
+    "use": "在指定输入集上构造等价程序变体进行编译器验证。",
+    "limits": "输入集约束很关键，不能描述成全输入上的形式化等价证明。",
+    "tags": [
+      "compiler-testing",
+      "metamorphic-testing"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{le2014emi,\n  author = {Le, Vu and Afshari, Mehrdad and Su, Zhendong},\n  title = {Compiler Validation via Equivalence Modulo Inputs},\n  booktitle = {Proceedings of the 35th ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  year = {2014},\n  pages = {216--226},\n  doi = {10.1145/2594291.2594334},\n  url = {https://doi.org/10.1145/2594291.2594334}\n}\n"
+  },
+  {
+    "key": "bohme2017aflgo",
+    "title": "Directed Greybox Fuzzing",
+    "authors": [
+      "Marcel Böhme",
+      "Van-Thuan Pham",
+      "Manh-Dung Nguyen",
+      "Abhik Roychoudhury"
+    ],
+    "year": 2017,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security",
+    "doi": "10.1145/3133956.3134020",
+    "url": "https://doi.org/10.1145/3133956.3134020",
+    "source_urls": [
+      "https://mboehme.github.io/paper/CCS17.pdf",
+      "https://doi.org/10.1145/3133956.3134020"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.2–3.3，pp5–6。未通读全文逐句审核或复现实验。",
+    "use": "面向给定位置的距离反馈和定向灰盒搜索。",
+    "limits": "距离反馈不是漏洞或防御正确性的 oracle，也不代表跨目标普遍胜出。",
+    "tags": [
+      "fuzzing",
+      "directed-fuzzing"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{bohme2017aflgo,\n  author = {B{\\\"o}hme, Marcel and Pham, Van-Thuan and Nguyen, Manh-Dung and Roychoudhury, Abhik},\n  title = {Directed Greybox Fuzzing},\n  booktitle = {Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security},\n  year = {2017},\n  pages = {2329--2344},\n  doi = {10.1145/3133956.3134020},\n  url = {https://doi.org/10.1145/3133956.3134020}\n}\n"
+  },
+  {
+    "key": "lopes2021alive2",
+    "title": "Alive2: Bounded Translation Validation for LLVM",
+    "authors": [
+      "Nuno P. Lopes",
+      "Juneyoung Lee",
+      "Chung-Kil Hur",
+      "Zhengyang Liu",
+      "John Regehr"
+    ],
+    "year": 2021,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 42nd ACM SIGPLAN International Conference on Programming Language Design and Implementation",
+    "doi": "10.1145/3453483.3454030",
+    "url": "https://doi.org/10.1145/3453483.3454030",
+    "source_urls": [
+      "https://web.ist.utl.pt/nuno.lopes/pubs/alive2-pldi21.pdf",
+      "https://doi.org/10.1145/3453483.3454030"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 abstract p1；§7–8，p9。未通读全文逐句审核或复现实验。",
+    "use": "LLVM IR refinement 与有界翻译验证。",
+    "limits": "不能声称对所有循环/后端/硬件或防御性质给出无条件保证。",
+    "tags": [
+      "compiler-validation",
+      "formal-methods"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{lopes2021alive2,\n  author = {Lopes, Nuno P. and Lee, Juneyoung and Hur, Chung-Kil and Liu, Zhengyang and Regehr, John},\n  title = {{Alive2}: Bounded Translation Validation for {LLVM}},\n  booktitle = {Proceedings of the 42nd ACM SIGPLAN International Conference on Programming Language Design and Implementation},\n  year = {2021},\n  pages = {65--79},\n  doi = {10.1145/3453483.3454030},\n  url = {https://doi.org/10.1145/3453483.3454030}\n}\n"
+  },
+  {
+    "key": "liu2025propertygpt",
+    "title": "PropertyGPT: LLM-driven Formal Verification of Smart Contracts through Retrieval-Augmented Property Generation",
+    "authors": [
+      "Ye Liu",
+      "Yue Xue",
+      "Daoyuan Wu",
+      "Yuqiang Sun",
+      "Yi Li",
+      "Miaolei Shi",
+      "Yang Liu"
+    ],
+    "year": 2025,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2025 Network and Distributed System Security Symposium",
+    "doi": "10.14722/ndss.2025.241357",
+    "url": "https://doi.org/10.14722/ndss.2025.241357",
+    "source_urls": [
+      "https://arxiv.org/pdf/2405.02580",
+      "https://doi.org/10.14722/ndss.2025.241357"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §V–VI，pp5–7；§VIII-F p13。未通读全文逐句审核或复现实验。",
+    "use": "检索辅助属性生成，以及 prover 检查合约是否满足给定属性。",
+    "limits": "证明给定属性不证明生成属性完整表达用户或规范意图。",
+    "tags": [
+      "LLM-specification",
+      "formal-methods"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{liu2025propertygpt,\n  author = {Liu, Ye and Xue, Yue and Wu, Daoyuan and Sun, Yuqiang and Li, Yi and Shi, Miaolei and Liu, Yang},\n  title = {{PropertyGPT}: {LLM}-driven Formal Verification of Smart Contracts through Retrieval-Augmented Property Generation},\n  booktitle = {Proceedings of the 2025 Network and Distributed System Security Symposium},\n  year = {2025},\n  doi = {10.14722/ndss.2025.241357},\n  url = {https://doi.org/10.14722/ndss.2025.241357}\n}\n"
+  },
+  {
+    "key": "wang2013stack",
+    "title": "Towards Optimization-Safe Systems: Analyzing the Impact of Undefined Behavior",
+    "authors": [
+      "Xi Wang",
+      "Nickolai Zeldovich",
+      "M. Frans Kaashoek",
+      "Armando Solar-Lezama"
+    ],
+    "year": 2013,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles",
+    "doi": "10.1145/2517349.2522728",
+    "url": "https://doi.org/10.1145/2517349.2522728",
+    "source_urls": [
+      "https://pdos.csail.mit.edu/papers/stack:sosp13.pdf",
+      "https://doi.org/10.1145/2517349.2522728"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.1–3.2，p5。未通读全文逐句审核或复现实验。",
+    "use": "应用依赖 UB 而出现 optimization-unstable code 的问题与分析。",
+    "limits": "不能把全部此类现象归为编译器违反语言语义的实现 bug。",
+    "tags": [
+      "undefined-behavior",
+      "motivation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{wang2013stack,\n  author = {Wang, Xi and Zeldovich, Nickolai and Kaashoek, M. Frans and Solar-Lezama, Armando},\n  title = {Towards Optimization-Safe Systems: Analyzing the Impact of Undefined Behavior},\n  booktitle = {Proceedings of the Twenty-Fourth ACM Symposium on Operating Systems Principles},\n  year = {2013},\n  pages = {260--275},\n  doi = {10.1145/2517349.2522728},\n  url = {https://doi.org/10.1145/2517349.2522728}\n}\n"
+  },
+  {
+    "key": "wang2026bulbasaur",
+    "title": "Bulbasaur: Branch-Guided Online Mutator Generation for Greybox Fuzzing",
+    "authors": [
+      "Yiyi Wang",
+      "Dongsong Yu",
+      "Ruiqi Dong",
+      "Yiyang Chen",
+      "Xiaogang Zhu",
+      "Chao Zhang"
+    ],
+    "year": 2026,
+    "entry_type": "inproceedings",
+    "venue": "35th USENIX Security Symposium (USENIX Security 26)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity26/presentation/wang-yiyi",
+    "source_urls": [
+      "https://www.usenix.org/system/files/usenixsecurity26-wang-yiyi.pdf",
+      "https://www.usenix.org/conference/usenixsecurity26/presentation/wang-yiyi"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.1–3.3，pp5–7。未通读全文逐句审核或复现实验。",
+    "use": "利用分支源码上下文和运行反馈在线生成分支专用 mutators。",
+    "limits": "对象为一般软件灰盒测试；不能改述成专门的编译器或防御测试工具。",
+    "tags": [
+      "LLM-fuzzing",
+      "feedback"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{wang2026bulbasaur,\n  author = {Wang, Yiyi and Yu, Dongsong and Dong, Ruiqi and Chen, Yiyang and Zhu, Xiaogang and Zhang, Chao},\n  title = {{Bulbasaur}: Branch-Guided Online Mutator Generation for Greybox Fuzzing},\n  booktitle = {35th USENIX Security Symposium (USENIX Security 26)},\n  year = {2026},\n  pages = {4089--4108},\n  publisher = {USENIX Association},\n  isbn = {978-1-939133-58-8},\n  url = {https://www.usenix.org/conference/usenixsecurity26/presentation/wang-yiyi}\n}\n"
+  },
+  {
+    "key": "yang2024whitefox",
+    "title": "WhiteFox: White-Box Compiler Fuzzing Empowered by Large Language Models",
+    "authors": [
+      "Chenyuan Yang",
+      "Yinlin Deng",
+      "Runyu Lu",
+      "Jiayi Yao",
+      "Jiawei Liu",
+      "Reyhaneh Jabbarvand",
+      "Lingming Zhang"
+    ],
+    "year": 2024,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Programming Languages",
+    "doi": "10.1145/3689736",
+    "url": "https://doi.org/10.1145/3689736",
+    "source_urls": [
+      "https://arxiv.org/pdf/2310.15991",
+      "https://doi.org/10.1145/3689736"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.1 p7；§3.3 p10；§3.4 pp12–13；§7.2 p22。未通读全文逐句审核或复现实验。",
+    "use": "从源码提炼优化触发要求，分离分析与生成，并利用优化触发反馈。",
+    "limits": "不能称只测 DL 编译器；源码引导或分析/生成角色分工并非本项目独有。",
+    "tags": [
+      "compiler-testing",
+      "LLM-fuzzing"
+    ],
+    "priority": "core",
+    "bibtex": "@article{yang2024whitefox,\n  author = {Yang, Chenyuan and Deng, Yinlin and Lu, Runyu and Yao, Jiayi and Liu, Jiawei and Jabbarvand, Reyhaneh and Zhang, Lingming},\n  title = {{WhiteFox}: White-Box Compiler Fuzzing Empowered by Large Language Models},\n  journal = {Proceedings of the ACM on Programming Languages},\n  volume = {8},\n  number = {OOPSLA2},\n  year = {2024},\n  pages = {709--735},\n  articleno = {296},\n  numpages = {27},\n  doi = {10.1145/3689736},\n  url = {https://doi.org/10.1145/3689736}\n}\n"
+  },
+  {
+    "key": "yang2025knighter",
+    "title": "KNighter: Transforming Static Analysis with LLM-Synthesized Checkers",
+    "authors": [
+      "Chenyuan Yang",
+      "Zijie Zhao",
+      "Zichen Xie",
+      "Haoyu Li",
+      "Lingming Zhang"
+    ],
+    "year": 2025,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the ACM SIGOPS 31st Symposium on Operating Systems Principles",
+    "doi": "10.1145/3731569.3764827",
+    "url": "https://doi.org/10.1145/3731569.3764827",
+    "source_urls": [
+      "https://arxiv.org/pdf/2503.09002",
+      "https://doi.org/10.1145/3731569.3764827"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "沿用 2026-11-11/12 的原文核验；选择性阅读 §3.1 p5；§3.1.4–3.2 p6；§5.4.1 p11。未通读全文逐句审核或复现实验。",
+    "use": "从补丁合成 CSA checker，并进行修复前后验证及 triage/refinement。",
+    "limits": "可编译或通过单组修复前后对照，不构成检查器的一般语义正确性证明。",
+    "tags": [
+      "LLM-analysis",
+      "checker-generation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{yang2025knighter,\n  author = {Yang, Chenyuan and Zhao, Zijie and Xie, Zichen and Li, Haoyu and Zhang, Lingming},\n  title = {{KNighter}: Transforming Static Analysis with {LLM}-Synthesized Checkers},\n  booktitle = {Proceedings of the ACM SIGOPS 31st Symposium on Operating Systems Principles},\n  year = {2025},\n  pages = {655--669},\n  doi = {10.1145/3731569.3764827},\n  url = {https://doi.org/10.1145/3731569.3764827}\n}\n"
+  },
+  {
+    "key": "silentbugs2023",
+    "title": "Silent Bugs Matter: A Study of Compiler-Introduced Security Bugs",
+    "authors": [
+      "Jianhao Xu",
+      "Kangjie Lu",
+      "Zhengjie Du",
+      "Zhu Ding",
+      "Linke Li",
+      "Qiushi Wu",
+      "Mathias Payer",
+      "Bing Mao"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "32nd USENIX Security Symposium (USENIX Security 23)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity23/presentation/xu-jianhao",
+    "source_urls": [
+      "https://www.usenix.org/conference/usenixsecurity23/presentation/xu-jianhao"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对一手出版/作者页面的元数据并阅读摘要；未通读全文或复现实验。",
+    "use": "作为 compiler-introduced security bugs 与编译器/用户安全预期差距的动机文献。",
+    "limits": "此类安全问题不全是违反语言语义的编译器实现 bug；具体分类与数量须再核对正文。",
+    "tags": [
+      "compiler-security",
+      "motivation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{silentbugs2023,\n  author = {Jianhao Xu and Kangjie Lu and Zhengjie Du and Zhu Ding and Linke Li and Qiushi Wu and Mathias Payer and Bing Mao},\n  title = {{Silent Bugs Matter: A Study of Compiler-Introduced Security Bugs}},\n  year = {2023},\n  booktitle = {32nd USENIX Security Symposium (USENIX Security 23)},\n  url = {https://www.usenix.org/conference/usenixsecurity23/presentation/xu-jianhao},\n  pages = {3655--3672},\n  publisher = {USENIX Association},\n  isbn = {978-1-939133-37-3}\n}\n"
+  },
+  {
+    "key": "liu2025agentfuzz",
+    "title": "Make Agent Defeat Agent: Automatic Detection of Taint-Style Vulnerabilities in LLM-based Agents",
+    "authors": [
+      "Fengyu Liu",
+      "Yuan Zhang",
+      "Jiaqi Luo",
+      "Jiarun Dai",
+      "Tian Chen",
+      "Letian Yuan",
+      "Zhengmin Yu",
+      "Youkun Shi",
+      "Ke Li",
+      "Chengyuan Zhou",
+      "Hao Chen",
+      "Min Yang"
+    ],
+    "year": 2025,
+    "entry_type": "inproceedings",
+    "venue": "34th USENIX Security Symposium (USENIX Security 25)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity25/presentation/liu-fengyu",
+    "source_urls": [
+      "https://www.usenix.org/conference/usenixsecurity25/presentation/liu-fengyu"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对一手出版/作者页面的元数据并阅读摘要；未通读全文或复现实验。",
+    "use": "LLM-agent 应用测试中结合语义及距离反馈的邻近工作，可用于反馈设计背景。",
+    "limits": "测试对象是 LLM-agent 应用；不应列为编译器防御测试的直接同类基线。",
+    "tags": [
+      "LLM-agents",
+      "testing"
+    ],
+    "priority": "optional",
+    "bibtex": "@inproceedings{liu2025agentfuzz,\n  author = {Fengyu Liu and Yuan Zhang and Jiaqi Luo and Jiarun Dai and Tian Chen and Letian Yuan and Zhengmin Yu and Youkun Shi and Ke Li and Chengyuan Zhou and Hao Chen and Min Yang},\n  title = {{Make Agent Defeat Agent: Automatic Detection of Taint-Style Vulnerabilities in LLM-based Agents}},\n  year = {2025},\n  booktitle = {34th USENIX Security Symposium (USENIX Security 25)},\n  url = {https://www.usenix.org/conference/usenixsecurity25/presentation/liu-fengyu},\n  pages = {3767--3786},\n  publisher = {USENIX Association},\n  isbn = {978-1-939133-52-6}\n}\n"
+  },
+  {
+    "key": "lin2026specauditor",
+    "title": "SpecAuditor: Generating Audit Specifications for LLM-Driven Bug Detection",
+    "authors": [
+      "Miaoqian Lin",
+      "Hao Chen"
+    ],
+    "year": 2026,
+    "entry_type": "inproceedings",
+    "venue": "2026 IEEE Symposium on Security and Privacy (SP)",
+    "doi": null,
+    "url": "https://sp2026.ieee-security.org/accepted-papers.html#collapse-212",
+    "source_urls": [
+      "https://sp2026.ieee-security.org/accepted-papers.html#collapse-212"
+    ],
+    "verification": "metadata-only",
+    "read_depth": "仅确认题名、署名和出版记录；尚未取得或阅读可靠原文摘要/方法。",
+    "use": "优先补读：题名与本项目的审计规格生成/LLM bug detection 讨论相关。",
+    "limits": "仅依据官方录用列表确认身份；未读摘要/方法，不能描述具体算法、实验表现或优劣。",
+    "tags": [
+      "LLM-specification",
+      "to-read"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{lin2026specauditor,\n  author = {Miaoqian Lin and Hao Chen},\n  title = {{SpecAuditor: Generating Audit Specifications for LLM-Driven Bug Detection}},\n  year = {2026},\n  booktitle = {2026 IEEE Symposium on Security and Privacy (SP)},\n  url = {https://sp2026.ieee-security.org/accepted-papers.html#collapse-212}\n}\n"
+  },
+  {
+    "key": "su2026cill",
+    "title": "CIll: CTI-Guided Invariant Generation via LLMs for Model Checking",
+    "authors": [
+      "Yuheng Su",
+      "Tianjun Bu",
+      "Qiusong Yang",
+      "Yiwei Ci",
+      "Enyuan Tian"
+    ],
+    "year": 2026,
+    "entry_type": "misc",
+    "venue": "arXiv preprint",
+    "doi": "10.48550/arXiv.2602.23389",
+    "url": "https://arxiv.org/abs/2602.23389",
+    "source_urls": [
+      "https://arxiv.org/abs/2602.23389"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对一手出版/作者页面的元数据并阅读摘要；未通读全文或复现实验。",
+    "use": "CTI 引导不变量生成、模型检查与归纳性检查的邻近工作。",
+    "limits": "预印本；形式化模型中的检查不能证明生成的编译器防御规则自动正确。",
+    "tags": [
+      "LLM-specification",
+      "invariant-generation",
+      "preprint"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{su2026cill,\n  author = {Yuheng Su and Tianjun Bu and Qiusong Yang and Yiwei Ci and Enyuan Tian},\n  title = {{CIll: CTI-Guided Invariant Generation via LLMs for Model Checking}},\n  year = {2026},\n  doi = {10.48550/arXiv.2602.23389},\n  url = {https://arxiv.org/abs/2602.23389},\n  howpublished = {arXiv preprint arXiv:2602.23389}\n}\n"
+  },
+  {
+    "key": "wei2022chain",
+    "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+    "authors": [
+      "Jason Wei",
+      "Xuezhi Wang",
+      "Dale Schuurmans",
+      "Maarten Bosma",
+      "Brian Ichter",
+      "Fei Xia",
+      "Ed Chi",
+      "Quoc V Le",
+      "Denny Zhou"
+    ],
+    "year": 2022,
+    "entry_type": "inproceedings",
+    "venue": "Advances in Neural Information Processing Systems",
+    "doi": "10.52202/068431-1800",
+    "url": "https://papers.nips.cc/paper_files/paper/2022/hash/9d5609613524ecf4f15af0f7b31abca4-Abstract-Conference.html",
+    "source_urls": [
+      "https://papers.nips.cc/paper_files/paper/2022/hash/9d5609613524ecf4f15af0f7b31abca4-Abstract-Conference.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对一手出版/作者页面的元数据并阅读摘要；未通读全文或复现实验。",
+    "use": "LLM 推理提示方法背景。",
+    "limits": "推理基准上的改善不构成程序/检查器正确性保证。",
+    "tags": [
+      "LLM-foundation"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{wei2022chain,\n  author = {Jason Wei and Xuezhi Wang and Dale Schuurmans and Maarten Bosma and Brian Ichter and Fei Xia and Ed Chi and Quoc V Le and Denny Zhou},\n  title = {{Chain-of-Thought Prompting Elicits Reasoning in Large Language Models}},\n  year = {2022},\n  booktitle = {Advances in Neural Information Processing Systems},\n  doi = {10.52202/068431-1800},\n  url = {https://papers.nips.cc/paper_files/paper/2022/hash/9d5609613524ecf4f15af0f7b31abca4-Abstract-Conference.html},\n  volume = {35},\n  pages = {24824--24837}\n}\n"
+  },
+  {
+    "key": "lewis2020retrieval",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "authors": [
+      "Patrick Lewis",
+      "Ethan Perez",
+      "Aleksandra Piktus",
+      "Fabio Petroni",
+      "Vladimir Karpukhin",
+      "Naman Goyal",
+      "Heinrich Küttler",
+      "Mike Lewis",
+      "Wen-tau Yih",
+      "Tim Rocktäschel",
+      "Sebastian Riedel",
+      "Douwe Kiela"
+    ],
+    "year": 2020,
+    "entry_type": "inproceedings",
+    "venue": "Advances in Neural Information Processing Systems",
+    "doi": null,
+    "url": "https://papers.nips.cc/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html",
+    "source_urls": [
+      "https://papers.nips.cc/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对一手出版/作者页面的元数据并阅读摘要；未通读全文或复现实验。",
+    "use": "检索与生成结合的方法背景。",
+    "limits": "检索增强不能保证检索内容版本正确、生成结果符合规范或没有幻觉。",
+    "tags": [
+      "LLM-foundation"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{lewis2020retrieval,\n  author = {Patrick Lewis and Ethan Perez and Aleksandra Piktus and Fabio Petroni and Vladimir Karpukhin and Naman Goyal and Heinrich K{\\\"u}ttler and Mike Lewis and Wen-tau Yih and Tim Rockt{\\\"a}schel and Sebastian Riedel and Douwe Kiela},\n  title = {{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks}},\n  year = {2020},\n  booktitle = {Advances in Neural Information Processing Systems},\n  url = {https://papers.nips.cc/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html},\n  volume = {33},\n  pages = {9459--9474}\n}\n"
+  },
+  {
+    "key": "lattner2004llvm",
+    "title": "LLVM: A Compilation Framework for Lifelong Program Analysis & Transformation",
+    "authors": [
+      "Chris Lattner",
+      "Vikram Adve"
+    ],
+    "year": 2004,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2004 International Symposium on Code Generation and Optimization (CGO)",
+    "doi": null,
+    "url": "https://llvm.org/pubs/2004-01-30-CGO-LLVM.html",
+    "source_urls": [
+      "https://llvm.org/pubs/2004-01-30-CGO-LLVM.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对一手出版/作者页面的元数据并阅读摘要；未通读全文或复现实验。",
+    "use": "LLVM 框架、SSA 表示及跨阶段分析/变换的背景引用。",
+    "limits": "2004 年框架论文不能用于证明当前版本的防御支持或后端实现正确性。",
+    "tags": [
+      "compiler-infrastructure"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{lattner2004llvm,\n  author = {Chris Lattner and Vikram Adve},\n  title = {{LLVM: A Compilation Framework for Lifelong Program Analysis \\& Transformation}},\n  year = {2004},\n  booktitle = {Proceedings of the 2004 International Symposium on Code Generation and Optimization (CGO)},\n  url = {https://llvm.org/pubs/2004-01-30-CGO-LLVM.html}\n}\n"
+  },
+  {
+    "key": "demoura2008z3",
+    "title": "Z3: An Efficient SMT Solver",
+    "authors": [
+      "Leonardo de Moura",
+      "Nikolaj Bjørner"
+    ],
+    "year": 2008,
+    "entry_type": "inproceedings",
+    "venue": "Tools and Algorithms for the Construction and Analysis of Systems (TACAS)",
+    "doi": "10.1007/978-3-540-78800-3_24",
+    "url": "https://doi.org/10.1007/978-3-540-78800-3_24",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1007%2F978-3-540-78800-3_24"
+    ],
+    "verification": "metadata-only",
+    "read_depth": "仅确认题名、署名和出版记录；尚未取得或阅读可靠原文摘要/方法。",
+    "use": "SMT solver 背景候选；正式引述能力或实验时需补读原文/对应版本文档。",
+    "limits": "本轮只读取出版方登记的 Crossref 元数据，没有取得摘要/全文，不据此推导工具能力。",
+    "tags": [
+      "SMT",
+      "formal-methods"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{demoura2008z3,\n  author = {Leonardo de Moura and Nikolaj Bj{\\o}rner},\n  title = {{Z3: An Efficient SMT Solver}},\n  year = {2008},\n  booktitle = {Tools and Algorithms for the Construction and Analysis of Systems (TACAS)},\n  doi = {10.1007/978-3-540-78800-3_24},\n  url = {https://doi.org/10.1007/978-3-540-78800-3_24},\n  pages = {337--340}\n}\n"
+  },
+  {
+    "key": "langgraph",
+    "title": "LangGraph",
+    "authors": [
+      "LangChain"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official software repository",
+    "doi": null,
+    "url": "https://github.com/langchain-ai/langgraph",
+    "source_urls": [
+      "https://github.com/langchain-ai/langgraph"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方项目入口和说明；未核验本项目的依赖版本。",
+    "use": "Agent 编排软件的候选背景引用；仅在论文实现确实使用时引用对应版本。",
+    "limits": "不是学术算法论文；本轮未核对 DeFuzz 的依赖文件或固定版本，不凭此声称实际使用。",
+    "tags": [
+      "software",
+      "agent-orchestration"
+    ],
+    "priority": "optional",
+    "bibtex": "@misc{langgraph,\n  author = {{LangChain}},\n  title = {{LangGraph}},\n  url = {https://github.com/langchain-ai/langgraph},\n  urldate = {2026-11-12},\n  note = {Official software repository; accessed 2026-11-12}\n}\n"
+  }
+]

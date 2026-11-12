@@ -1,0 +1,704 @@
+[
+  {
+    "key": "pnueli1998translationvalidation",
+    "title": "Translation Validation",
+    "authors": [
+      "A. Pnueli",
+      "M. Siegel",
+      "E. Singerman"
+    ],
+    "year": 1998,
+    "entry_type": "inproceedings",
+    "venue": "TACAS 1998",
+    "doi": "10.1007/bfb0054170",
+    "url": "https://doi.org/10.1007/bfb0054170",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1007/BFb0054170",
+      "https://link.springer.com/chapter/10.1007/BFb0054170",
+      "https://link.springer.com/content/pdf/10.1007/BFb0054170.pdf"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读Springer摘要、正式PDF首页及Introduction；正式出版年1998，网页First Online 2006不是论文年份。作者忠实保留原发表署名。",
+    "use": "支持逐次验证编译结果、共同语义框架和refinement的历史来源；与证明整个编译器的路线区分。",
+    "limits": "本文实例为SIGNAL到C，不能据此声称任意编译器后端或安全机制已有端到端保证；未将作者首字母臆造展开。",
+    "tags": [
+      "translation-validation",
+      "refinement",
+      "background"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{pnueli1998translationvalidation,\n  author = {A. Pnueli and M. Siegel and E. Singerman},\n  title = {{Translation Validation}},\n  year = {1998},\n  booktitle = {Tools and Algorithms for the Construction and Analysis of Systems},\n  pages = {151--166},\n  publisher = {Springer Berlin Heidelberg},\n  doi = {10.1007/bfb0054170},\n  url = {https://doi.org/10.1007/bfb0054170}\n}\n"
+  },
+  {
+    "key": "claessen2000quickcheck",
+    "title": "QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs",
+    "authors": [
+      "Koen Claessen",
+      "John Hughes"
+    ],
+    "year": 2000,
+    "entry_type": "inproceedings",
+    "venue": "ICFP 2000",
+    "doi": "10.1145/351240.351266",
+    "url": "https://doi.org/10.1145/351240.351266",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/351240.351266",
+      "https://api.crossref.org/works/10.1145/357766.351266"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社SIGPLAN重印的完整摘要，并核对ICFP正式论文DOI、作者、题名与副题。",
+    "use": "支持将性质写为可执行函数并在随机输入上测试，以及自定义生成器与性质判据相分离的经典先例。",
+    "limits": "测试给定性质不证明性质符合需求，也不构成程序普遍正确性证明；不能将可执行predicate本身称为形式化证明。",
+    "tags": [
+      "property-based-testing",
+      "random-testing",
+      "oracle"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{claessen2000quickcheck,\n  author = {Koen Claessen and John Hughes},\n  title = {{QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs}},\n  year = {2000},\n  booktitle = {Proceedings of the fifth ACM SIGPLAN international conference on Functional programming},\n  pages = {268--279},\n  publisher = {ACM},\n  doi = {10.1145/351240.351266},\n  url = {https://doi.org/10.1145/351240.351266}\n}\n"
+  },
+  {
+    "key": "zeller2002deltadebugging",
+    "title": "Simplifying and Isolating Failure-Inducing Input",
+    "authors": [
+      "Andreas Zeller",
+      "Ralf Hildebrandt"
+    ],
+    "year": 2002,
+    "entry_type": "article",
+    "venue": "IEEE Transactions on Software Engineering 28(2), 2002",
+    "doi": "10.1109/32.988498",
+    "url": "https://doi.org/10.1109/32.988498",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109/32.988498",
+      "https://www.st.cs.uni-saarland.de/papers/tse2002/tse2002.pdf"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读作者正式论文PDF首页、摘要与Introduction，核对作者全名及dd/ddmin区别；出版社元数据用于正式页码和DOI。",
+    "use": "支持保持失败条件的测试缩减和通过/失败输入之间差异隔离；用于解释最小案例产出与后续确认的分工。",
+    "limits": "ddmin的局部最小性不等于全局最小；缩减保留的是给定测试判据，不证明该判据语义正确。",
+    "tags": [
+      "test-reduction",
+      "delta-debugging",
+      "oracle"
+    ],
+    "priority": "core",
+    "bibtex": "@article{zeller2002deltadebugging,\n  author = {Andreas Zeller and Ralf Hildebrandt},\n  title = {{Simplifying and Isolating Failure-Inducing Input}},\n  year = {2002},\n  journal = {IEEE Transactions on Software Engineering},\n  volume = {28},\n  number = {2},\n  pages = {183--200},\n  publisher = {Institute of Electrical and Electronics Engineers (IEEE)},\n  doi = {10.1109/32.988498},\n  url = {https://doi.org/10.1109/32.988498}\n}\n"
+  },
+  {
+    "key": "ernst2007daikon",
+    "title": "The Daikon system for dynamic detection of likely invariants",
+    "authors": [
+      "Michael D. Ernst",
+      "Jeff H. Perkins",
+      "Philip J. Guo",
+      "Stephen McCamant",
+      "Carlos Pacheco",
+      "Matthew S. Tschantz",
+      "Chen Xiao"
+    ],
+    "year": 2007,
+    "entry_type": "article",
+    "venue": "Science of Computer Programming 69, 2007",
+    "doi": "10.1016/j.scico.2007.01.015",
+    "url": "https://doi.org/10.1016/j.scico.2007.01.015",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1016/j.scico.2007.01.015",
+      "https://homes.cs.washington.edu/~mernst/pubs/daikon-tool-scp2007.pdf"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读作者正式PDF首页、摘要、Introduction与示例前半部分；核对全部作者、正式期刊年份及DOI。",
+    "use": "支持从执行观测推断likely invariants，与从文档/历史推断规格形成可比较路线；提醒观测成立和规范性正确应分开。",
+    "limits": "likely invariant由已观察轨迹支持，不是普遍语义定理或安全意图证明；不能把动态统计推断与形式化验证混称。",
+    "tags": [
+      "invariant-inference",
+      "specification-mining",
+      "dynamic-analysis",
+      "oracle"
+    ],
+    "priority": "core",
+    "bibtex": "@article{ernst2007daikon,\n  author = {Michael D. Ernst and Jeff H. Perkins and Philip J. Guo and Stephen McCamant and Carlos Pacheco and Matthew S. Tschantz and Chen Xiao},\n  title = {{The Daikon system for dynamic detection of likely invariants}},\n  year = {2007},\n  journal = {Science of Computer Programming},\n  volume = {69},\n  number = {1-3},\n  pages = {35--45},\n  publisher = {Elsevier BV},\n  doi = {10.1016/j.scico.2007.01.015},\n  url = {https://doi.org/10.1016/j.scico.2007.01.015}\n}\n"
+  },
+  {
+    "key": "leroy2009compcert",
+    "title": "Formal verification of a realistic compiler",
+    "authors": [
+      "Xavier Leroy"
+    ],
+    "year": 2009,
+    "entry_type": "article",
+    "venue": "Communications of the ACM 52(7), 2009",
+    "doi": "10.1145/1538788.1538814",
+    "url": "https://doi.org/10.1145/1538788.1538814",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Formal%20verification%20of%20a%20realistic%20compiler&rows=2"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社登记的完整摘要，核对作者、正式年份、卷期、页码与DOI。",
+    "use": "支持区分编译器验证、具体翻译验证和测试；CompCert以Coq证明Clight到PowerPC的语义保持。",
+    "limits": "限于该论文所覆盖的语言、目标和证明边界。摘要明确提到源程序已证明安全性质向目标代码传递，不能写成形式化编译器验证完全不涉及安全。",
+    "tags": [
+      "compiler-verification",
+      "semantic-preservation",
+      "background"
+    ],
+    "priority": "core",
+    "bibtex": "@article{leroy2009compcert,\n  author = {Xavier Leroy},\n  title = {{Formal verification of a realistic compiler}},\n  year = {2009},\n  journal = {Communications of the ACM},\n  volume = {52},\n  number = {7},\n  pages = {107--115},\n  publisher = {Association for Computing Machinery (ACM)},\n  doi = {10.1145/1538788.1538814},\n  url = {https://doi.org/10.1145/1538788.1538814}\n}\n"
+  },
+  {
+    "key": "holler2012langfuzz",
+    "title": "Fuzzing with Code Fragments",
+    "authors": [
+      "Christian Holler",
+      "Kim Herzig",
+      "Andreas Zeller"
+    ],
+    "year": 2012,
+    "entry_type": "inproceedings",
+    "venue": "USENIX Security 2012",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity12/technical-sessions/presentation/holler",
+    "source_urls": [
+      "https://www.usenix.org/conference/usenixsecurity12/technical-sessions/presentation/holler"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读USENIX官方页完整摘要、作者列表及官方BibTeX，核对出版年和页码。",
+    "use": "支持语法生成与既有代码片段重用结合的输入生成路线，补足LLM前的语言测试生成背景。",
+    "limits": "语言引擎测试生成方法不等于编译器防御契约检查；语法有效和片段重用也不自动保证完整程序无语义错误。",
+    "tags": [
+      "generation",
+      "grammar",
+      "javascript",
+      "fuzzing"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{holler2012langfuzz,\n  author = {Christian Holler and Kim Herzig and Andreas Zeller},\n  title = {{Fuzzing with Code Fragments}},\n  booktitle = {21st USENIX Security Symposium (USENIX Security 12)},\n  year = {2012},\n  pages = {445--458},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/usenixsecurity12/technical-sessions/presentation/holler}\n}\n"
+  },
+  {
+    "key": "regehr2012creduce",
+    "title": "Test-Case Reduction for C Compiler Bugs",
+    "authors": [
+      "John Regehr",
+      "Yang Chen",
+      "Pascal Cuoq",
+      "Eric Eide",
+      "Chucky Ellison",
+      "Xuejun Yang"
+    ],
+    "year": 2012,
+    "entry_type": "inproceedings",
+    "venue": "PLDI 2012",
+    "doi": "10.1145/2254064.2254104",
+    "url": "https://doi.org/10.1145/2254064.2254104",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Test-case%20reduction%20for%20C%20compiler%20bugs&rows=2"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社SIGPLAN重印完整摘要，与PLDI正式记录核对；此条是正式论文，区别既有refs.bib的C-Reduce项目网页。",
+    "use": "支持编译器测试缩减需要语言相关变换，普通文本delta debugging可能保留过大或依赖UB的案例。",
+    "limits": "C-Reduce依赖interestingness test，不能把缩减完成解释成自动证明程序无UB或缺陷已确认；本条不是对既有creduce网页条目的自动替换。",
+    "tags": [
+      "test-reduction",
+      "compiler-testing",
+      "undefined-behavior"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{regehr2012creduce,\n  author = {John Regehr and Yang Chen and Pascal Cuoq and Eric Eide and Chucky Ellison and Xuejun Yang},\n  title = {{Test-Case Reduction for C Compiler Bugs}},\n  year = {2012},\n  booktitle = {Proceedings of the 33rd ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  pages = {335--346},\n  publisher = {ACM},\n  doi = {10.1145/2254064.2254104},\n  url = {https://doi.org/10.1145/2254064.2254104}\n}\n"
+  },
+  {
+    "key": "le2015athena",
+    "title": "Finding Deep Compiler Bugs via Guided Stochastic Program Mutation",
+    "authors": [
+      "Vu Le",
+      "Chengnian Sun",
+      "Zhendong Su"
+    ],
+    "year": 2015,
+    "entry_type": "inproceedings",
+    "venue": "OOPSLA 2015",
+    "doi": "10.1145/2814270.2814319",
+    "url": "https://doi.org/10.1145/2814270.2814319",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Finding%20Deep%20Compiler%20Bugs%20via%20Guided%20Stochastic%20Program%20Mutation&rows=2"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社SIGPLAN重印摘要；与正式OOPSLA会议记录匹配题名、完整作者列表、年份和页码。",
+    "use": "支持EMI由Orion删死代码扩展至Athena插入/删除未执行代码，并用控制流多样性目标引导随机搜索的演进。",
+    "limits": "等价仅针对给定输入；不是全输入语义等价，也不直接证明安全防御契约。没有复现实验或重新核验所报bug数量。",
+    "tags": [
+      "compiler-testing",
+      "emi",
+      "metamorphic-testing",
+      "mutation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{le2015athena,\n  author = {Vu Le and Chengnian Sun and Zhendong Su},\n  title = {{Finding Deep Compiler Bugs via Guided Stochastic Program Mutation}},\n  year = {2015},\n  booktitle = {Proceedings of the 2015 ACM SIGPLAN International Conference on Object-Oriented Programming, Systems, Languages, and Applications},\n  pages = {386--399},\n  publisher = {ACM},\n  doi = {10.1145/2814270.2814319},\n  url = {https://doi.org/10.1145/2814270.2814319}\n}\n"
+  },
+  {
+    "key": "lidbury2015clsmith",
+    "title": "Many-Core Compiler Fuzzing",
+    "authors": [
+      "Christopher Lidbury",
+      "Andrei Lascu",
+      "Nathan Chong",
+      "Alastair F. Donaldson"
+    ],
+    "year": 2015,
+    "entry_type": "inproceedings",
+    "venue": "PLDI 2015",
+    "doi": "10.1145/2737924.2737986",
+    "url": "https://doi.org/10.1145/2737924.2737986",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Many-core%20compiler%20fuzzing&rows=3"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社SIGPLAN重印摘要，并核对同论文的PLDI正式记录。",
+    "use": "支持随机差分与EMI向OpenCL多核环境扩展，生成确定性、可通信kernel，以及增加动态死代码的注入机制。",
+    "limits": "涉及多设备配置并不等于具有跨ISA语义或安全契约可比性；不能直接当DeFuzz四ISA实验的统一baseline。",
+    "tags": [
+      "compiler-testing",
+      "opencl",
+      "many-core",
+      "differential-testing",
+      "emi"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{lidbury2015clsmith,\n  author = {Christopher Lidbury and Andrei Lascu and Nathan Chong and Alastair F. Donaldson},\n  title = {{Many-Core Compiler Fuzzing}},\n  year = {2015},\n  booktitle = {Proceedings of the 36th ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  pages = {65--76},\n  publisher = {ACM},\n  doi = {10.1145/2737924.2737986},\n  url = {https://doi.org/10.1145/2737924.2737986}\n}\n"
+  },
+  {
+    "key": "lopes2015alive",
+    "title": "Provably Correct Peephole Optimizations with Alive",
+    "authors": [
+      "Nuno P. Lopes",
+      "David Menendez",
+      "Santosh Nagarakatte",
+      "John Regehr"
+    ],
+    "year": 2015,
+    "entry_type": "inproceedings",
+    "venue": "PLDI 2015",
+    "doi": "10.1145/2737924.2737965",
+    "url": "https://doi.org/10.1145/2737924.2737965",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Provably%20correct%20peephole%20optimizations%20with%20Alive&rows=2"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读同一论文SIGPLAN重印记录的完整摘要，并以会议记录核对正式DOI、作者和页码。",
+    "use": "支持以DSL表达LLVM局部优化、自动证明或产生反例，以及从已验证规则生成实现的前例。",
+    "limits": "Alive主要针对所支持的局部优化及其语义模型，不等于验证所有后端防御；不能把整数原版的范围套用为任意浮点优化。",
+    "tags": [
+      "translation-validation",
+      "llvm",
+      "peephole",
+      "oracle"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{lopes2015alive,\n  author = {Nuno P. Lopes and David Menendez and Santosh Nagarakatte and John Regehr},\n  title = {{Provably Correct Peephole Optimizations with Alive}},\n  year = {2015},\n  booktitle = {Proceedings of the 36th ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  pages = {22--32},\n  publisher = {ACM},\n  doi = {10.1145/2737924.2737965},\n  url = {https://doi.org/10.1145/2737924.2737965}\n}\n"
+  },
+  {
+    "key": "menendez2016alivefp",
+    "title": "Alive-FP: Automated Verification of Floating Point Based Peephole Optimizations in LLVM",
+    "authors": [
+      "David Menendez",
+      "Santosh Nagarakatte",
+      "Aarti Gupta"
+    ],
+    "year": 2016,
+    "entry_type": "inproceedings",
+    "venue": "SAS 2016",
+    "doi": "10.1007/978-3-662-53413-7_16",
+    "url": "https://doi.org/10.1007/978-3-662-53413-7_16",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Alive-FP%20Automated%20Verification%20of%20Floating%20Point%20Based%20Peephole%20Optimizations&rows=2",
+      "https://link.springer.com/chapter/10.1007/978-3-662-53413-7_16"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读Springer原文摘要及Introduction，核对正式作者、出版年、题名、页码和DOI。",
+    "use": "支持浮点优化验证需要明确NaN、有符号零、无穷及fast-math等语义前提，形式化checker的范围受模型约束。",
+    "limits": "只覆盖论文声明的一类不会造成精度损失的浮点/fast-math优化，不可外推所有浮点近似优化都已得到验证。",
+    "tags": [
+      "translation-validation",
+      "llvm",
+      "floating-point",
+      "semantic-model"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{menendez2016alivefp,\n  author = {David Menendez and Santosh Nagarakatte and Aarti Gupta},\n  title = {{Alive-FP: Automated Verification of Floating Point Based Peephole Optimizations in LLVM}},\n  year = {2016},\n  booktitle = {Static Analysis},\n  pages = {317--337},\n  publisher = {Springer Berlin Heidelberg},\n  doi = {10.1007/978-3-662-53413-7_16},\n  url = {https://doi.org/10.1007/978-3-662-53413-7_16}\n}\n"
+  },
+  {
+    "key": "sun2016hermes",
+    "title": "Finding Compiler Bugs via Live Code Mutation",
+    "authors": [
+      "Chengnian Sun",
+      "Vu Le",
+      "Zhendong Su"
+    ],
+    "year": 2016,
+    "entry_type": "inproceedings",
+    "venue": "OOPSLA 2016",
+    "doi": "10.1145/2983990.2984038",
+    "url": "https://doi.org/10.1145/2983990.2984038",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Finding%20compiler%20bugs%20via%20live%20code%20mutation%20Hermes&rows=3"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社SIGPLAN重印完整摘要，核对正式会议记录；确认工具名Hermes及live/dead两类区域的变异。",
+    "use": "支持EMI不应被一概描述为只能改死代码；Hermes扩展到活代码区域，是Related Work潜在的重要遗漏。",
+    "limits": "针对输入集保持等价仍是前提；活代码变异并不自动产生针对编译器防御的专门oracle。",
+    "tags": [
+      "compiler-testing",
+      "emi",
+      "metamorphic-testing",
+      "live-code-mutation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{sun2016hermes,\n  author = {Chengnian Sun and Vu Le and Zhendong Su},\n  title = {{Finding Compiler Bugs via Live Code Mutation}},\n  year = {2016},\n  booktitle = {Proceedings of the 2016 ACM SIGPLAN International Conference on Object-Oriented Programming, Systems, Languages, and Applications},\n  pages = {849--863},\n  publisher = {ACM},\n  doi = {10.1145/2983990.2984038},\n  url = {https://doi.org/10.1145/2983990.2984038}\n}\n"
+  },
+  {
+    "key": "donaldson2017glfuzz",
+    "title": "Automated Testing of Graphics Shader Compilers",
+    "authors": [
+      "Alastair F. Donaldson",
+      "Hugues Evrard",
+      "Andrei Lascu",
+      "Paul Thomson"
+    ],
+    "year": 2017,
+    "entry_type": "article",
+    "venue": "PACMPL 1(OOPSLA), 2017",
+    "doi": "10.1145/3133917",
+    "url": "https://doi.org/10.1145/3133917",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Metamorphic%20Testing%20of%20Graphics%20Shader%20Compilers&rows=2"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社完整摘要，确认GLFuzz、语义等价shader变换、图像差异与自动缩减的描述；核对全部作者和DOI。",
+    "use": "支持当图形结果不完全指定时，metamorphic testing仍可为shader编译器构造实用oracle；说明编译器测试并非只比较整数checksum。",
+    "limits": "图像等价/渲染差异的判据依赖该领域设定，不可直接外推为所有安全防御契约oracle；不复用其漏洞或效果数字。",
+    "tags": [
+      "compiler-testing",
+      "graphics",
+      "metamorphic-testing",
+      "oracle"
+    ],
+    "priority": "supporting",
+    "bibtex": "@article{donaldson2017glfuzz,\n  author = {Alastair F. Donaldson and Hugues Evrard and Andrei Lascu and Paul Thomson},\n  title = {{Automated Testing of Graphics Shader Compilers}},\n  year = {2017},\n  journal = {Proceedings of the ACM on Programming Languages},\n  volume = {1},\n  number = {OOPSLA},\n  pages = {1--29},\n  publisher = {Association for Computing Machinery (ACM)},\n  doi = {10.1145/3133917},\n  url = {https://doi.org/10.1145/3133917}\n}\n"
+  },
+  {
+    "key": "zhang2017spe",
+    "title": "Skeletal Program Enumeration for Rigorous Compiler Testing",
+    "authors": [
+      "Qirun Zhang",
+      "Chengnian Sun",
+      "Zhendong Su"
+    ],
+    "year": 2017,
+    "entry_type": "inproceedings",
+    "venue": "PLDI 2017",
+    "doi": "10.1145/3062341.3062379",
+    "url": "https://doi.org/10.1145/3062341.3062379",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3062341.3062379",
+      "https://arxiv.org/abs/1610.03148",
+      "https://people.inf.ethz.ch/suz/publications/"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读作者arXiv v4完整摘要及作者publication页面，正式年份与DOI使用PLDI记录。",
+    "use": "支持在固定语法骨架和变量集合下系统枚举非alpha等价变量使用模式；补足随机生成之外的枚举路线。",
+    "limits": "穷举保证受固定骨架与变量集合限定，不能称为穷举所有程序或证明编译器正确。",
+    "tags": [
+      "compiler-testing",
+      "enumeration",
+      "generation",
+      "coverage"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{zhang2017spe,\n  author = {Qirun Zhang and Chengnian Sun and Zhendong Su},\n  title = {{Skeletal Program Enumeration for Rigorous Compiler Testing}},\n  year = {2017},\n  booktitle = {Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  pages = {347--361},\n  publisher = {ACM},\n  doi = {10.1145/3062341.3062379},\n  url = {https://doi.org/10.1145/3062341.3062379}\n}\n"
+  },
+  {
+    "key": "chen2018metamorphicsurvey",
+    "title": "Metamorphic Testing: A Review of Challenges and Opportunities",
+    "authors": [
+      "Tsong Yueh Chen",
+      "Fei-Ching Kuo",
+      "Huai Liu",
+      "Pak-Lok Poon",
+      "Dave Towey",
+      "T. H. Tse",
+      "Zhi Quan Zhou"
+    ],
+    "year": 2018,
+    "entry_type": "article",
+    "venue": "ACM Computing Surveys 51(1), 2018",
+    "doi": "10.1145/3143561",
+    "url": "https://doi.org/10.1145/3143561",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3143561"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读出版社登记的完整摘要，核对title与subtitle、全部作者、正式卷期与年份。",
+    "use": "支持metamorphic relation是多输入及期望输出之间的必要性质，兼具测试生成与结果判定角色；可解释关系型oracle。",
+    "limits": "关系需符合目标规格，满足关系不代表实现全面正确；本文是综述，不能作为DeFuzz checker正确性的证明。T. H. Tse保留公开发表署名。",
+    "tags": [
+      "metamorphic-testing",
+      "oracle",
+      "survey"
+    ],
+    "priority": "core",
+    "bibtex": "@article{chen2018metamorphicsurvey,\n  author = {Tsong Yueh Chen and Fei-Ching Kuo and Huai Liu and Pak-Lok Poon and Dave Towey and T. H. Tse and Zhi Quan Zhou},\n  title = {{Metamorphic Testing: A Review of Challenges and Opportunities}},\n  year = {2018},\n  journal = {ACM Computing Surveys},\n  volume = {51},\n  number = {1},\n  pages = {1--27},\n  publisher = {Association for Computing Machinery (ACM)},\n  doi = {10.1145/3143561},\n  url = {https://doi.org/10.1145/3143561}\n}\n"
+  },
+  {
+    "key": "klees2018fuzzeval",
+    "title": "Evaluating Fuzz Testing",
+    "authors": [
+      "George Klees",
+      "Andrew Ruef",
+      "Benji Cooper",
+      "Shiyi Wei",
+      "Michael Hicks"
+    ],
+    "year": 2018,
+    "entry_type": "inproceedings",
+    "venue": "ACM CCS 2018",
+    "doi": "10.1145/3243734.3243804",
+    "url": "https://doi.org/10.1145/3243734.3243804",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3243734.3243804",
+      "https://arxiv.org/pdf/1808.09700"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读作者arXiv论文摘要和Introduction（含重复运行、统计检验、基准/种子/预算敏感性及ground truth讨论），正式出版元数据与CCS匹配。",
+    "use": "支持重复实验、合理baseline、代表性基准、固定资源、统计检验和以真实bug而非原始crash计数评价。",
+    "limits": "不应从该文机械推出某个统一运行次数或时长适合所有DeFuzz实验；其对既有论文的结论属于当年的样本范围。",
+    "tags": [
+      "fuzzing-evaluation",
+      "statistics",
+      "benchmark",
+      "metrics"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{klees2018fuzzeval,\n  author = {George Klees and Andrew Ruef and Benji Cooper and Shiyi Wei and Michael Hicks},\n  title = {{Evaluating Fuzz Testing}},\n  year = {2018},\n  booktitle = {Proceedings of the 2018 ACM SIGSAC Conference on Computer and Communications Security},\n  pages = {2123--2138},\n  publisher = {ACM},\n  doi = {10.1145/3243734.3243804},\n  url = {https://doi.org/10.1145/3243734.3243804}\n}\n"
+  },
+  {
+    "key": "sun2018perses",
+    "title": "Perses: Syntax-Guided Program Reduction",
+    "authors": [
+      "Chengnian Sun",
+      "Yuanbo Li",
+      "Qirun Zhang",
+      "Tianxiao Gu",
+      "Zhendong Su"
+    ],
+    "year": 2018,
+    "entry_type": "inproceedings",
+    "venue": "ICSE 2018",
+    "doi": "10.1145/3180155.3180236",
+    "url": "https://doi.org/10.1145/3180155.3180236",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3180155.3180236",
+      "https://raw.githubusercontent.com/perses-project/perses/master/doc/publication/2018_perses_icse.pdf",
+      "https://raw.githubusercontent.com/perses-project/perses/master/README.md"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读作者官方仓库所附ICSE正式PDF摘要和Introduction，以及README；论文全题名由PDF补全出版社只保留Perses的短title。",
+    "use": "支持用输入语法避免大量语法无效的缩减候选，以及通用reducer与性质判据之间的接口。",
+    "limits": "语法有效不等于语义有效或不含UB；性质保持依赖外部测试脚本，不能据此证明oracle正确。",
+    "tags": [
+      "test-reduction",
+      "syntax-guided",
+      "language-agnostic"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{sun2018perses,\n  author = {Chengnian Sun and Yuanbo Li and Qirun Zhang and Tianxiao Gu and Zhendong Su},\n  title = {{Perses: Syntax-Guided Program Reduction}},\n  year = {2018},\n  booktitle = {Proceedings of the 40th International Conference on Software Engineering},\n  pages = {361--371},\n  publisher = {ACM},\n  doi = {10.1145/3180155.3180236},\n  url = {https://doi.org/10.1145/3180155.3180236}\n}\n"
+  },
+  {
+    "key": "gharachorlu2019pardis",
+    "title": "Pardis: Priority Aware Test Case Reduction",
+    "authors": [
+      "Golnaz Gharachorlu",
+      "Nick Sumner"
+    ],
+    "year": 2019,
+    "entry_type": "inproceedings",
+    "venue": "FASE 2019",
+    "doi": "10.1007/978-3-030-16722-6_24",
+    "url": "https://doi.org/10.1007/978-3-030-16722-6_24",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Pardis%20Priority%20Aware%20Test%20Case%20Reduction&rows=2",
+      "https://link.springer.com/chapter/10.1007/978-3-030-16722-6_24",
+      "https://link.springer.com/content/pdf/10.1007/978-3-030-16722-6_24.pdf"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读Springer全文摘要和Introduction以及正式PDF首页；PDF确认工具名Pardis，修正出版社文本元数据遗漏的图片标题。",
+    "use": "支持结构化缩减中的优先级反转会影响效率，作为reduction成本与实现设计的补充背景。",
+    "limits": "相对Perses的效率数字依赖论文同组基准与设置；不可宣称对所有语言/缺陷普遍更快。",
+    "tags": [
+      "test-reduction",
+      "priority",
+      "efficiency"
+    ],
+    "priority": "optional",
+    "bibtex": "@inproceedings{gharachorlu2019pardis,\n  author = {Golnaz Gharachorlu and Nick Sumner},\n  title = {{Pardis: Priority Aware Test Case Reduction}},\n  year = {2019},\n  booktitle = {Fundamental Approaches to Software Engineering},\n  pages = {409--426},\n  publisher = {Springer International Publishing},\n  doi = {10.1007/978-3-030-16722-6_24},\n  url = {https://doi.org/10.1007/978-3-030-16722-6_24}\n}\n"
+  },
+  {
+    "key": "hazimeh2020magma",
+    "title": "Magma: A Ground-Truth Fuzzing Benchmark",
+    "authors": [
+      "Ahmad Hazimeh",
+      "Adrian Herrera",
+      "Mathias Payer"
+    ],
+    "year": 2020,
+    "entry_type": "article",
+    "venue": "PACM on Measurement and Analysis of Computing Systems 4(3), 2020",
+    "doi": "10.1145/3428334",
+    "url": "https://doi.org/10.1145/3428334",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3428334",
+      "https://arxiv.org/pdf/2009.01120"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读完整论文的作者arXiv摘要、Introduction与指标问题讨论，并核对2020完整期刊论文DOI；排除2021两页会议摘要版本。",
+    "use": "支持区分bug reached、triggered、detected；说明crash去重和覆盖率不足以替代真实bug ground truth。",
+    "limits": "Magma自身是特定应用及历史bug基准，不可直接当作DeFuzz防御缺陷的ground truth；也不支持覆盖率与任何任务效果完全无关的极端说法。",
+    "tags": [
+      "fuzzing-evaluation",
+      "ground-truth",
+      "benchmark",
+      "metrics"
+    ],
+    "priority": "core",
+    "bibtex": "@article{hazimeh2020magma,\n  author = {Ahmad Hazimeh and Adrian Herrera and Mathias Payer},\n  title = {{Magma: A Ground-Truth Fuzzing Benchmark}},\n  year = {2020},\n  journal = {Proceedings of the ACM on Measurement and Analysis of Computing Systems},\n  volume = {4},\n  number = {3},\n  pages = {1--29},\n  publisher = {Association for Computing Machinery (ACM)},\n  doi = {10.1145/3428334},\n  url = {https://doi.org/10.1145/3428334}\n}\n"
+  },
+  {
+    "key": "park2020die",
+    "title": "Fuzzing JavaScript Engines with Aspect-preserving Mutation",
+    "authors": [
+      "Soyeon Park",
+      "Wen Xu",
+      "Insu Yun",
+      "Daehee Jang",
+      "Taesoo Kim"
+    ],
+    "year": 2020,
+    "entry_type": "inproceedings",
+    "venue": "IEEE Symposium on Security and Privacy 2020",
+    "doi": "10.1109/sp40000.2020.00067",
+    "url": "https://doi.org/10.1109/sp40000.2020.00067",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Fuzzing%20JavaScript%20Engines%20with%20Aspect-preserving%20Mutation&rows=3",
+      "https://taesoo.kim/pubs/2020/park:die.pdf"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "已读作者托管正式论文首页摘要与Introduction，核对出版社正式年份、题名、作者、页码。",
+    "use": "支持随机变异保留类型和结构等有利于触发深层JIT行为的特征，说明输入多样性与保留触发条件之间的权衡。",
+    "limits": "aspect-preserving指概率性保留特征，不是严格保语义或形式化证明；JavaScript引擎结果不能直接视为LLVM/GCC防御检查效果。",
+    "tags": [
+      "jit",
+      "javascript",
+      "mutation",
+      "generation"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{park2020die,\n  author = {Soyeon Park and Wen Xu and Insu Yun and Daehee Jang and Taesoo Kim},\n  title = {{Fuzzing JavaScript Engines with Aspect-preserving Mutation}},\n  year = {2020},\n  booktitle = {2020 IEEE Symposium on Security and Privacy (SP)},\n  pages = {1629--1642},\n  publisher = {IEEE},\n  doi = {10.1109/sp40000.2020.00067},\n  url = {https://doi.org/10.1109/sp40000.2020.00067}\n}\n"
+  },
+  {
+    "key": "manes2021fuzzingsurvey",
+    "title": "The Art, Science, and Engineering of Fuzzing: A Survey",
+    "authors": [
+      "Valentin J.M. Manes",
+      "HyungSeok Han",
+      "Choongwoo Han",
+      "Sang Kil Cha",
+      "Manuel Egele",
+      "Edward J. Schwartz",
+      "Maverick Woo"
+    ],
+    "year": 2021,
+    "entry_type": "article",
+    "venue": "IEEE Transactions on Software Engineering 47(11), 2021",
+    "doi": "10.1109/tse.2019.2946563",
+    "url": "https://doi.org/10.1109/tse.2019.2946563",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Fuzzing%20Art%20Science%20and%20Engineering&rows=2",
+      "https://arxiv.org/abs/1812.00140"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读作者arXiv v4完整摘要并核对IEEE正式卷期页码；正式发表年2021，区别预印本2018及early-access DOI中的2019。",
+    "use": "支持fuzzing的一般模型及各阶段设计分类，用于Background组织输入生成、执行、反馈与结果判定。",
+    "limits": "这是综述及分类参考，不能为DeFuzz具体性能或首创性直接背书；本文arXiv曾标注投ACM CSUR但正式载体是IEEE TSE。",
+    "tags": [
+      "fuzzing",
+      "survey",
+      "taxonomy",
+      "background"
+    ],
+    "priority": "supporting",
+    "bibtex": "@article{manes2021fuzzingsurvey,\n  author = {Valentin J.M. Manes and HyungSeok Han and Choongwoo Han and Sang Kil Cha and Manuel Egele and Edward J. Schwartz and Maverick Woo},\n  title = {{The Art, Science, and Engineering of Fuzzing: A Survey}},\n  year = {2021},\n  journal = {IEEE Transactions on Software Engineering},\n  volume = {47},\n  number = {11},\n  pages = {2312--2331},\n  publisher = {Institute of Electrical and Electronics Engineers (IEEE)},\n  doi = {10.1109/tse.2019.2946563},\n  url = {https://doi.org/10.1109/tse.2019.2946563}\n}\n"
+  },
+  {
+    "key": "metzman2021fuzzbench",
+    "title": "FuzzBench: An Open Fuzzer Benchmarking Platform and Service",
+    "authors": [
+      "Jonathan Metzman",
+      "László Szekeres",
+      "Laurent Simon",
+      "Read Sprabery",
+      "Abhishek Arya"
+    ],
+    "year": 2021,
+    "entry_type": "inproceedings",
+    "venue": "ESEC/FSE 2021 Industry Track",
+    "doi": "10.1145/3468264.3473932",
+    "url": "https://doi.org/10.1145/3468264.3473932",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3468264.3473932",
+      "https://research.google/pubs/fuzzbench-an-open-fuzzer-benchmarking-platform-and-service/",
+      "https://raw.githubusercontent.com/google/fuzzbench/master/README.md"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读Google Research官方论文摘要及官方仓库README，并核对正式会议作者、年份、页码与DOI。",
+    "use": "支持可重现的大规模fuzzer比较平台、统一集成接口和统计报告的实验组织思路。",
+    "limits": "使用FuzzBench不自动保证DeFuzz编译器/防御任务公平；样本README的24小时20次配置只是示例，不能据此宣称是统一必需标准。",
+    "tags": [
+      "fuzzing-evaluation",
+      "benchmark",
+      "reproducibility",
+      "infrastructure"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{metzman2021fuzzbench,\n  author = {Jonathan Metzman and L{\\'a}szl{\\'o} Szekeres and Laurent Simon and Read Sprabery and Abhishek Arya},\n  title = {{FuzzBench: An Open Fuzzer Benchmarking Platform and Service}},\n  year = {2021},\n  booktitle = {Proceedings of the 29th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},\n  pages = {1393--1403},\n  publisher = {ACM},\n  doi = {10.1145/3468264.3473932},\n  url = {https://doi.org/10.1145/3468264.3473932}\n}\n"
+  },
+  {
+    "key": "gross2023fuzzilli",
+    "title": "FUZZILLI: Fuzzing for JavaScript JIT Compiler Vulnerabilities",
+    "authors": [
+      "Samuel Groß",
+      "Simon Koch",
+      "Lukas Bernhard",
+      "Thorsten Holz",
+      "Martin Johns"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "NDSS 2023",
+    "doi": "10.14722/ndss.2023.24290",
+    "url": "https://doi.org/10.14722/ndss.2023.24290",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=JIT-Picking%20Differential%20Fuzzing%20of%20JavaScript%20Engines&rows=2",
+      "https://www.ndss-symposium.org/ndss-paper/fuzzilli-fuzzing-for-javascript-jit-compiler-vulnerabilities/"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已读NDSS官方论文页完整摘要及作者列表，并核对出版社DOI记录。",
+    "use": "支持专门设计中间表示以生成能触发JIT语义的输入；用于讨论到达编译阶段需要结构化输入。",
+    "limits": "不能将其JIT漏洞目标等同编译器静态防御契约验证；官方摘要的首创/覆盖声明仅属该论文自身范围，不据此排除所有先前方法。",
+    "tags": [
+      "jit",
+      "javascript",
+      "intermediate-representation",
+      "generation"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{gross2023fuzzilli,\n  author = {Samuel Gro{\\ss} and Simon Koch and Lukas Bernhard and Thorsten Holz and Martin Johns},\n  title = {{FUZZILLI: Fuzzing for JavaScript JIT Compiler Vulnerabilities}},\n  year = {2023},\n  booktitle = {Proceedings 2023 Network and Distributed System Security Symposium},\n  publisher = {Internet Society},\n  doi = {10.14722/ndss.2023.24290},\n  url = {https://doi.org/10.14722/ndss.2023.24290}\n}\n"
+  }
+]

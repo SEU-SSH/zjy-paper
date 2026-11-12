@@ -1,0 +1,889 @@
+[
+  {
+    "key": "abadi2009cfi",
+    "title": "Control-flow integrity principles, implementations, and applications",
+    "authors": [
+      "Martín Abadi",
+      "Mihai Budiu",
+      "Úlfar Erlingsson",
+      "Jay Ligatti"
+    ],
+    "year": 2009,
+    "entry_type": "article",
+    "venue": "ACM Transactions on Information and System Security",
+    "doi": "10.1145/1609956.1609960",
+    "url": "https://doi.org/10.1145/1609956.1609960",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/1609956.1609960"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对出版方登记的 Crossref 题名、作者、年份、venue、DOI，并阅读同一记录的完整摘要；未通读全文或复现实验。",
+    "use": "用于定义 CFI 的基本策略、控制流约束及其与影子调用栈的联系。",
+    "limits": "此条为 2009 年扩展期刊版，不能写成 CFI 首次提出于 2009 年；安全保证依赖论文策略与威胁模型，不代表所有实际 CFI 实现都阻止全部控制流攻击。",
+    "tags": [
+      "CFI",
+      "foundation"
+    ],
+    "priority": "core",
+    "bibtex": "@article{abadi2009cfi,\n  author = {Mart{\\'i}n Abadi and Mihai Budiu and {\\'U}lfar Erlingsson and Jay Ligatti},\n  title = {{Control-flow integrity principles, implementations, and applications}},\n  year = {2009},\n  journal = {ACM Transactions on Information and System Security},\n  volume = {13},\n  number = {1},\n  pages = {1--40},\n  doi = {10.1145/1609956.1609960},\n  url = {https://doi.org/10.1145/1609956.1609960}\n}\n"
+  },
+  {
+    "key": "burow2017cfisurvey",
+    "title": "Control-Flow Integrity: Precision, Security, and Performance",
+    "authors": [
+      "Nathan Burow",
+      "Scott A. Carr",
+      "Joseph Nash",
+      "Per Larsen",
+      "Michael Franz",
+      "Stefan Brunthaler",
+      "Mathias Payer"
+    ],
+    "year": 2017,
+    "entry_type": "article",
+    "venue": "ACM Computing Surveys",
+    "doi": "10.1145/3054924",
+    "url": "https://doi.org/10.1145/3054924",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3054924",
+      "https://hexhive.epfl.ch/publications/files/17CSUR.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 Crossref 出版元数据及完整摘要，并阅读作者公开稿的署名、摘要与引言；作者稿保留占位 DOI/卷期，最终元数据以出版登记为依据；未通读全文或复现实验。",
+    "use": "用于组织 CFI 精度、安全性、性能和前向/后向边比较维度。",
+    "limits": "该综述反映当时系统；不能据此概括所有 2026 年编译器实现，论文性能数字也不能直接充当 DeFuzz baseline。 2017 为首次在线发表年；Crossref 另列 2018 印刷日期，二者不是两项独立研究。",
+    "tags": [
+      "CFI",
+      "survey"
+    ],
+    "priority": "core",
+    "bibtex": "@article{burow2017cfisurvey,\n  author = {Nathan Burow and Scott A. Carr and Joseph Nash and Per Larsen and Michael Franz and Stefan Brunthaler and Mathias Payer},\n  title = {{Control-Flow Integrity: Precision, Security, and Performance}},\n  year = {2017},\n  journal = {ACM Computing Surveys},\n  volume = {50},\n  number = {1},\n  pages = {1--33},\n  doi = {10.1145/3054924},\n  url = {https://doi.org/10.1145/3054924}\n}\n",
+    "publication_dates": {
+      "online": "2017-04-04",
+      "print": "2018-01-31"
+    },
+    "year_basis": "采用首次在线发表年 2017，与作者组论文列表一致；Crossref 另登记 2018 的印刷卷期日期。"
+  },
+  {
+    "key": "cowan1998stackguard",
+    "title": "StackGuard: Automatic Adaptive Detection and Prevention of Buffer-Overflow Attacks",
+    "authors": [
+      "Crispin Cowan",
+      "Calton Pu",
+      "Dave Maier",
+      "Heather Hinton",
+      "Jonathan Walpole",
+      "Peat Bakke",
+      "Steve Beattie",
+      "Aaron Grier",
+      "Perry Wagle",
+      "Qian Zhang"
+    ],
+    "year": 1998,
+    "entry_type": "inproceedings",
+    "venue": "7th USENIX Security Symposium",
+    "doi": null,
+    "url": "https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf",
+    "source_urls": [
+      "https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 原始 PDF 的正文题名、作者、摘要与引言；作者顺序取正文署名而非归档封面；未通读全文或复现实验。",
+    "use": "用于交代编译器插入栈保护的历史及 canary 机制的背景。",
+    "limits": "历史原型不等同于当前 GCC/LLVM stack protector；不能表述为检测一切栈越界或内存破坏。",
+    "tags": [
+      "stack-protector",
+      "canary",
+      "foundation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{cowan1998stackguard,\n  author = {Crispin Cowan and Calton Pu and Dave Maier and Heather Hinton and Jonathan Walpole and Peat Bakke and Steve Beattie and Aaron Grier and Perry Wagle and Qian Zhang},\n  title = {{StackGuard: Automatic Adaptive Detection and Prevention of Buffer-Overflow Attacks}},\n  year = {1998},\n  booktitle = {7th USENIX Security Symposium},\n  url = {https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf}\n}\n"
+  },
+  {
+    "key": "kuznetsov2014cpi",
+    "title": "Code-Pointer Integrity",
+    "authors": [
+      "Volodymyr Kuznetsov",
+      "Laszlo Szekeres",
+      "Mathias Payer",
+      "George Candea",
+      "R. Sekar",
+      "Dawn Song"
+    ],
+    "year": 2014,
+    "entry_type": "inproceedings",
+    "venue": "11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/osdi14/technical-sessions/presentation/kuznetsov",
+    "source_urls": [
+      "https://www.usenix.org/conference/osdi14/technical-sessions/presentation/kuznetsov"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 官方页面的完整摘要与官方 BibTeX；未通读全文或复现实验。",
+    "use": "用于介绍代码指针保护、CPI/CPS 及安全栈分离相关设计背景。",
+    "limits": "需区分论文的 CPI、较弱 CPS 与具体 SafeStack 实现；不能把整篇 CPI 的保证直接赋给当前 LLVM SafeStack。",
+    "tags": [
+      "CPI",
+      "CPS",
+      "SafeStack",
+      "pointer-integrity"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{kuznetsov2014cpi,\n  author = {Volodymyr Kuznetsov and Laszlo Szekeres and Mathias Payer and George Candea and R. Sekar and Dawn Song},\n  title = {{Code-Pointer Integrity}},\n  year = {2014},\n  booktitle = {11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14)},\n  pages = {147--163},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/osdi14/technical-sessions/presentation/kuznetsov}\n}\n"
+  },
+  {
+    "key": "tice2014forwardcfi",
+    "title": "Enforcing Forward-Edge Control-Flow Integrity in GCC & LLVM",
+    "authors": [
+      "Caroline Tice",
+      "Tom Roeder",
+      "Peter Collingbourne",
+      "Stephen Checkoway",
+      "Úlfar Erlingsson",
+      "Luis Lozano",
+      "Geoff Pike"
+    ],
+    "year": 2014,
+    "entry_type": "inproceedings",
+    "venue": "23rd USENIX Security Symposium (USENIX Security 14)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity14/technical-sessions/presentation/tice",
+    "source_urls": [
+      "https://www.usenix.org/conference/usenixsecurity14/technical-sessions/presentation/tice"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 官方页面的完整摘要与官方 BibTeX；未通读全文或复现实验。",
+    "use": "用于说明生产编译器中的前向边 CFI 及增量编译、动态库等兼容性约束。",
+    "limits": "研究对象是当时实现和前向边策略，不证明当前所有 CFI 模式、所有 ISA 或后向边保护均正确。",
+    "tags": [
+      "CFI",
+      "compiler-hardening",
+      "LLVM",
+      "GCC"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{tice2014forwardcfi,\n  author = {Caroline Tice and Tom Roeder and Peter Collingbourne and Stephen Checkoway and {\\'U}lfar Erlingsson and Luis Lozano and Geoff Pike},\n  title = {{Enforcing Forward-Edge Control-Flow Integrity in GCC \\& LLVM}},\n  year = {2014},\n  booktitle = {23rd USENIX Security Symposium (USENIX Security 14)},\n  pages = {941--955},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/usenixsecurity14/technical-sessions/presentation/tice}\n}\n"
+  },
+  {
+    "key": "burow2019shadowstacks",
+    "title": "SoK: Shining Light on Shadow Stacks",
+    "authors": [
+      "Nathan Burow",
+      "Xinping Zhang",
+      "Mathias Payer"
+    ],
+    "year": 2019,
+    "entry_type": "inproceedings",
+    "venue": "2019 IEEE Symposium on Security and Privacy (SP)",
+    "doi": "10.1109/sp.2019.00076",
+    "url": "https://doi.org/10.1109/sp.2019.00076",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109/sp.2019.00076",
+      "https://hexhive.epfl.ch/publications/files/19Oakland.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 Crossref 出版元数据，并阅读作者公开 PDF 的题名、署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于讨论后向边保护、影子栈的安全性、性能及兼容性权衡。",
+    "limits": "是 IEEE S&P 2019 论文，不是 USENIX；研究结论不能替代当前 Intel CET、Arm GCS 或各编译器实现的文档与测试。",
+    "tags": [
+      "shadow-stack",
+      "backward-edge",
+      "survey"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{burow2019shadowstacks,\n  author = {Nathan Burow and Xinping Zhang and Mathias Payer},\n  title = {{SoK: Shining Light on Shadow Stacks}},\n  year = {2019},\n  booktitle = {2019 IEEE Symposium on Security and Privacy (SP)},\n  pages = {985--999},\n  doi = {10.1109/sp.2019.00076},\n  url = {https://doi.org/10.1109/sp.2019.00076}\n}\n"
+  },
+  {
+    "key": "mashtizadeh2015ccfi",
+    "title": "CCFI: Cryptographically Enforced Control Flow Integrity",
+    "authors": [
+      "Ali José Mashtizadeh",
+      "Andrea Bittau",
+      "Dan Boneh",
+      "David Mazières"
+    ],
+    "year": 2015,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 22nd ACM SIGSAC Conference on Computer and Communications Security",
+    "doi": "10.1145/2810103.2813676",
+    "url": "https://doi.org/10.1145/2810103.2813676",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/2810103.2813676",
+      "https://www.scs.stanford.edu/~dm/home/papers/mashtizadeh:ccfi.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 Crossref 元数据并阅读作者公开 PDF 的署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于补充基于消息认证码的代码指针完整性机制和编译器支持的历史背景。",
+    "limits": "论文采用 AES-NI 的 Clang/LLVM 原型；不能等同于 Arm PAC，也不沿用摘要中历史性的“all known attacks”作为今天的无条件结论。",
+    "tags": [
+      "CFI",
+      "pointer-integrity",
+      "cryptographic"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{mashtizadeh2015ccfi,\n  author = {Ali Jos{\\'e} Mashtizadeh and Andrea Bittau and Dan Boneh and David Mazi{\\`e}res},\n  title = {{CCFI: Cryptographically Enforced Control Flow Integrity}},\n  year = {2015},\n  booktitle = {Proceedings of the 22nd ACM SIGSAC Conference on Computer and Communications Security},\n  pages = {941--951},\n  doi = {10.1145/2810103.2813676},\n  url = {https://doi.org/10.1145/2810103.2813676}\n}\n"
+  },
+  {
+    "key": "zhang2016vtrust",
+    "title": "VTrust: Regaining Trust on Virtual Calls",
+    "authors": [
+      "Chao Zhang",
+      "Scott A. Carr",
+      "Tongxin Li",
+      "Yu Ding",
+      "Chengyu Song",
+      "Mathias Payer",
+      "Dawn Song"
+    ],
+    "year": 2016,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings 2016 Network and Distributed System Security Symposium",
+    "doi": "10.14722/ndss.2016.23164",
+    "url": "https://doi.org/10.14722/ndss.2016.23164",
+    "source_urls": [
+      "https://api.crossref.org/works/10.14722/ndss.2016.23164",
+      "https://hexhive.epfl.ch/publications/files/16NDSS.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 Crossref 元数据并阅读作者公开 PDF 的署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于补充针对 C++ 虚调用的类型约束和虚表指针保护设计。",
+    "limits": "安全描述须保留虚表只读、论文威胁模型和实现条件；不是一般内存安全保证，也不是所有间接控制转移的全面保护。",
+    "tags": [
+      "CFI",
+      "C++",
+      "virtual-dispatch"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{zhang2016vtrust,\n  author = {Chao Zhang and Scott A. Carr and Tongxin Li and Yu Ding and Chengyu Song and Mathias Payer and Dawn Song},\n  title = {{VTrust: Regaining Trust on Virtual Calls}},\n  year = {2016},\n  booktitle = {Proceedings 2016 Network and Distributed System Security Symposium},\n  doi = {10.14722/ndss.2016.23164},\n  url = {https://doi.org/10.14722/ndss.2016.23164}\n}\n"
+  },
+  {
+    "key": "burow2018cfixx",
+    "title": "CFIXX: Object Type Integrity for C++",
+    "authors": [
+      "Nathan Burow",
+      "Derrick McKee",
+      "Scott A. Carr",
+      "Mathias Payer"
+    ],
+    "year": 2018,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings 2018 Network and Distributed System Security Symposium",
+    "doi": "10.14722/ndss.2018.23279",
+    "url": "https://doi.org/10.14722/ndss.2018.23279",
+    "source_urls": [
+      "https://api.crossref.org/works/10.14722/ndss.2018.23279",
+      "https://hexhive.epfl.ch/publications/files/18NDSS.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 NDSS DOI 的 Crossref 元数据，并阅读作者公开 PDF 的署名、摘要与引言；记录题名版本差异；未通读全文或复现实验。",
+    "use": "用于说明动态对象类型完整性与静态合法目标集合之间的区别，以及 OTI 对 CFI 的补充。",
+    "limits": "Crossref/NDSS DOI 登记题名为 Object Type Integrity for C++，作者 PDF 题名另有 Virtual Dispatch；两者 DOI 相同。本条采用登记题名。论文 OTI 的范围不能扩大为所有 C++ 类型安全。",
+    "tags": [
+      "CFI",
+      "OTI",
+      "C++"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{burow2018cfixx,\n  author = {Nathan Burow and Derrick McKee and Scott A. Carr and Mathias Payer},\n  title = {{CFIXX: Object Type Integrity for C++}},\n  year = {2018},\n  booktitle = {Proceedings 2018 Network and Distributed System Security Symposium},\n  doi = {10.14722/ndss.2018.23279},\n  url = {https://doi.org/10.14722/ndss.2018.23279}\n}\n"
+  },
+  {
+    "key": "serebryany2012asan",
+    "title": "AddressSanitizer: A Fast Address Sanity Checker",
+    "authors": [
+      "Konstantin Serebryany",
+      "Derek Bruening",
+      "Alexander Potapenko",
+      "Dmitriy Vyukov"
+    ],
+    "year": 2012,
+    "entry_type": "inproceedings",
+    "venue": "2012 USENIX Annual Technical Conference (USENIX ATC 12)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/atc12/technical-sessions/presentation/serebryany",
+    "source_urls": [
+      "https://www.usenix.org/conference/atc12/technical-sessions/presentation/serebryany"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 官方页面的完整摘要与官方 BibTeX；未通读全文或复现实验。",
+    "use": "用于介绍地址 sanitizer 的编译器插桩、分配器与内存错误检测背景。",
+    "limits": "ASan 的内存错误检测不等于证明 sanitizer 自身插桩正确，也不能用未报告错误证明程序完全内存安全。",
+    "tags": [
+      "sanitizer",
+      "ASan",
+      "memory-safety"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{serebryany2012asan,\n  author = {Konstantin Serebryany and Derek Bruening and Alexander Potapenko and Dmitriy Vyukov},\n  title = {{AddressSanitizer: A Fast Address Sanity Checker}},\n  year = {2012},\n  booktitle = {2012 USENIX Annual Technical Conference (USENIX ATC 12)},\n  pages = {309--318},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/atc12/technical-sessions/presentation/serebryany}\n}\n"
+  },
+  {
+    "key": "stepanov2015msan",
+    "title": "MemorySanitizer: Fast Detector of Uninitialized Memory Use in C++",
+    "authors": [
+      "Evgeniy Stepanov",
+      "Konstantin Serebryany"
+    ],
+    "year": 2015,
+    "entry_type": "inproceedings",
+    "venue": "2015 IEEE/ACM International Symposium on Code Generation and Optimization (CGO)",
+    "doi": "10.1109/cgo.2015.7054186",
+    "url": "https://doi.org/10.1109/cgo.2015.7054186",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109/cgo.2015.7054186",
+      "https://raw.githubusercontent.com/wiki/google/sanitizers/MemorySanitizer.md"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "核对 Crossref 出版元数据；阅读 Google sanitizers 官方项目 MemorySanitizer 文档的引言、检测条件、库插桩要求与论文链接；原论文 PDF 未成功取得。",
+    "use": "用于区分未初始化值使用检测与地址越界检测，并记录全栈插桩的实际约束。",
+    "limits": "原论文 Google PDF 在本次远端环境下载失败；方法说明来自官方项目文档而非对原论文全文/摘要的阅读，当前文档也不能视为 2015 实现逐项快照。",
+    "tags": [
+      "sanitizer",
+      "MSan",
+      "uninitialized-memory"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{stepanov2015msan,\n  author = {Evgeniy Stepanov and Konstantin Serebryany},\n  title = {{MemorySanitizer: Fast Detector of Uninitialized Memory Use in C++}},\n  year = {2015},\n  booktitle = {2015 IEEE/ACM International Symposium on Code Generation and Optimization (CGO)},\n  pages = {46--55},\n  doi = {10.1109/cgo.2015.7054186},\n  url = {https://doi.org/10.1109/cgo.2015.7054186}\n}\n"
+  },
+  {
+    "key": "nagarakatte2009softbound",
+    "title": "SoftBound: Highly Compatible and Complete Spatial Memory Safety for C",
+    "authors": [
+      "Santosh Nagarakatte",
+      "Jianzhou Zhao",
+      "Milo M. K. Martin",
+      "Steve Zdancewic"
+    ],
+    "year": 2009,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 30th ACM SIGPLAN Conference on Programming Language Design and Implementation",
+    "doi": "10.1145/1542476.1542504",
+    "url": "https://doi.org/10.1145/1542476.1542504",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/1542476.1542504",
+      "https://api.crossref.org/works/10.1145/1543135.1542504"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对会议论文的 Crossref 元数据，并阅读同文 SIGPLAN Notices 版的完整摘要；库内采用会议版 DOI，未将两版作为不同研究计数；未通读全文或复现实验。",
+    "use": "用于介绍通过分离的每指针 base/bound 元数据实施空间内存安全。",
+    "limits": "完整检查与仅写检查模式的保证不同；不能把空间安全描述成时间安全，也不应把论文形式化模型直接扩大到任意现代 C/C++ 构建。",
+    "tags": [
+      "spatial-safety",
+      "bounds",
+      "compiler-instrumentation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{nagarakatte2009softbound,\n  author = {Santosh Nagarakatte and Jianzhou Zhao and Milo M. K. Martin and Steve Zdancewic},\n  title = {{SoftBound: Highly Compatible and Complete Spatial Memory Safety for C}},\n  year = {2009},\n  booktitle = {Proceedings of the 30th ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  pages = {245--258},\n  doi = {10.1145/1542476.1542504},\n  url = {https://doi.org/10.1145/1542476.1542504}\n}\n"
+  },
+  {
+    "key": "nagarakatte2010cets",
+    "title": "CETS: compiler enforced temporal safety for C",
+    "authors": [
+      "Santosh Nagarakatte",
+      "Jianzhou Zhao",
+      "Milo M. K. Martin",
+      "Steve Zdancewic"
+    ],
+    "year": 2010,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2010 international symposium on Memory management",
+    "doi": "10.1145/1806651.1806657",
+    "url": "https://doi.org/10.1145/1806651.1806657",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/1806651.1806657",
+      "https://api.crossref.org/works/10.1145/1837855.1806657"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对会议论文的 Crossref 元数据，并阅读同文 SIGPLAN Notices 版的完整摘要；库内采用会议版 DOI，未将两版作为不同研究计数；未通读全文或复现实验。",
+    "use": "用于介绍对象标识符和指针元数据支持的时间内存安全，与空间安全形成对照。",
+    "limits": "摘要中的形式化时间安全保证以不存在空间安全违规为条件；不能省略该前提或将单独 CETS 表述为完整内存安全。",
+    "tags": [
+      "temporal-safety",
+      "compiler-instrumentation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{nagarakatte2010cets,\n  author = {Santosh Nagarakatte and Jianzhou Zhao and Milo M. K. Martin and Steve Zdancewic},\n  title = {{CETS: compiler enforced temporal safety for C}},\n  year = {2010},\n  booktitle = {Proceedings of the 2010 international symposium on Memory management},\n  pages = {31--40},\n  doi = {10.1145/1806651.1806657},\n  url = {https://doi.org/10.1145/1806651.1806657}\n}\n"
+  },
+  {
+    "key": "akritidis2009baggy",
+    "title": "Baggy Bounds Checking: An Efficient and Backwards-Compatible Defense against Out-of-Bounds Errors",
+    "authors": [
+      "Periklis Akritidis",
+      "Manuel Costa",
+      "Miguel Castro",
+      "Steven Hand"
+    ],
+    "year": 2009,
+    "entry_type": "inproceedings",
+    "venue": "18th USENIX Security Symposium",
+    "doi": null,
+    "url": "https://www.usenix.org/legacy/event/sec09/tech/full_papers/akritidis.pdf",
+    "source_urls": [
+      "https://www.usenix.org/legacy/event/sec09/tech/full_papers/akritidis.pdf"
+    ],
+    "verification": "metadata+method",
+    "read_depth": "阅读 USENIX 原始 PDF 的署名、摘要、引言及设计开头关于分配边界的定义；未通读全文或复现实验。",
+    "use": "用于说明边界检查中安全粒度、元数据布局与兼容性的设计权衡。",
+    "limits": "Baggy 检查的是分配边界，可能允许对象与分配块之间的 padding 访问；不能称为精确的子对象边界检查。",
+    "tags": [
+      "spatial-safety",
+      "bounds"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{akritidis2009baggy,\n  author = {Periklis Akritidis and Manuel Costa and Miguel Castro and Steven Hand},\n  title = {{Baggy Bounds Checking: An Efficient and Backwards-Compatible Defense against Out-of-Bounds Errors}},\n  year = {2009},\n  booktitle = {18th USENIX Security Symposium},\n  url = {https://www.usenix.org/legacy/event/sec09/tech/full_papers/akritidis.pdf}\n}\n"
+  },
+  {
+    "key": "berger2006diehard",
+    "title": "DieHard: probabilistic memory safety for unsafe languages",
+    "authors": [
+      "Emery D. Berger",
+      "Benjamin G. Zorn"
+    ],
+    "year": 2006,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 27th ACM SIGPLAN Conference on Programming Language Design and Implementation",
+    "doi": "10.1145/1133981.1134000",
+    "url": "https://doi.org/10.1145/1133981.1134000",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/1133981.1134000",
+      "https://api.crossref.org/works/10.1145/1133255.1134000"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对会议论文的 Crossref 元数据，并阅读同文 SIGPLAN Notices 版的完整摘要；库内采用会议版 DOI，未将两版作为不同研究计数；未通读全文或复现实验。",
+    "use": "用于补充随机化、冗余与概率性内存安全容错的另一类设计。",
+    "limits": "其概率保证与确定性的边界检查不同；不能将容错成功或多副本输出一致写成无漏洞证明。",
+    "tags": [
+      "probabilistic-safety",
+      "memory-safety"
+    ],
+    "priority": "optional",
+    "bibtex": "@inproceedings{berger2006diehard,\n  author = {Emery D. Berger and Benjamin G. Zorn},\n  title = {{DieHard: probabilistic memory safety for unsafe languages}},\n  year = {2006},\n  booktitle = {Proceedings of the 27th ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  pages = {158--168},\n  doi = {10.1145/1133981.1134000},\n  url = {https://doi.org/10.1145/1133981.1134000}\n}\n"
+  },
+  {
+    "key": "duck2018effectivesan",
+    "title": "EffectiveSan: type and memory error detection using dynamically typed C/C++",
+    "authors": [
+      "Gregory J. Duck",
+      "Roland H. C. Yap"
+    ],
+    "year": 2018,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 39th ACM SIGPLAN Conference on Programming Language Design and Implementation",
+    "doi": "10.1145/3192366.3192388",
+    "url": "https://doi.org/10.1145/3192366.3192388",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3192366.3192388",
+      "https://api.crossref.org/works/10.1145/3296979.3192388"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对会议论文的 Crossref 元数据，并阅读同文 SIGPLAN Notices 版的完整摘要；库内采用会议版 DOI，未将两版作为不同研究计数；未通读全文或复现实验。",
+    "use": "用于补充动态类型检查、类型元数据和子对象边界检测等 sanitizer 设计维度。",
+    "limits": "该方法的覆盖范围、兼容性和开销需按论文实验对象与模式陈述；不能泛称所有 sanitizer 都能检测相同类型/子对象错误。",
+    "tags": [
+      "sanitizer",
+      "type-safety",
+      "subobject-bounds"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{duck2018effectivesan,\n  author = {Gregory J. Duck and Roland H. C. Yap},\n  title = {{EffectiveSan: type and memory error detection using dynamically typed C/C++}},\n  year = {2018},\n  booktitle = {Proceedings of the 39th ACM SIGPLAN Conference on Programming Language Design and Implementation},\n  pages = {181--195},\n  doi = {10.1145/3192366.3192388},\n  url = {https://doi.org/10.1145/3192366.3192388}\n}\n"
+  },
+  {
+    "key": "haller2016typesan",
+    "title": "TypeSan: Practical Type Confusion Detection",
+    "authors": [
+      "Istvan Haller",
+      "Yuseok Jeon",
+      "Hui Peng",
+      "Mathias Payer",
+      "Cristiano Giuffrida",
+      "Herbert Bos",
+      "Erik van der Kouwe"
+    ],
+    "year": 2016,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security",
+    "doi": "10.1145/2976749.2978405",
+    "url": "https://doi.org/10.1145/2976749.2978405",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/2976749.2978405",
+      "https://hexhive.epfl.ch/publications/files/16CCS2.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 ACM/Crossref 元数据并阅读作者公开 PDF 的题名、署名、摘要与引言；作者顺序采用出版记录与正文共同支持的顺序；未通读全文或复现实验。",
+    "use": "用于说明 C++ 错误类型转换检测与每对象运行时类型元数据。",
+    "limits": "TypeSan 针对类型混淆检测，不是所有内存错误的统一检测器；摘要中的覆盖和开销比较限于当时被比较的工具与基准。",
+    "tags": [
+      "sanitizer",
+      "type-confusion",
+      "C++"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{haller2016typesan,\n  author = {Istvan Haller and Yuseok Jeon and Hui Peng and Mathias Payer and Cristiano Giuffrida and Herbert Bos and Erik van der Kouwe},\n  title = {{TypeSan: Practical Type Confusion Detection}},\n  year = {2016},\n  booktitle = {Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security},\n  pages = {517--528},\n  doi = {10.1145/2976749.2978405},\n  url = {https://doi.org/10.1145/2976749.2978405}\n}\n"
+  },
+  {
+    "key": "jeon2017hextype",
+    "title": "HexType: Efficient Detection of Type Confusion Errors for C++",
+    "authors": [
+      "Yuseok Jeon",
+      "Priyam Biswas",
+      "Scott Carr",
+      "Byoungyoung Lee",
+      "Mathias Payer"
+    ],
+    "year": 2017,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security",
+    "doi": "10.1145/3133956.3134062",
+    "url": "https://doi.org/10.1145/3133956.3134062",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3133956.3134062",
+      "https://hexhive.epfl.ch/publications/files/17CCS.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 ACM/Crossref 元数据，并阅读作者公开 PDF 的署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于补充显式运行时类型检查、对象分配模式覆盖及 sanitizer 优化。",
+    "limits": "是 C++ 类型混淆检测研究；对 Firefox/SPEC 的改善不能外推为任何编译器防御或任意工作负载的优势。",
+    "tags": [
+      "sanitizer",
+      "type-confusion",
+      "C++"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{jeon2017hextype,\n  author = {Yuseok Jeon and Priyam Biswas and Scott Carr and Byoungyoung Lee and Mathias Payer},\n  title = {{HexType: Efficient Detection of Type Confusion Errors for C++}},\n  year = {2017},\n  booktitle = {Proceedings of the 2017 ACM SIGSAC Conference on Computer and Communications Security},\n  pages = {2373--2387},\n  doi = {10.1145/3133956.3134062},\n  url = {https://doi.org/10.1145/3133956.3134062}\n}\n"
+  },
+  {
+    "key": "serebryany2018memorytagging",
+    "title": "Memory Tagging and how it improves C/C++ memory safety",
+    "authors": [
+      "Kostya Serebryany",
+      "Evgenii Stepanov",
+      "Aleksey Shlyapnikov",
+      "Vlad Tsyrklevich",
+      "Dmitry Vyukov"
+    ],
+    "year": 2018,
+    "entry_type": "misc",
+    "venue": "arXiv preprint arXiv:1802.09517",
+    "doi": "10.48550/arXiv.1802.09517",
+    "url": "https://arxiv.org/abs/1802.09517",
+    "source_urls": [
+      "https://arxiv.org/abs/1802.09517"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 arXiv 官方题名、作者、年份与摘要；未通读全文或复现实验。",
+    "use": "用于介绍内存标记机制及硬件/编译器协作的背景。",
+    "limits": "这是预印本；摘要讨论 SPARC 硬件与 AArch64 方案，不能据此宣称已评价当前 Arm MTE 全部实现或获得确定性的完整内存安全。",
+    "tags": [
+      "memory-tagging",
+      "hardware-assisted",
+      "memory-safety"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{serebryany2018memorytagging,\n  author = {Kostya Serebryany and Evgenii Stepanov and Aleksey Shlyapnikov and Vlad Tsyrklevich and Dmitry Vyukov},\n  title = {{Memory Tagging and how it improves C/C++ memory safety}},\n  year = {2018},\n  howpublished = {arXiv preprint arXiv:1802.09517},\n  doi = {10.48550/arXiv.1802.09517},\n  url = {https://arxiv.org/abs/1802.09517},\n  eprint = {1802.09517},\n  archivePrefix = {arXiv}\n}\n"
+  },
+  {
+    "key": "jeon2020fuzzan",
+    "title": "FuZZan: Efficient Sanitizer Metadata Design for Fuzzing",
+    "authors": [
+      "Yuseok Jeon",
+      "WookHyun Han",
+      "Nathan Burow",
+      "Mathias Payer"
+    ],
+    "year": 2020,
+    "entry_type": "inproceedings",
+    "venue": "2020 USENIX Annual Technical Conference (USENIX ATC 20)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/atc20/presentation/jeon",
+    "source_urls": [
+      "https://www.usenix.org/conference/atc20/presentation/jeon"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 官方页面的完整摘要与官方 BibTeX；未通读全文或复现实验。",
+    "use": "用于区分提高 fuzzing 中 sanitizer 运行效率的工作与检测编译器防御实现错误的工作。",
+    "limits": "文中设计应用于 ASan，性能与检出结论有基准范围；不能把吞吐量提升改写为所有 sanitizer 的检测能力提升。",
+    "tags": [
+      "sanitizer",
+      "fuzzing",
+      "metadata"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{jeon2020fuzzan,\n  author = {Yuseok Jeon and WookHyun Han and Nathan Burow and Mathias Payer},\n  title = {{FuZZan: Efficient Sanitizer Metadata Design for Fuzzing}},\n  year = {2020},\n  booktitle = {2020 USENIX Annual Technical Conference (USENIX ATC 20)},\n  pages = {249--263},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/atc20/presentation/jeon}\n}\n"
+  },
+  {
+    "key": "marini2025qmsan",
+    "title": "QMSan: Efficiently Detecting Uninitialized Memory Errors During Fuzzing",
+    "authors": [
+      "Matteo Marini",
+      "Daniele Cono D’Elia",
+      "Mathias Payer",
+      "Leonardo Querzoni"
+    ],
+    "year": 2025,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings 2025 Network and Distributed System Security Symposium",
+    "doi": "10.14722/ndss.2025.241133",
+    "url": "https://doi.org/10.14722/ndss.2025.241133",
+    "source_urls": [
+      "https://api.crossref.org/works/10.14722/ndss.2025.241133",
+      "https://hexhive.epfl.ch/publications/files/25NDSS3.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 NDSS DOI 的 Crossref 元数据，并阅读作者公开 PDF 的署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于补充近期未初始化内存检测、二进制翻译和 fuzzing 场景下插桩兼容性问题。",
+    "limits": "论文实验中未出现误报/漏报不等于一般性零误报/零漏报证明；该研究检测被测程序错误，不直接验证编译器安全防御的正确性。",
+    "tags": [
+      "sanitizer",
+      "fuzzing",
+      "uninitialized-memory"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{marini2025qmsan,\n  author = {Matteo Marini and Daniele Cono D'Elia and Mathias Payer and Leonardo Querzoni},\n  title = {{QMSan: Efficiently Detecting Uninitialized Memory Errors During Fuzzing}},\n  year = {2025},\n  booktitle = {Proceedings 2025 Network and Distributed System Security Symposium},\n  doi = {10.14722/ndss.2025.241133},\n  url = {https://doi.org/10.14722/ndss.2025.241133}\n}\n"
+  },
+  {
+    "key": "szekeres2013eternalwar",
+    "title": "SoK: Eternal War in Memory",
+    "authors": [
+      "László Szekeres",
+      "Mathias Payer",
+      "Tao Wei",
+      "Dawn Song"
+    ],
+    "year": 2013,
+    "entry_type": "inproceedings",
+    "venue": "2013 IEEE Symposium on Security and Privacy",
+    "doi": "10.1109/sp.2013.13",
+    "url": "https://doi.org/10.1109/sp.2013.13",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109/sp.2013.13",
+      "https://hexhive.epfl.ch/publications/files/13Oakland.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 IEEE/Crossref 出版元数据，并阅读作者公开 PDF 的署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于组织空间/时间内存安全、代码指针保护等策略的关系和部署权衡。",
+    "limits": "综述中的当前系统、已部署防御与攻击情况对应 2013 年；不能将历史判断照搬为 2026 年事实。",
+    "tags": [
+      "memory-safety",
+      "survey",
+      "foundation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{szekeres2013eternalwar,\n  author = {L{\\'a}szl{\\'o} Szekeres and Mathias Payer and Tao Wei and Dawn Song},\n  title = {{SoK: Eternal War in Memory}},\n  year = {2013},\n  booktitle = {2013 IEEE Symposium on Security and Privacy},\n  pages = {48--62},\n  doi = {10.1109/sp.2013.13},\n  url = {https://doi.org/10.1109/sp.2013.13}\n}\n"
+  },
+  {
+    "key": "yang2017deadstore",
+    "title": "Dead Store Elimination (Still) Considered Harmful",
+    "authors": [
+      "Zhaomo Yang",
+      "Brian Johannesmeyer",
+      "Anders Trier Olesen",
+      "Sorin Lerner",
+      "Kirill Levchenko"
+    ],
+    "year": 2017,
+    "entry_type": "inproceedings",
+    "venue": "26th USENIX Security Symposium (USENIX Security 17)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/yang",
+    "source_urls": [
+      "https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/yang"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 官方页面的完整摘要与官方 BibTeX；未通读全文或复现实验。",
+    "use": "直接支持编译器优化可能破坏程序员预期的敏感数据擦除，以及擦除技术和编译器支持的讨论。",
+    "limits": "应限定为安全擦除场景和具体技术；不能扩展为编译器通常破坏所有安全检查，或将擦除语义混同于标准功能输出。",
+    "tags": [
+      "secure-erasure",
+      "optimization",
+      "security-semantics"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{yang2017deadstore,\n  author = {Zhaomo Yang and Brian Johannesmeyer and Anders Trier Olesen and Sorin Lerner and Kirill Levchenko},\n  title = {{Dead Store Elimination (Still) Considered Harmful}},\n  year = {2017},\n  booktitle = {26th USENIX Security Symposium (USENIX Security 17)},\n  pages = {1025--1040},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/yang}\n}\n"
+  },
+  {
+    "key": "simon2018whatyouc",
+    "title": "What You Get is What You C: Controlling Side Effects in Mainstream C Compilers",
+    "authors": [
+      "Laurent Simon",
+      "David Chisnall",
+      "Ross Anderson"
+    ],
+    "year": 2018,
+    "entry_type": "inproceedings",
+    "venue": "2018 IEEE European Symposium on Security and Privacy (EuroS&P)",
+    "doi": "10.1109/eurosp.2018.00009",
+    "url": "https://doi.org/10.1109/eurosp.2018.00009",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109/eurosp.2018.00009",
+      "https://www.cl.cam.ac.uk/archive/rja14/Papers/whatyouc.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 IEEE/Crossref 元数据，并阅读作者公开 PDF 的署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于论证常数时间和秘密擦除等隐含安全属性需要显式编译器支持，而普通 C 可观察行为不足以表达全部安全意图。",
+    "limits": "论文实现和论证有具体属性、架构与工具链范围；不能据此声称所有常数时间代码都会被优化破坏或所有副作用都可由该方案保障。",
+    "tags": [
+      "secure-erasure",
+      "constant-time",
+      "optimization",
+      "security-semantics"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{simon2018whatyouc,\n  author = {Laurent Simon and David Chisnall and Ross Anderson},\n  title = {{What You Get is What You C: Controlling Side Effects in Mainstream C Compilers}},\n  year = {2018},\n  booktitle = {2018 IEEE European Symposium on Security and Privacy (EuroS\\&P)},\n  pages = {1--15},\n  doi = {10.1109/eurosp.2018.00009},\n  url = {https://doi.org/10.1109/eurosp.2018.00009}\n}\n"
+  },
+  {
+    "key": "almeida2016ctverif",
+    "title": "Verifying Constant-Time Implementations",
+    "authors": [
+      "José Bacelar Almeida",
+      "Manuel Barbosa",
+      "Gilles Barthe",
+      "François Dupressoir",
+      "Michael Emmi"
+    ],
+    "year": 2016,
+    "entry_type": "inproceedings",
+    "venue": "25th USENIX Security Symposium (USENIX Security 16)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/almeida",
+    "source_urls": [
+      "https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/almeida"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 官方页面的完整摘要与官方 BibTeX；未通读全文或复现实验。",
+    "use": "用于说明常数时间是关系型安全属性，以及可在优化后的 LLVM 实现上开展专门验证。",
+    "limits": "需保留泄漏模型、公开输入/输出和验证假设；不能把 LLVM 层验证直接写成所有微架构侧信道安全。",
+    "tags": [
+      "constant-time",
+      "verification",
+      "LLVM",
+      "security-semantics"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{almeida2016ctverif,\n  author = {Jos{\\'e} Bacelar Almeida and Manuel Barbosa and Gilles Barthe and Fran{\\cc}ois Dupressoir and Michael Emmi},\n  title = {{Verifying Constant-Time Implementations}},\n  year = {2016},\n  booktitle = {25th USENIX Security Symposium (USENIX Security 16)},\n  pages = {53--70},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/almeida}\n}\n"
+  },
+  {
+    "key": "blazy2019constanttime",
+    "title": "Verifying constant-time implementations by abstract interpretation",
+    "authors": [
+      "Sandrine Blazy",
+      "David Pichardie",
+      "Alix Trieu"
+    ],
+    "year": 2019,
+    "entry_type": "article",
+    "venue": "Journal of Computer Security",
+    "doi": "10.3233/jcs-181136",
+    "url": "https://doi.org/10.3233/jcs-181136",
+    "source_urls": [
+      "https://api.crossref.org/works/10.3233/jcs-181136"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对出版方登记的 Crossref 题名、作者、年份、venue、DOI，并阅读同一记录的完整摘要；未通读全文或复现实验。 Crossref 明确区分 2018 在线发表和 2019 卷期，条目采用卷期年。",
+    "use": "用于补充基于抽象解释的 C 源程序常数时间验证及其与 CompCert/Verasco 的联系。",
+    "limits": "源语言分析和核心语言语义论证不自动推出所有后端、ISA 或微架构上的完整侧信道安全。",
+    "tags": [
+      "constant-time",
+      "abstract-interpretation",
+      "verification"
+    ],
+    "priority": "supporting",
+    "bibtex": "@article{blazy2019constanttime,\n  author = {Sandrine Blazy and David Pichardie and Alix Trieu},\n  title = {{Verifying constant-time implementations by abstract interpretation}},\n  year = {2019},\n  journal = {Journal of Computer Security},\n  volume = {27},\n  number = {1},\n  pages = {137--163},\n  doi = {10.3233/jcs-181136},\n  url = {https://doi.org/10.3233/jcs-181136}\n}\n",
+    "publication_dates": {
+      "online": "2018-09-24",
+      "print": "2019-01-11"
+    },
+    "year_basis": "采用卷期年 2019；在线首次发表为 2018。"
+  },
+  {
+    "key": "oleksenko2020specfuzz",
+    "title": "SpecFuzz: Bringing Spectre-type vulnerabilities to the surface",
+    "authors": [
+      "Oleksii Oleksenko",
+      "Bohdan Trach",
+      "Mark Silberstein",
+      "Christof Fetzer"
+    ],
+    "year": 2020,
+    "entry_type": "inproceedings",
+    "venue": "29th USENIX Security Symposium (USENIX Security 20)",
+    "doi": null,
+    "url": "https://www.usenix.org/conference/usenixsecurity20/presentation/oleksenko",
+    "source_urls": [
+      "https://www.usenix.org/conference/usenixsecurity20/presentation/oleksenko"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "阅读 USENIX 官方页面的完整摘要与官方 BibTeX；未通读全文或复现实验。",
+    "use": "用于介绍通过软件暴露推测执行路径、结合检查器和 fuzzing 检测特定推测执行风险的思路。",
+    "limits": "其检测范围受推测模型、执行覆盖和检查器约束；不应表述为涵盖所有瞬态执行漏洞或对编译器防御正确性的通用证明。",
+    "tags": [
+      "speculation",
+      "fuzzing",
+      "Spectre"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{oleksenko2020specfuzz,\n  author = {Oleksii Oleksenko and Bohdan Trach and Mark Silberstein and Christof Fetzer},\n  title = {{SpecFuzz: Bringing Spectre-type vulnerabilities to the surface}},\n  year = {2020},\n  booktitle = {29th USENIX Security Symposium (USENIX Security 20)},\n  pages = {1481--1498},\n  publisher = {USENIX Association},\n  url = {https://www.usenix.org/conference/usenixsecurity20/presentation/oleksenko}\n}\n"
+  },
+  {
+    "key": "guarnieri2020spectector",
+    "title": "Spectector: Principled Detection of Speculative Information Flows",
+    "authors": [
+      "Marco Guarnieri",
+      "Boris Köpf",
+      "José Francisco Morales",
+      "Jan Reineke",
+      "Andrés Sánchez"
+    ],
+    "year": 2020,
+    "entry_type": "inproceedings",
+    "venue": "2020 IEEE Symposium on Security and Privacy (SP)",
+    "doi": "10.1109/sp40000.2020.00011",
+    "url": "https://doi.org/10.1109/sp40000.2020.00011",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109/sp40000.2020.00011",
+      "https://spectector.github.io/",
+      "https://spectector.github.io/papers/spectector.pdf"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对 IEEE/Crossref 元数据，阅读作者项目网站方法说明，以及作者公开论文 PDF 的署名、摘要与引言；未通读全文或复现实验。",
+    "use": "用于补充基于符号执行与 SMT 的推测信息流分析，以及检查编译器插入推测执行缓解措施的相关工作。",
+    "limits": "结论相对论文的执行/泄漏模型、程序范围和分析限制成立；不能概括为任意真实处理器上无侧信道。",
+    "tags": [
+      "speculation",
+      "verification",
+      "compiler-hardening"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{guarnieri2020spectector,\n  author = {Marco Guarnieri and Boris K{\\\"o}pf and Jos{\\'e} Francisco Morales and Jan Reineke and Andr{\\'e}s S{\\'a}nchez},\n  title = {{Spectector: Principled Detection of Speculative Information Flows}},\n  year = {2020},\n  booktitle = {2020 IEEE Symposium on Security and Privacy (SP)},\n  pages = {1--19},\n  doi = {10.1109/sp40000.2020.00011},\n  url = {https://doi.org/10.1109/sp40000.2020.00011}\n}\n"
+  },
+  {
+    "key": "vassena2021blade",
+    "title": "Automatically Eliminating Speculative Leaks from Cryptographic Code with Blade",
+    "authors": [
+      "Marco Vassena",
+      "Craig Disselkoen",
+      "Klaus von Gleissenthall",
+      "Sunjay Cauligi",
+      "Rami Gökhan Kıcı",
+      "Ranjit Jhala",
+      "Dean Tullsen",
+      "Deian Stefan"
+    ],
+    "year": 2021,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Programming Languages",
+    "doi": "10.1145/3434330",
+    "url": "https://doi.org/10.1145/3434330",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145/3434330"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "核对出版方登记的 Crossref 题名、作者、年份、venue、DOI，并阅读同一记录的完整摘要；未通读全文或复现实验。",
+    "use": "用于补充通过类型系统约束推测信息流并自动插入保护的编译器防御研究。",
+    "limits": "论文原型基于 Cranelift/WebAssembly，保证相对形式化模型成立；不能表述成已保护所有原生 C/C++ 编译器或所有瞬态执行机制。",
+    "tags": [
+      "speculation",
+      "type-system",
+      "compiler-hardening"
+    ],
+    "priority": "core",
+    "bibtex": "@article{vassena2021blade,\n  author = {Marco Vassena and Craig Disselkoen and Klaus von Gleissenthall and Sunjay Cauligi and Rami G{\\\"o}khan K{\\i}c{\\i} and Ranjit Jhala and Dean Tullsen and Deian Stefan},\n  title = {{Automatically Eliminating Speculative Leaks from Cryptographic Code with Blade}},\n  year = {2021},\n  journal = {Proceedings of the ACM on Programming Languages},\n  volume = {5},\n  number = {POPL},\n  pages = {1--30},\n  doi = {10.1145/3434330},\n  url = {https://doi.org/10.1145/3434330}\n}\n"
+  }
+]

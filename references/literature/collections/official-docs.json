@@ -1,0 +1,827 @@
+[
+  {
+    "key": "gcc15instrumentation",
+    "title": "GCC 15.2: Instrumentation Options",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Instrumentation-Options.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Instrumentation-Options.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "栈保护、stack-clash、CFI、sanitizer、hardened 选项及平台限制。",
+    "limits": "选项文档描述预期行为，不能证明具体编译器构建的实现正确。",
+    "tags": [
+      "official-documentation",
+      "compiler-defense-flags"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{gcc15instrumentation,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Instrumentation Options}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Instrumentation-Options.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gcc15commonfunctionattrs",
+    "title": "GCC 15.2: Common Function Attributes",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Function-Attributes.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Function-Attributes.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "zero_call_used_regs、access 等函数属性的规范与启用条件。",
+    "limits": "strub 的主要规范在 Common Type Attributes，不能把属性存在等同于任意调用点已被正确加固。",
+    "tags": [
+      "official-documentation",
+      "strub-zero-call-used-regs-access"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{gcc15commonfunctionattrs,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Common Function Attributes}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Function-Attributes.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gcc15commonvariableattrs",
+    "title": "GCC 15.2: Common Variable Attributes",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Variable-Attributes.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Variable-Attributes.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "counted_by 和 nonstring 属性及对象边界相关语义。",
+    "limits": "属性支持和语义依赖语言及编译器版本，不代表自动保证所有动态边界安全。",
+    "tags": [
+      "official-documentation",
+      "counted-by-nonstring"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{gcc15commonvariableattrs,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Common Variable Attributes}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Variable-Attributes.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gcc15codegen",
+    "title": "GCC 15.2: Code Generation Options",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Code-Gen-Options.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Code-Gen-Options.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "栈复用、代码生成与 noplt 等编译选项背景。",
+    "limits": "ABI、链接器和平台条件需要同时核对；性能选项并非一律是安全防御。",
+    "tags": [
+      "official-documentation",
+      "abi-stack-reuse-noplt"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{gcc15codegen,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Code Generation Options}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Code-Gen-Options.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gcc15staticanalysis",
+    "title": "GCC 15.2: Static Analyzer Options",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Static-Analyzer-Options.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Static-Analyzer-Options.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "-fanalyzer 的用途、检查器选项和诊断边界。",
+    "limits": "静态诊断与运行时插桩属于不同验证对象，不应混为所有后端均生效的防御。",
+    "tags": [
+      "official-documentation",
+      "static-analysis"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{gcc15staticanalysis,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Static Analyzer Options}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Static-Analyzer-Options.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gcc15optimize",
+    "title": "GCC 15.2: Optimize Options",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Optimize-Options.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Optimize-Options.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "自动变量初始化、寄存器清零以及优化选项的预期语义。",
+    "limits": "需同时考虑优化等级、目标支持和显式选项；此页面不是实验支持矩阵。",
+    "tags": [
+      "official-documentation",
+      "optimization-init-scrubbing"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{gcc15optimize,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Optimize Options}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Optimize-Options.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangcfi",
+    "title": "Clang: Control Flow Integrity",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/ControlFlowIntegrity.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/ControlFlowIntegrity.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "Clang CFI 方案、启用条件及使用限制。",
+    "limits": "不同 CFI 方案、LTO 和可见性条件不同，不能概括为同一检查契约。",
+    "tags": [
+      "official-documentation",
+      "cfi"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{clangcfi,\n  author = {{LLVM Project}},\n  title = {{Clang: Control Flow Integrity}},\n  url = {https://clang.llvm.org/docs/ControlFlowIntegrity.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangcfidesign",
+    "title": "Clang: Control Flow Integrity Design Documentation",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/ControlFlowIntegrityDesign.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/ControlFlowIntegrityDesign.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "类型测试与控制流完整性实现设计背景。",
+    "limits": "设计文档不证明当前版本或所有 ISA 上的实现正确。",
+    "tags": [
+      "official-documentation",
+      "cfi-design"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangcfidesign,\n  author = {{LLVM Project}},\n  title = {{Clang: Control Flow Integrity Design Documentation}},\n  url = {https://clang.llvm.org/docs/ControlFlowIntegrityDesign.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangsafestack",
+    "title": "Clang: SafeStack",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/SafeStack.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/SafeStack.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "safe/unsafe stack 划分、使用条件和已说明的限制。",
+    "limits": "SafeStack 不等于通用越界检测，也不能等同于硬件 shadow stack。",
+    "tags": [
+      "official-documentation",
+      "safestack"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangsafestack,\n  author = {{LLVM Project}},\n  title = {{Clang: SafeStack}},\n  url = {https://clang.llvm.org/docs/SafeStack.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangshadowcallstack",
+    "title": "Clang: ShadowCallStack",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/ShadowCallStack.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/ShadowCallStack.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "返回地址保护与架构专用寄存器、运行时支持前提。",
+    "limits": "页面是滚动版本；平台支持需对齐实验编译器，不能仅由文档清单推出可用性。",
+    "tags": [
+      "official-documentation",
+      "shadow-stack"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangshadowcallstack,\n  author = {{LLVM Project}},\n  title = {{Clang: ShadowCallStack}},\n  url = {https://clang.llvm.org/docs/ShadowCallStack.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangasan",
+    "title": "Clang: AddressSanitizer",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/AddressSanitizer.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/AddressSanitizer.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "ASan 检测对象、构建和运行要求、局限。",
+    "limits": "检测器本身的正确性与覆盖范围仍需独立验证，不代表不存在漏报。",
+    "tags": [
+      "official-documentation",
+      "asan"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangasan,\n  author = {{LLVM Project}},\n  title = {{Clang: AddressSanitizer}},\n  url = {https://clang.llvm.org/docs/AddressSanitizer.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangmsan",
+    "title": "Clang: MemorySanitizer",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/MemorySanitizer.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/MemorySanitizer.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "未初始化内存使用检测与完整插桩等运行前提。",
+    "limits": "MSan 与 ASan 的问题模型不同，不能交换其缺陷覆盖范围。",
+    "tags": [
+      "official-documentation",
+      "msan"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangmsan,\n  author = {{LLVM Project}},\n  title = {{Clang: MemorySanitizer}},\n  url = {https://clang.llvm.org/docs/MemorySanitizer.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangubsan",
+    "title": "Clang: UndefinedBehaviorSanitizer",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "UBSan 检查集合、recover/trap 等报告行为。",
+    "limits": "报告模式可配置；不能把所有 sanitizer 的成功诊断都概括成必然进程崩溃。",
+    "tags": [
+      "official-documentation",
+      "ubsan"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangubsan,\n  author = {{LLVM Project}},\n  title = {{Clang: UndefinedBehaviorSanitizer}},\n  url = {https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clanghwasan",
+    "title": "Clang: Hardware-assisted AddressSanitizer Design",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "指针/内存标记及 AArch64 TBI 支持下的检测设计。",
+    "limits": "HWASan 与硬件 MTE 不是同一机制，也不提供一般无遗漏保证。",
+    "tags": [
+      "official-documentation",
+      "hwasan"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clanghwasan,\n  author = {{LLVM Project}},\n  title = {{Clang: Hardware-assisted AddressSanitizer Design}},\n  url = {https://clang.llvm.org/docs/HardwareAssistedAddressSanitizerDesign.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangslh",
+    "title": "LLVM: Speculative Load Hardening",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://llvm.org/docs/SpeculativeLoadHardening.html",
+    "source_urls": [
+      "https://llvm.org/docs/SpeculativeLoadHardening.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "SLH 的威胁范围、谓词依赖与实现思路。",
+    "limits": "只适用于文档明确的推测执行问题模型，不是所有微架构侧信道的统一防御。",
+    "tags": [
+      "official-documentation",
+      "speculative-load-hardening"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangslh,\n  author = {{LLVM Project}},\n  title = {{LLVM: Speculative Load Hardening}},\n  url = {https://llvm.org/docs/SpeculativeLoadHardening.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangattrs",
+    "title": "Clang: Attribute Reference",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang.llvm.org/docs/AttributeReference.html",
+    "source_urls": [
+      "https://clang.llvm.org/docs/AttributeReference.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "musttail、counted_by 及其他检查适用条件所需的属性规范。",
+    "limits": "必须引用具体属性小节；整个属性目录不能作为某一目标后端正确实现的证据。",
+    "tags": [
+      "official-documentation",
+      "attributes-counted-by-musttail"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangattrs,\n  author = {{LLVM Project}},\n  title = {{Clang: Attribute Reference}},\n  url = {https://clang.llvm.org/docs/AttributeReference.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "llvmreflang",
+    "title": "LLVM Language Reference Manual",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://llvm.org/docs/LangRef.html",
+    "source_urls": [
+      "https://llvm.org/docs/LangRef.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "IR 语义、属性、内存操作与正确性约束的规范基础。",
+    "limits": "滚动开发版需与实验 LLVM commit 对齐；不能自动覆盖机器码层防御义务。",
+    "tags": [
+      "official-documentation",
+      "ir-semantics-poison-ub"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{llvmreflang,\n  author = {{LLVM Project}},\n  title = {{LLVM Language Reference Manual}},\n  url = {https://llvm.org/docs/LangRef.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "llvmub",
+    "title": "LLVM IR Undefined Behavior Manual",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://llvm.org/docs/UndefinedBehavior.html",
+    "source_urls": [
+      "https://llvm.org/docs/UndefinedBehavior.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "undef、poison、freeze 与 refinement 比较的语义背景。",
+    "limits": "LLVM IR 的 UB 语义不能直接等同于 C/C++ 源语言规则。",
+    "tags": [
+      "official-documentation",
+      "ub-refinement"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{llvmub,\n  author = {{LLVM Project}},\n  title = {{LLVM IR Undefined Behavior Manual}},\n  url = {https://llvm.org/docs/UndefinedBehavior.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "llvmcodegen",
+    "title": "The LLVM Target-Independent Code Generator",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://llvm.org/docs/CodeGenerator.html",
+    "source_urls": [
+      "https://llvm.org/docs/CodeGenerator.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "middle-end/backend lowering、指令选择与机器级变换背景。",
+    "limits": "架构说明不证明某个 pass 或保护机制在全部目标上的行为。",
+    "tags": [
+      "official-documentation",
+      "backend-lowering"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{llvmcodegen,\n  author = {{LLVM Project}},\n  title = {{The LLVM Target-Independent Code Generator}},\n  url = {https://llvm.org/docs/CodeGenerator.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "llvmtestguide",
+    "title": "LLVM Testing Infrastructure Guide",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://llvm.org/docs/TestingGuide.html",
+    "source_urls": [
+      "https://llvm.org/docs/TestingGuide.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "回归测试、lit/FileCheck 等实现验证背景。",
+    "limits": "通过既有回归测试不等于对全部安全契约的语义证明。",
+    "tags": [
+      "official-documentation",
+      "testing-regression"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{llvmtestguide,\n  author = {{LLVM Project}},\n  title = {{LLVM Testing Infrastructure Guide}},\n  url = {https://llvm.org/docs/TestingGuide.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "glibcfortify",
+    "title": "The GNU C Library: Source Fortification",
+    "authors": [
+      "GNU C Library Developers"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://sourceware.org/glibc/manual/latest/html_node/Source-Fortification.html",
+    "source_urls": [
+      "https://sourceware.org/glibc/manual/latest/html_node/Source-Fortification.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "_FORTIFY_SOURCE、对象大小内建函数及加固调用的库/编译器契约。",
+    "limits": "glibc 版本、编译器能力和优化条件共同决定行为，不能由符号存在推出边界计算正确。",
+    "tags": [
+      "official-documentation",
+      "fortify"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{glibcfortify,\n  author = {{GNU C Library Developers}},\n  title = {{The GNU C Library: Source Fortification}},\n  url = {https://sourceware.org/glibc/manual/latest/html_node/Source-Fortification.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "glibcerase",
+    "title": "The GNU C Library: Erasing Sensitive Data",
+    "authors": [
+      "GNU C Library Developers"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://sourceware.org/glibc/manual/latest/html_node/Erasing-Sensitive-Data.html",
+    "source_urls": [
+      "https://sourceware.org/glibc/manual/latest/html_node/Erasing-Sensitive-Data.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "普通擦除可能被优化删除，与 explicit_bzero/memset_explicit 承诺的区别。",
+    "limits": "擦除目标内存的保证不自动覆盖寄存器副本和所有中间数据。",
+    "tags": [
+      "official-documentation",
+      "secure-erasure"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{glibcerase,\n  author = {{GNU C Library Developers}},\n  title = {{The GNU C Library: Erasing Sensitive Data}},\n  url = {https://sourceware.org/glibc/manual/latest/html_node/Erasing-Sensitive-Data.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "arm_aapcs64",
+    "title": "Procedure Call Standard for the Arm 64-bit Architecture (AAPCS64), 2025Q1",
+    "authors": [
+      "Arm"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://raw.githubusercontent.com/ARM-software/abi-aa/2025Q1/aapcs64/aapcs64.rst",
+    "source_urls": [
+      "https://raw.githubusercontent.com/ARM-software/abi-aa/2025Q1/aapcs64/aapcs64.rst"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取 2025Q1 规范源码的寄存器/特性约定小节。",
+    "use": "AArch64 参数、返回值、callee-saved 与平台寄存器约定。",
+    "limits": "特别注意 x18 的平台保留规则；ABI 义务与 caller-saved 寄存器清零义务不同。",
+    "tags": [
+      "official-documentation",
+      "arm_aapcs64"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{arm_aapcs64,\n  author = {{Arm}},\n  title = {{Procedure Call Standard for the Arm 64-bit Architecture (AAPCS64), 2025Q1}},\n  year = {2025},\n  url = {https://raw.githubusercontent.com/ARM-software/abi-aa/2025Q1/aapcs64/aapcs64.rst},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "arm_sysvabi64",
+    "title": "System V ABI for the Arm 64-bit Architecture, 2025Q1",
+    "authors": [
+      "Arm"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://raw.githubusercontent.com/ARM-software/abi-aa/2025Q1/sysvabi64/sysvabi64.rst",
+    "source_urls": [
+      "https://raw.githubusercontent.com/ARM-software/abi-aa/2025Q1/sysvabi64/sysvabi64.rst"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取 2025Q1 规范源码的寄存器/特性约定小节。",
+    "use": "BTI、PAC、GCS 相关 ELF 特性与链接/调用约定。",
+    "limits": "规范支持不表示任意硬件、内核或 QEMU 已实现该特性。",
+    "tags": [
+      "official-documentation",
+      "arm_sysvabi64"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{arm_sysvabi64,\n  author = {{Arm}},\n  title = {{System V ABI for the Arm 64-bit Architecture, 2025Q1}},\n  year = {2025},\n  url = {https://raw.githubusercontent.com/ARM-software/abi-aa/2025Q1/sysvabi64/sysvabi64.rst},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "riscvpsabi",
+    "title": "RISC-V ABIs Specification, version 2.0-rc0",
+    "authors": [
+      "RISC-V International"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://riscv-non-isa.github.io/riscv-elf-psabi-doc/",
+    "source_urls": [
+      "https://riscv-non-isa.github.io/riscv-elf-psabi-doc/"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "RISC-V 寄存器约定、调用约定和 ELF ABI。",
+    "limits": "本次页面标示 2026-11-04 pre-release 2.0-rc0；不能当作已冻结正式版本，实验前必须固定版本。",
+    "tags": [
+      "official-documentation",
+      "riscv-abi"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{riscvpsabi,\n  author = {{RISC-V International}},\n  title = {{RISC-V ABIs Specification, version 2.0-rc0}},\n  url = {https://riscv-non-isa.github.io/riscv-elf-psabi-doc/},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "loongarchabi",
+    "title": "LoongArch ELF ABI Specification, version 2.01",
+    "authors": [
+      "Loongson Technology Corporation Limited"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html",
+    "source_urls": [
+      "https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "LoongArch 寄存器、参数/返回值及 ELF ABI。",
+    "limits": "ABI 文档不能证明某个 compiler defense 已被 LoongArch 后端实现。",
+    "tags": [
+      "official-documentation",
+      "loongarch-abi"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{loongarchabi,\n  author = {{Loongson Technology Corporation Limited}},\n  title = {{LoongArch ELF ABI Specification, version 2.01}},\n  url = {https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "loongarchisa",
+    "title": "LoongArch Reference Manual, Volume 1: Basic Architecture, version 1.10",
+    "authors": [
+      "Loongson Technology Corporation Limited"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html",
+    "source_urls": [
+      "https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "LoongArch 指令语义及机器级观察的规范入口。",
+    "limits": "按具体指令小节和版本引用，不从 ISA 规范推断工具链与运行环境支持。",
+    "tags": [
+      "official-documentation",
+      "loongarch-isa"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{loongarchisa,\n  author = {{Loongson Technology Corporation Limited}},\n  title = {{LoongArch Reference Manual, Volume 1: Basic Architecture, version 1.10}},\n  url = {https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "riscvcfi_raw",
+    "title": "RISC-V Unprivileged ISA Manual: Control-Flow Integrity",
+    "authors": [
+      "RISC-V International"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://raw.githubusercontent.com/riscv/riscv-isa-manual/main/src/unpriv/cfi.adoc",
+    "source_urls": [
+      "https://raw.githubusercontent.com/riscv/riscv-isa-manual/main/src/unpriv/cfi.adoc"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方规范源码的前向/后向边 CFI 及扩展定义。",
+    "use": "Zicfilp 前向边与 Zicfiss 后向边防御的官方规范源码。",
+    "limits": "读取的是 main 分支规范源码；正式引用前应固定 release/commit，并核验硬件及编译器支持。",
+    "tags": [
+      "official-documentation",
+      "riscvcfi_raw"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{riscvcfi_raw,\n  author = {{RISC-V International}},\n  title = {{RISC-V Unprivileged ISA Manual: Control-Flow Integrity}},\n  url = {https://raw.githubusercontent.com/riscv/riscv-isa-manual/main/src/unpriv/cfi.adoc},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "x86psabi",
+    "title": "System V Application Binary Interface: AMD64 Architecture Processor Supplement",
+    "authors": [
+      "x86-64 psABI Maintainers"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gitlab.com/x86-psABIs/x86-64-ABI",
+    "source_urls": [
+      "https://gitlab.com/x86-psABIs/x86-64-ABI"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取维护仓库的项目标识和规范入口，尚未逐节读取规范 PDF。",
+    "use": "x86-64 psABI 维护仓库与规范入口。",
+    "limits": "本次只核维护仓库和规范入口；具体寄存器或 red-zone 论断需进一步查阅相应版本 PDF。",
+    "tags": [
+      "official-documentation",
+      "x86psabi"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{x86psabi,\n  author = {{x86-64 psABI Maintainers}},\n  title = {{System V Application Binary Interface: AMD64 Architecture Processor Supplement}},\n  url = {https://gitlab.com/x86-psABIs/x86-64-ABI},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "clangcsacheckers",
+    "title": "Clang Static Analyzer: Checker Developer Manual",
+    "authors": [
+      "LLVM Project"
+    ],
+    "year": null,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://clang-analyzer.llvm.org/checker_dev_manual.html",
+    "source_urls": [
+      "https://clang-analyzer.llvm.org/checker_dev_manual.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "CSA checker 接口与扩展分析器背景，可配合 KNighter。",
+    "limits": "这里只支持开发接口背景，不证明合成 checker 的可靠性。",
+    "tags": [
+      "official-documentation",
+      "checker-synthesis"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{clangcsacheckers,\n  author = {{LLVM Project}},\n  title = {{Clang Static Analyzer: Checker Developer Manual}},\n  url = {https://clang-analyzer.llvm.org/checker_dev_manual.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gcctypeattrs",
+    "title": "GCC 15.2: Common Type Attributes",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Type-Attributes.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Type-Attributes.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "strub 类型属性、模式、调用约束与栈擦除规范。",
+    "limits": "须与 instrumentation options 联合读；不能把未启用或不适用的擦除视为遗漏。",
+    "tags": [
+      "official-documentation",
+      "gcctypeattrs"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{gcctypeattrs,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Common Type Attributes}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Common-Type-Attributes.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gccobjectsize",
+    "title": "GCC 15.2: Object Size Checking",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Object-Size-Checking.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Object-Size-Checking.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "__builtin_object_size、动态对象大小和加固调用的判定基础。",
+    "limits": "对象大小语义及未知值处理依赖 type 参数；常量差异本身不能证明错误。",
+    "tags": [
+      "official-documentation",
+      "gccobjectsize"
+    ],
+    "priority": "core",
+    "bibtex": "@misc{gccobjectsize,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: Object Size Checking}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Object-Size-Checking.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  },
+  {
+    "key": "gccstrictflex",
+    "title": "GCC 15.2: C Dialect Options",
+    "authors": [
+      "GCC Developers"
+    ],
+    "year": 2025,
+    "entry_type": "misc",
+    "venue": "Official documentation",
+    "doi": null,
+    "url": "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/C-Dialect-Options.html",
+    "source_urls": [
+      "https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/C-Dialect-Options.html"
+    ],
+    "verification": "official-doc",
+    "read_depth": "已读取官方页面及与用途对应的小节；未核对实现或执行实验。",
+    "use": "-fstrict-flex-arrays 等 C 方言选项与柔性数组的适用规则。",
+    "limits": "语言选项的行为不等同于独立运行时 bounds checker。",
+    "tags": [
+      "official-documentation",
+      "gccstrictflex"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{gccstrictflex,\n  author = {{GCC Developers}},\n  title = {{GCC 15.2: C Dialect Options}},\n  year = {2025},\n  url = {https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/C-Dialect-Options.html},\n  urldate = {2026-11-12},\n  note = {Official documentation; accessed 2026-11-12}\n}"
+  }
+]

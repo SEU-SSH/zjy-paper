@@ -1,0 +1,890 @@
+[
+  {
+    "key": "deng2023titanfuzz",
+    "title": "Large Language Models Are Zero-Shot Fuzzers: Fuzzing Deep-Learning Libraries via Large Language Models",
+    "authors": [
+      "Yinlin Deng",
+      "Chunqiu Steven Xia",
+      "Haoran Peng",
+      "Chenyuan Yang",
+      "Lingming Zhang"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 32nd ACM SIGSOFT International Symposium on Software Testing and Analysis",
+    "doi": "10.1145/3597926.3598067",
+    "url": "https://doi.org/10.1145/3597926.3598067",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3597926.3598067",
+      "https://arxiv.org/abs/2212.14834"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "LLM同时承担程序生成与补全式变异，利用训练语料中语言/API约束知识提高输入有效性；适合相关工作中生成侧背景。",
+    "limits": "评估对象主要是深度学习库；不能外推到编译器防御完整性，也不能把生成有效性当成oracle正确性。",
+    "tags": [
+      "LLM-fuzzing",
+      "DL-libraries",
+      "generation-mutation"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{deng2023titanfuzz,\n  author = {Deng, Yinlin and Xia, Chunqiu Steven and Peng, Haoran and Yang, Chenyuan and Zhang, Lingming},\n  title = {{Large Language Models Are Zero-Shot Fuzzers: Fuzzing Deep-Learning Libraries via Large Language Models}},\n  year = {2023},\n  booktitle = {Proceedings of the 32nd ACM SIGSOFT International Symposium on Software Testing and Analysis},\n  pages = {423--435},\n  doi = {10.1145/3597926.3598067},\n  url = {https://doi.org/10.1145/3597926.3598067}\n}\n"
+  },
+  {
+    "key": "deng2024fuzzgpt",
+    "title": "Large Language Models are Edge-Case Generators: Crafting Unusual Programs for Fuzzing Deep Learning Libraries",
+    "authors": [
+      "Yinlin Deng",
+      "Chunqiu Steven Xia",
+      "Chenyuan Yang",
+      "Shizhuo Dylan Zhang",
+      "Shujing Yang",
+      "Lingming Zhang"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the IEEE/ACM 46th International Conference on Software Engineering",
+    "doi": "10.1145/3597503.3623343",
+    "url": "https://doi.org/10.1145/3597503.3623343",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3597503.3623343",
+      "https://arxiv.org/abs/2304.02014"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "利用历史触发缺陷程序的稀有成分，通过in-context learning或fine-tuning生成非常规输入；可支持缺陷历史作为生成知识源。",
+    "limits": "历史bug模式启发输入不等于从历史补丁准确恢复防御规范；本文收录正式ICSE题名，预印本题名不同。",
+    "tags": [
+      "LLM-fuzzing",
+      "historical-bugs",
+      "edge-cases"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{deng2024fuzzgpt,\n  author = {Deng, Yinlin and Xia, Chunqiu Steven and Yang, Chenyuan and Zhang, Shizhuo Dylan and Yang, Shujing and Zhang, Lingming},\n  title = {{Large Language Models are Edge-Case Generators: Crafting Unusual Programs for Fuzzing Deep Learning Libraries}},\n  year = {2024},\n  booktitle = {Proceedings of the IEEE/ACM 46th International Conference on Software Engineering},\n  pages = {1--13},\n  doi = {10.1145/3597503.3623343},\n  url = {https://doi.org/10.1145/3597503.3623343}\n}\n"
+  },
+  {
+    "key": "meng2024chatafl",
+    "title": "Large Language Model guided Protocol Fuzzing",
+    "authors": [
+      "Ruijie Meng",
+      "Martin Mirchev",
+      "Marcel Böhme",
+      "Abhik Roychoudhury"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings 2024 Network and Distributed System Security Symposium",
+    "doi": "10.14722/ndss.2024.24556",
+    "url": "https://doi.org/10.14722/ndss.2024.24556",
+    "source_urls": [
+      "https://api.crossref.org/works/10.14722%2Fndss.2024.24556",
+      "https://www.ndss-symposium.org/ndss-paper/large-language-model-guided-protocol-fuzzing/"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "利用LLM中的协议知识生成消息语法并引导消息序列探索，说明自然语言领域知识能够辅助结构化测试。",
+    "limits": "评估对象是网络协议实现；状态覆盖不证明编译产物防御性质。不能把论文结果外推到任意协议或任意模型。",
+    "tags": [
+      "LLM-fuzzing",
+      "protocol",
+      "structured-input"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{meng2024chatafl,\n  author = {Meng, Ruijie and Mirchev, Martin and B{\\\"o}hme, Marcel and Roychoudhury, Abhik},\n  title = {{Large Language Model guided Protocol Fuzzing}},\n  year = {2024},\n  booktitle = {Proceedings 2024 Network and Distributed System Security Symposium},\n  doi = {10.14722/ndss.2024.24556},\n  url = {https://doi.org/10.14722/ndss.2024.24556}\n}\n"
+  },
+  {
+    "key": "lyu2024promptfuzz",
+    "title": "Prompt Fuzzing for Fuzz Driver Generation",
+    "authors": [
+      "Yunlong Lyu",
+      "Yuxuan Xie",
+      "Peng Chen",
+      "Hao Chen"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2024 on ACM SIGSAC Conference on Computer and Communications Security",
+    "doi": "10.1145/3658644.3670396",
+    "url": "https://doi.org/10.1145/3658644.3670396",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3658644.3670396",
+      "https://arxiv.org/abs/2312.17677"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "覆盖反馈驱动prompt变异与fuzz driver生成，并结合程序验证和调度；可用于输入/驱动合成及反馈循环近邻。",
+    "limits": "它生成库测试驱动，不生成DeFuzz防御oracle；不要与另一篇同名PromptFuzz提示注入测试论文混淆。",
+    "tags": [
+      "LLM-fuzzing",
+      "harness-generation",
+      "coverage-feedback"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{lyu2024promptfuzz,\n  author = {Lyu, Yunlong and Xie, Yuxuan and Chen, Peng and Chen, Hao},\n  title = {{Prompt Fuzzing for Fuzz Driver Generation}},\n  year = {2024},\n  booktitle = {Proceedings of the 2024 on ACM SIGSAC Conference on Computer and Communications Security},\n  pages = {3793--3807},\n  doi = {10.1145/3658644.3670396},\n  url = {https://doi.org/10.1145/3658644.3670396}\n}\n"
+  },
+  {
+    "key": "hu2023chatfuzz",
+    "title": "Augmenting Greybox Fuzzing with Generative AI",
+    "authors": [
+      "Jie Hu",
+      "Qian Zhang",
+      "Heng Yin"
+    ],
+    "year": 2023,
+    "entry_type": "misc",
+    "venue": "arXiv preprint arXiv:2306.06782",
+    "doi": "10.48550/arXiv.2306.06782",
+    "url": "https://arxiv.org/abs/2306.06782",
+    "source_urls": [
+      "https://arxiv.org/abs/2306.06782"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对作者arXiv元数据并阅读摘要；未核实正式出版版本，未逐节精读或复现实验。",
+    "use": "从灰盒fuzzer的seed pool选取种子，提示生成模型产生更符合格式的变体；适合说明LLM辅助变异的早期工作。",
+    "limits": "本轮核实的是2023作者预印本，未核实正式出版版本；原文明确在复杂非平凡语法目标上未普遍优于AFL++。",
+    "tags": [
+      "LLM-fuzzing",
+      "greybox",
+      "structured-input"
+    ],
+    "priority": "supporting",
+    "bibtex": "@misc{hu2023chatfuzz,\n  author = {Hu, Jie and Zhang, Qian and Yin, Heng},\n  title = {{Augmenting Greybox Fuzzing with Generative AI}},\n  year = {2023},\n  howpublished = {arXiv preprint arXiv:2306.06782},\n  doi = {10.48550/arXiv.2306.06782},\n  url = {https://arxiv.org/abs/2306.06782},\n  eprint = {2306.06782},\n  archivePrefix = {arXiv},\n  primaryClass = {cs.CR}\n}\n"
+  },
+  {
+    "key": "zhang2026llamafuzz",
+    "title": "LLAMAFUZZ: Large Language Model Enhanced Greybox Fuzzing",
+    "authors": [
+      "Hongxiang Zhang",
+      "Yuyang Rong",
+      "Yifeng He",
+      "Hao Chen"
+    ],
+    "year": 2026,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 7th ACM/IEEE International Conference on Automation of Software Test",
+    "doi": "10.1145/3793654.3793756",
+    "url": "https://doi.org/10.1145/3793654.3793756",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3793654.3793756",
+      "https://arxiv.org/abs/2406.07714"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "通过配对变异种子微调LLM并接入灰盒fuzzing，补充结构化输入变异路线；正式AST2026版本已核。",
+    "limits": "通用程序的结构化数据变异，不是编译器防御oracle；摘要中的覆盖/bug结果只适用于其基准、配置和统计口径。",
+    "tags": [
+      "LLM-fuzzing",
+      "greybox",
+      "fine-tuning",
+      "2026"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{zhang2026llamafuzz,\n  author = {Zhang, Hongxiang and Rong, Yuyang and He, Yifeng and Chen, Hao},\n  title = {{LLAMAFUZZ: Large Language Model Enhanced Greybox Fuzzing}},\n  year = {2026},\n  booktitle = {Proceedings of the 7th ACM/IEEE International Conference on Automation of Software Test},\n  pages = {34--45},\n  doi = {10.1145/3793654.3793756},\n  url = {https://doi.org/10.1145/3793654.3793756}\n}\n"
+  },
+  {
+    "key": "lemieux2023codamosa",
+    "title": "CodaMosa: Escaping Coverage Plateaus in Test Generation with Pre-trained Large Language Models",
+    "authors": [
+      "Caroline Lemieux",
+      "Jeevana Priya Inala",
+      "Shuvendu K. Lahiri",
+      "Siddhartha Sen"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "2023 IEEE/ACM 45th International Conference on Software Engineering (ICSE)",
+    "doi": "10.1109/ICSE48619.2023.00085",
+    "url": "https://doi.org/10.1109/ICSE48619.2023.00085",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109%2FICSE48619.2023.00085",
+      "https://www.microsoft.com/en-us/research/publication/codamosa-escaping-coverage-plateaus-in-test-generation-with-pre-trained-large-language-models/"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "搜索式测试覆盖进入平台期时，调用LLM产生欠覆盖函数的示例，再由搜索继续探索；可支持按反馈选择模型介入时机。",
+    "limits": "覆盖提高并不证明安全性质；这里的LLM辅助单元测试生成不能直接当成编译器防御对照实验结果。",
+    "tags": [
+      "LLM-test-generation",
+      "coverage-feedback",
+      "hybrid-search"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{lemieux2023codamosa,\n  author = {Lemieux, Caroline and Inala, Jeevana Priya and Lahiri, Shuvendu K. and Sen, Siddhartha},\n  title = {{CodaMosa: Escaping Coverage Plateaus in Test Generation with Pre-trained Large Language Models}},\n  year = {2023},\n  booktitle = {2023 IEEE/ACM 45th International Conference on Software Engineering (ICSE)},\n  pages = {919--931},\n  doi = {10.1109/ICSE48619.2023.00085},\n  url = {https://doi.org/10.1109/ICSE48619.2023.00085}\n}\n"
+  },
+  {
+    "key": "ryan2024symprompt",
+    "title": "Code-Aware Prompting: A Study of Coverage-Guided Test Generation in Regression Setting using LLM",
+    "authors": [
+      "Gabriel Ryan",
+      "Siddhartha Jain",
+      "Mingyue Shang",
+      "Shiqi Wang",
+      "Xiaofei Ma",
+      "Murali Krishna Ramanathan",
+      "Baishakhi Ray"
+    ],
+    "year": 2024,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Software Engineering",
+    "doi": "10.1145/3643769",
+    "url": "https://doi.org/10.1145/3643769",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3643769",
+      "https://arxiv.org/abs/2402.00097"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "把生成过程拆成与执行路径对齐的多阶段prompt，并提供类型及依赖上下文；可支持源码条件与输入生成的连接。",
+    "limits": "路径引导用于Python回归测试，不能声称它不利用源码，也不能把路径覆盖等同于语义正确性证明。",
+    "tags": [
+      "LLM-test-generation",
+      "source-context",
+      "path-guidance"
+    ],
+    "priority": "supporting",
+    "bibtex": "@article{ryan2024symprompt,\n  author = {Ryan, Gabriel and Jain, Siddhartha and Shang, Mingyue and Wang, Shiqi and Ma, Xiaofei and Ramanathan, Murali Krishna and Ray, Baishakhi},\n  title = {{Code-Aware Prompting: A Study of Coverage-Guided Test Generation in Regression Setting using LLM}},\n  year = {2024},\n  journal = {Proceedings of the ACM on Software Engineering},\n  volume = {1},\n  number = {FSE},\n  pages = {951--971},\n  doi = {10.1145/3643769},\n  url = {https://doi.org/10.1145/3643769}\n}\n"
+  },
+  {
+    "key": "altmayerpizzorno2025coverup",
+    "title": "CoverUp: Effective High Coverage Test Generation for Python",
+    "authors": [
+      "Juan Altmayer Pizzorno",
+      "Emery D. Berger"
+    ],
+    "year": 2025,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Software Engineering",
+    "doi": "10.1145/3729398",
+    "url": "https://doi.org/10.1145/3729398",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3729398",
+      "https://arxiv.org/abs/2403.16218"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "迭代结合覆盖分析、代码上下文和执行反馈生成高覆盖Python回归测试；是2025年反馈驱动测试生成近邻。",
+    "limits": "正式题名已改为Effective High Coverage Test Generation for Python；覆盖结果不能证明oracle或程序语义完整。",
+    "tags": [
+      "LLM-test-generation",
+      "coverage-feedback",
+      "2025"
+    ],
+    "priority": "core",
+    "bibtex": "@article{altmayerpizzorno2025coverup,\n  author = {Altmayer Pizzorno, Juan and Berger, Emery D.},\n  title = {{CoverUp: Effective High Coverage Test Generation for Python}},\n  year = {2025},\n  journal = {Proceedings of the ACM on Software Engineering},\n  volume = {2},\n  number = {FSE},\n  pages = {2897--2919},\n  doi = {10.1145/3729398},\n  url = {https://doi.org/10.1145/3729398}\n}\n"
+  },
+  {
+    "key": "chen2024chatunitest",
+    "title": "ChatUniTest: A Framework for LLM-Based Test Generation",
+    "authors": [
+      "Yinghao Chen",
+      "Zehao Hu",
+      "Chen Zhi",
+      "Junxiao Han",
+      "Shuiguang Deng",
+      "Jianwei Yin"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Companion Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering",
+    "doi": "10.1145/3663529.3663801",
+    "url": "https://doi.org/10.1145/3663529.3663801",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3663529.3663801",
+      "https://arxiv.org/abs/2305.04764"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "自适应focal context及generation-validation-repair流程，可作为上下文压缩、生成后检查与修复的工程近邻。",
+    "limits": "收录的是FSE2024 Companion工具论文；通过编译/测试检查不代表生成断言准确表达用户意图。",
+    "tags": [
+      "LLM-test-generation",
+      "context-selection",
+      "validation-repair"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{chen2024chatunitest,\n  author = {Chen, Yinghao and Hu, Zehao and Zhi, Chen and Han, Junxiao and Deng, Shuiguang and Yin, Jianwei},\n  title = {{ChatUniTest: A Framework for LLM-Based Test Generation}},\n  year = {2024},\n  booktitle = {Companion Proceedings of the 32nd ACM International Conference on the Foundations of Software Engineering},\n  pages = {572--576},\n  doi = {10.1145/3663529.3663801},\n  url = {https://doi.org/10.1145/3663529.3663801}\n}\n"
+  },
+  {
+    "key": "cosler2023nl2spec",
+    "title": "nl2spec: Interactively Translating Unstructured Natural Language to Temporal Logics with Large Language Models",
+    "authors": [
+      "Matthias Cosler",
+      "Christopher Hahn",
+      "Daniel Mendoza",
+      "Frederik Schmitt",
+      "Caroline Trippel"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "Computer Aided Verification",
+    "doi": "10.1007/978-3-031-37703-7_18",
+    "url": "https://doi.org/10.1007/978-3-031-37703-7_18",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1007%2F978-3-031-37703-7_18",
+      "https://arxiv.org/abs/2303.04864"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "将自然语言要求转成时序逻辑，并把子公式映射回原文供人交互修正；非常适合说明规范提取的歧义和可追溯性。",
+    "limits": "明确包含用户增删改子翻译；不能写成全自动正确恢复规范，更不能据此声称DeFuzz结构化要求就是形式化证明。",
+    "tags": [
+      "specification-inference",
+      "natural-language",
+      "human-in-loop"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{cosler2023nl2spec,\n  author = {Cosler, Matthias and Hahn, Christopher and Mendoza, Daniel and Schmitt, Frederik and Trippel, Caroline},\n  title = {{nl2spec: Interactively Translating Unstructured Natural Language to Temporal Logics with Large Language Models}},\n  year = {2023},\n  booktitle = {Computer Aided Verification},\n  pages = {383--396},\n  doi = {10.1007/978-3-031-37703-7_18},\n  url = {https://doi.org/10.1007/978-3-031-37703-7_18}\n}\n"
+  },
+  {
+    "key": "sun2024clover",
+    "title": "Clover: Closed-Loop Verifiable Code Generation",
+    "authors": [
+      "Chuyue Sun",
+      "Ying Sheng",
+      "Oded Padon",
+      "Clark Barrett"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "AI Verification",
+    "doi": "10.1007/978-3-031-65112-0_7",
+    "url": "https://doi.org/10.1007/978-3-031-65112-0_7",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1007%2F978-3-031-65112-0_7",
+      "https://arxiv.org/abs/2310.17807"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "检查代码、docstring与形式化标注的一致性，结合LLM和验证工具；可用于讨论生成规范与代码之间的交叉检查。",
+    "limits": "摘要评估为教材级Dafny程序；基准上的零误接收不是普遍零误报保证，也不是编译器防御语义正确性证据。",
+    "tags": [
+      "formal-verification",
+      "code-generation",
+      "specification-consistency"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{sun2024clover,\n  author = {Sun, Chuyue and Sheng, Ying and Padon, Oded and Barrett, Clark},\n  title = {{Clover: Closed-Loop Verifiable Code Generation}},\n  year = {2024},\n  booktitle = {AI Verification},\n  pages = {134--155},\n  doi = {10.1007/978-3-031-65112-0_7},\n  url = {https://doi.org/10.1007/978-3-031-65112-0_7}\n}\n"
+  },
+  {
+    "key": "wen2024autospec",
+    "title": "Enchanting Program Specification Synthesis by Large Language Models Using Static Analysis and Program Verification",
+    "authors": [
+      "Cheng Wen",
+      "Jialun Cao",
+      "Jie Su",
+      "Zhiwu Xu",
+      "Shengchao Qin",
+      "Mengda He",
+      "Haokun Li",
+      "Shing-Chi Cheung",
+      "Cong Tian"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Computer Aided Verification",
+    "doi": "10.1007/978-3-031-65630-9_16",
+    "url": "https://doi.org/10.1007/978-3-031-65630-9_16",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1007%2F978-3-031-65630-9_16",
+      "https://arxiv.org/abs/2404.00762"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "静态分析和验证器驱动LLM生成候选规范，分解程序并逐轮验证候选；适合说明生成器与外部判据分工。",
+    "limits": "候选规范在给定形式模型中验证，不自动等于自然语言防御意图正确；不要把AutoSpec当作仅生成loop invariant的系统。",
+    "tags": [
+      "specification-inference",
+      "formal-verification",
+      "static-analysis"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{wen2024autospec,\n  author = {Wen, Cheng and Cao, Jialun and Su, Jie and Xu, Zhiwu and Qin, Shengchao and He, Mengda and Li, Haokun and Cheung, Shing-Chi and Tian, Cong},\n  title = {{Enchanting Program Specification Synthesis by Large Language Models Using Static Analysis and Program Verification}},\n  year = {2024},\n  booktitle = {Computer Aided Verification},\n  pages = {302--328},\n  doi = {10.1007/978-3-031-65630-9_16},\n  url = {https://doi.org/10.1007/978-3-031-65630-9_16}\n}\n"
+  },
+  {
+    "key": "wu2024lemur",
+    "title": "Lemur: Integrating Large Language Models in Automated Program Verification",
+    "authors": [
+      "Haoze Wu",
+      "Clark Barrett",
+      "Nina Narodytska"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "The Twelfth International Conference on Learning Representations",
+    "doi": null,
+    "url": "https://openreview.net/forum?id=Q3YaCghZNt",
+    "source_urls": [
+      "https://arxiv.org/abs/2310.04870",
+      "https://theory.stanford.edu/~barrett/pubs/WCB24-abstract.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "将LLM提出候选证明信息与自动推理器组合，并给出规则及soundness论证；适合对照程序化验证和LLM启发式的边界。",
+    "limits": "论文证明的可靠性依赖其验证演算与自动推理器前提；不能移植成DeFuzz确定执行checker的语义正确性保证。",
+    "tags": [
+      "formal-verification",
+      "neuro-symbolic",
+      "soundness"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{wu2024lemur,\n  author = {Wu, Haoze and Barrett, Clark and Narodytska, Nina},\n  title = {{Lemur: Integrating Large Language Models in Automated Program Verification}},\n  year = {2024},\n  booktitle = {The Twelfth International Conference on Learning Representations},\n  url = {https://openreview.net/forum?id=Q3YaCghZNt}\n}\n"
+  },
+  {
+    "key": "li2025iris",
+    "title": "IRIS: LLM-Assisted Static Analysis for Detecting Security Vulnerabilities",
+    "authors": [
+      "Ziyang Li",
+      "Saikat Dutta",
+      "Mayur Naik"
+    ],
+    "year": 2025,
+    "entry_type": "inproceedings",
+    "venue": "The Thirteenth International Conference on Learning Representations",
+    "doi": null,
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/582d4e27fa24168f3af1f4582655034b-Abstract-Conference.html",
+    "source_urls": [
+      "https://arxiv.org/abs/2405.17238",
+      "https://proceedings.iclr.cc/paper_files/paper/2025/hash/582d4e27fa24168f3af1f4582655034b-Abstract-Conference.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "结合LLM推断污点规范、上下文分析与全仓库静态推理；直接相关于模型提供知识、分析器承担系统检查的路线。",
+    "limits": "面向Java安全缺陷检测；LLM参与规范与上下文判别，不能概括成完全没有模型介入的裁决链或任意源码检查器合成。",
+    "tags": [
+      "LLM-static-analysis",
+      "taint-specifications",
+      "CodeQL",
+      "2025"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{li2025iris,\n  author = {Li, Ziyang and Dutta, Saikat and Naik, Mayur},\n  title = {{IRIS: LLM-Assisted Static Analysis for Detecting Security Vulnerabilities}},\n  year = {2025},\n  booktitle = {The Thirteenth International Conference on Learning Representations},\n  pages = {35735--35758},\n  url = {https://proceedings.iclr.cc/paper_files/paper/2025/hash/582d4e27fa24168f3af1f4582655034b-Abstract-Conference.html}\n}\n"
+  },
+  {
+    "key": "li2024llift",
+    "title": "Enhancing Static Analysis for Practical Bug Detection: An LLM-Integrated Approach",
+    "authors": [
+      "Haonan Li",
+      "Yu Hao",
+      "Yizhuo Zhai",
+      "Zhiyun Qian"
+    ],
+    "year": 2024,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Programming Languages",
+    "doi": "10.1145/3649828",
+    "url": "https://doi.org/10.1145/3649828",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3649828"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "将静态分析与LLM结合，通过post-constraint guidance改进Linux内核use-before-initialization分析；可说明语义辅助路径筛选。",
+    "limits": "针对特定缺陷模型和内核变量约定；不是通用checker生成，也不是形式化soundness保证。",
+    "tags": [
+      "LLM-static-analysis",
+      "kernel",
+      "post-constraints"
+    ],
+    "priority": "core",
+    "bibtex": "@article{li2024llift,\n  author = {Li, Haonan and Hao, Yu and Zhai, Yizhuo and Qian, Zhiyun},\n  title = {{Enhancing Static Analysis for Practical Bug Detection: An LLM-Integrated Approach}},\n  year = {2024},\n  journal = {Proceedings of the ACM on Programming Languages},\n  volume = {8},\n  number = {OOPSLA1},\n  pages = {474--499},\n  doi = {10.1145/3649828},\n  url = {https://doi.org/10.1145/3649828}\n}\n"
+  },
+  {
+    "key": "ji2025artemis",
+    "title": "Artemis: Toward Accurate Detection of Server-Side Request Forgeries through LLM-Assisted Inter-procedural Path-Sensitive Taint Analysis",
+    "authors": [
+      "Yuchen Ji",
+      "Ting Dai",
+      "Zhichao Zhou",
+      "Yutian Tang",
+      "Jingzhu He"
+    ],
+    "year": 2025,
+    "entry_type": "article",
+    "venue": "Proceedings of the ACM on Programming Languages",
+    "doi": "10.1145/3720488",
+    "url": "https://doi.org/10.1145/3720488",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1145%2F3720488",
+      "https://arxiv.org/abs/2502.21026"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "LLM辅助的过程间、路径敏感污点分析，是从规范/上下文知识进入静态分析的2025近邻。",
+    "limits": "对象为PHP中的SSRF，已有分析器核心及特定规则；本轮只读摘要，LLM具体介入点应在正文引用前再精读方法。",
+    "tags": [
+      "LLM-static-analysis",
+      "taint-analysis",
+      "2025"
+    ],
+    "priority": "supporting",
+    "bibtex": "@article{ji2025artemis,\n  author = {Ji, Yuchen and Dai, Ting and Zhou, Zhichao and Tang, Yutian and He, Jingzhu},\n  title = {{Artemis: Toward Accurate Detection of Server-Side Request Forgeries through LLM-Assisted Inter-procedural Path-Sensitive Taint Analysis}},\n  year = {2025},\n  journal = {Proceedings of the ACM on Programming Languages},\n  volume = {9},\n  number = {OOPSLA1},\n  pages = {1349--1377},\n  doi = {10.1145/3720488},\n  url = {https://doi.org/10.1145/3720488}\n}\n"
+  },
+  {
+    "key": "wang2025inferroi",
+    "title": "Boosting Static Resource Leak Detection via LLM-based Resource-Oriented Intention Inference",
+    "authors": [
+      "Chong Wang",
+      "Jianan Liu",
+      "Xin Peng",
+      "Yang Liu",
+      "Yiling Lou"
+    ],
+    "year": 2025,
+    "entry_type": "inproceedings",
+    "venue": "2025 IEEE/ACM 47th International Conference on Software Engineering (ICSE)",
+    "doi": "10.1109/ICSE55347.2025.00131",
+    "url": "https://doi.org/10.1109/ICSE55347.2025.00131",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1109%2FICSE55347.2025.00131",
+      "https://arxiv.org/abs/2311.04448"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "LLM推断资源获取、释放和可达性验证意图，再结合两阶段静态分析检查泄漏；与“规范/意图生成+程序检查”相关。",
+    "limits": "意图推断不是完整资源语义证明；原论文作者验证与开发者确认数量不同，不能混写成全部获开发者确认。",
+    "tags": [
+      "LLM-static-analysis",
+      "resource-intention",
+      "2025"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{wang2025inferroi,\n  author = {Wang, Chong and Liu, Jianan and Peng, Xin and Liu, Yang and Lou, Yiling},\n  title = {{Boosting Static Resource Leak Detection via LLM-based Resource-Oriented Intention Inference}},\n  year = {2025},\n  booktitle = {2025 IEEE/ACM 47th International Conference on Software Engineering (ICSE)},\n  pages = {2905--2917},\n  doi = {10.1109/ICSE55347.2025.00131},\n  url = {https://doi.org/10.1109/ICSE55347.2025.00131}\n}\n"
+  },
+  {
+    "key": "sun2024gptscan",
+    "title": "GPTScan: Detecting Logic Vulnerabilities in Smart Contracts by Combining GPT with Program Analysis",
+    "authors": [
+      "Yuqiang Sun",
+      "Daoyuan Wu",
+      "Yue Xue",
+      "Han Liu",
+      "Haijun Wang",
+      "Zhengzi Xu",
+      "Xiaofei Xie",
+      "Yang Liu"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the IEEE/ACM 46th International Conference on Software Engineering",
+    "doi": "10.1145/3597503.3639117",
+    "url": "https://doi.org/10.1145/3597503.3639117",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=GPTScan%20Detecting%20Logic%20Vulnerabilities&rows=3",
+      "https://arxiv.org/abs/2308.03314"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "以LLM识别逻辑缺陷候选及关键变量/语句，再执行静态确认；可支持模型建议与程序分析证据相结合。",
+    "limits": "静态确认降低误报并不消除误报；智能合约业务逻辑和编译器防御要求不同，不能直接外推精度数字。",
+    "tags": [
+      "LLM-static-analysis",
+      "static-confirmation",
+      "smart-contracts"
+    ],
+    "priority": "core",
+    "bibtex": "@inproceedings{sun2024gptscan,\n  author = {Sun, Yuqiang and Wu, Daoyuan and Xue, Yue and Liu, Han and Wang, Haijun and Xu, Zhengzi and Xie, Xiaofei and Liu, Yang},\n  title = {{GPTScan: Detecting Logic Vulnerabilities in Smart Contracts by Combining GPT with Program Analysis}},\n  year = {2024},\n  booktitle = {Proceedings of the IEEE/ACM 46th International Conference on Software Engineering},\n  pages = {1--13},\n  doi = {10.1145/3597503.3639117},\n  url = {https://doi.org/10.1145/3597503.3639117}\n}\n"
+  },
+  {
+    "key": "yao2023react",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "authors": [
+      "Shunyu Yao",
+      "Jeffrey Zhao",
+      "Dian Yu",
+      "Nan Du",
+      "Izhak Shafran",
+      "Karthik Narasimhan",
+      "Yuan Cao"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "The Eleventh International Conference on Learning Representations",
+    "doi": null,
+    "url": "https://openreview.net/forum?id=WE_vluYUL-X",
+    "source_urls": [
+      "https://arxiv.org/abs/2210.03629",
+      "https://react-lm.github.io/"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对作者arXiv的ICLR camera-ready说明并阅读摘要、作者项目页的prompting说明；未复现实验。",
+    "use": "交替推理、动作与环境观察的agent设计先例；可为DeFuzz迭代读取源码、执行工具、根据反馈调整生成的组织方式提供背景。",
+    "limits": "ReAct是通用agent范式，不是编译器测试专用算法；它不提供工具输出或最终判定正确性的保证。",
+    "tags": [
+      "agents",
+      "tool-use",
+      "reasoning-action"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{yao2023react,\n  author = {Yao, Shunyu and Zhao, Jeffrey and Yu, Dian and Du, Nan and Shafran, Izhak and Narasimhan, Karthik and Cao, Yuan},\n  title = {{ReAct: Synergizing Reasoning and Acting in Language Models}},\n  year = {2023},\n  booktitle = {The Eleventh International Conference on Learning Representations},\n  url = {https://openreview.net/forum?id=WE_vluYUL-X}\n}\n"
+  },
+  {
+    "key": "shinn2023reflexion",
+    "title": "Reflexion: language agents with verbal reinforcement learning",
+    "authors": [
+      "Noah Shinn",
+      "Federico Cassano",
+      "Ashwin Gopinath",
+      "Karthik Narasimhan",
+      "Shunyu Yao"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "Advances in Neural Information Processing Systems",
+    "doi": "10.52202/075280-0377",
+    "url": "https://papers.nips.cc/paper_files/paper/2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html",
+    "source_urls": [
+      "https://papers.nips.cc/paper_files/paper/2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "将任务反馈转换为语言反思并保存到episodic memory，用于下一次尝试；可讨论跨轮反馈积累。",
+    "limits": "语言反思不是独立验证器，也不等于更新模型参数的强化学习；正式会议作者名单与arXiv元数据不同，采用会议名单。",
+    "tags": [
+      "agents",
+      "memory",
+      "verbal-feedback"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{shinn2023reflexion,\n  author = {Shinn, Noah and Cassano, Federico and Gopinath, Ashwin and Narasimhan, Karthik and Yao, Shunyu},\n  title = {{Reflexion: language agents with verbal reinforcement learning}},\n  year = {2023},\n  booktitle = {Advances in Neural Information Processing Systems},\n  volume = {36},\n  pages = {8634--8652},\n  doi = {10.52202/075280-0377},\n  url = {https://papers.nips.cc/paper_files/paper/2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html}\n}\n"
+  },
+  {
+    "key": "yang2024sweagent",
+    "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+    "authors": [
+      "John Yang",
+      "Carlos E. Jimenez",
+      "Alexander Wettig",
+      "Kilian Lieret",
+      "Shunyu Yao",
+      "Karthik Narasimhan",
+      "Ofir Press"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "Advances in Neural Information Processing Systems",
+    "doi": "10.52202/079017-1601",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/5a7c947568c1b1328ccc5230172e1e7c-Abstract-Conference.html",
+    "source_urls": [
+      "https://proceedings.neurips.cc/paper_files/paper/2024/hash/5a7c947568c1b1328ccc5230172e1e7c-Abstract-Conference.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "agent-computer interface对仓库导航、文件编辑和测试执行的作用，可支撑工具接口与agent能力分离的设计理由。",
+    "limits": "软件修复基准成功率不能作为编译器缺陷发现能力或防御验证正确性的依据。",
+    "tags": [
+      "agents",
+      "tool-interface",
+      "repository-navigation"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{yang2024sweagent,\n  author = {Yang, John and Jimenez, Carlos E. and Wettig, Alexander and Lieret, Kilian and Yao, Shunyu and Narasimhan, Karthik and Press, Ofir},\n  title = {{SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering}},\n  year = {2024},\n  booktitle = {Advances in Neural Information Processing Systems},\n  volume = {37},\n  pages = {50528--50652},\n  doi = {10.52202/079017-1601},\n  url = {https://proceedings.neurips.cc/paper_files/paper/2024/hash/5a7c947568c1b1328ccc5230172e1e7c-Abstract-Conference.html}\n}\n"
+  },
+  {
+    "key": "wu2024autogen",
+    "title": "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversations",
+    "authors": [
+      "Qingyun Wu",
+      "Gagan Bansal",
+      "Jieyu Zhang",
+      "Yiran Wu",
+      "Beibin Li",
+      "Erkang Zhu",
+      "Li Jiang",
+      "Xiaoyun Zhang",
+      "Shaokun Zhang",
+      "Jiale Liu",
+      "Ahmed Hassan Awadallah",
+      "Ryen W White",
+      "Doug Burger",
+      "Chi Wang"
+    ],
+    "year": 2024,
+    "entry_type": "inproceedings",
+    "venue": "First Conference on Language Modeling",
+    "doi": null,
+    "url": "https://colmweb.org/2024/AcceptedPapers.html",
+    "source_urls": [
+      "https://arxiv.org/abs/2308.08155",
+      "https://colmweb.org/2024/AcceptedPapers.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对COLM2024官方录用名单及完整作者列表，并阅读作者arXiv摘要；官方录用列表题名为Conversations，预印本为Conversation。OpenReview遇到浏览器校验，未读取其正文。",
+    "use": "可编程多agent对话以及模型、工具、人类输入的组合框架；仅在解释编排背景时引用。",
+    "limits": "框架通用性不是DeFuzz采用特定多agent配置有效的实验证据；不能把多agent编排称为本项目独有。",
+    "tags": [
+      "agents",
+      "multi-agent",
+      "orchestration"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{wu2024autogen,\n  author = {Wu, Qingyun and Bansal, Gagan and Zhang, Jieyu and Wu, Yiran and Li, Beibin and Zhu, Erkang and Jiang, Li and Zhang, Xiaoyun and Zhang, Shaokun and Liu, Jiale and Awadallah, Ahmed Hassan and White, Ryen W and Burger, Doug and Wang, Chi},\n  title = {{AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversations}},\n  year = {2024},\n  booktitle = {First Conference on Language Modeling},\n  url = {https://colmweb.org/2024/AcceptedPapers.html}\n}\n"
+  },
+  {
+    "key": "schick2023toolformer",
+    "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+    "authors": [
+      "Timo Schick",
+      "Jane Dwivedi-Yu",
+      "Roberto Dessi",
+      "Roberta Raileanu",
+      "Maria Lomeli",
+      "Eric Hambro",
+      "Luke Zettlemoyer",
+      "Nicola Cancedda",
+      "Thomas Scialom"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "Advances in Neural Information Processing Systems",
+    "doi": "10.52202/075280-2997",
+    "url": "https://papers.nips.cc/paper_files/paper/2023/hash/d842425e4bf79ba039352da0f658a906-Abstract-Conference.html",
+    "source_urls": [
+      "https://papers.nips.cc/paper_files/paper/2023/hash/d842425e4bf79ba039352da0f658a906-Abstract-Conference.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "通过自监督训练学习何时、怎样调用API的工具使用先例，可为背景中的工具增强语言模型提供出处。",
+    "limits": "Toolformer包含模型训练，不能拿来直接证明纯prompt驱动工具循环的效果；正式版多一位作者Eric Hambro。",
+    "tags": [
+      "agents",
+      "tool-use",
+      "self-supervised-learning"
+    ],
+    "priority": "optional",
+    "bibtex": "@inproceedings{schick2023toolformer,\n  author = {Schick, Timo and Dwivedi-Yu, Jane and Dessi, Roberto and Raileanu, Roberta and Lomeli, Maria and Hambro, Eric and Zettlemoyer, Luke and Cancedda, Nicola and Scialom, Thomas},\n  title = {{Toolformer: Language Models Can Teach Themselves to Use Tools}},\n  year = {2023},\n  booktitle = {Advances in Neural Information Processing Systems},\n  volume = {36},\n  pages = {68539--68551},\n  doi = {10.52202/075280-2997},\n  url = {https://papers.nips.cc/paper_files/paper/2023/hash/d842425e4bf79ba039352da0f658a906-Abstract-Conference.html}\n}\n"
+  },
+  {
+    "key": "madaan2023selfrefine",
+    "title": "Self-Refine: Iterative Refinement with Self-Feedback",
+    "authors": [
+      "Aman Madaan",
+      "Niket Tandon",
+      "Prakhar Gupta",
+      "Skyler Hallinan",
+      "Luyu Gao",
+      "Sarah Wiegreffe",
+      "Uri Alon",
+      "Nouha Dziri",
+      "Shrimai Prabhumoye",
+      "Yiming Yang",
+      "Shashank Gupta",
+      "Bodhisattwa Prasad Majumder",
+      "Katherine Hermann",
+      "Sean Welleck",
+      "Amir Yazdanbakhsh",
+      "Peter Clark"
+    ],
+    "year": 2023,
+    "entry_type": "inproceedings",
+    "venue": "Advances in Neural Information Processing Systems",
+    "doi": "10.52202/075280-2019",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/91edff07232fb1b55a505a9e9f6c0ff3-Abstract-Conference.html",
+    "source_urls": [
+      "https://proceedings.neurips.cc/paper_files/paper/2023/hash/91edff07232fb1b55a505a9e9f6c0ff3-Abstract-Conference.html"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "同一模型生成、反馈和修订的迭代模式；可作为与外部编译/执行反馈不同的自我修订路线。",
+    "limits": "模型自反馈不是独立oracle；不应由其平均任务增益推出编译器测试中的可靠性。",
+    "tags": [
+      "agents",
+      "iterative-refinement",
+      "self-feedback"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{madaan2023selfrefine,\n  author = {Madaan, Aman and Tandon, Niket and Gupta, Prakhar and Hallinan, Skyler and Gao, Luyu and Wiegreffe, Sarah and Alon, Uri and Dziri, Nouha and Prabhumoye, Shrimai and Yang, Yiming and Gupta, Shashank and Majumder, Bodhisattwa Prasad and Hermann, Katherine and Welleck, Sean and Yazdanbakhsh, Amir and Clark, Peter},\n  title = {{Self-Refine: Iterative Refinement with Self-Feedback}},\n  year = {2023},\n  booktitle = {Advances in Neural Information Processing Systems},\n  volume = {36},\n  pages = {46534--46594},\n  doi = {10.52202/075280-2019},\n  url = {https://proceedings.neurips.cc/paper_files/paper/2023/hash/91edff07232fb1b55a505a9e9f6c0ff3-Abstract-Conference.html}\n}\n"
+  },
+  {
+    "key": "liu2024lostmiddle",
+    "title": "Lost in the Middle: How Language Models Use Long Contexts",
+    "authors": [
+      "Nelson F. Liu",
+      "Kevin Lin",
+      "John Hewitt",
+      "Ashwin Paranjape",
+      "Michele Bevilacqua",
+      "Fabio Petroni",
+      "Percy Liang"
+    ],
+    "year": 2024,
+    "entry_type": "article",
+    "venue": "Transactions of the Association for Computational Linguistics",
+    "doi": "10.1162/tacl_a_00638",
+    "url": "https://doi.org/10.1162/tacl_a_00638",
+    "source_urls": [
+      "https://api.crossref.org/works?query.title=Lost%20in%20the%20Middle%20How%20Language%20Models%20Use%20Long%20Contexts&rows=3",
+      "https://arxiv.org/abs/2307.03172"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "相关信息在长上下文中位置不同会影响模型表现；可解释为什么检索和上下文组织值得做消融。",
+    "limits": "实验主要是问答和键值检索；不能宣称它已经证明某种源码切片或BM25优于embedding。",
+    "tags": [
+      "retrieval",
+      "long-context",
+      "context-selection"
+    ],
+    "priority": "supporting",
+    "bibtex": "@article{liu2024lostmiddle,\n  author = {Liu, Nelson F. and Lin, Kevin and Hewitt, John and Paranjape, Ashwin and Bevilacqua, Michele and Petroni, Fabio and Liang, Percy},\n  title = {{Lost in the Middle: How Language Models Use Long Contexts}},\n  year = {2024},\n  journal = {Transactions of the Association for Computational Linguistics},\n  volume = {12},\n  pages = {157--173},\n  doi = {10.1162/tacl_a_00638},\n  url = {https://doi.org/10.1162/tacl_a_00638}\n}\n"
+  },
+  {
+    "key": "robertson2009bm25",
+    "title": "The Probabilistic Relevance Framework: BM25 and Beyond",
+    "authors": [
+      "Stephen Robertson",
+      "Hugo Zaragoza"
+    ],
+    "year": 2009,
+    "entry_type": "article",
+    "venue": "Foundations and Trends in Information Retrieval",
+    "doi": "10.1561/1500000019",
+    "url": "https://doi.org/10.1561/1500000019",
+    "source_urls": [
+      "https://api.crossref.org/works/10.1561%2F1500000019"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "BM25/BM25F概率相关性框架的权威系统阐述，可支撑方法部分词法检索公式和参数来源。",
+    "limits": "这是检索方法基础，不是针对编译器源码的优越性证据；不能把经典BM25和项目定制融合排序的效果混为一谈。",
+    "tags": [
+      "retrieval",
+      "BM25",
+      "probabilistic-ranking"
+    ],
+    "priority": "core",
+    "bibtex": "@article{robertson2009bm25,\n  author = {Robertson, Stephen and Zaragoza, Hugo},\n  title = {{The Probabilistic Relevance Framework: BM25 and Beyond}},\n  year = {2009},\n  journal = {Foundations and Trends in Information Retrieval},\n  volume = {4},\n  number = {1-2},\n  pages = {1--174},\n  doi = {10.1561/1500000019},\n  url = {https://doi.org/10.1561/1500000019}\n}\n"
+  },
+  {
+    "key": "karpukhin2020dpr",
+    "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+    "authors": [
+      "Vladimir Karpukhin",
+      "Barlas Oguz",
+      "Sewon Min",
+      "Patrick Lewis",
+      "Ledell Wu",
+      "Sergey Edunov",
+      "Danqi Chen",
+      "Wen-tau Yih"
+    ],
+    "year": 2020,
+    "entry_type": "inproceedings",
+    "venue": "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    "doi": "10.18653/v1/2020.emnlp-main.550",
+    "url": "https://aclanthology.org/2020.emnlp-main.550/",
+    "source_urls": [
+      "https://aclanthology.org/2020.emnlp-main.550/"
+    ],
+    "verification": "metadata+abstract",
+    "read_depth": "已核对正式元数据及一手摘要；未逐节精读、未复现实验。",
+    "use": "双编码器dense passage retrieval的代表工作；可在方法或检索消融背景中说明密集检索路线。",
+    "limits": "在开放域问答上优于BM25不代表编译器标识符、pass名或代码上下文也更好。",
+    "tags": [
+      "retrieval",
+      "dense-retrieval",
+      "dual-encoder"
+    ],
+    "priority": "supporting",
+    "bibtex": "@inproceedings{karpukhin2020dpr,\n  author = {Vladimir Karpukhin and Barlas Oguz and Sewon Min and Patrick Lewis and Ledell Wu and Sergey Edunov and Danqi Chen and Wen-tau Yih},\n  title = {{Dense Passage Retrieval for Open-Domain Question Answering}},\n  year = {2020},\n  booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)},\n  pages = {6769--6781},\n  doi = {10.18653/v1/2020.emnlp-main.550},\n  url = {https://aclanthology.org/2020.emnlp-main.550/}\n}\n"
+  }
+]
