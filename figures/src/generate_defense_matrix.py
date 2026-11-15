@@ -79,7 +79,7 @@ def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
                 svg.append(f'<circle cx="{cx + 16}" cy="{cy + cell_h/2}" r="4" fill="#D97706"/>')
                 svg.append(f'<text x="{cx + 26}" y="{cy + cell_h/2 + 3.5}" fill="#92400E" font-size="9.5" font-weight="700">Audit</text>')
             elif status == 3:
-                # Confirmed & Merged (DeFuzz)
+                # Confirmed & Merged (DeFenzz)
                 svg.append(f'<rect x="{cx}" y="{cy}" width="{cell_w}" height="{cell_h}" rx="4" fill="#D1FAE5" stroke="#34D399" stroke-width="1.5"/>')
                 svg.append(f'<text x="{cx + 15}" y="{cy + cell_h/2 + 4}" fill="#059669" font-size="11" font-weight="800">&#x2713;</text>')
                 svg.append(f'<text x="{cx + 26}" y="{cy + cell_h/2 + 3.5}" fill="#065F46" font-size="9.5" font-weight="700">Verified</text>')
@@ -106,7 +106,7 @@ def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
     <!-- Confirmed & Merged -->
     <rect x="425" y="0" width="16" height="16" rx="3" fill="#D1FAE5" stroke="#34D399" stroke-width="1.5"/>
     <text x="428" y="12.5" fill="#059669" font-size="10" font-weight="800">&#x2713;</text>
-    <text x="447" y="12.5" fill="#64748B" font-size="10.5">Confirmed &amp; Merged (DeFuzz)</text>
+    <text x="447" y="12.5" fill="#64748B" font-size="10.5">Confirmed &amp; Merged (DeFenzz)</text>
   </g>
 ''')
 

@@ -2,7 +2,8 @@
 
 ## 1. Writing Skill & Locked Sections
 - Always load and follow the **`plain-paper-writing`** skill when drafting or revising manuscript prose (plain vocabulary, 15–25 words per sentence, strict design-vs-implementation separation outside `Section IV Implementation`, and sentence-split `diff` + word-level track-changes on delivery).
-- Check [`outline_status.md`](./outline_status.md) before editing `main.tex`: never modify sections marked `[ready]` unless explicitly instructed by the user.
+- Check [`outline_status.md`](./outline_status.md) and [`mat_comments_list.md`](./mat_comments_list.md) before editing `main.tex`: never modify sections marked `[ready]` unless explicitly instructed by the user.
+- **Current Locked Boundary (`L1–L182` `[ready]`)**: **`Title`, `Abstract`, `Section I (Introduction)`, and `Section II (Motivation)` (`main.tex` `L1–L182`) have completed all revisions per Mat's Round 1 & Round 2 comments (`[R1-1]`–`[R1-11]`, `[R2-1]`–`[R2-10]`) and are strictly LOCKED.** Focus subsequent Mat-comment revisions (`[R2-11]`–`[R2-15]`) on `Section III (Design)` onward (`L183+`).
 - Use [`evaluation_data/README.md`](./evaluation_data/README.md) as the single source of truth for experimental numbers.
 
 ## 2. Step 3 (`Check IR` & Programmatic Oracles) Ground-Truth Architecture

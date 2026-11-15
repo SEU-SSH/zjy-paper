@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 246" width="520" height="246" style="background-color: #FFFFFF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+<rect x="16" y="9" width="9.5" height="9.5" rx="1.5" fill="#92400E"/>
+<text x="28.5" y="17.2" fill="#1C1917" font-size="8.6" font-weight="600">Call-Graph</text>
+<rect x="88.0" y="9" width="9.5" height="9.5" rx="1.5" fill="#D97706"/>
+<text x="100.5" y="17.2" fill="#1C1917" font-size="8.6" font-weight="600">Lexical Search</text>
+<rect x="180.0" y="9" width="9.5" height="9.5" rx="1.5" fill="#FDE68A" stroke="#B45309" stroke-width="0.7"/>
+<text x="192.5" y="17.2" fill="#1C1917" font-size="8.6" font-weight="600">Slice Read</text>
+<rect x="252.0" y="9" width="9.5" height="9.5" rx="1.5" fill="#228833"/>
+<text x="264.5" y="17.2" fill="#1C1917" font-size="8.6" font-weight="600">Write / Edit</text>
+<rect x="334.0" y="9" width="9.5" height="9.5" rx="1.5" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.7"/>
+<text x="346.5" y="17.2" fill="#1C1917" font-size="8.6" font-weight="600">Workspace / Exec</text>
+<text x="414" y="30" fill="#57534E" font-size="8.5" font-weight="700">Calls (Avg/Sess)</text>
+<line x1="114.0" y1="35" x2="114.0" y2="211.5" stroke="#E7E5E4" stroke-width="1"/>
+<text x="114.0" y="223.5" fill="#57534E" font-size="8.8" text-anchor="middle">0%</text>
+<line x1="187.0" y1="35" x2="187.0" y2="211.5" stroke="#E7E5E4" stroke-width="1"/>
+<text x="187.0" y="223.5" fill="#57534E" font-size="8.8" text-anchor="middle">25%</text>
+<line x1="260.0" y1="35" x2="260.0" y2="211.5" stroke="#E7E5E4" stroke-width="1"/>
+<text x="260.0" y="223.5" fill="#57534E" font-size="8.8" text-anchor="middle">50%</text>
+<line x1="333.0" y1="35" x2="333.0" y2="211.5" stroke="#E7E5E4" stroke-width="1"/>
+<text x="333.0" y="223.5" fill="#57534E" font-size="8.8" text-anchor="middle">75%</text>
+<line x1="406.0" y1="35" x2="406.0" y2="211.5" stroke="#E7E5E4" stroke-width="1"/>
+<text x="406.0" y="223.5" fill="#57534E" font-size="8.8" text-anchor="middle">100%</text>
+<text x="260.0" y="236.5" fill="#1C1917" font-size="9.3" font-weight="600" text-anchor="middle">Tool Invocation Share (%)</text>
+<text x="108" y="50.5" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="end">Source Map (GCC)</text>
+<rect x="114.00" y="39.5" width="52.55" height="15.0" fill="#92400E"/>
+<text x="140.3" y="50.2" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">18%</text>
+<rect x="166.55" y="39.5" width="95.52" height="15.0" fill="#D97706"/>
+<text x="214.3" y="50.2" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">33%</text>
+<rect x="262.07" y="39.5" width="67.78" height="15.0" fill="#FDE68A" stroke="#D97706" stroke-width="0.5"/>
+<text x="296.0" y="50.2" fill="#78350F" font-size="8.0" font-weight="700" text-anchor="middle">23%</text>
+<rect x="329.85" y="39.5" width="76.15" height="15.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.5"/>
+<text x="367.9" y="50.2" fill="#334155" font-size="8.0" font-weight="700" text-anchor="middle">26%</text>
+<text x="414" y="50.5" fill="#1C1917" font-size="8.8" font-weight="600">53.0k (14.4/s)</text>
+<text x="108" y="75.0" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="end">Source Map (LLVM)</text>
+<rect x="114.00" y="64.0" width="0.42" height="15.0" fill="#92400E"/>
+<rect x="114.42" y="64.0" width="159.98" height="15.0" fill="#D97706"/>
+<text x="194.4" y="74.7" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">55%</text>
+<rect x="274.40" y="64.0" width="121.87" height="15.0" fill="#FDE68A" stroke="#D97706" stroke-width="0.5"/>
+<text x="335.3" y="74.7" fill="#78350F" font-size="8.0" font-weight="700" text-anchor="middle">42%</text>
+<rect x="396.27" y="64.0" width="9.73" height="15.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.5"/>
+<text x="414" y="75.0" fill="#1C1917" font-size="8.8" font-weight="600">6.2k (11.0/s)</text>
+<text x="108" y="99.5" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="end">Check IR (GCC)</text>
+<rect x="114.00" y="88.5" width="36.50" height="15.0" fill="#D97706"/>
+<text x="132.2" y="99.2" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">12%</text>
+<rect x="150.50" y="88.5" width="32.52" height="15.0" fill="#FDE68A" stroke="#D97706" stroke-width="0.5"/>
+<rect x="183.02" y="88.5" width="219.36" height="15.0" fill="#228833"/>
+<text x="292.7" y="99.2" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">75%</text>
+<rect x="402.39" y="88.5" width="3.61" height="15.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.5"/>
+<text x="414" y="99.5" fill="#1C1917" font-size="8.8" font-weight="600">808 (1.4/s)</text>
+<text x="108" y="124.0" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="end">Check IR (LLVM)</text>
+<rect x="114.00" y="113.0" width="51.90" height="15.0" fill="#D97706"/>
+<text x="140.0" y="123.7" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">18%</text>
+<rect x="165.90" y="113.0" width="30.47" height="15.0" fill="#FDE68A" stroke="#D97706" stroke-width="0.5"/>
+<rect x="196.38" y="113.0" width="203.93" height="15.0" fill="#228833"/>
+<text x="298.3" y="123.7" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">70%</text>
+<rect x="400.31" y="113.0" width="5.69" height="15.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.5"/>
+<text x="414" y="124.0" fill="#1C1917" font-size="8.8" font-weight="600">872 (1.6/s)</text>
+<text x="108" y="148.5" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="end">Fuzz Loop (GCC)</text>
+<rect x="114.00" y="137.5" width="18.28" height="15.0" fill="#92400E"/>
+<rect x="132.28" y="137.5" width="131.29" height="15.0" fill="#D97706"/>
+<text x="197.9" y="148.2" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">45%</text>
+<rect x="263.58" y="137.5" width="125.24" height="15.0" fill="#FDE68A" stroke="#D97706" stroke-width="0.5"/>
+<text x="326.2" y="148.2" fill="#78350F" font-size="8.0" font-weight="700" text-anchor="middle">43%</text>
+<rect x="388.81" y="137.5" width="17.19" height="15.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.5"/>
+<text x="414" y="148.5" fill="#1C1917" font-size="8.8" font-weight="600">23.9k (27.8/s)</text>
+<text x="108" y="173.0" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="end">Fuzz Loop (LLVM)</text>
+<rect x="114.00" y="162.0" width="21.79" height="15.0" fill="#92400E"/>
+<rect x="135.79" y="162.0" width="148.01" height="15.0" fill="#D97706"/>
+<text x="209.8" y="172.7" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">51%</text>
+<rect x="283.80" y="162.0" width="106.65" height="15.0" fill="#FDE68A" stroke="#D97706" stroke-width="0.5"/>
+<text x="337.1" y="172.7" fill="#78350F" font-size="8.0" font-weight="700" text-anchor="middle">37%</text>
+<rect x="390.44" y="162.0" width="15.56" height="15.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.5"/>
+<text x="414" y="173.0" fill="#1C1917" font-size="8.8" font-weight="600">14.4k (25.2/s)</text>
+<line x1="12" y1="184.0" x2="510" y2="184.0" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3,2.5"/>
+<text x="108" y="202.5" fill="#78716C" font-size="9.2" font-weight="700" text-anchor="end">w/o Check IR (All)</text>
+<rect x="114.00" y="191.5" width="72.72" height="15.0" fill="#D97706"/>
+<text x="150.4" y="202.2" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">25%</text>
+<rect x="186.72" y="191.5" width="125.69" height="15.0" fill="#FDE68A" stroke="#D97706" stroke-width="0.5"/>
+<text x="249.6" y="202.2" fill="#78350F" font-size="8.0" font-weight="700" text-anchor="middle">43%</text>
+<rect x="312.41" y="191.5" width="70.21" height="15.0" fill="#228833"/>
+<text x="347.5" y="202.2" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">24%</text>
+<rect x="382.62" y="191.5" width="23.38" height="15.0" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.5"/>
+<text x="414" y="202.5" fill="#78716C" font-size="8.8" font-weight="600">18.5k (15.0/s)</text>
+<line x1="114" y1="35" x2="114" y2="211.5" stroke="#78716C" stroke-width="1.2"/>
+<line x1="114" y1="211.5" x2="406" y2="211.5" stroke="#78716C" stroke-width="1.2"/>
+</svg>

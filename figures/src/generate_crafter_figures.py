@@ -16,7 +16,7 @@ def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
     svg = []
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
     
-    # Fill colors (DeFuzz status: Confirmed / Reported / None)
+    # Fill colors (DeFenzz status: Confirmed / Reported / None)
     C_REP  = "#E3F1E7"   # Reported (light green fill)
     C_CONF = "#228833"   # Confirmed (dark green fill)
     C_NONE = "#FFFFFF"   # Empty (white fill)

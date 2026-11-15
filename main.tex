@@ -144,9 +144,9 @@ In answering this central question, this paper makes the following contributions
 
 \subsection{Compiler-Instrumented Defenses}\label{sec:bg-defenses}
 
-Compilers deploy automated defenses to protect software against security threats. Unlike standalone binary rewriters, compiler-instrumented defenses span both middle-end and backend stages of compilation. Middle-end passes analyze object bounds and control flow to insert or optimize high-level checks on the intermediate representation (IR). Backend passes enforce low-level protections by controlling stack frame layouts, register assignments, and machine instructions across target ISAs.
+Compilers deploy automated defenses to protect C and C++ systems software against the exploitation of unknown or unpatched vulnerabilities. Unlike standalone binary rewriters, compiler-instrumented defenses span both middle-end and backend stages of compilation. Middle-end passes analyze object bounds and control flow to insert or optimize high-level checks on the intermediate representation (IR). Backend passes enforce low-level protections by controlling stack frame layouts, register assignments, and machine instructions across target ISAs.
 
-Preserving security guarantees across this multi-stage pipeline is error-prone. A middle-end optimization can rewrite a defense check under flawed size assumptions, or a backend pass can misplace a stack guard slot. When such bugs occur, the compiler neither crashes nor emits warnings. Instead, it produces a working binary whose security protection is quietly weakened or broken.
+Preserving security guarantees across this multi-stage pipeline is error-prone. A middle-end optimization can rewrite a defense check under flawed size assumptions, or a backend pass can misplace a stack guard slot. When such bugs occur, the compiler neither crashes nor emits warnings. Instead, it produces a working binary whose security protection is silently weakened or broken.
 
 \subsection{Motivating Example}\label{sec:motivating-example}
 
@@ -174,51 +174,28 @@ In Listing~\ref{lst:motivating-fortify}, \texttt{init\_opaque(dst)} initializes 
 
 \subsection{Limitations of Existing Approaches}\label{sec:limitations}
 
-Existing compiler testing tools fail to detect this vulnerability due to two fundamental barriers in prior work. The first barrier of existing fuzzers is the \textbf{oracle gap}. Widely used compiler fuzzers such as Csmith~\cite{yang2011csmith}, YARPGen~\cite{livinskii2020yarpgen}, and EMI~\cite{le2014emi} only check whether the compiler crashes or whether compiled binaries produce consistent outputs on benign inputs. In Listing~\ref{lst:motivating-fortify}, GCC compiles the code cleanly, and any benign string \texttt{src} produces the exact same return value across all optimization levels. Because crash and differential testing do not check whether the binary enforces the reduced bound ($64 - k$), they remain blind when the defense is weakened.
+Existing compiler testing tools fail to detect this vulnerability due to two fundamental barriers in prior work. The first barrier of existing fuzzers is the \textbf{oracle gap}. Widely used compiler fuzzers such as Csmith~\cite{yang2011csmith}, YARPGen~\cite{livinskii2020yarpgen}, and EMI~\cite{le2014emi} only check whether the compiler crashes or whether compiled binaries produce consistent outputs on benign inputs. In Listing~\ref{lst:motivating-fortify}, GCC compiles the code cleanly. During benign executions, the mitigation is never triggered because the program stays within bounds. Thus, any benign string \texttt{src} produces the exact same return value across all optimization levels. Because crash and differential testing do not check whether the binary enforces the reduced bound ($64 - k$), they remain blind when the defense is weakened.
 
 The second barrier in prior tools is locating defense-related compiler branches and satisfying their triggering conditions. Traditional directed fuzzers can steer execution toward given target branches, but they cannot tell which branches inside millions of lines of compiler source code control a defense, such as the \texttt{BUILT\_IN\_STRCAT\_CHK} branch in \texttt{get\_string\_length()}. Even after reaching that branch, triggering the bug in Listing~\ref{lst:motivating-fortify} requires three coupled conditions on \texttt{dst}: the buffer must have a known allocation size so GCC emits \texttt{\_\_strcat\_chk(dst, src, 64)}, its prefix length $k$ must remain unknown at the append site so folding is deferred, and a subsequent \texttt{strlen(dst)} call must query the length to trigger the rewrite into \texttt{\_\_stpcpy\_chk(dst + k, src, 64)}. Random mutators rarely chain an opaque initialization, a fortified append, and a subsequent \texttt{strlen} call on the same buffer.
 
-Beyond fuzzing, static analysis requires heavy manual effort from human experts to craft custom rules for each defense mechanism and target ISA. Meanwhile, using LLMs to audit compiler source code end-to-end causes severe hallucinations and false bug reports. To overcome these limitations, a testing framework must locate defense-related compiler branches and guide seed generation toward them. The generated seeds must satisfy the branch conditions so the compiler emits the defense code in the binary. The framework must then run the compiled binary with defense-triggering inputs and use deterministic oracles to check whether the protection is silently weakened or broken.
+Beyond fuzzing, static analysis requires heavy manual effort from human experts to craft custom rules for each defense mechanism and target ISA. Using LLMs to audit compiler source code end-to-end causes severe hallucinations and false bug reports. To overcome these limitations, a testing framework must locate defense-related compiler branches and guide seed generation toward them. The generated seeds must satisfy the branch conditions so the compiler emits the defense code in the binary. The framework must then inspect or execute the compiled binary using deterministic oracles to check whether the protection is silently weakened or broken.
 
 \section{Design of DeFenzz}\label{sec:design}\label{sec:overview}
 
-\wincfig{method-overview}{Overview of \textsc{DeFenzz} across four stages: (1) extracting security invariants via CoT and RAG, (2) mapping invariants to compiler branches, (3) combining Check~IR primitives and target ISA specifications into multi-ISA checkers, and (4) branch-guided agentic fuzzing.}
+\wincfig{method-overview}{Architecture of \textsc{DeFenzz}. Offline stages extract security invariants from specifications and patches, map them to defense-related compiler branches, and build validated Check~IR checkers. Online fuzzing synthesizes targeted test seeds under branch-trace and checker feedback.}
 
-In this section, we present the design of \textsc{DeFenzz}, an invariant-guided framework for discovering silent failures in compiler-instrumented defenses. Figure~\ref{fig:method-overview} illustrates its overall workflow, which consists of four core steps: security invariant generation, compiler source mapping, programmatic oracle construction, and agentic directed fuzzing. First, we extract security invariants from compiler source code, official documentation, and historical bug reports using a hybrid CoT and RAG pipeline. Second, we map these invariants to the relevant compiler passes and decision branches, identifying where defenses are implemented and which conditions govern their execution. Third, we combine Check~IR primitives with target ISA specifications to synthesize executable static and dynamic Go checkers across architectures, verifying whether compiled programs preserve intended defenses without model hallucination. Finally, our agentic directed fuzzing coordinates a generator agent and a feedback agent to iteratively synthesize and mutate test programs under branch-trace and checker feedback. We discuss each step in detail in the following subsections.
+Testing compiler-instrumented defenses after compilation inverts the assumptions of conventional compiler fuzzing. Benign inputs never trigger mitigations, and broken defenses neither crash the compiler nor alter normal program outputs. Figure~\ref{fig:method-overview} shows how \textsc{DeFenzz} addresses these challenges through four coupled design stages. Because a buggy compiler cannot serve as its own reference, \textsc{DeFenzz} extracts external \emph{security invariants} specifying each defense rule and its failure signal (Section~\ref{sec:invariants}). Since defense logic spans millions of lines of compiler code, \textsc{DeFenzz} maps each invariant to its controlling branches and inserts compile-time probes (Section~\ref{sec:mapping}). To distinguish an intact mitigation from a silent failure across architectures, \textsc{DeFenzz} builds deterministic static and dynamic checkers over formalized query primitives (Section~\ref{sec:oracle}). Guided by mapped branches and checker verdicts, LLM agents synthesize test seeds that act as targeted fuzz drivers to trigger defense violations (Section~\ref{sec:online}).
 
 \subsection{Security Invariant Generation}\label{sec:invariants}\label{sec:specgen}
 
-To detect silent defense failures, \textsc{DeFenzz} extracts security invariants that specify the protection rules each compiler defense must enforce. Because the compiler itself may contain bugs, neither its implementation logic nor its compiled outputs can serve as the ground truth. Treating current compiler behavior as the reference would cause circular self-validation whenever a bug silently weakens or breaks a defense. Instead, \textsc{DeFenzz} extracts security invariants from three sources: official compiler documentation and ISA/ABI manuals, developer comments and assertions in compiler source code, and confirmed historical bug reports.
-
-Feeding whole compiler files or manuals to an LLM exceeds context limits and causes hallucinations. To keep each prompt focused, \textsc{DeFenzz} splits compiler source code and official documentation into small, self-contained slices. For compiler source code, each slice contains a single C/C++ function with its leading header comment, or a single machine-description pattern (\texttt{define\_insn} or \texttt{define\_expand}). For official documentation, each slice captures a self-contained manual section defining defense requirements, such as a command-line option entry in GCC's user manual, a target-hook specification in GCC's internals manual, or a feature design section in Clang documentation. Every slice records its source path, line boundaries, defense mechanism, and target ISA. Because these slices are completely independent, \textsc{DeFenzz} analyzes them in parallel using CoT prompting~\cite{wei2022chain} to extract the triggering precondition, the protection rule, and the observable violation signal. In the fortified string bug, reviewing the slice for \texttt{get\_string\_length()} and its header comment leads the model to infer a clear rule: when advancing a destination pointer by a prefix length, the pass must subtract that same length from the remaining size bound.
-
-Different defenses and backends often perform similar low-level operations, such as updating size bounds, laying out stack frames, or clearing registers before return. As a result, new silent failures often share the same root causes as historical bugs. To find such bugs across defenses and architectures, \textsc{DeFenzz} uses a hybrid RAG pipeline~\cite{lewis2020retrieval,liu2025propertygpt} to transfer historical bug patterns. Searching directly with a raw bug patch only matches the original buggy function. Instead, \textsc{DeFenzz} strips defense-specific function and flag names from each historical bug report, distilling a general query with three parts: a root-cause summary, defense-agnostic action keywords, and original defense terms to exclude, as shown in Listing~\ref{lst:rag-transfer} for GCC PR~96191~\cite{gccpr96191}. Using this query, \textsc{DeFenzz} searches the sliced source and documentation corpus by combining BM25 keyword search with dense vector retrieval via Reciprocal Rank Fusion. BM25 matches underscore-split identifier tokens that share naming conventions across passes, such as \texttt{ix86\_zero\_\allowbreak call\_used\_regs}. Dense vector retrieval finds slices that implement the same operation with different data structures, such as the register bitmap in ARM's \texttt{cmse\_nonsecure\_\allowbreak entry\_clear\_\allowbreak before\_return}. After filtering out slices that contain the excluded terms, \textsc{DeFenzz} selects the top-$k$ candidate slices. For each candidate slice, the model pairs the code with the historical root cause and uses CoT reasoning to derive a new invariant for that target defense.
+Post-compilation defense testing requires an external specification of what each mitigation must enforce. Differential fuzzing compares compiler builds on the same program, but a missing bound check or misplaced canary leaves benign outputs unchanged across all builds. Deriving rules from the compiler's own code or emitted binaries is equally flawed, as any existing compiler bug becomes part of the specification. Meanwhile, manually writing formal specifications across dozens of defenses and target ISAs cannot scale. \textsc{DeFenzz} instead represents each mitigation requirement as a target-independent \emph{security invariant}, shown in Listing~\ref{lst:invariant-record} for our motivating \texttt{\_FORTIFY\_SOURCE} bug. Each invariant forms a testable hypothesis with three fields: a triggering precondition (\texttt{precond}), a required protection rule (\texttt{rule}), and an observable failure signal (\texttt{signal}). Keeping these fields free of compiler-internal file or variable names allows one invariant to drive testing across optimization levels and architectures.
 
 \par\vspace{5pt}\noindent\begin{minipage}{\columnwidth}
-\begin{lstlisting}[language={}, keepspaces=true, morekeywords={root_cause,tokens,exclude,hit_1_bm25,hit_2_dense,fn,why}, morecomment={[l]{\#}}, morestring={[b]"}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={RAG query structure and cross-defense retrieval hits.}, label={lst:rag-transfer}]
-# Distilled Query from GCC PR 96191
-root_cause: "Function exit path returns without
-             clearing caller-visible registers"
-tokens:     ["epilogue", "caller_saved", "clear",
-             "register", "return"]
-exclude:    ["stack-protector", "canary"]
-# Top Cross-Defense Hits via BM25 + Dense RRF
-hit_1_bm25:  "config/i386/i386.cc"
-  fn:  "ix86_zero_call_used_regs"
-  why: "sub-tokens {zero, call, regs}"
-hit_2_dense: "config/arm/arm.cc"
-  fn:  "cmse_nonsecure_entry_clear_before_return"
-  why: "root cause on register-clear bitmap"
-\end{lstlisting}
-\end{minipage}\par\vspace{5pt}
-
-All invariants from CoT analysis and RAG transfer are stored as structured records in a unified catalog, as shown in Listing~\ref{lst:invariant-record}. Each record tags the target defense and applicable ISAs, followed by three core fields: the triggering precondition, the protection rule, and the observable violation signal. Because these records describe security rules without tying them to specific compiler files or functions, the same invariant can guide source mapping across different compilers and build binary checkers across multiple ISAs.
-
-\par\vspace{5pt}\noindent\begin{minipage}{\columnwidth}
-\begin{lstlisting}[language={}, keepspaces=true, morekeywords={id,defense,isas,precond,rule,signal}, morecomment={[l]{\#}}, morestring={[b]"}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Structured security invariant record in the catalog.}, label={lst:invariant-record}]
+\begin{lstlisting}[language={}, keepspaces=true, morekeywords={id,defense,isas,precond,rule,signal}, morecomment={[l]{\#}}, morestring={[b]"}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Structured security invariant record for \texttt{INV-FORT-014}.}, label={lst:invariant-record}]
 id:      "INV-FORT-014"
 defense: "_FORTIFY_SOURCE"
-isas:    ["x86_64", "aarch64", "riscv64"]
+isas:    ["x86_64", "aarch64",
+          "riscv64", "loongarch64"]
 precond: "Fortified append on sized buffer N with
           prefix len k, followed by length query"
 rule:    "Rewriting append to offset dst + k must
@@ -228,41 +205,59 @@ signal:  "Bound argument stays > N - k, or runtime
 \end{lstlisting}
 \end{minipage}\par\vspace{5pt}
 
-\subsection{Compiler Source Mapping}\label{sec:mapping}\label{sec:instrumentation}\label{sec:offline}
+Extracting accurate invariants with LLMs requires strict grounding in authoritative sources. Prompting an LLM from memory hallucinates nonexistent flags, whereas feeding raw compiler files mixes buggy implementation logic with intended security contracts. \textsc{DeFenzz} instead extracts invariants only from declarative contract sources: official compiler and ISA manuals, developer comments and assertions, and confirmed security patches. Each manual entry or documented routine is analyzed independently using Chain-of-Thought (CoT) prompting~\cite{wei2022chain} to derive the precondition, protection rule, and failure signal. Candidates without explicit specification or assertion evidence are discarded before entering the catalog. In our motivating example, the documented offset contract on \texttt{get\_string\_length()} yields \texttt{INV-FORT-014}: advancing \texttt{dst} by $k$ bytes must reduce the bound to $N - k$.
 
-With the invariant catalog in place, \textsc{DeFenzz} maps each security invariant to the compiler passes and decision branches that implement the target defense. An invariant defines what rule a compiled program must follow, but not where the compiler enforces that rule across millions of lines of C and C++ code. Simple keyword search is not enough because a single defense often spans middle-end passes, target hooks, and backend machine descriptions. To navigate the codebase accurately, \textsc{DeFenzz} gives a mapping agent three static analysis tools: a symbol indexer, a call-graph analyzer, and an AST parser. Using these tools, the agent locates defense logic along a three-level hierarchy of passes, functions, and branches.
-
-Starting from defense flags or builtin names, the agent queries the symbol indexer and call graph to find the pass that implements the defense. Within that pass, it follows call-graph edges to find functions that compute object bounds, lay out stack frames, or insert runtime checks. It then parses the AST of each function to extract the conditional branches and variables that control the defense. Listing~\ref{lst:source-mapping} shows the resulting mapping for \texttt{INV-FORT-014}, which traces fortified string calls to the \texttt{tree-ssa-strlen} pass, the \texttt{get\_\allowbreak string\_\allowbreak length()} function, and the \texttt{BUILT\_IN\_\allowbreak STRCAT\_CHK} branch.
+Manuals and comments state intended behavior for individual defenses, but they rarely list subtle corner cases such as epilogue leaks or optimization drops. Because distinct defenses share low-level operations like updating bounds, ordering stack slots, and clearing registers, bugs fixed in one defense often recur in others. To catch these recurring flaws, \textsc{DeFenzz} transfers historical bug patterns across defenses using Retrieval-Augmented Generation (RAG)~\cite{lewis2020retrieval,liu2025propertygpt}. Searching directly with a raw bug patch fails because its function and flag names only match the already-fixed defense. \textsc{DeFenzz} therefore strips defense-specific identifiers from each historical fix to form a mechanism-neutral failure query, while excluding the original defense (Listing~\ref{lst:rag-transfer}). Retrieving defense routines that perform matching low-level operations transfers a stack-canary register leak (GCC PR~96191~\cite{gccpr96191}) into new register-clearing invariants for x86 and ARM.
 
 \par\vspace{5pt}\noindent\begin{minipage}{\columnwidth}
-\begin{lstlisting}[language={}, keepspaces=true, morekeywords={pass,file,function,branch,vars,log_id,case,if,DEFENZZ_HIT}, morecomment={[f]{\#}}, morestring={[b]"}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Source mapping and branch logging for \texttt{INV-FORT-014}.}, label={lst:source-mapping}]
-# 1. Three-Level Hierarchy Mapping (INV-FORT-014)
+\begin{lstlisting}[language={}, keepspaces=true, morekeywords={root_cause,operations,exclude,transfer_1,transfer_2,invariant}, morecomment={[l]{\#}}, morestring={[b]"}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Mechanism-neutral bug abstraction and cross-defense invariant transfer from GCC PR~96191.}, label={lst:rag-transfer}]
+# 1. Abstracted Failure Pattern (from GCC PR 96191)
+root_cause: "Epilogue returns without clearing
+             secret value from caller-visible reg"
+operations: ["epilogue", "caller_saved", "clear",
+             "register", "return"]
+exclude:    ["stack-protector", "canary"]
+# 2. Cross-Defense Transfers to Other Mitigations
+transfer_1: "ix86_zero_call_used_regs" (x86 scrub)
+  invariant: "All exits zero call-used registers"
+transfer_2: "cmse_nonsecure_entry_clear" (ARM CMSE)
+  invariant: "Gateway return scrubs secret regs"
+\end{lstlisting}
+\end{minipage}\par\vspace{5pt}
+
+\subsection{Compiler Source Mapping}\label{sec:mapping}\label{sec:instrumentation}\label{sec:offline}
+
+A target-independent invariant states what protection a binary must preserve, not where the compiler implements or optimizes that defense. Without locating those internal decision points, black-box fuzzers generate valid programs that rarely enter defense-specific compiler code. Whole-compiler greybox coverage is also ineffective because millions of general optimization branches drown out the few branches controlling a mitigation. Simple keyword search fails as well: a single frontend hardening flag often triggers middle-end passes, target hooks, and backend patterns under unrelated internal names.
+
+Feeding entire compiler trees to an LLM is infeasible, while asking an LLM to guess file paths produces hallucinated locations. \textsc{DeFenzz} instead pairs a mapping agent with static code-navigation tools to narrow the codebase along three levels: pass, function, and branch. Starting from documented defense flags or builtins, the agent traces symbol definitions and call-graph edges into the passes and backend hooks implementing the mitigation. Within each function, syntax-tree analysis isolates the exact conditional branches and variables that gate check insertion, bound updates, or frame layout. Listing~\ref{lst:source-mapping} shows this mapping for \texttt{INV-FORT-014}, linking fortified string calls to the \texttt{tree-ssa-strlen} pass, \texttt{get\_\allowbreak string\_\allowbreak length()}, and its \texttt{BUILT\_IN\_\allowbreak STRCAT\_CHK} rewrite branch.
+
+\par\vspace{5pt}\noindent\begin{minipage}{\columnwidth}
+\begin{lstlisting}[language={}, keepspaces=true, morekeywords={pass,file,function,branch,vars,probe,case,if,DEFENZZ_HIT}, morecomment={[f]{\#}}, morestring={[b]"}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Hierarchical branch mapping and compile-time probe for \texttt{INV-FORT-014}.}, label={lst:source-mapping}]
+# 1. Hierarchical Branch Mapping (INV-FORT-014)
 pass:     "tree-ssa-strlen"
 file:     "gcc/tree-ssa-strlen.cc"
 function: "get_string_length"
 branch:   "case BUILT_IN_STRCAT_CHK"
   vars:   ["elen", "objsize", "lhs"]
-  log_id: "fortify#b4e1"
-# 2. Instrumented Branch in get_string_length()
+  probe:  "fortify#b4e1"
+# 2. Compile-Time Probe Inside the Compiler Pass
 case BUILT_IN_STRCAT_CHK:
-  DEFENZZ_HIT("fortify#b4e1:hit");
+  DEFENZZ_HIT("fortify#b4e1");
   if (elen != NULL && objsize != NULL) { ... }
-# 3. Emitted Compile-Time Log
-[DEFENZZ_LOG] fortify#b4e1:hit
 \end{lstlisting}
 \end{minipage}\par\vspace{5pt}
 
-Based on each mapping, \textsc{DeFenzz} assigns a unique branch tag such as \texttt{fortify\#b4e1}, where \texttt{b4e1} hashes the mapped file, line, and branch condition, and inserts a logging probe right before the branch, as shown in Listing~\ref{lst:source-mapping}. When the instrumented compiler builds a test seed, each reached probe prints its branch tag to the compile-time log, showing the fuzzer which mapped defense branches were executed during compilation and which remained unreached.
+To observe whether test seeds reach these mapped locations, \textsc{DeFenzz} instruments only the mapped compiler branches with lightweight compile-time probes (\texttt{DEFENZZ\_HIT}). Unlike full-compiler coverage, selective probes avoid build slowdowns and give feedback agents a concise trace of missed and reached defense branches. Crucially, these probes execute inside the compiler itself rather than inside the emitted target binary, leaving target code generation and stack layouts completely untouched.
 
 \subsection{Programmatic Oracle Construction}\label{sec:oracle}
 
-To check whether a test program $p$ preserves a defense, \textsc{DeFenzz} turns each security invariant into an executable Go checker across target ISAs, with \textbf{zero LLM involvement in bug adjudication}. However, asking an LLM to write raw checkers from scratch is unreliable. Checking a security invariant requires combining high-level verification logic with low-level ISA and ABI rules, such as register roles, calling conventions, and stack layouts. Relying on the model's internal knowledge for these low-level rules easily causes hallucinations, especially on less common architectures. Moreover, writing raw checkers from scratch---parsing compiler dumps, assembly text, ELF sections, and runtime outputs directly for each invariant---often introduces coding bugs, causing false alarms or missed bugs.
+Once a test program is compiled with a defense enabled, \textsc{DeFenzz} must determine whether the emitted binary preserves the protection or silently breaks it. Conventional fuzzing oracles fail here because they equate program crashes with bugs and clean exits with correct execution. Testing active mitigations at runtime requires inverting this failure signal. When a test program crosses a protected boundary, an intact mitigation aborts execution (e.g., via \texttt{SIGABRT}) to block exploitation. Surviving that violation without trapping---or leaving secret canary values in caller-visible registers after return---exposes a silent defense bug. However, runtime execution alone cannot test every compiler defense. Hardware defenses like CFI landing pads (\texttt{endbr64}, \texttt{bti}, \texttt{lpad}) stay dormant without specialized CPUs, and structural flaws like stale bound constants appear directly in assembly. \textsc{DeFenzz} therefore assigns each invariant either a \emph{static checker} over compiled artifacts or a \emph{dynamic checker} over sandboxed execution, matching how its failure signal manifests.
 
-\textsc{DeFenzz} addresses both issues through a \textbf{target specification table} $\mathcal{T}_i$ and a library of \textbf{Check~IR primitives} $\Omega$. Built from official ISA and ABI manuals, $\mathcal{T}_i$ stores exact parameters for each architecture $i$, including stack growth direction, return-address location, caller-saved and argument registers, CFI landing-pad bytes, and instruction alignment, as shown in Table~\ref{tab:isa-spec}. Meanwhile, Check~IR provides built-in primitives $\Omega$ that query individual facts from $p$ across its compiler dumps, assembly code, ELF binary, and runtime execution. Static primitives in $\Omega$ inspect dumps, assembly, and ELF sections to query imported symbols, call sites, pointer offsets, and constant call arguments. Dynamic primitives in $\Omega$ run $p$ to observe runtime behavior, such as exit signals, output markers, and post-return register values.
+Constructing accurate checkers across hundreds of invariants and multiple ISAs exposes a sharp design trade-off. Hand-writing checkers cannot scale across backends, while using an LLM as an online oracle is slow and hallucinates register roles and stack offsets. Asking an LLM to write raw checkers from scratch avoids online judgment, yet generated parsers still hardcode x86 mnemonics or invert signed frame offsets. Conversely, restricting checkers to a rigid declarative formula cannot express loops across call sites or multi-instruction data-flow checks. \textsc{DeFenzz} resolves this trade-off by factoring each checker into a \textbf{target specification table} $\mathcal{T}_i$, formalized \textbf{Check~IR} query primitives $\Omega$, and concise high-level check logic. Derived from architecture manuals, $\mathcal{T}_i$ stores exact ISA and ABI rules for each target $i$, shown for three representative architectures in Table~\ref{tab:isa-spec}. Check~IR provides pre-tested static primitives that query compiler dumps, assembly, and ELF binaries, alongside dynamic primitives that capture exit signals, trap markers, and post-return registers. Over $\Omega$ and $\mathcal{T}_i$, the LLM writes only high-level control flow---loops and conditionals---without touching raw text or binary parsing.
 
 \begin{table}[b]
 \centering
-\caption{Selected ISA and ABI parameters in the target specification table $\mathcal{T}_i$.}
+\caption{Selected ISA and ABI parameters for representative targets in $\mathcal{T}_i$.}
 \label{tab:isa-spec}
 \footnotesize
 \setlength{\tabcolsep}{2.8pt}
@@ -283,12 +278,12 @@ $\text{align}$ (step) & $1$ byte & $4$ bytes & $2$ bytes \\
 }
 \end{table}
 
-Rather than encoding an entire checker as a single rigid expression or writing raw checkers from scratch, the LLM writes high-level Go logic over $\Omega$ and $\mathcal{T}_i$ to form a complete checker $\phi$:
+Each synthesized checker $\phi$ combines a single mode $\mu \in \{\mathsf{Static}, \mathsf{Dynamic}\}$ and its applicable architectures $I_\phi$ with two boolean checks:
 \begin{equation}
 \phi = \langle \mu,\; I_\phi,\; G_{\text{app}}(p, \mathcal{T}_i),\; P_{\text{safe}}(p, \mathcal{T}_i) \rangle.
 \label{eq:pred-ir}
 \end{equation}
-Each checker $\phi$ declares a single checking mode $\mu \in \{\mathsf{Static}, \mathsf{Dynamic}\}$ and its applicable architectures $I_\phi$. Using Go control flow over primitives in $\Omega$ and fields in $\mathcal{T}_i$, $\phi$ implements two boolean checks: a precondition guard $G_{\text{app}}(p, \mathcal{T}_i)$ that tests whether $p$ activates the target defense, and a safety check $P_{\text{safe}}(p, \mathcal{T}_i)$ that tests whether the protection holds. Given a test program $p$ on target $i \in I_\phi$, running $\phi$ returns one of four verdicts:
+A naive pass-or-fail oracle would treat non-triggering test programs as defense passes and treat build failures as compiler bugs. To prevent both errors, $\phi$ separates the applicability guard $G_{\text{app}}$---which checks whether seed $p$ activates the defense---from the protection check $P_{\text{safe}}$, yielding four verdicts:
 \begin{equation}
 \mathsf{Verdict}(p, \phi, i) = \begin{cases}
 \mathbf{ERROR}, & \text{if build or query fails,} \\
@@ -298,31 +293,28 @@ Each checker $\phi$ declares a single checking mode $\mu \in \{\mathsf{Static}, 
 \end{cases}
 \label{eq:inference-rules}
 \end{equation}
-Build or query failures return $\mathbf{ERROR}$ instead of false bug alerts, and programs that do not trigger the defense return $\mathbf{NA}$ instead of false passes.
+Listing~\ref{lst:go-checker} shows the static checker for \texttt{INV-FORT-014}. Its guard $G_{\text{app}}$ locates rewritten \texttt{\_\_stpcpy\_chk} call sites via \texttt{ir.CallSites} and returns $\mathbf{NA}$ when none exist. Its check $P_{\text{safe}}$ queries buffer size, pointer offset, and constant bound via $\mathcal{T}_i.\text{ArgRegs}$, returning $\mathbf{FAIL}$ whenever a shifted destination keeps an unreduced bound. For dynamic invariants, $P_{\text{safe}}$ instead runs $p$ on boundary-violating inputs through dynamic primitives in $\Omega$. It returns $\mathbf{FAIL}$ if an overflow fails to abort or if $\mathcal{T}_i.R_{\text{caller}}$ retains a canary after return (as in GCC PR~96191~\cite{gccpr96191}).
 
-\begin{lstlisting}[float=t, language=C, morekeywords={func,return,if,for,range,len,nil,Prog,Target,Verdict,ERROR,NA,PASS,FAIL}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Static Go checker for \texttt{INV-FORT-014} combining Check~IR primitives and $\mathcal{T}_i$ with high-level check logic.}, label={lst:go-checker}]
-func CheckFortify(p *Prog, T Target) Verdict {
-  // G_app: check rewritten __stpcpy_chk calls
-  sites, err := ir.CallSites(p, "__stpcpy_chk")
-  if err != nil { return ERROR }
-  if len(sites) == 0 { return NA }
+\begin{lstlisting}[float=t, language=C, morekeywords={return,if,for,in,len,Seed,TargetSpec,Verdict,ERROR,NA,PASS,FAIL}, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Static checker for \texttt{INV-FORT-014} combining Check~IR primitives $\Omega$ and target specification $\mathcal{T}_i$.}, label={lst:go-checker}]
+Verdict CheckFortify(Seed p, TargetSpec T) {
+  // G_app: locate rewritten __stpcpy_chk calls
+  sites = ir.CallSites(p, "__stpcpy_chk");
+  if (ir.QueryFailed(sites)) return ERROR;
+  if (len(sites) == 0)       return NA;
 
-  // P_safe: LLM logic over Check IR + T_i
-  for _, s := range sites {
-    bufSz := ir.DstObjSize(p, s, T.ArgRegs[0])
-    moved := ir.HasPtrOffset(p, s, T.ArgRegs[0])
-    bnd, ok := ir.ConstArgImm(p, s, T.ArgRegs[2])
-    if moved && ok && bnd >= bufSz {
-      return FAIL // dst moved, bound >= N
-    }
+  // P_safe: check logic over Check IR and T_i
+  for (s in sites) {
+    bufSz = ir.DstObjSize(p, s, T.ArgRegs[0]);
+    moved = ir.HasPtrOffset(p, s, T.ArgRegs[0]);
+    bnd, ok = ir.ConstArgImm(p, s, T.ArgRegs[2]);
+    if (moved && ok && bnd >= bufSz)
+      return FAIL; // dst shifted, bound unreduced
   }
-  return PASS
+  return PASS;
 }
 \end{lstlisting}
 
-Listing~\ref{lst:go-checker} shows how a static Go checker combines Check~IR primitives and $\mathcal{T}_i$ for \texttt{INV-FORT-014}. For $G_{\text{app}}$, the checker calls \texttt{ir.CallSites} to locate rewritten \texttt{\_\_stpcpy\_chk} calls in $p$, returning $\mathbf{NA}$ when none exist. For $P_{\text{safe}}$, the LLM writes a loop over each call site. Inside the loop, primitives query the destination buffer size and check whether the destination pointer in the first argument register advances past the buffer base. The checker then reads the constant bound loaded into the third argument register. When GCC advances the destination pointer by $k$ bytes but keeps the bound at 64 bytes, the bound exceeds the remaining space and the checker returns $\mathbf{FAIL}$.
-
-When an invariant depends on runtime state, a dynamic Go checker invokes execution primitives in $\Omega$ to run $p$. In GCC PR~96191~\cite{gccpr96191}, a function checks its stack canary in a scratch register but fails to clear that register before returning. Its dynamic checker verifies that $p$ imports \texttt{\_\_stack\_chk\_fail} for $G_{\text{app}}$, calls \texttt{ir.PostReturnRegs} to run $p$ and record the caller-saved registers in $\mathcal{T}_i.R_{\text{caller}}$ after return, and loops over those registers to return $\mathbf{FAIL}$ if any register still holds the canary.
+Even when restricted to $\Omega$ and $\mathcal{T}_i$, offline LLM authoring can still produce malformed logic or overly permissive checks. Before any checker enters fuzzing, \textsc{DeFenzz} validates it offline through two deterministic gates. \emph{Gate~1 (Well-Formedness)} checks that $\phi$ compiles cleanly and references only defined primitives in $\Omega$ and valid fields in $\mathcal{T}_i$, rejecting hallucinated APIs. \emph{Gate~2 (Differential Anchoring)} tests $\phi$ on a reference seed compiled both with and without the target defense flag. A valid checker must return $\mathbf{PASS}$ on the hardened build and $\mathbf{NA}$ or $\mathbf{FAIL}$ on the unhardened build, rejecting misfiring checks. Failed checkers receive gate diagnostics for bounded offline repair, and any checker that still fails is quarantined. Crucially, differential builds are used only offline to validate checkers; during online fuzzing, each validated checker directly tests each compiled seed without LLM judgment.
 
 \subsection{Agentic Directed Fuzzing}\label{sec:online}\label{sec:loop}
 
@@ -331,7 +323,7 @@ When an invariant depends on runtime state, a dynamic Go checker invokes executi
 \label{alg:fuzz-loop}
 \footnotesize
 \begin{algorithmic}[1]
-\REQUIRE Go checker $\phi$, mapped branches $m$, target ISA $i$, budget $B$
+\REQUIRE Validated checker $\phi$, mapped branches $m$, target ISA $i$, budget $B$
 \ENSURE Minimized bug PoCs on shared blackboard
 \STATE $\textit{PoCs} \leftarrow \emptyset$; $\; \textit{guide} \leftarrow \mathsf{InitGuidance}(\phi, m)$
 \FOR{$t = 1$ \TO $B$}
@@ -351,81 +343,115 @@ When an invariant depends on runtime state, a dynamic Go checker invokes executi
 \end{algorithmic}
 \end{algorithm}
 
-With the invariant catalog, mapped branches $m$, and Go checkers $\phi$ in place, \textsc{DeFenzz} runs the directed fuzzing loop in Algorithm~\ref{alg:fuzz-loop}. Letting LLM agents call tools in an open-ended loop often causes aimless exploration and unverified bug claims. Instead, a central orchestrator runs a fixed four-step loop for each invariant and target architecture $i \in I_\phi$ within a budget of $B$ rounds. In each round, a Generator Agent writes a test program $p$, the instrumented compiler compiles $p$ and logs reached branches, the Go checker $\phi$ evaluates $p$, and a Feedback Agent guides the next mutation. The orchestrator records every test program $p$, branch trace, and verdict on a shared blackboard so that every test case and bug report can be reproduced.
+With validated checkers $\phi$ and mapped branches $m$ ready, \textsc{DeFenzz} runs the online directed fuzzing loop in Algorithm~\ref{alg:fuzz-loop}. Random program generators rarely trigger deep defense passes, while unconstrained LLM agents often drift into aimless exploration and unverified bug claims. \textsc{DeFenzz} instead enforces a bounded $B$-round loop per invariant and target ISA $i \in I_\phi$ under a deterministic orchestrator. Each round synthesizes a seed $p$, records reached compiler branches, runs $\phi$ on the compiled seed, and logs all artifacts for replay.
 
-In each round, the Generator Agent writes a C or C++ test program $p$ to reach the mapped branches $m$ and satisfy the precondition $G_{\text{app}}(p, \mathcal{T}_i)$. Triggering a silent defense bug often requires multiple statements to work together on the same buffer. In \texttt{INV-FORT-014}, triggering the faulty rewrite requires a fixed-size buffer, an unknown prefix length at compile time, a fortified string append, and a trailing length query on that buffer. Guided by $m$ and the invariant record, the Generator Agent writes small programs that satisfy all of these conditions at once, while hiding selected values across non-inlined helper calls, runtime inputs, and memory barriers so that early optimizations do not fold away the test logic.
+In each round, the Generator Agent synthesizes a C or C++ seed $p$ that acts as a targeted fuzz driver testing a specific mitigation hypothesis. Specifically, $p$ combines source constructs to reach $m$ and satisfy $G_{\text{app}}$, testing whether compilation preserves $P_{\text{safe}}$ under optimization. Synthesizing such drivers faces a fundamental optimization dilemma. Without opacity barriers, early constant folding and dead-code elimination strip test buffers before defense passes run. Conversely, adding blanket \texttt{volatile} qualifiers suppresses the middle-end optimizations that silently relax defenses. Guided by $m$ and the invariant record, the Generator Agent coordinates coupled multi-statement patterns while placing opacity barriers selectively at function boundaries. For \texttt{INV-FORT-014}, it pairs a sized buffer, a fortified append, and a trailing \texttt{strlen} call, hiding only the prefix length behind an opaque helper. For dynamic checkers, $p$ also supplies controlled out-of-bounds inputs so $\phi$ can separate a mitigation abort ($\mathbf{PASS}$) from a silent fall-through ($\mathbf{FAIL}$).
 
-When $p$ does not trigger a bug, the Feedback Agent must determine whether compilation failed to reach the target branch $m$ or reached $m$ without violating the invariant $\phi$. To separate these cases, the agent inspects both the compile-time branch trace and the four-state verdict $\mathsf{Verdict}(p, \phi, i)$. A verdict of $\mathbf{ERROR}$ or $\mathbf{NA}$ indicates that $p$ failed to compile or never activated the defense, so the agent fixes syntax errors or adds the missing defense triggers. When $p$ activates the defense and returns $\mathbf{PASS}$, the agent compares the branch trace against $m$: if compilation turned away before $m$, the agent modifies the program constructs that control the missed branch condition; if compilation already reached $m$, the agent mutates the variables and data-flow operands inspected at $m$ to drive the pass into an unsafe corner case.
+When a seed $p$ does not expose a bug, neither compiler coverage nor the checker verdict alone explains why. Branch traces cannot tell whether the defense activated, while a $\mathbf{PASS}$ verdict cannot tell whether compilation reached $m$ or bypassed $m$ entirely. The Feedback Agent therefore combines the compile-time trace with the four-state verdict $\mathsf{Verdict}(p, \phi, i)$ to steer mutation. On $\mathbf{ERROR}$ or $\mathbf{NA}$, it repairs syntax errors or missing defense triggers. On $\mathbf{PASS}$ with $m$ unreached, it modifies the source constructs controlling the missed branch condition along the mapped path. Once compilation hits $m$ and still returns $\mathbf{PASS}$, the agent mutates the boundary sizes, types, and operands inspected at $m$ to stress corner cases.
 
-Once $\phi$ returns $\mathbf{FAIL}$, \textsc{DeFenzz} uses both $m$ and $\phi$ to minimize and generalize the bug-triggering program $p$. Traditional test-case reducers only preserve compiler crashes or exit codes, which easily collapses a silent defense bug into unrelated undefined behavior during reduction. Instead, the Minimizer Agent pairs C-Reduce~\cite{creduce} with the instrumented compiler and $\phi$, accepting a reduction step only when the candidate program still reaches $m$ and returns $\mathbf{FAIL}$. Because the minimized program $p^*$ isolates the exact flawed compiler logic, the Generator Agent then mutates $p^*$ across sibling builtins, data types, optimization levels, and target ISAs to uncover related silent defense bugs that share the same root cause.
+When $\phi$ returns $\mathbf{FAIL}$, raw multi-function seeds still contain surrounding boilerplate that obscures the compiler root cause. Standard crash-based reduction fails on silent defense bugs because preserving a zero exit code easily deletes the defense trigger or introduces unrelated undefined behavior. The Minimizer Agent instead locks reduction to $m$ and $\phi$, keeping a smaller program $p^*$ only when compilation hits $m$ and returns $\mathbf{FAIL}$. Because silent defense flaws often stem from shared helpers or missing backend attributes across related operations, \textsc{DeFenzz} also amplifies each minimized bug $p^*$. The Generator Agent mutates $p^*$ across sibling builtins, data types, optimization levels, and target ISAs to uncover related silent bugs sharing the same root cause.
 
 \section{Implementation}\label{sec:impl}
 
-\textsc{DeFenzz} is implemented as a Python orchestrator paired with a deterministic Go oracle service. In the offline stages, the Python pipeline splits compiler source code and manuals into modular slices, and indexes them for hybrid RAG using dense embeddings fused with BM25. For compiler source mapping, the symbol indexer, call-graph analyzer, and AST parser are built on \texttt{clangd}, CodeQL, and Tree-sitter, and exposed to agents as read-only MCP tools. Based on the mapped branches $m$, a deterministic AST rewriter injects logging probes into GCC and LLVM before building the instrumented compilers.
+\textsc{DeFenzz} comprises a Python orchestration pipeline paired with a deterministic Go oracle service over gRPC. To fit model context limits, Step~1 splits compiler C/C++ files into single functions with their leading header comments. It similarly splits machine-description files into \texttt{define\_insn} or \texttt{define\_expand} patterns, and splits GCC and Clang manuals into per-option or per-hook sections. For cross-defense RAG retrieval, \textsc{DeFenzz} indexes underscore-split identifier tokens with BM25 alongside dense vector embeddings in \texttt{sqlite-vec}. BM25 matches shared identifier naming across passes, while dense retrieval captures semantically similar operations implemented with different data structures. Candidate slices are ranked via Reciprocal Rank Fusion after filtering out excluded terms from the original defense.
 
-The oracle core is implemented in Go and communicates with the Python orchestrator over gRPC. It hosts the target specification table $\mathcal{T}_i$, the Check~IR primitive library $\Omega$, and all compiled Go checkers $\phi$. Static primitives in $\Omega$ inspect compiler pass dumps, assembly files, ELF sections, and multi-architecture disassembly. Dynamic primitives run $p$ inside isolated containers using native execution or QEMU user-mode emulators across target ISAs. During online fuzzing, the Go core also drives C-Reduce~\cite{creduce} for program minimization and records every test program $p$, compile-time branch trace, and checker verdict on a persistent blackboard so that every confirmed bug can be deterministically replayed.
+In Step~2, symbol lookup, call-graph queries, and syntax-tree parsing build on \texttt{clangd}, CodeQL, and Tree-sitter as read-only Model Context Protocol (MCP) tools. A deterministic Tree-sitter rewriter hashes each mapped file, line, and condition into a tag such as \texttt{fortify\#b4e1}. It then injects \texttt{DEFENZZ\_HIT} logging probes immediately before each mapped branch across GCC and LLVM. Probes print to the compile-time log only when the \texttt{DEFENZZ\_LOG} environment variable is set, adding zero instructions or runtime overhead to emitted target binaries.
+
+In Step~3, the Go oracle service hosts the target specification table $\mathcal{T}_i$, the Check~IR library $\Omega$, and all compiled Go checkers $\phi$. Static primitives in $\Omega$ parse compiler pass dumps, assembly text, ELF headers and relocations, and multi-ISA disassembly. Dynamic primitives execute target binaries inside isolated rootless Podman containers using native execution or QEMU user-mode emulators across x86-64, AArch64, RISC-V, and LoongArch64. Offline checker validation runs Go type and AST checks against $\Omega$ and $\mathcal{T}_i$ for Gate~1, followed by automated hardened-versus-unhardened builds for Gate~2. During online fuzzing, the Go service drives C-Reduce~\cite{creduce} under a wrapper requiring mapped probe hits and $\mathbf{FAIL}$ verdicts. All seeds, compiler flags, branch traces, and checker hashes are stored in an append-only content-addressed ledger for deterministic replay.
 
 \section{Evaluation}\label{sec:eval}
 
-We evaluate \textsc{DeFenzz} on GCC and LLVM across multiple target architectures and compiler-instrumented defenses. Our experiments answer four research questions:
+We evaluate \textsc{DeFenzz} on GCC and LLVM across multiple target architectures and six families of compiler-instrumented defenses. Our experiments answer four research questions:
 \begin{itemize}
-  \item \textbf{RQ1 (Bug Discovery):} Can \textsc{DeFenzz} uncover previously unknown, high-severity silent defense bugs across compilers, defense families, and architectures?
-  \item \textbf{RQ2 (Invariant and Oracle Quality):} How effectively does \textsc{DeFenzz} extract grounded security invariants and reject faulty checkers via offline gates?
-  \item \textbf{RQ3 (Ablation Study):} How much does each design choice, starting with formal Check~IR synthesis, improve bug detection and precision?
-  \item \textbf{RQ4 (Telemetry and Overhead):} What are the agent tool-call patterns, token costs, KV-cache hit rates, and build overheads across pipeline stages?
+  \item \textbf{RQ1 (Bug Discovery and Oracle Funnel):} Can \textsc{DeFenzz} build an accurate multi-ISA checker suite and uncover previously unknown, high-severity silent defense bugs across compilers, defense families, and architectures?
+  \item \textbf{RQ2 (Comparison with Existing Fuzzers):} How does \textsc{DeFenzz} compare against traditional and LLM-driven compiler fuzzers in reaching defense branches and detecting silent defense bugs?
+  \item \textbf{RQ3 (Ablation Study):} How much do Check~IR primitives, cross-defense RAG transfer, compiler source mapping, and programmatic checkers each contribute to bug discovery, accuracy, and cost?
+  \item \textbf{RQ4 (Telemetry, Cost, and Overhead):} What are the agent tool-call patterns, token costs, prefix-cache hit rates, and compiler or binary overheads across pipeline stages?
 \end{itemize}
 
 \subsection{Experimental Setup}\label{sec:eval-setup}
 
 \noindent\textbf{Target Compilers and Architectures.}
-We evaluate \textsc{DeFenzz} on release builds of GCC~16.2.0 (verified against GCC~17.0 trunk) and LLVM/Clang~23.1.2. Each campaign targets four primary 64-bit architectures: x86-64, AArch64, RISC-V (\texttt{rv64gc}), and LoongArch64. For portable target hooks, \textsc{DeFenzz} also cross-compiles seeds for 32-bit x86, ARM, MIPS64, PowerPC64LE, and s390x.
+We evaluate \textsc{DeFenzz} on release builds of GCC~16.2.0 (also tested against GCC~17.0 trunk) and LLVM/Clang~23.1.2. All multi-ISA campaigns target four 64-bit architectures: x86-64, AArch64, RISC-V (\texttt{rv64gc}), and LoongArch64. For portable target hooks, \textsc{DeFenzz} also cross-compiles seeds for 32-bit x86, ARM, MIPS64, PowerPC64LE, and s390x.
 
 \vspace{3pt}\noindent\textbf{Evaluated Defense Families.}
-Table~\ref{tab:bug-summary} groups the audited mechanisms into six defense families spanning both middle-end and backend compiler stages. Control-flow defenses cover CET-IBT, ARM BTI, PAC, KCFI, Clang CFI, and RISC-V \texttt{Zicfilp}. Stack defenses cover stack canaries, stack-clash probing, SafeStack, CET shadow stacks, ARM GCS, \texttt{Zicfiss}, and ShadowCallStack. Memory sanitizers include ASan, HWASan, MTE stack tagging, and UBSan. Scrubbing and speculation defenses include \texttt{-fzero-\allowbreak call-used-regs}, \texttt{-fstrub}, auto-var-init, SLH, SLS, LVI, and retpolines. The remaining two families cover object-bounds fortification (\texttt{\_FORTIFY\_\allowbreak SOURCE}, \texttt{counted\_by}, \texttt{-fstrict-\allowbreak flex-arrays}, \texttt{-fanalyzer}) and call, link, or enclave hardening (RELRO, \texttt{noplt}, \texttt{noexecstack}, SGX).
+Table~\ref{tab:bug-summary} groups the tested mitigations into six defense families (\texttt{F1}--\texttt{F6}) spanning middle-end and backend passes. \texttt{F1} (Control-Flow Integrity) covers CET-IBT, CET shadow-stack landing checks, ARM BTI, PAC, GCS, RISC-V \texttt{Zicfilp}/\texttt{Zicfiss}, KCFI, Clang CFI, and VTV. \texttt{F2} (Stack Protection) covers stack canaries, stack-clash probing, SafeStack, and ShadowCallStack. \texttt{F3} (Memory Sanitizers) includes ASan, HWASan, MTE stack tagging, and UBSan. \texttt{F4} (State Scrubbing) covers \texttt{-fzero-\allowbreak call-used-regs}, \texttt{-fstrub}, trivial auto-var initialization, and dead-store-resistant wipes. \texttt{F5} (Speculation Hardening) includes SLH, SLS, LVI, retpolines, and hardened compares. \texttt{F6} (Bounds and Fortification) covers \texttt{\_FORTIFY\_\allowbreak SOURCE}, \texttt{counted\_by}, \texttt{nonstring}, strict flexible arrays, and security analyzer attributes.
 
 \vspace{3pt}\noindent\textbf{Environment and Model Configuration.}
-All experiments run inside an isolated Linux container on a 16-vCPU ARM Neoverse-N2 server. The container bundles GNU and LLVM cross-toolchains, QEMU user-mode emulators for x86-64, AArch64, RISC-V, and LoongArch64, and C-Reduce~\cite{creduce}. All LLM agents query \texttt{deepseek-flash} with prefix KV-caching enabled. Hybrid RAG indexes 5,380 GCC and 1,030 LLVM slices using \texttt{BAAI/bge-small-en-v1.5} embeddings fused with BM25. Step~3 caps offline Check~IR repair at three attempts per invariant. Step~4 allocates an online budget of $B = 8$ iterations per invariant and target ISA. All online bug verdicts are decided strictly by compiled checkers, with \textbf{zero LLM involvement in bug adjudication}.
+All experiments run on a 16-vCPU ARM Neoverse-N2 Linux server (30~GiB RAM) bundling GNU and LLVM cross-toolchains and QEMU user-mode emulators across all four 64-bit ISAs. All LLM agents query \texttt{deepseek-flash} with prefix KV-caching enabled. Step~3 caps offline checker repair at three attempts per invariant, and Step~4 allocates an online budget of $B = 8$ iterations per invariant and target ISA. During fuzzing, compiled checkers directly test each seed without using an LLM to judge bug verdicts.
 
-\vspace{3pt}\noindent\textbf{Baselines and Controlled Variants.}
-We compare \textsc{DeFenzz} against Csmith~\cite{yang2011csmith} and YARPGen~\cite{livinskii2020yarpgen} compiled under identical hardening flags from \texttt{-O0} to \texttt{-O3}. We also define five controlled ablations to isolate internal components. \emph{w/o Formal Check~IR} replaces Check~IR with direct LLM synthesis of raw Go checkers. \emph{w/o Hybrid RAG} disables historical bug transfer, and \emph{w/o Source Mapping} removes AST branch mapping and \texttt{DEFENZZ\_HIT} probes. \emph{w/o Programmatic Oracle} replaces compiled checkers with LLM judgment, while \emph{Bare Agent} runs an unconstrained tool-using agent.
+\vspace{3pt}\noindent\textbf{Baselines and Ablation Variants.}
+For RQ2, we compare \textsc{DeFenzz} against five compiler fuzzers across two categories: three traditional generators and mutators (YARPGen~\cite{livinskii2020yarpgen}, UBfuzz~\cite{li2024ubfuzz}, and MetaMut~\cite{ou2024metamut}) and two LLM-driven fuzzers (FeatureFuzz~\cite{he2026featurefuzz} and Fuzz4All~\cite{xia2024fuzz4all}). Each traditional fuzzer runs for five independent 12-hour single-core trials (60 CPU-hours per tool). We evaluate a stratified sample of 500 valid seeds per trial (2,500 seeds per tool) across all four ISAs. Both LLM fuzzers run on \texttt{deepseek-flash} with 21,415 online LLM calls across all 12 compiler--family pairs, matching Step~4 of \textsc{DeFenzz}. We evaluate 100\% of their unique valid seeds. To separate the oracle gap from the seed-generation gap, we test every baseline's seeds under both its native oracle (\emph{Native}) and our checker suite (\emph{+Our Oracle}) using per-mechanism flag profiles and UBSan clean-input filtering. For RQ3, we test five ablations. \emph{w/o Check~IR} writes standalone Go checkers directly, while \emph{w/o Hybrid RAG} uses segmented CoT extraction only. \emph{w/o Source Mapping} removes mapped compiler branches and compile-time traces, \emph{w/o Programmatic Oracle} replaces compiled checkers with an LLM judge, and \emph{Bare Agent} runs an unconstrained agent without invariants, branch maps, or checkers.
 
 \begin{table*}[t]
 \centering
-\caption{Summary of 111 previously unknown silent defense bugs discovered by \textsc{DeFenzz} across GCC and LLVM.}
+\caption{Summary of 915 validated checkers, 9,061 active 4-ISA branch probes, and 111 previously unknown silent defense bugs discovered by \textsc{DeFenzz} across GCC~16.2.0 and LLVM~23.1.2.}
 \label{tab:bug-summary}
 \footnotesize
-\setlength{\tabcolsep}{2.1pt}
+\setlength{\tabcolsep}{2.7pt}
 \renewcommand{\arraystretch}{1.13}
-\begin{tabular}{@{}lrrrrrll@{}}
+\begin{tabular}{@{}llrrrrrrl@{}}
 \toprule
-\textbf{Defense Family} & \textbf{Checkers (G/L)} & \textbf{GCC} & \textbf{LLVM} & \textbf{Total} & \textbf{Conf. (Fix)} & \textbf{Affected ISAs} & \textbf{Representative Upstream IDs} \\
+\textbf{ID} & \textbf{Defense Family} & \textbf{Checkers (G/L)} & \textbf{4-ISA Probes} & \textbf{GCC} & \textbf{LLVM} & \textbf{Total} & \textbf{Conf. (Fix)} & \textbf{Representative Upstream IDs} \\
 \midrule
-CFI \& Landing Pads & 201 (39/162) & 9 & 22 & 31 & 11 (3) & x86, ARM64, RV64, LA64 & PR 125084, 128360; \#208751, \#236673 \\
-Stack \& Shadow Stacks & 113 (62/51) & 12 & 11 & 23 & 6 (3) & x86, ARM64, RV64, LA64, MIPS & PR 125049, 128271; \#237864, \#237865 \\
-Memory Sanitizers \& MTE & 179 (58/121) & 8 & 12 & 20 & 3 (0) & x86, ARM64, RV64, LA64 & PR 128276, 128280; \#237909, \#236685 \\
-Scrubbing \& Speculation & 121 (73/48) & 13 & 7 & 20 & 5 (1) & x86, ARM64, RV64, Generic & PR 128287, 128388; \#236795, \#240257 \\
-Bounds \& Fortification & 130 (100/30) & 12 & 0 & 12 & 3 (2) & x86, ARM64, RV64, LA64 & PR 125079, 128591, 128592 \\
-Call, Link \& Enclave & 171 (142/29) & 4 & 1 & 5 & 2 (2) & x86, RV64, Generic & PR 128015, 128283; \#220866 \\
+\texttt{F1} & Control-Flow Integrity & 223 (52/171) & 1,747 & 14 & 22 & 36 & 13 (5) & PR 125084, 128011, 128360; \#208751, \#236673 \\
+\texttt{F2} & Stack Protection & 173 (117/56) & 1,429 & 10 & 11 & 21 & 6 (3) & PR 125049, 127318, 128271; \#237864 \\
+\texttt{F3} & Memory Sanitizers & 194 (66/128) & 2,265 & 9 & 12 & 21 & 4 (1) & PR 128276, 128280, 128592; \#237909 \\
+\texttt{F4} & State Scrubbing & 68 (66/2) & 575 & 8 & 2 & 10 & 3 (0) & PR 128287, 128363, 128575; \#236795 \\
+\texttt{F5} & Speculation Hardening & 65 (17/48) & 296 & 4 & 5 & 9 & 2 (1) & PR 128364, 128367, 128388; \#240257 \\
+\texttt{F6} & Bounds \& Fortification & 192 (155/37) & 2,749 & 13 & 1 & 14 & 2 (1) & PR 125079, 127333, 128274, 128591 \\
 \midrule
-\textbf{\textsc{DeFenzz} Total} & \textbf{915 (474/441)} & \textbf{58} & \textbf{53} & \textbf{111} & \textbf{30 (11)} & \textbf{All evaluated ISAs} & \textbf{All 111 filed upstream} \\
-\midrule
-Csmith~\cite{yang2011csmith} (hardened) & -- & 0 & 0 & 0 & 0 (0) & x86, ARM64, RV64, LA64 & \tbd{N} crashes; 0 silent bugs \\
-YARPGen~\cite{livinskii2020yarpgen} (hardened) & -- & 0 & 0 & 0 & 0 (0) & x86, ARM64, RV64, LA64 & \tbd{N} crashes; 0 silent bugs \\
+\textbf{All} & \textbf{Six Defense Families (4 ISAs)} & \textbf{915 (473/442)} & \textbf{9,061} & \textbf{58} & \textbf{53} & \textbf{111} & \textbf{30 (11)$^\dagger$} & \textbf{All 111 reproducible \& filed upstream} \\
 \bottomrule
+\multicolumn{9}{@{}p{0.94\textwidth}@{}} {\scriptsize $^\dagger$Maintainers officially confirmed 30 bugs (18 GCC, 12 LLVM), fixed 11 in mainline (9 GCC, 2 LLVM), and applied \texttt{wrong-code} or \texttt{miscompilation} tags to 5 additional reports (35 corroborated upstream in total). \texttt{F1} includes enclave and call-target guards (e.g., PR~128015, PR~128283).}
 \end{tabular}
 \end{table*}
 
-\subsection{RQ1: Silent Defense Bug Discovery}\label{sec:eval-rq1}
+\subsection{RQ1: Silent Defense Bug Discovery and Oracle Funnel}\label{sec:eval-rq1}
 
-\vspace{2pt}\noindent\textbf{Overall Discovery and Upstream Triage.}
-Table~\ref{tab:bug-summary} summarizes our bug-finding results across GCC and LLVM. \textsc{DeFenzz} discovered and filed \textbf{111 previously unknown silent defense bugs}, comprising 58 in GCC and 53 in LLVM. Among these filed reports, \textbf{30 have been officially confirmed upstream (18 GCC, 12 LLVM), including 11 already fixed (9 GCC, 2 LLVM)}, and another 5 carry maintainer wrong-code or miscompilation tags while awaiting formal status transitions. Several fixes were backported to release branches as old as GCC~14. Maintainer review and our pre-filing audit also identified 3 intentional design behaviors, 7 disputed language-boundary cases, 2 independently patched trunk bugs, and 8 candidates with incomplete contract evidence; we exclude all 20 cases from the 111 bug count. Under identical hardening flags, Csmith and YARPGen trigger \tbd{N} compiler crashes and functional miscompilations, yet both find \textbf{zero} silent defense bugs. Crash and differential testing check output equivalence on benign inputs, leaving them blind when compilers silently weaken or break a defense.
+\noindent\textbf{Overall Discovery and Upstream Triage.}
+Table~\ref{tab:bug-summary} summarizes our bug-finding results across GCC and LLVM. \textsc{DeFenzz} discovered and filed \textbf{111 previously unknown silent defense bugs}, comprising 58 in GCC and 53 in LLVM. Maintainers have \textbf{officially confirmed 30 bugs (18 GCC, 12 LLVM), including 11 already fixed in mainline (9 GCC, 2 LLVM)}. Another 5 reports carry maintainer \texttt{wrong-code} or \texttt{miscompilation} tags while patches are under review, and several fixes were backported to release branches as old as GCC~14. Across all 131 candidate findings from our campaigns, maintainer feedback and pre-filing audits flagged 20 non-bug cases: 3 intentional compiler behaviors, 7 disputed language-boundary cases, 2 bugs independently patched on trunk, and 8 candidates with incomplete specification support. We exclude all 20 cases from the 111 bug count.
 
-\wincfig{eval-bug-char}{Characterization of the 111 silent defense bugs discovered by \textsc{DeFenzz}: (a) distribution across compiler stages in GCC and LLVM, and (b) target ISA scope broken down by security severity.}
+\wincfig{eval-bug-char}{Characterization of the 111 silent defense bugs discovered by \textsc{DeFenzz}: (a) root-cause distribution across compilation stages in GCC and LLVM, and (b) target ISA scope broken down by security severity.}
 
 \vspace{3pt}\noindent\textbf{Stage, Architecture, and Severity Distribution.}
-Figure~\ref{fig:eval-bug-char} characterizes the root causes and affected architectures of all 111 bugs. As shown in Figure~\ref{fig:eval-bug-char}(a), backend target lowering and frame layout account for 48.6\% (54/111) of all bugs, middle-end IR passes account for 22.5\% (25/111), and frontend attribute handling accounts for 10.8\% (12/111). The remaining 18.0\% (20/111) arise in option lowering, IPA/LTO serialization, or runtime libraries; for example, GCC PR~128276~\cite{gccpr128276} silently drops every HWASan and MTE stack-tagging scope marker during LTO stream-in. Figure~\ref{fig:eval-bug-char}(b) shows that \textbf{50 bugs (45.0\%) have High security severity} and 39 (35.1\%) have Medium severity. These flaws bypass CFI landing pads, corrupt shadow stacks, or disable memory sanitizers without emitting any warnings. Portable cross-ISA flaws account for 42.3\% (47/111) of the total. Among the 64 architecture-restricted bugs, \textbf{54.7\% (35/64) affect only non-x86 backends} (AArch64, RISC-V, and LoongArch64), such as broken RISC-V \texttt{Zicfilp} landing pads~\cite{gccpr128011}, premature RVV stack-clash CFA switches~\cite{gccpr127318}, LoongArch canary leaks~\cite{gccpr125049}, and AArch64 PAC/KCFI flaws~\cite{llvm236673,llvm237862}. These results show that newer non-x86 defenses harbor dense silent failure modes missed by x86-only testing.
+Figure~\ref{fig:eval-bug-char} characterizes the root causes and affected architectures of all 111 silent bugs. In Figure~\ref{fig:eval-bug-char}(a), backend target lowering and stack-frame layout account for 48.6\% (54/111) of the bugs, middle-end IR passes account for 22.5\% (25/111), and frontend attribute handling accounts for 10.8\% (12/111). The remaining 18.0\% (20/111) arise in option lowering (10), IPA/LTO serialization (7), and defense runtime libraries (3). For instance, GCC PR~128276~\cite{gccpr128276} silently drops every HWASan and MTE stack-tagging scope marker during LTO stream-in. Figure~\ref{fig:eval-bug-char}(b) shows that \textbf{50 bugs (45.0\%) carry High security severity} and 39 (35.1\%) carry Medium severity. High-severity bugs completely omit or bypass an enabled defense, such as stripping CFI landing pads, skipping stack-clash page probes, or deleting secret-erasing stores without warnings. Portable cross-ISA bugs account for 42.3\% (47/111) of the catalog. Among the 64 architecture-restricted bugs, \textbf{54.7\% (35/64) affect only non-x86 backends} (AArch64, RISC-V, and LoongArch64). Representative cases include misplaced RISC-V \texttt{Zicfilp} landing pads~\cite{gccpr128011}, premature RVV stack-clash CFA switches~\cite{gccpr127318}, LoongArch canary leaks~\cite{gccpr125049}, and AArch64 PAC/KCFI flaws~\cite{llvm236673,llvm237862}. Newer non-x86 mitigations thus harbor dense silent failure modes that x86-only testing never reaches.
 
-\begin{lstlisting}[float=t, language=C, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Case study 1 (GCC PR~128271, fixed in GCC~14--17): missing RTL clobbers on x86 CET shadow-stack intrinsics.}, label={lst:case-shstk}]
+\begin{table}[t]
+\centering
+\caption{Offline invariant extraction, source mapping, and two-gate Check~IR validation funnel across GCC and LLVM.}
+\label{tab:invariant-funnel}
+\footnotesize
+\setlength{\tabcolsep}{4.0pt}
+\renewcommand{\arraystretch}{1.11}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Offline Pipeline Metric} & \textbf{GCC} & \textbf{LLVM} & \textbf{Total} \\
+\midrule
+Modular source and manual slices reviewed & 286 & 294 & 580 \\
+Segmented CoT invariants accepted & 465 & 439 & 904 \\
+Hybrid RAG candidates retrieved & 785 & 769 & 1,554 \\
+Hybrid RAG invariants accepted (0 overlap) & 10 & 7 & 17 \\
+\textbf{Step~1 Candidate Invariant Catalog} & \textbf{475} & \textbf{446} & \textbf{921} \\
+\midrule
+Mapped pass--function--branch paths & 1,669 & 1,253 & 2,922 \\
+Instrumented compiler source files & 342 & 405 & 747 \\
+Active 4-ISA compile-time branch probes & 4,537 & 4,524 & 9,061 \\
+\midrule
+First-attempt checker pass rate & 84.0\% & 80.5\% & 82.3\% \\
+Gate~1 errors caught (primitive/type checks) & 36 & 80 & 116 \\
+Gate~2 errors caught (baseline anchoring) & 48 & 41 & 89 \\
+Quarantined invariants after 3 attempts & 2 & 4 & 6 \\
+\textbf{Step~3 Validated Checkers (906S / 9D)} & \textbf{473} & \textbf{442} & \textbf{915} \\
+Active 4-ISA batch static checkers & 470 & 433 & 903 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{3pt}\noindent\textbf{Offline Invariant and Checker Funnel.}
+Table~\ref{tab:invariant-funnel} tracks how \textsc{DeFenzz} constructs and validates its checker catalog offline. In Step~1, segmented CoT analyzed 580 modular source, target-hook, and manual slices across GCC and LLVM, extracting 904 security invariants. Cross-defense RAG distilled 100 historical mitigation patches into mechanism-neutral queries and retrieved 1,554 candidate slices. Origin-defense filtering and source grounding rejected 1,537 noisy or duplicate hits, contributing 17 non-overlapping invariants. Step~1 yielded \textbf{921 security invariants} (475 GCC, 446 LLVM) anchored in 671 compiler assertions or hooks and 250 external specification rules. Step~2 mapped all 921 invariants to \textbf{2,922} pass--function--branch paths across 747 source files. This instrumentation inserted 9,061 active branch probes across the four 64-bit ISAs (2,295 x86-64, 2,568 AArch64, 2,095 RISC-V64, and 2,103 LoongArch64). In Step~3, the authoring agent combined Check~IR primitives ($\Omega$) and target ISA tables ($\mathcal{T}_i$) into high-level Go checkers across 1,120 attempts (1.22 per invariant). On the first try, \textbf{758 checkers (82.3\%) passed both offline validation gates}. Gate~1 caught 116 primitive, expression, or $\mathcal{T}_i$ binding errors, while Gate~2 caught 89 hardened-versus-unhardened anchoring errors. Guided by gate diagnostics, the agent repaired 157 of the 163 failed checkers within three attempts and quarantined 6 invariants. Step~3 produced \textbf{915 validated checkers (99.3\%)}, comprising 906 static checkers and 9 dynamic checkers. Excluding 9 dynamic checkers that require custom runtime arguments and 3 static checkers restricted to 32-bit ARM or PowerPC leaves 903 uniform 4-ISA static checkers for batch evaluation.
+
+\begin{lstlisting}[float=t, language=C, numbers=none, xleftmargin=3.4pt, xrightmargin=0pt, linewidth=\dimexpr\columnwidth-3.4pt\relax, framexleftmargin=0pt, framexrightmargin=0pt, caption={Case study 1 (GCC PR~128271, fixed in GCC~14--17): missing RTL clobbers on x86 CET shadow-stack intrinsics.}, label={lst:case-shstk}]
 // Compile: gcc -O2 -mshstk
 void test_cet(long *cnt, void *tok) {
   long v = *cnt - 1;  *cnt = v;
@@ -439,9 +465,9 @@ void test_cet(long *cnt, void *tok) {
 \end{lstlisting}
 
 \vspace{2pt}\noindent\textbf{Case Study 1: Silent CET Shadow-Stack Corruption in GCC.}
-Listing~\ref{lst:case-shstk} shows a high-severity x86 CET shadow-stack bug found by \textsc{DeFenzz} (GCC PR~128271~\cite{gccpr128271}). Per the Intel SDM, \texttt{CLRSSBSY} clears a shadow-stack busy token, writes \texttt{CF}, and unconditionally clears \texttt{ZF} to zero. In addition, \texttt{WRSSQ} writes shadow-stack memory that ordinary \texttt{MOV} loads can read. From this specification, \textsc{DeFenzz} extracted an invariant requiring shadow-stack intrinsics to preserve subsequent flag-dependent branches and post-write verification reads. In \texttt{gcc/config/i386/i386.md}, however, five CET patterns (\texttt{clrssbsy}, \texttt{@wrss<mode>}, \texttt{@wruss<mode>}, \texttt{saveprevssp}, and \texttt{rstorssp}) omitted \texttt{FLAGS\_REG} and memory clobbers. As a result, RTL \texttt{compare-elim} deleted \texttt{testq} after \texttt{\_clrssbsy} and reused stale flags from \texttt{subq}, making \texttt{je on\_zero} permanently dead. In the same pass pipeline, RTL CSE folded post-\texttt{\_wrssq} verification checks (\texttt{*ss == val}) to zero. GCC maintainers patched trunk within 24 hours and backported the fix to GCC~16, 15, and 14.
+Listing~\ref{lst:case-shstk} illustrates a high-severity x86 CET shadow-stack flaw uncovered by \textsc{DeFenzz} (GCC PR~128271~\cite{gccpr128271}). Under the Intel architecture manual, \texttt{CLRSSBSY} clears a shadow-stack busy token, updates \texttt{CF}, and unconditionally clears \texttt{ZF} to zero, while \texttt{WRSSQ} writes shadow-stack memory readable by normal loads. From this specification, \textsc{DeFenzz} extracted an invariant requiring shadow-stack intrinsics to preserve subsequent flag-dependent branches and post-write readback checks. In \texttt{gcc/config/i386/i386.md}, however, five CET patterns (\texttt{clrssbsy}, \texttt{@wrss<mode>}, \texttt{@wruss<mode>}, \texttt{saveprevssp}, and \texttt{rstorssp}) omitted \texttt{FLAGS\_REG} and memory clobbers. Consequently, RTL \texttt{compare-elim} deleted \texttt{testq} after \texttt{\_clrssbsy} and reused stale flags from \texttt{subq}, rendering \texttt{je on\_zero} permanently dead. In the same pass pipeline, RTL CSE folded post-\texttt{\_wrssq} readback checks (\texttt{*ss == val}) to zero. GCC maintainers patched trunk within 24 hours and backported the fix to GCC~16, 15, and 14.
 
-\begin{lstlisting}[float=t, language=C, numbers=none, xleftmargin=3pt, framexleftmargin=0pt, caption={Case study 2 (LLVM \#237864, confirmed): AArch64 SafeStack allocates a fixed 16-byte slot for scalable SVE locals.}, label={lst:case-safestack}]
+\begin{lstlisting}[float=t, language=C, numbers=none, xleftmargin=3.4pt, xrightmargin=0pt, linewidth=\dimexpr\columnwidth-3.4pt\relax, framexleftmargin=0pt, framexrightmargin=0pt, caption={Case study 2 (LLVM \#237864, confirmed): AArch64 SafeStack allocates a fixed 16-byte slot for scalable SVE locals.}, label={lst:case-safestack}]
 // Flags: -O2 -march=armv8-a+sve -fsanitize=safe-stack
 #include <arm_sve.h>
 void sink(svint32_t *p);
@@ -456,67 +482,71 @@ void f(void) {
 \end{lstlisting}
 
 \vspace{2pt}\noindent\textbf{Case Study 2: AArch64 SafeStack Frame Overflow in LLVM.}
-Listing~\ref{lst:case-safestack} shows a high-severity flaw between SafeStack and ARM SVE in Clang~23.1.2 (LLVM~\#237864~\cite{llvm237864}). Under \texttt{-fsanitize=safe-stack}, escaping stack buffers move to an unsafe stack to isolate return addresses on the safe stack. Guided by mapped branches in \texttt{SafeStack.cpp}, the Generator Agent synthesized a test program passing an escaping \texttt{svint32\_t} local to an opaque \texttt{sink}. Because \texttt{getStaticAlloca\allowbreak AllocationSize()} returned zero for the scalable vector type, \texttt{moveStaticAllocas\allowbreak ToUnsafeStack()} turned that zero size into a fixed 16-byte slot (\texttt{sub x9, x21, \#16}), after which \texttt{st1w} wrote \texttt{VL} bytes to \texttt{usp - 16}. Running the binary under \texttt{qemu-aarch64} with \texttt{VL = 32} and \texttt{64} bytes overwrote 16 and 48 bytes of caller unsafe-stack data without any warning. Compiling without \texttt{-fsanitize=safe-stack} sized the frame properly via \texttt{addvl}, and LLVM maintainers confirmed the miscompilation.
+Listing~\ref{lst:case-safestack} shows a high-severity interaction flaw between SafeStack and ARM SVE in Clang~23.1.2 (LLVM~\#237864~\cite{llvm237864}). Under \texttt{-fsanitize=safe-stack}, address-taken stack locals move to a separate unsafe stack to isolate return addresses on the safe stack. Guided by mapped branches in \texttt{SafeStack.cpp}, the Generator Agent synthesized a seed passing an escaping scalable \texttt{svint32\_t} vector to an external \texttt{sink}. Because \texttt{getStaticAlloca\allowbreak AllocationSize()} returned zero for scalable vectors, \texttt{moveStaticAllocas\allowbreak ToUnsafeStack()} rounded that zero size up to a fixed 16-byte slot (\texttt{sub x9, x21, \#16}). The subsequent \texttt{st1w} instruction then stored \texttt{VL} bytes to \texttt{usp - 16}. Executing the binary under \texttt{qemu-aarch64} with vector lengths of 32 and 64 bytes overwrote 16 and 48 bytes of caller unsafe-stack state without warning, and LLVM maintainers confirmed the miscompilation.
 
-\subsection{RQ2: Invariant Extraction and Formal Oracle Quality}\label{sec:eval-rq2}
-
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\caption{Offline invariant extraction, source mapping, and two-gate Check~IR validation funnel across GCC and LLVM.}
-\label{tab:invariant-funnel}
+\caption{Comparison of \textsc{DeFenzz} against traditional and LLM-driven compiler fuzzers across four 64-bit ISAs. Traditional fuzzers report per-trial $\text{mean}\pm\text{std}$ with 5-trial cumulative union in brackets (\texttt{[...]}); LLM fuzzers run at 1:1 online call parity (\texttt{@21,415} calls).}
+\label{tab:rq2-comparison}
 \footnotesize
-\setlength{\tabcolsep}{4.2pt}
-\renewcommand{\arraystretch}{1.12}
-\begin{tabular}{@{}lrrr@{}}
+\setlength{\tabcolsep}{2.2pt}
+\medmuskip=1mu
+\renewcommand{\arraystretch}{1.13}
+\begin{tabular}{@{}llrrrrr@{}}
 \toprule
-\textbf{Offline Pipeline Metric} & \textbf{GCC} & \textbf{LLVM} & \textbf{Total} \\
+\textbf{Fuzzer} & \textbf{Budget} & \textbf{Seeds (\#ICE)} & \textbf{Branch Cov. (/ 9,061)} & \textbf{Active Inv. (/ 903)} & \textbf{Bugs (\emph{Native})} & \textbf{Bugs (\emph{+Our Oracle})} \\
 \midrule
-Modular source/manual slices reviewed & 286 & 294 & 580 \\
-Segmented CoT invariants accepted & 465 & 439 & 904 \\
-Hybrid RAG candidates retrieved & 785 & 769 & 1,554 \\
-Hybrid RAG invariants accepted (0 overlap) & 10 & 7 & 17 \\
-\textbf{Step~1 Candidate Invariant Catalog} & \textbf{475} & \textbf{446} & \textbf{921} \\
+YARPGen~\cite{livinskii2020yarpgen} & $1\text{c}\times12\text{h}\times5$ & $13{,}114\pm335$ [2] & $4{,}629.8\pm2.4$ [4,648, 51.3\%] & $103.8\pm1.5$ [107, 11.9\%] & $0.0\pm0.0$ [0] & $1.0\pm0.0$ [\textbf{1} (0G/1L)] \\
+UBfuzz~\cite{li2024ubfuzz} & $1\text{c}\times12\text{h}\times5$ & $4{,}975\pm178$ [0] & $5{,}586.2\pm31.6$ [5,672, 62.6\%] & $135.6\pm2.4$ [140, 15.5\%] & $0^*$ [$0^*$] & $2.2\pm0.5$ [\textbf{3} (0G/3L)] \\
+MetaMut~\cite{ou2024metamut} & $1\text{c}\times12\text{h}\times5$ & $126{,}605\pm1{,}698$ [1] & $6{,}297.4\pm19.4$ [6,429, 71.0\%] & $143.8\pm6.5$ [163, 18.1\%] & $0.0\pm0.0$ [0] & $6.4\pm0.9$ [\textbf{8} (1G/7L)] \\
 \midrule
-Mapped pass--function--branch paths & 1,669 & 1,253 & 2,922 \\
-Instrumented source files (\texttt{GCC/CLANG\_INST}) & 342 & 405 & 747 \\
-\midrule
-First-attempt Check~IR pass rate & 84.0\% & 80.5\% & 82.3\% \\
-Gate~1 errors caught (well-formedness) & 36 & 80 & 116 \\
-Gate~2 errors caught (differential anchoring) & 48 & 41 & 89 \\
-Quarantined rules after 3 attempts & 1 & 5 & 6 \\
-\textbf{Step~3 Validated Oracles Entering Fuzzing} & \textbf{474} & \textbf{441} & \textbf{915} \\
+FeatureFuzz~\cite{he2026featurefuzz} & @21,415 calls & 728 [681u] (0) & 6,257 (69.1\%) & 195 (21.6\%) & 2 & \textbf{14} (6G/8L) \\
+Fuzz4All~\cite{xia2024fuzz4all} & @21,415 calls & 4,152 [3,977u] (0) & 6,543 (72.2\%) & 187 (20.7\%) & 11 & \textbf{18} (10G/8L) \\
+\textbf{\textsc{DeFenzz} (Ours)} & \textbf{@21,415 calls} & \textbf{715$^\ddagger$ (20)} & \textbf{7,210 (79.6\%)} & \textbf{257$^\ddagger$ (28.5\%)} & \textbf{111} & \textbf{111 (58G/53L)} \\
 \bottomrule
+\multicolumn{7}{@{}p{0.94\textwidth}@{}} {\scriptsize $^*$UBfuzz's expected-trap oracle applies only to \texttt{F3} (N/A on \texttt{F1, F2, F4--F6}); on \texttt{F3} it emits $649.0\pm23.8$ raw alerts/trial driven by dead-code-eliminated injected UB rather than silent mitigation failures. \texttt{u} = unique valid seeds evaluated. $^\ddagger$\textsc{DeFenzz} retains 715 minimized trigger and frontier seeds (268 GCC, 447 LLVM), which alone hit 79.6\% of defense probes and 257 batch checkers (833/903 = 92.2\% exercised across online sessions).}
 \end{tabular}
-\end{table}
+\end{table*}
 
-\noindent\textbf{Invariant Extraction and RAG Grounding.}
-Table~\ref{tab:invariant-funnel} tracks how \textsc{DeFenzz} builds and validates its oracle catalog offline. In Step~1, segmented CoT analyzed 580 modular pass, target-hook, and manual slices (6.16M characters) across GCC and LLVM, extracting 904 security invariants. Hybrid RAG distilled 100 historical defense fixes into mechanism-neutral queries and retrieved 1,554 candidate slices. Origin-anchor exclusion and source grounding rejected 1,537 noisy or duplicate hits, accepting 17 cross-defense invariants with zero overlap against CoT. Step~1 produced \textbf{921 candidate invariants} (475 GCC, 446 LLVM), grounded in 671 compiler assertions or hooks and 250 specification rules. In Step~2, the mapping agent resolved all 921 invariants to \textbf{2,922} pass--function--branch paths across 747 source files with zero failures.
+\wincfig{eval-rq2-comparison}{Baseline comparison across six compiler fuzzers: (a) deduplicated silent defense bugs per family (\texttt{F1}--\texttt{F6}) under \emph{+Our Oracle} versus native detection, and (b) compile-time defense branch coverage across all four 64-bit ISAs.}
 
-\vspace{3pt}\noindent\textbf{Two-Gate Check~IR Validation Funnel.}
-In Step~3, \textsc{DeFenzz} formalized all 921 invariants into Check~IR across 1,120 bounded authoring attempts (1.22 attempts per invariant). On the first attempt, \textbf{758 rules (82.3\%) passed both deterministic validation gates} without human intervention. Across failed attempts, Gate~1 (formal well-formedness) caught 116 errors: 55 hallucinated primitives outside $\Omega$, 55 malformed predicate expressions, and 6 unbound fields in $\mathcal{T}_i$. Gate~2 (differential baseline anchoring) caught another 89 errors, comprising 81 probe misfires between hardened and unhardened builds and 8 Go lowering violations. Exact gate diagnostics enabled the authoring agent to repair 157 of the 163 failed rules within three attempts, quarantining only 6 rules. In total, \textbf{915 validated programmatic oracles (99.3\%)} entered online fuzzing, implemented as 903 static phase-1 checkers and 12 sandboxed dynamic phase-2 checkers.
+\subsection{RQ2: Comparison with Existing Compiler Fuzzers}\label{sec:eval-rq2}
+
+Table~\ref{tab:rq2-comparison} and Figure~\ref{fig:eval-rq2-comparison} compare \textsc{DeFenzz} against five traditional and LLM-driven compiler fuzzers, testing the two barriers identified in Section~\ref{sec:limitations}.
+
+\vspace{3pt}\noindent\textbf{Isolating the Oracle Gap.}
+Comparing the \emph{Native} and \emph{+Our Oracle} columns in Table~\ref{tab:rq2-comparison} measures how many silent defense bugs evade existing test oracles even when a fuzzer's own seeds already trigger them. Across five 12-hour trials, MetaMut generates 126,605 valid programs per trial (over 633,000 in total) and YARPGen generates 13,114 programs per trial. Yet both differential output oracles detect \textbf{zero silent defense bugs} ($0.0\pm0.0$) across all 12 hours. UBfuzz injects undefined behavior to check whether sanitizers trap; its oracle does not apply to non-sanitizer families (\texttt{F1, F2, F4--F6}), and its $649.0\pm23.8$ raw \texttt{F3} alerts per trial stem from dead-code-eliminated UB rather than broken defenses. Attaching \textsc{DeFenzz}'s programmatic checkers to those same seed corpora uncovers \textbf{1, 3, and 8 real silent defense bugs} in YARPGen, UBfuzz, and MetaMut. Our checkers likewise lift FeatureFuzz from 2 native differential alerts to \textbf{14 silent bugs (7.0$\times$)} and Fuzz4All from 11 to \textbf{18 silent bugs (1.64$\times$)}. Without binary- and runtime-level defense checkers, conventional output and crash oracles miss the vast majority of silent mitigation failures.
+
+\vspace{3pt}\noindent\textbf{Isolating the Branch-Reaching and Precondition Gap.}
+Even with \textsc{DeFenzz}'s full checker suite (\emph{+Our Oracle}), the strongest baseline (Fuzz4All) stops at \textbf{18 silent bugs (16.2\% of \textsc{DeFenzz})}. Both LLM baselines reach this plateau despite generating 27.7\%--30.1\% more completion tokens than \textsc{DeFenzz} (25.12M and 25.59M versus 19.67M). In Figure~\ref{fig:eval-rq2-comparison}(a), the bug sets across all six tools form a strict subset chain ($1 \subset 3 \subset 8 \subset 14 \subset 18 \subset 111$). Consequently, \textbf{93 of the 111 bugs (83.8\%) are exclusive to \textsc{DeFenzz}}, and \textsc{DeFenzz} misses zero bugs found by any baseline. Figure~\ref{fig:eval-rq2-comparison}(b) explains why unguided seed generation falls short. Arithmetic and loop generators like YARPGen lack defense attributes, intrinsics, and multi-flag interactions, reaching only 51.3\% of the 9,061 defense branch probes (11.9\% of invariants) and missing \texttt{F2}--\texttt{F6} entirely. Prompt-guided LLM fuzzers (FeatureFuzz and Fuzz4All) synthesize surface defense constructs and reach 69.1\%--72.2\% of shallow entry probes (20.7\%--21.6\% of invariants), mostly exposing middle-end sanitizer (\texttt{F3}) and fortification (\texttt{F6}) bugs. Without mapped branch traces and invariant preconditions, however, they rarely penetrate deep backend frame-layout, scrubbing (\texttt{F4}), or landing-pad (\texttt{F1}) bailout paths. Guided by branch traces and four-state checker verdicts, \textsc{DeFenzz}'s 715 retained trigger seeds alone cover \textbf{79.6\% (7,210/9,061)} of defense probes across x86-64 (80.1\%), AArch64 (79.9\%), RISC-V64 (78.5\%), and LoongArch64 (79.7\%). This targeted reach uncovers 36 \texttt{F1}, 21 \texttt{F2}, 10 \texttt{F4}, and 9 \texttt{F5} bugs, compared to at most 3, 1, 1, and 1 in any baseline.
 
 \subsection{RQ3: Ablation Study}\label{sec:eval-rq3}
 
-\incfig{eval-ablation}{Ablation comparison across \textsc{DeFenzz} variants showing unique silent defense bugs, non-x86 (RISC-V and LoongArch64) detections, and spurious raw alerts.}
+\incfig{eval-ablation}{Two-scope ablation results: (a) full-campaign Check~IR and RAG ablations across 921 invariants and four ISAs, and (b) controlled online pipeline ablations on a 41-invariant GCC~16.2.0 AArch64 slice.}
 
 \begin{table}[t]
 \centering
-\caption{Controlled ablation results across \textsc{DeFenzz} variants. Unrun component ablations are marked as {\color{red}\textbf{TBD}}.}
+\caption{Controlled ablation results across full-campaign offline components (Scope~A) and online pipeline stages (Scope~B).}
 \label{tab:ablation}
 \footnotesize
-\setlength{\tabcolsep}{2.4pt}
-\renewcommand{\arraystretch}{1.14}
-\begin{tabular}{@{}lrrrrr@{}}
+\setlength{\tabcolsep}{1.9pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}lrrrrrr@{}}
 \toprule
-\textbf{System Variant} & \textbf{1st-Pass} & \textbf{Tok.} & \textbf{RV+LA} & \textbf{FPs} & \textbf{Bugs} \\
+\textbf{Scope A (921 Inv.)} & \textbf{Inv.} & \textbf{1st} & \textbf{Tok.} & \textbf{RV+LA} & \textbf{FPs} & \textbf{Bugs} \\
 \midrule
-\textbf{Full \textsc{DeFenzz} (Check~IR)} & \textbf{82.3\%} & \textbf{54.8M} & \textbf{136} & \textbf{0} & \textbf{111} \\
-w/o Formal Check~IR & 70.5\% & 638.4M & 64 & 51 & 82 \\
-w/o Hybrid RAG & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} \\
-w/o Source Mapping & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} \\
-w/o Prog. Oracle & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} \\
-Bare Agent & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} \\
+\textbf{Full \textsc{DeFenzz}} & \textbf{921} & \textbf{82.3\%} & \textbf{54.8M} & \textbf{136} & \textbf{0} & \textbf{111} \\
+w/o Check~IR & 921 & 70.5\% & 638.4M & 64 & 51 & 82 \\
+w/o Hybrid RAG & 904 & 82.4\% & 53.8M & 135 & 0 & 109 \\
+\midrule
+\textbf{Scope B (41 Inv.)} & \textbf{Calls} & \textbf{Reas.} & \textbf{Tok.} & \textbf{Time} & \textbf{Rej./Lk.} & \textbf{Bugs} \\
+\midrule
+\textbf{Full \textsc{DeFenzz}} & \textbf{1,160} & \textbf{0.75M} & \textbf{429.1M} & \textbf{2.26h} & \textbf{4 / 0} & \textbf{0} \\
+w/o Source Mapping & 1,135 & 0.89M & 50.8M & 2.67h & 8 / 1 & 0 \\
+w/o Prog. Oracle & 2,681 & 7.25M & 206.0M & 15.50h & 5 / 1 & 0 \\
+Bare Agent & 54 & 0.01M & 5.9M & 0.14h & 1 / 0 & 0 \\
 \bottomrule
+\multicolumn{7}{@{}p{0.98\columnwidth}@{}} {\scriptsize Scope~A evaluates all four ISAs; Scope~B runs on a frozen 41-invariant GCC~16.2.0 AArch64 slice with compliant ABI paths (0 true bugs). \textbf{Rej./Lk.} lists rejected alerts versus leaked false reports.}
 \end{tabular}
 \end{table}
 
@@ -533,34 +563,34 @@ Bare Agent & {\color{red}\textbf{TBD}} & {\color{red}\textbf{TBD}} & {\color{red
 \midrule
 Step~1: Security Invariant Extraction & Offline & --$^\dagger$ & -- & -- & -- & 15.00 & 2.00 \\
 Step~2a: Compiler Source Mapping & Offline & 35,523 & 617.07 & 572.84 (92.8\%) & 22.28 & 639.36 & 29.50 \\
-Step~2b: AST Branch Instrumentation & Offline & 0 & 0.00 & -- & 0.00 & 0.00 & 0.82 \\
-Step~3: Check~IR Oracle Synthesis & Offline & 2,733 & 47.35 & 36.37 (76.8\%) & 7.46 & 54.81 & 2.20 \\
+Step~2b: Branch Probe Instrumentation & Offline & 0 & 0.00 & -- & 0.00 & 0.00 & 0.82 \\
+Step~3: Check~IR Checker Construction & Offline & 2,733 & 47.35 & 36.37 (76.8\%) & 7.46 & 54.81 & 2.20 \\
 \midrule
-Step~4: Directed Fuzzing \& Audit & Online & 21,415 & 881.17 & 818.21 (92.9\%) & 19.67 & 900.84 & 10.16 \\
+Step~4: Directed Fuzzing \& Minimizing & Online & 21,415 & 881.17 & 818.21 (92.9\%) & 19.67 & 900.84 & 10.16 \\
 \midrule
 \textbf{Full Campaign Total (GCC + LLVM)} & \textbf{All} & \textbf{59,671} & \textbf{1,545.59} & \textbf{1,427.42 (92.4\%)} & \textbf{49.41} & \textbf{1,610.01} & \textbf{44.68} \\
 \bottomrule
-\multicolumn{8}{@{}p{0.84\textwidth}@{}} {\scriptsize $^\dagger$Step~1 ran on pre-sliced source and manual batches under a 15.00M-token cap (10.00M GCC, 5.00M LLVM); per-call cache counters are recorded across Steps~2--4.}
+\multicolumn{8}{@{}p{0.86\textwidth}@{}} {\scriptsize $^\dagger$Step~1 ran on pre-sliced source and manual batches under a 15.00M-token cap (10.00M GCC, 5.00M LLVM); per-call cache counters are recorded across Steps~2--4.}
 \end{tabular}
 \end{table*}
 
-\noindent\textbf{Impact of Formal Check~IR Synthesis.}
-Figure~\ref{fig:eval-ablation} and Table~\ref{tab:ablation} compare full \textsc{DeFenzz} against \emph{w/o Formal Check~IR}, where the agent writes standalone Go checkers directly from invariants. Across all 921 invariants, raw Go synthesis lowers first-attempt validation from 82.3\% to 70.5\%. It also triggers 98 Go compile or type errors versus 7 lowering errors under Check~IR (\textbf{14.0$\times$ fewer}). Because raw Go agents repeatedly debug multi-hundred-line parsers, Step~3 token usage rises from 54.81M to 638.44M (\textbf{11.6$\times$}) and authoring time grows from 2.20~h to 17.11~h (\textbf{7.8$\times$}).
+Figure~\ref{fig:eval-ablation} and Table~\ref{tab:ablation} evaluate our five ablated variants across two scopes. Scope~A tests offline specification and checker construction across all 921 invariants and four ISAs, whereas Scope~B tests online fuzzing and adjudication on a fixed 41-invariant GCC~16.2.0 AArch64 slice. We restrict Scope~B to 41 invariants because an online LLM judge already consumes 15.50~h of cumulative LLM latency and 206.0M tokens on that slice alone, making a full four-ISA run prohibitively expensive.
 
-To isolate oracle quality from seed-generation randomness, we ran both checker suites on the same candidate triggers across all four ISAs. Check~IR lifts total ISA-level detections from 188 to 315 (\textbf{1.68$\times$}). Non-x86 backends benefit most: detections grow from 33 to 72 on RISC-V (\textbf{2.18$\times$}) and from 31 to 64 on LoongArch64 (\textbf{2.06$\times$}), reaching 136 versus 64 combined (\textbf{2.13$\times$}). Among 104 triggers missed by raw Go checkers, 80 returned $\mathbf{NA}$ because hand-generated parsers hardcoded x86-64 or AArch64 mnemonics and bailed out on RISC-V or LoongArch64. Check~IR avoids this gap by reading backend conventions directly from $\mathcal{T}_i$. Check~IR also eliminates \textbf{51 spurious raw $\mathbf{FAIL}$ alerts} (12 GCC, 39 LLVM) caused by matching mnemonics inside assembly comments or inverting signed frame offsets. In total, Check~IR uniquely uncovers \textbf{29 verified silent defense bugs} (11 GCC, 18 LLVM, including 11 High-severity bugs), lifting total bug discovery from 82 to 111.
+\vspace{3pt}\noindent\textbf{Impact of Check~IR and Cross-Defense RAG (Scope~A).}
+In \emph{w/o Check~IR}, the authoring agent writes standalone Go checkers directly without $\Omega$ or $\mathcal{T}_i$. Across all 921 invariants, standalone Go authoring lowers first-attempt validation from 82.3\% to 70.5\%. Step~3 token usage jumps from 54.81M to 638.44M (\textbf{11.6$\times$}) and authoring time grows from 2.20~h to 17.11~h (\textbf{7.8$\times$}) as agents debug multi-hundred-line ELF and disassembly parsers. Tested on the same candidate triggers across all four ISAs, Check~IR raises total ISA-level detections from 188 to 315 (\textbf{1.68$\times$}). Non-x86 backends gain the most, with RISC-V64 and LoongArch64 detections rising from 64 to 136 (\textbf{2.13$\times$}). Among 104 triggers missed by raw Go checkers, 80 returned $\mathbf{NA}$ because custom regex parsers hardcoded x86-64 or AArch64 mnemonics. Check~IR also eliminates \textbf{51 spurious raw $\mathbf{FAIL}$ alerts} (12 GCC, 39 LLVM) from matching mnemonics inside assembly comments or inverting frame-offset signs. Overall, Check~IR uniquely uncovers \textbf{29 silent defense bugs} (11 GCC, 18 LLVM), lifting total discovery from 82 to 111. Disabling cross-defense retrieval (\emph{w/o Hybrid RAG}) drops the 17 transferred invariants (921 to 904) and misses 2 unique cross-mechanism bugs (111 to 109) at negligible cost (1.02M Step~3 tokens).
 
-\vspace{3pt}\noindent\textbf{Remaining Component Ablations.}
-\tbd{Experiments for \emph{w/o Hybrid RAG}, \emph{w/o Source Mapping}, \emph{w/o Programmatic Oracle}, and \emph{Bare Agent} are reserved for completion. This paragraph will report invariant recall without RAG transfer, branch coverage without \texttt{DEFENZZ\_HIT} probes, false positives under LLM adjudication, and stalls in unconstrained agents.}
+\vspace{3pt}\noindent\textbf{Impact of Source Mapping and Programmatic Checkers (Scope~B).}
+The frozen 41-invariant GCC~16.2.0 AArch64 slice covers BTI, canary, and MTE paths that emit compliant ABI code and contain zero true bugs, testing false-report resistance. On this slice, \textbf{Full \textsc{DeFenzz}} rejects all 4 candidate alerts with \textbf{zero leaked false reports} in 2.26~h of LLM latency (0.75M reasoning tokens). Removing branch mapping and compile-time traces (\emph{w/o Source Mapping}) leaves workers wandering across unrelated driver and frontend files. Those workers generate 9 false candidates (8 rejected) and leak 1 uncompiled false report that mistakes opt-in \texttt{-fstack-protector-explicit} semantics for a bug. Replacing compiled checkers with an LLM judge (\emph{w/o Programmatic Oracle}) increases LLM calls \textbf{2.31$\times$} (1,160 to 2,681), reasoning tokens \textbf{9.67$\times$} (0.75M to 7.25M), and cumulative LLM latency \textbf{6.87$\times$} (2.26~h to 15.50~h). That LLM judge also leaks a hallucinated \texttt{-fsanitize=memtag-stack} linker-spec bug report without running a binary check. Stripping invariants, mapping, and checkers (\emph{Bare Agent}) causes the agent to stall after 54 calls (0.14~h), filing one rejected claim on a CPU-tuning JSON parser and finding zero defense bugs.
 
-\subsection{RQ4: Agent Telemetry, Token Usage, and Overhead}\label{sec:eval-rq4}
+\subsection{RQ4: Agent Telemetry, Cost, and Overhead}\label{sec:eval-rq4}
 
-\incfig{eval-tool-calls}{Distribution and volume of agent MCP and workspace tool invocations across pipeline stages in \textsc{DeFenzz} versus raw Go checker authoring (\emph{w/o Check~IR}).}
+\incfig{eval-tool-calls}{Share and volume of agent tool invocations across pipeline stages in \textsc{DeFenzz} versus standalone Go checker authoring (\emph{w/o Check~IR}).}
 
 \noindent\textbf{Agent Tool-Call Telemetry.}
-Figure~\ref{fig:eval-tool-calls} breaks down 99,236 tool calls across 6,798 agent sessions in \textsc{DeFenzz}, plus 18,495 calls across 1,229 sessions in \emph{w/o Check~IR}. Tool patterns mirror the structure of each compiler. In GCC source mapping, agents issue 52,953 calls across 3,677 sessions (14.4 calls/session). Absent in LLVM, 18.0\% of GCC calls query the Call-Graph MCP server to link flags across GIMPLE passes, RTL expanders, target hooks, and \texttt{.md} files. In LLVM, modular C++ pass files let agents map all 446 invariants in 6,244 calls (11.0 calls/session), using lexical search (54.8\%) and slice reads (41.7\%). In Step~3, Check~IR authoring requires only \textbf{1,680 tool calls} across both compilers (1.4--1.6 calls/session), with over 70\% directly writing concise specification files. Without Check~IR, raw Go authoring requires \textbf{18,495 tool calls} (15.0 calls/session, \textbf{11.0$\times$ higher}) to search and inspect parser APIs. During online fuzzing and auditing, agents average 25.2--27.8 read-only navigation calls per session alongside 705 deterministic gRPC oracle runs.
+Figure~\ref{fig:eval-tool-calls} breaks down 99,236 tool calls across 6,798 agent sessions in \textsc{DeFenzz}, compared against 18,495 calls across 1,229 sessions in Step~3 of \emph{w/o Check~IR}. Tool usage reflects the internal modularity of each compiler. Mapping GCC's 475 invariants requires 52,953 tool calls across 3,677 sessions (14.4 calls/session). Within GCC, 18.0\% of calls query the call graph to trace defense flags across GIMPLE passes, RTL expanders, target hooks, and machine-description files. In contrast, LLVM's self-contained C++ pass files let agents map all 446 invariants in 6,244 calls (11.0 calls/session) using lexical search (54.8\%) and slice reads (41.7\%). In Step~3, Check~IR authoring needs only \textbf{1,680 tool calls} across both compilers (1.4--1.6 calls/session), with over 70\% directly writing compact checker logic. Without Check~IR, standalone Go authoring demands \textbf{18,495 tool calls} (15.0 calls/session, \textbf{11.0$\times$ higher}) to inspect parser libraries and fix build errors. During online fuzzing, agents average 25.2--27.8 read-only code navigation calls per session alongside compiled checker runs.
 
-\vspace{3pt}\noindent\textbf{Token Efficiency, Build Overhead, and Runtime.}
-Table~\ref{tab:token-overhead} reports LLM token usage and wall-clock time across all stages. One-time offline preparation (Steps~1--3) takes 709.17M tokens and 34.52~h, led by GCC source mapping (28.23~h versus 1.27~h on LLVM). Both the mapped branch hierarchies and compiled Check~IR checkers are reusable across fuzzing runs and point releases. Deterministic AST instrumentation (Step~2b) rewrites 747 files with zero LLM calls. Building the instrumented compilers on 16 ARM Neoverse-N2 vCPUs takes 4.6~min (277.1~s) for \texttt{GCC\_INST} and 25.8~min (1,550.8~s) for \texttt{CLANG\_INST}. Because \texttt{DEFENZZ\_HIT} probes stay dormant unless \texttt{DEFENZZ\_LOG} is set, compiled target binaries incur zero runtime overhead. Online directed fuzzing (Step~4) completes in \textbf{10.16~h} (7.43~h GCC, 2.73~h LLVM) and consumes 900.84M tokens. Step~4 reaches its first verified silent defense bug after 31.9~min on GCC and 157.6~min on LLVM. Keeping invariant schemas, $\Omega$ signatures, and $\mathcal{T}_i$ fixed in prompt prefixes achieves a \textbf{92.4\% overall KV-cache hit rate} (1,427.42M cached input tokens). As a result, online fuzzing costs an average of \textbf{5.5~min of wall-clock time and 8.12M tokens per discovered silent defense bug}.
+\vspace{3pt}\noindent\textbf{Token Cost, Build Time, and Binary Overhead.}
+Table~\ref{tab:token-overhead} reports LLM token accounting and wall-clock runtime across all stages. Offline preparation (Steps~1--3) incurs a one-time cost of 709.17M tokens and 34.52~h, led by GCC source mapping (28.23~h versus 1.27~h on LLVM). Both the mapped branch catalogs and compiled checkers reuse directly across fuzzing campaigns and compiler point releases. Source instrumentation (Step~2b) rewrites 747 compiler files deterministically in 0.82~h (21.5~min GCC, 27.4~min LLVM) with zero LLM calls. Clean 16-core builds of the instrumented compilers take 4.6~min (277.1~s) for GCC and 25.8~min (1,550.8~s) for Clang, adding under 2.0\% per-seed compile overhead. Because probes instrument host compiler branches rather than emitted code, compiled target binaries incur \textbf{0.0\% runtime and code-size overhead}. Online directed fuzzing (Step~4) completes in \textbf{10.16~h} (7.43~h GCC, 2.73~h LLVM) using 900.84M tokens and triggers its first silent defense bug after 31.9~min on GCC and 157.6~min on LLVM. Keeping invariant schemas, $\Omega$ signatures, and $\mathcal{T}_i$ fixed in prompt prefixes yields a \textbf{92.4\% overall KV-cache hit rate} (1,427.42M cached input tokens). Online fuzzing thus averages \textbf{5.5~min and 8.12M tokens per discovered silent defense bug}.
 
 \bibliographystyle{IEEEtran}
 \bibliography{refs}

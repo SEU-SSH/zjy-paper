@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-DeFuzz Full Methodology Architecture Diagram Generator
+DeFenzz Full Methodology Architecture Diagram Generator
 Aligned with top-tier security conference standards (IEEE S&P, USENIX Security, ACM CCS, NDSS).
 Generates publication-ready SVG, PDF, and PNG with crisp typography, elegant color palettes, and rich vector iconography.
 """
@@ -139,7 +139,7 @@ def generate_svg():
     svg.append('''
   <!-- Top Header -->
   <g transform="translate(40, 25)">
-    <text x="0" y="32" fill="#FFFFFF" font-size="26" font-weight="800" letter-spacing="0.5">DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses</text>
+    <text x="0" y="32" fill="#FFFFFF" font-size="26" font-weight="800" letter-spacing="0.5">DeFenzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses</text>
     <text x="0" y="56" fill="#94A3B8" font-size="14" font-weight="400">Autonomous Invariant Distillation · Code Grounding &amp; Log Probe · PBT Parameterized Fuzzing · Compiler Diagnostics &amp; Dual-Path Adaptation</text>
     
     <!-- Feature Badges -->
@@ -414,9 +414,9 @@ def generate_svg():
       <g transform="translate(12, 54)">
         <rect x="0" y="0" width="{p2_w-56}" height="110" rx="5" fill="#1E293B" stroke="#475569" stroke-width="1"/>
         <text x="10" y="18" fill="#94A3B8" font-size="9" font-family="monospace">// Auto-injected at aarch64_layout_frame:6915</text>
-        <text x="10" y="34" fill="#38BDF8" font-size="9" font-family="monospace">fprintf(stderr, "[DEFUZZ_LOG_SP_01] Entry: calls_alloca=%d\\n",</text>
+        <text x="10" y="34" fill="#38BDF8" font-size="9" font-family="monospace">fprintf(stderr, "[DEFENZZ_LOG_SP_01] Entry: calls_alloca=%d\\n",</text>
         <text x="10" y="48" fill="#38BDF8" font-size="9" font-family="monospace">        cfun-&gt;calls_alloca);</text>
-        <text x="10" y="68" fill="#FBBF24" font-size="9" font-family="monospace">fprintf(stderr, "[DEFUZZ_LOG_SP_02] Frame Offset: local=%lld, ",</text>
+        <text x="10" y="68" fill="#FBBF24" font-size="9" font-family="monospace">fprintf(stderr, "[DEFENZZ_LOG_SP_02] Frame Offset: local=%lld, ",</text>
         <text x="10" y="82" fill="#FBBF24" font-size="9" font-family="monospace">        frame.locals_offset);</text>
         <text x="10" y="98" fill="#34D399" font-size="9" font-family="monospace">// Re-evaluate compiler internal invariant state</text>
       </g>
@@ -436,13 +436,13 @@ def generate_svg():
       <g transform="translate(12, 54)">
         <rect x="0" y="0" width="170" height="85" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1"/>
         <text x="12" y="20" fill="#A7F3D0" font-size="11" font-weight="700">Instrumented GCC</text>
-        <text x="12" y="38" fill="#E2E8F0" font-size="9.5">• gcc-13.2-defuzz-log</text>
+        <text x="12" y="38" fill="#E2E8F0" font-size="9.5">• gcc-13.2-defenzz-log</text>
         <text x="12" y="54" fill="#E2E8F0" font-size="9.5">• -fstack-usage enabled</text>
-        <text x="12" y="70" fill="#E2E8F0" font-size="9.5">• [DEFUZZ_LOG_*] emitters</text>
+        <text x="12" y="70" fill="#E2E8F0" font-size="9.5">• [DEFENZZ_LOG_*] emitters</text>
 
         <rect x="184" y="0" width="170" height="85" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1"/>
         <text x="196" y="20" fill="#A7F3D0" font-size="11" font-weight="700">Instrumented LLVM</text>
-        <text x="196" y="38" fill="#E2E8F0" font-size="9.5">• clang-17-defuzz-log</text>
+        <text x="196" y="38" fill="#E2E8F0" font-size="9.5">• clang-17-defenzz-log</text>
         <text x="196" y="54" fill="#E2E8F0" font-size="9.5">• -fstack-size-section</text>
         <text x="196" y="70" fill="#E2E8F0" font-size="9.5">• Pass timing &amp; DAG dump</text>
       </g>
@@ -527,7 +527,7 @@ def generate_svg():
 
         <rect x="205" y="0" width="200" height="70" rx="5" fill="#1E293B" stroke="#0369A1" stroke-width="1"/>
         <text x="10" y="18" fill="#38BDF8" font-size="10" font-weight="700">Runtime Execution Logs</text>
-        <text x="10" y="34" fill="#E2E8F0" font-size="9.5">• [DEFUZZ_LOG_*] trace stream</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9.5">• [DEFENZZ_LOG_*] trace stream</text>
         <text x="10" y="48" fill="#E2E8F0" font-size="9.5">• Exit Code / Signal (SIGABRT/SEGV)</text>
         <text x="10" y="62" fill="#E2E8F0" font-size="9.5">• GDB / Disassembly trace</text>
       </g>
@@ -615,7 +615,7 @@ def generate_svg():
 
         <rect x="8" y="62" width="{p4_w-72}" height="35" rx="4" fill="#1E293B"/>
         <text x="16" y="76" fill="#E2E8F0" font-size="9.5" font-weight="600">• Unique-ID Log Trace Verification</text>
-        <text x="16" y="88" fill="#94A3B8" font-size="9">Did execution reach [DEFUZZ_LOG_SP_01] calls_alloca branch?</text>
+        <text x="16" y="88" fill="#94A3B8" font-size="9">Did execution reach [DEFENZZ_LOG_SP_01] calls_alloca branch?</text>
       </g>
 
       <g transform="translate(12, 168)">
@@ -747,7 +747,7 @@ def generate_svg():
 
 if __name__ == "__main__":
     svg_str = generate_svg()
-    out_dir = Path("/mnt/propagation/sources/research-defuzz-paper-0a9b3a25380dae02/figures")
+    out_dir = Path("/mnt/propagation/sources/research-defenzz-paper-0a9b3a25380dae02/figures")
     svg_path = out_dir / "architecture_master_v7.svg"
     pdf_path = out_dir / "architecture_master_v7.pdf"
     png_path = out_dir / "architecture_master_v7.png"

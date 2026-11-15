@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 232" width="880" height="232" style="background-color: #FFFFFF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+<text x="214" y="15.5" fill="#1C1917" font-size="11.3" font-weight="700" text-anchor="middle">(a) Silent Bugs by Defense Family (+Our Oracle)</text>
+<rect x="14" y="23" width="8.5" height="8.5" rx="1.5" fill="#1B7837"/>
+<text x="25" y="30.5" fill="#57534E" font-size="8.6" font-weight="600">F1 CFI</text>
+<rect x="66" y="23" width="8.5" height="8.5" rx="1.5" fill="#D97706"/>
+<text x="77" y="30.5" fill="#57534E" font-size="8.6" font-weight="600">F2 Stack</text>
+<rect x="126" y="23" width="8.5" height="8.5" rx="1.5" fill="#92400E"/>
+<text x="137" y="30.5" fill="#57534E" font-size="8.6" font-weight="600">F3 Sanitizer</text>
+<rect x="202" y="23" width="8.5" height="8.5" rx="1.5" fill="#0284C7"/>
+<text x="213" y="30.5" fill="#57534E" font-size="8.6" font-weight="600">F4 Scrub</text>
+<rect x="264" y="23" width="8.5" height="8.5" rx="1.5" fill="#FDE68A" stroke="#B45309" stroke-width="0.6"/>
+<text x="275" y="30.5" fill="#57534E" font-size="8.6" font-weight="600">F5 Spec</text>
+<rect x="322" y="23" width="8.5" height="8.5" rx="1.5" fill="#B91C1C"/>
+<text x="333" y="30.5" fill="#57534E" font-size="8.6" font-weight="600">F6 Fortify</text>
+<line x1="80.0" y1="43" x2="80.0" y2="187.0" stroke="#E7E5E4" stroke-width="1"/>
+<text x="80.0" y="199.5" fill="#57534E" font-size="8.8" text-anchor="middle">0</text>
+<line x1="142.0" y1="43" x2="142.0" y2="187.0" stroke="#E7E5E4" stroke-width="1"/>
+<text x="142.0" y="199.5" fill="#57534E" font-size="8.8" text-anchor="middle">30</text>
+<line x1="204.0" y1="43" x2="204.0" y2="187.0" stroke="#E7E5E4" stroke-width="1"/>
+<text x="204.0" y="199.5" fill="#57534E" font-size="8.8" text-anchor="middle">60</text>
+<line x1="266.0" y1="43" x2="266.0" y2="187.0" stroke="#E7E5E4" stroke-width="1"/>
+<text x="266.0" y="199.5" fill="#57534E" font-size="8.8" text-anchor="middle">90</text>
+<line x1="328.0" y1="43" x2="328.0" y2="187.0" stroke="#E7E5E4" stroke-width="1"/>
+<text x="328.0" y="199.5" fill="#57534E" font-size="8.8" text-anchor="middle">120</text>
+<text x="204.0" y="213.5" fill="#1C1917" font-size="9.4" font-weight="600" text-anchor="middle">Deduplicated Silent Defense Bugs (F1&#8211;F6)</text>
+<line x1="117.2" y1="151.0" x2="117.2" y2="165.0" stroke="#B45309" stroke-width="1" stroke-dasharray="2.5,2"/>
+<line x1="117.2" y1="162.0" x2="309.4" y2="162.0" stroke="#B45309" stroke-width="1.15"/>
+<line x1="117.2" y1="159.4" x2="117.2" y2="164.6" stroke="#B45309" stroke-width="1.15"/>
+<line x1="309.4" y1="159.4" x2="309.4" y2="164.6" stroke="#B45309" stroke-width="1.15"/>
+<line x1="236.0" y1="84.0" x2="236.0" y2="162.0" stroke="#D97706" stroke-width="0.9" stroke-dasharray="2.5,2"/>
+<circle cx="236.0" cy="162.0" r="2.0" fill="#B45309"/>
+<rect x="196.0" y="53.0" width="198.0" height="31.0" rx="3.5" fill="#FEFCE8" stroke="#D97706" stroke-width="0.9"/>
+<text x="295.0" y="65.5" fill="#92400E" font-size="8.4" font-weight="700" text-anchor="middle">+93 Exclusive to DeFenzz (83.8%)</text>
+<text x="295.0" y="77.5" fill="#78350F" font-size="7.9" font-weight="600" text-anchor="middle">Strict Superset of All 5 Baselines (0 Missed)</text>
+<text x="74" y="57.4" fill="#1C1917" font-size="9.4" font-weight="500" text-anchor="end">YARPGen</text>
+<rect x="80.00" y="47.0" width="2.07" height="14.2" fill="#1B7837"/>
+<text x="87.1" y="57.4" fill="#57534E" font-size="8.6" font-weight="600">1 (Native: 0)</text>
+<text x="74" y="79.9" fill="#1C1917" font-size="9.4" font-weight="500" text-anchor="end">UBfuzz</text>
+<rect x="80.00" y="69.5" width="2.07" height="14.2" fill="#1B7837"/>
+<rect x="82.07" y="69.5" width="4.13" height="14.2" fill="#92400E"/>
+<text x="91.2" y="79.9" fill="#57534E" font-size="8.6" font-weight="600">3 (Native: 0*)</text>
+<text x="74" y="102.4" fill="#1C1917" font-size="9.4" font-weight="500" text-anchor="end">MetaMut</text>
+<rect x="80.00" y="92.0" width="2.07" height="14.2" fill="#1B7837"/>
+<rect x="82.07" y="92.0" width="2.07" height="14.2" fill="#D97706"/>
+<rect x="84.13" y="92.0" width="12.40" height="14.2" fill="#92400E"/>
+<text x="101.5" y="102.4" fill="#57534E" font-size="8.6" font-weight="600">8 (Native: 0)</text>
+<text x="74" y="124.9" fill="#1C1917" font-size="9.4" font-weight="500" text-anchor="end">FeatureFuzz</text>
+<rect x="80.00" y="114.5" width="4.13" height="14.2" fill="#1B7837"/>
+<rect x="84.13" y="114.5" width="2.07" height="14.2" fill="#D97706"/>
+<rect x="86.20" y="114.5" width="14.47" height="14.2" fill="#92400E"/>
+<rect x="100.67" y="114.5" width="2.07" height="14.2" fill="#FDE68A" stroke="#B45309" stroke-width="0.5"/>
+<rect x="102.73" y="114.5" width="6.20" height="14.2" fill="#B91C1C"/>
+<text x="113.9" y="124.9" fill="#57534E" font-size="8.6" font-weight="600">14 (Native: 2)</text>
+<text x="74" y="147.4" fill="#1C1917" font-size="9.4" font-weight="500" text-anchor="end">Fuzz4All</text>
+<rect x="80.00" y="137.0" width="6.20" height="14.2" fill="#1B7837"/>
+<rect x="86.20" y="137.0" width="2.07" height="14.2" fill="#D97706"/>
+<rect x="88.27" y="137.0" width="18.60" height="14.2" fill="#92400E"/>
+<text x="97.6" y="147.3" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">9</text>
+<rect x="106.87" y="137.0" width="2.07" height="14.2" fill="#0284C7"/>
+<rect x="108.93" y="137.0" width="2.07" height="14.2" fill="#FDE68A" stroke="#B45309" stroke-width="0.5"/>
+<rect x="111.00" y="137.0" width="6.20" height="14.2" fill="#B91C1C"/>
+<text x="122.2" y="147.4" fill="#57534E" font-size="8.6" font-weight="600">18 (Native: 11)</text>
+<text x="74" y="178.9" fill="#1C1917" font-size="9.4" font-weight="700" text-anchor="end">DeFenzz</text>
+<rect x="80.00" y="168.5" width="74.40" height="14.2" fill="#1B7837"/>
+<text x="117.2" y="178.8" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">36</text>
+<rect x="154.40" y="168.5" width="43.40" height="14.2" fill="#D97706"/>
+<text x="176.1" y="178.8" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">21</text>
+<rect x="197.80" y="168.5" width="43.40" height="14.2" fill="#92400E"/>
+<text x="219.5" y="178.8" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">21</text>
+<rect x="241.20" y="168.5" width="20.67" height="14.2" fill="#0284C7"/>
+<text x="251.5" y="178.8" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">10</text>
+<rect x="261.87" y="168.5" width="18.60" height="14.2" fill="#FDE68A" stroke="#B45309" stroke-width="0.5"/>
+<text x="271.2" y="178.8" fill="#78350F" font-size="8.0" font-weight="700" text-anchor="middle">9</text>
+<rect x="280.47" y="168.5" width="28.93" height="14.2" fill="#B91C1C"/>
+<text x="294.9" y="178.8" fill="#FFFFFF" font-size="8.0" font-weight="700" text-anchor="middle">14</text>
+<text x="314.4" y="178.9" fill="#166534" font-size="8.6" font-weight="700">111 (Native: 111)</text>
+<line x1="80" y1="43" x2="80" y2="187.0" stroke="#78716C" stroke-width="1.2"/>
+<line x1="80" y1="187.0" x2="328" y2="187.0" stroke="#78716C" stroke-width="1.2"/>
+<line x1="428" y1="12" x2="428" y2="220" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="665.0" y="15.5" fill="#1C1917" font-size="11.3" font-weight="700" text-anchor="middle">(b) Defense Branch Coverage Across 4 ISAs (/ 9,061 Probes)</text>
+<rect x="444" y="23" width="8.5" height="8.5" rx="1.5" fill="#E2E8F0" stroke="#64748B" stroke-width="0.6"/>
+<text x="455" y="30.5" fill="#57534E" font-size="8.5" font-weight="600">YARPGen</text>
+<rect x="510" y="23" width="8.5" height="8.5" rx="1.5" fill="#94A3B8"/>
+<text x="521" y="30.5" fill="#57534E" font-size="8.5" font-weight="600">UBfuzz</text>
+<rect x="566" y="23" width="8.5" height="8.5" rx="1.5" fill="#FDE68A" stroke="#B45309" stroke-width="0.6"/>
+<text x="577" y="30.5" fill="#57534E" font-size="8.5" font-weight="600">MetaMut</text>
+<rect x="629" y="23" width="8.5" height="8.5" rx="1.5" fill="#F59E0B"/>
+<text x="640" y="30.5" fill="#57534E" font-size="8.5" font-weight="600">FeatureFuzz</text>
+<rect x="709" y="23" width="8.5" height="8.5" rx="1.5" fill="#B45309"/>
+<text x="720" y="30.5" fill="#57534E" font-size="8.5" font-weight="600">Fuzz4All</text>
+<rect x="772" y="23" width="8.5" height="8.5" rx="1.5" fill="#228833"/>
+<text x="783" y="30.5" fill="#166534" font-size="8.5" font-weight="700">DeFenzz</text>
+<line x1="478" y1="188.0" x2="864" y2="188.0" stroke="#E7E5E4" stroke-width="1"/>
+<text x="473" y="191.2" fill="#57534E" font-size="8.6" text-anchor="end">0%</text>
+<line x1="478" y1="152.2" x2="864" y2="152.2" stroke="#E7E5E4" stroke-width="1"/>
+<text x="473" y="155.4" fill="#57534E" font-size="8.6" text-anchor="end">25%</text>
+<line x1="478" y1="116.5" x2="864" y2="116.5" stroke="#E7E5E4" stroke-width="1"/>
+<text x="473" y="119.7" fill="#57534E" font-size="8.6" text-anchor="end">50%</text>
+<line x1="478" y1="80.8" x2="864" y2="80.8" stroke="#E7E5E4" stroke-width="1"/>
+<text x="473" y="84.0" fill="#57534E" font-size="8.6" text-anchor="end">75%</text>
+<line x1="478" y1="45.0" x2="864" y2="45.0" stroke="#E7E5E4" stroke-width="1"/>
+<text x="473" y="48.2" fill="#57534E" font-size="8.6" text-anchor="end">100%</text>
+<text x="526.2" y="201.5" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="middle">x86-64</text>
+<text x="526.2" y="212.5" fill="#57534E" font-size="8.2" font-weight="500" text-anchor="middle">(2,295)</text>
+<rect x="488.1" y="111.8" width="11.2" height="76.2" rx="1.2" fill="#E2E8F0" stroke="#64748B" stroke-width="0.6"/>
+<text x="493.8" y="108.3" fill="#64748B" font-size="7.6" font-weight="600" text-anchor="middle">53%</text>
+<rect x="501.1" y="95.8" width="11.2" height="92.2" rx="1.2" fill="#94A3B8"/>
+<rect x="514.1" y="84.0" width="11.2" height="104.0" rx="1.2" fill="#FDE68A" stroke="#B45309" stroke-width="0.6"/>
+<rect x="527.1" y="86.5" width="11.2" height="101.5" rx="1.2" fill="#F59E0B"/>
+<rect x="540.1" y="82.2" width="11.2" height="105.8" rx="1.2" fill="#B45309"/>
+<rect x="553.1" y="73.5" width="11.2" height="114.5" rx="1.2" fill="#228833"/>
+<text x="558.8" y="69.7" fill="#166534" font-size="8.2" font-weight="700" text-anchor="middle">80.1%</text>
+<text x="622.8" y="201.5" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="middle">AArch64</text>
+<text x="622.8" y="212.5" fill="#57534E" font-size="8.2" font-weight="500" text-anchor="middle">(2,568)</text>
+<rect x="584.6" y="116.1" width="11.2" height="71.9" rx="1.2" fill="#E2E8F0" stroke="#64748B" stroke-width="0.6"/>
+<text x="590.2" y="112.6" fill="#64748B" font-size="7.6" font-weight="600" text-anchor="middle">50%</text>
+<rect x="597.6" y="100.8" width="11.2" height="87.2" rx="1.2" fill="#94A3B8"/>
+<rect x="610.6" y="89.2" width="11.2" height="98.8" rx="1.2" fill="#FDE68A" stroke="#B45309" stroke-width="0.6"/>
+<rect x="623.6" y="92.3" width="11.2" height="95.7" rx="1.2" fill="#F59E0B"/>
+<rect x="636.6" y="88.0" width="11.2" height="100.0" rx="1.2" fill="#B45309"/>
+<rect x="649.6" y="73.7" width="11.2" height="114.3" rx="1.2" fill="#228833"/>
+<text x="655.2" y="69.9" fill="#166534" font-size="8.2" font-weight="700" text-anchor="middle">79.9%</text>
+<text x="719.2" y="201.5" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="middle">RISC-V64</text>
+<text x="719.2" y="212.5" fill="#57534E" font-size="8.2" font-weight="500" text-anchor="middle">(2,095)</text>
+<rect x="681.1" y="116.4" width="11.2" height="71.6" rx="1.2" fill="#E2E8F0" stroke="#64748B" stroke-width="0.6"/>
+<text x="686.8" y="112.9" fill="#64748B" font-size="7.6" font-weight="600" text-anchor="middle">50%</text>
+<rect x="694.1" y="99.2" width="11.2" height="88.8" rx="1.2" fill="#94A3B8"/>
+<rect x="707.1" y="87.3" width="11.2" height="100.7" rx="1.2" fill="#FDE68A" stroke="#B45309" stroke-width="0.6"/>
+<rect x="720.1" y="89.9" width="11.2" height="98.1" rx="1.2" fill="#F59E0B"/>
+<rect x="733.1" y="85.0" width="11.2" height="103.0" rx="1.2" fill="#B45309"/>
+<rect x="746.1" y="75.7" width="11.2" height="112.3" rx="1.2" fill="#228833"/>
+<text x="751.8" y="71.9" fill="#166534" font-size="8.2" font-weight="700" text-anchor="middle">78.5%</text>
+<text x="815.8" y="201.5" fill="#1C1917" font-size="9.2" font-weight="600" text-anchor="middle">LoongArch64</text>
+<text x="815.8" y="212.5" fill="#57534E" font-size="8.2" font-weight="500" text-anchor="middle">(2,103)</text>
+<rect x="777.6" y="114.4" width="11.2" height="73.6" rx="1.2" fill="#E2E8F0" stroke="#64748B" stroke-width="0.6"/>
+<text x="783.2" y="110.9" fill="#64748B" font-size="7.6" font-weight="600" text-anchor="middle">52%</text>
+<rect x="790.6" y="98.1" width="11.2" height="89.9" rx="1.2" fill="#94A3B8"/>
+<rect x="803.6" y="85.2" width="11.2" height="102.8" rx="1.2" fill="#FDE68A" stroke="#B45309" stroke-width="0.6"/>
+<rect x="816.6" y="87.9" width="11.2" height="100.1" rx="1.2" fill="#F59E0B"/>
+<rect x="829.6" y="83.2" width="11.2" height="104.8" rx="1.2" fill="#B45309"/>
+<rect x="842.6" y="74.0" width="11.2" height="114.0" rx="1.2" fill="#228833"/>
+<text x="848.2" y="70.2" fill="#166534" font-size="8.2" font-weight="700" text-anchor="middle">79.7%</text>
+<line x1="478" y1="45" x2="478" y2="188" stroke="#78716C" stroke-width="1.2"/>
+<line x1="478" y1="188" x2="864" y2="188" stroke="#78716C" stroke-width="1.2"/>
+</svg>

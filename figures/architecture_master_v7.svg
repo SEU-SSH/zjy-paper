@@ -116,7 +116,7 @@
 <rect x="0" y="0" width="1920" height="1080" fill="url(#grad-bg-main)"/>
   <!-- Top Header -->
   <g transform="translate(40, 25)">
-    <text x="0" y="32" fill="#FFFFFF" font-size="26" font-weight="800" letter-spacing="0.5">DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses</text>
+    <text x="0" y="32" fill="#FFFFFF" font-size="26" font-weight="800" letter-spacing="0.5">DeFenzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses</text>
     <text x="0" y="56" fill="#94A3B8" font-size="14" font-weight="400">Autonomous Invariant Distillation · Code Grounding &amp; Log Probe · PBT Parameterized Fuzzing · Compiler Diagnostics &amp; Dual-Path Adaptation</text>
     
     <!-- Feature Badges -->
@@ -360,9 +360,9 @@
       <g transform="translate(12, 54)">
         <rect x="0" y="0" width="364" height="110" rx="5" fill="#1E293B" stroke="#475569" stroke-width="1"/>
         <text x="10" y="18" fill="#94A3B8" font-size="9" font-family="monospace">// Auto-injected at aarch64_layout_frame:6915</text>
-        <text x="10" y="34" fill="#38BDF8" font-size="9" font-family="monospace">fprintf(stderr, "[DEFUZZ_LOG_SP_01] Entry: calls_alloca=%d\n",</text>
+        <text x="10" y="34" fill="#38BDF8" font-size="9" font-family="monospace">fprintf(stderr, "[DEFENZZ_LOG_SP_01] Entry: calls_alloca=%d\n",</text>
         <text x="10" y="48" fill="#38BDF8" font-size="9" font-family="monospace">        cfun-&gt;calls_alloca);</text>
-        <text x="10" y="68" fill="#FBBF24" font-size="9" font-family="monospace">fprintf(stderr, "[DEFUZZ_LOG_SP_02] Frame Offset: local=%lld, ",</text>
+        <text x="10" y="68" fill="#FBBF24" font-size="9" font-family="monospace">fprintf(stderr, "[DEFENZZ_LOG_SP_02] Frame Offset: local=%lld, ",</text>
         <text x="10" y="82" fill="#FBBF24" font-size="9" font-family="monospace">        frame.locals_offset);</text>
         <text x="10" y="98" fill="#34D399" font-size="9" font-family="monospace">// Re-evaluate compiler internal invariant state</text>
       </g>
@@ -382,13 +382,13 @@
       <g transform="translate(12, 54)">
         <rect x="0" y="0" width="170" height="85" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1"/>
         <text x="12" y="20" fill="#A7F3D0" font-size="11" font-weight="700">Instrumented GCC</text>
-        <text x="12" y="38" fill="#E2E8F0" font-size="9.5">• gcc-13.2-defuzz-log</text>
+        <text x="12" y="38" fill="#E2E8F0" font-size="9.5">• gcc-13.2-defenzz-log</text>
         <text x="12" y="54" fill="#E2E8F0" font-size="9.5">• -fstack-usage enabled</text>
-        <text x="12" y="70" fill="#E2E8F0" font-size="9.5">• [DEFUZZ_LOG_*] emitters</text>
+        <text x="12" y="70" fill="#E2E8F0" font-size="9.5">• [DEFENZZ_LOG_*] emitters</text>
 
         <rect x="184" y="0" width="170" height="85" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1"/>
         <text x="196" y="20" fill="#A7F3D0" font-size="11" font-weight="700">Instrumented LLVM</text>
-        <text x="196" y="38" fill="#E2E8F0" font-size="9.5">• clang-17-defuzz-log</text>
+        <text x="196" y="38" fill="#E2E8F0" font-size="9.5">• clang-17-defenzz-log</text>
         <text x="196" y="54" fill="#E2E8F0" font-size="9.5">• -fstack-size-section</text>
         <text x="196" y="70" fill="#E2E8F0" font-size="9.5">• Pass timing &amp; DAG dump</text>
       </g>
@@ -457,7 +457,8 @@
         <svg width="20" height="20" viewBox="0 0 24 24"><path d="M19.4 13c.04-.32.06-.66.06-1s-.02-.68-.06-1l2.1-1.65c.2-.15.25-.42.13-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.5 1c-.52-.4-1.08-.73-1.7-.98l-.37-2.65c-.04-.24-.25-.42-.5-.42h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.62.25-1.18.58-1.7.98l-2.5-1c-.22-.08-.49 0-.61.22l-2 3.46c-.13.22-.07.49.13.64l2.1 1.65c-.04.32-.06.65-.06 1s.02.68.06 1l-2.1 1.65c-.2.15-.25.42-.13.64l2 3.46c.12.22.39.3.61.22l2.5-1c.52.4 1.08.73 1.7.98l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.62-.25 1.18-.58 1.7-.98l2.5 1c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.13-.64l-2.1-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" fill="currentColor"/></svg>
       </g>
       <text x="40" y="27" fill="#FFFFFF" font-size="13.5" font-weight="700">Compile &amp; Execute (Instrumented)</text>
-      <text x="40" y="43" fill="#7DD3FC" font-size="10.5">Target Compiler compiles Seed $ightarrow$ Collects Diagnostics &amp; Logs</text>
+      <text x="40" y="43" fill="#7DD3FC" font-size="10.5">Target Compiler compiles Seed $
+ightarrow$ Collects Diagnostics &amp; Logs</text>
 
       <g transform="translate(12, 52)">
         <rect x="0" y="0" width="195" height="70" rx="5" fill="#1E293B" stroke="#0369A1" stroke-width="1"/>
@@ -468,7 +469,7 @@
 
         <rect x="205" y="0" width="200" height="70" rx="5" fill="#1E293B" stroke="#0369A1" stroke-width="1"/>
         <text x="10" y="18" fill="#38BDF8" font-size="10" font-weight="700">Runtime Execution Logs</text>
-        <text x="10" y="34" fill="#E2E8F0" font-size="9.5">• [DEFUZZ_LOG_*] trace stream</text>
+        <text x="10" y="34" fill="#E2E8F0" font-size="9.5">• [DEFENZZ_LOG_*] trace stream</text>
         <text x="10" y="48" fill="#E2E8F0" font-size="9.5">• Exit Code / Signal (SIGABRT/SEGV)</text>
         <text x="10" y="62" fill="#E2E8F0" font-size="9.5">• GDB / Disassembly trace</text>
       </g>
@@ -500,14 +501,18 @@
         <rect x="0" y="0" width="195" height="95" rx="5" fill="#064E3B" stroke="#059669" stroke-width="1.2"/>
         <text x="12" y="22" fill="#34D399" font-size="11.5" font-weight="700">Branch A: Not Violated</text>
         <text x="12" y="40" fill="#A7F3D0" font-size="9.5">Seed failed to break invariant.</text>
-        <text x="12" y="56" fill="#E2E8F0" font-size="9.5">$ightarrow$ Collect deep diagnostics</text>
-        <text x="12" y="72" fill="#E2E8F0" font-size="9.5">$ightarrow$ Enter Feedback Agent</text>
+        <text x="12" y="56" fill="#E2E8F0" font-size="9.5">$
+ightarrow$ Collect deep diagnostics</text>
+        <text x="12" y="72" fill="#E2E8F0" font-size="9.5">$
+ightarrow$ Enter Feedback Agent</text>
 
         <rect x="210" y="0" width="195" height="95" rx="5" fill="#4C0519" stroke="#E11D48" stroke-width="1.2"/>
         <text x="222" y="22" fill="#FB7185" font-size="11.5" font-weight="700">Branch B: Violated!</text>
         <text x="222" y="40" fill="#FDA4AF" font-size="9.5">Defense bypassed or broken!</text>
-        <text x="222" y="56" fill="#E2E8F0" font-size="9.5">$ightarrow$ Persist PoC &amp; Log Trace</text>
-        <text x="222" y="72" fill="#E2E8F0" font-size="9.5">$ightarrow$ Trigger Lateral Fuzzing</text>
+        <text x="222" y="56" fill="#E2E8F0" font-size="9.5">$
+ightarrow$ Persist PoC &amp; Log Trace</text>
+        <text x="222" y="72" fill="#E2E8F0" font-size="9.5">$
+ightarrow$ Trigger Lateral Fuzzing</text>
       </g>
     </g>
   </g>
@@ -548,7 +553,7 @@
 
         <rect x="8" y="62" width="393" height="35" rx="4" fill="#1E293B"/>
         <text x="16" y="76" fill="#E2E8F0" font-size="9.5" font-weight="600">• Unique-ID Log Trace Verification</text>
-        <text x="16" y="88" fill="#94A3B8" font-size="9">Did execution reach [DEFUZZ_LOG_SP_01] calls_alloca branch?</text>
+        <text x="16" y="88" fill="#94A3B8" font-size="9">Did execution reach [DEFENZZ_LOG_SP_01] calls_alloca branch?</text>
       </g>
 
       <g transform="translate(12, 168)">
@@ -585,7 +590,8 @@
         <text x="12" y="58" fill="#E2E8F0" font-size="9.5">2. Synthesizes patched Checker code (Static symbol / Dynamic offset)</text>
         <text x="12" y="76" fill="#E2E8F0" font-size="9.5">3. <tspan fill="#F59E0B" font-weight="700">Grounding Gate Re-Verification</tspan>: Validates on baseline test set</text>
         <text x="12" y="94" fill="#E2E8F0" font-size="9.5">4. Replaces catalog entry in Blackboard with new version tag</text>
-        <text x="12" y="114" fill="#34D399" font-size="9.5" font-weight="600">$ightarrow$ Resumes seed generation with zero goalpost drift</text>
+        <text x="12" y="114" fill="#34D399" font-size="9.5" font-weight="600">$
+ightarrow$ Resumes seed generation with zero goalpost drift</text>
       </g>
     </g>
 
@@ -614,7 +620,8 @@
         <text x="12" y="54" fill="#FECDD3" font-size="9">• Orthogonal syntax variants (alloca vs VLA vs dynamic struct array)</text>
         <text x="12" y="70" fill="#FECDD3" font-size="9">• Multiple nested function frames &amp; non-local goto labels</text>
         <text x="12" y="86" fill="#FECDD3" font-size="9">• Optimization flags matrix (-O1, -O2, -O3, -Os, -fno-omit-frame-pointer)</text>
-        <text x="12" y="104" fill="#FBBF24" font-size="9.5" font-weight="600">$ightarrow$ Exploits maximum vulnerability surface under same invariant</text>
+        <text x="12" y="104" fill="#FBBF24" font-size="9.5" font-weight="600">$
+ightarrow$ Exploits maximum vulnerability surface under same invariant</text>
       </g>
     </g>
   </g>
