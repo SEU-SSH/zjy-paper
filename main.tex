@@ -1,10 +1,14 @@
 %% DeFenzz — IEEE S&P submission draft
 %% Compile: latexmk -pdf main.tex   (or: pdflatex; bibtex; pdflatex; pdflatex)
-\documentclass[conference]{IEEEtran}
+\documentclass[conference,compsoc]{IEEEtran}
 \IEEEoverridecommandlockouts
 
 \usepackage[T1]{fontenc}
-\usepackage{cite}
+\ifCLASSOPTIONcompsoc
+  \usepackage[nocompress]{cite}
+\else
+  \usepackage{cite}
+\fi
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{algorithm}
@@ -93,10 +97,6 @@
   frame=single,
   morekeywords={size_t,uintptr_t}
 }
-
-\makeatletter
-\def\abstract{\normalfont\@IEEEabskeysecsize\textbf{Abstract}---\relax\bfseries}
-\makeatother
 
 \begin{document}
 
