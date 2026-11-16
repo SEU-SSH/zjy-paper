@@ -529,6 +529,37 @@ Step~4: Online Fuzzing & 21,415 & 900.8M (92.9\%) & 10.16 \\
 
 Table~\ref{tab:token-overhead} summarizes LLM token usage and wall-clock runtime across the full GCC and LLVM campaigns. Offline preparation (Steps~1--3) is a one-time cost of 34.52~h and 709.2M tokens, whose mapped branches and compiled checkers reuse across fuzzing runs and point releases. GCC dominates mapping time (28.23~h vs.\ 1.27~h on LLVM) because its defense logic spans cross-file target hooks rather than modular C++ passes. Selective pass instrumentation adds under 2.0\% per-seed compile overhead, and emitted target binaries incur \textbf{0.0\% runtime and code-size overhead}. Online directed fuzzing (Step~4) completes across both compilers and all four ISAs in \textbf{10.16~h}, uncovering its first silent bug after 31.9~min on GCC. Keeping invariant schemas, $\Omega$, and $\mathcal{T}_i$ fixed in prompt prefixes achieves a \textbf{92.4\% KV-cache hit rate} (1,427.4M cached tokens). Overall, online fuzzing averages \textbf{5.5~min and 8.12M tokens per discovered silent defense bug}.
 
+\section{Related Work}\label{sec:related-work}
+
+\noindent\textbf{Compiler Testing and Defense Validation.}
+Csmith~\cite{yang2011csmith} and YARPGen~\cite{livinskii2020yarpgen} compare program outputs across compiler builds, while YARPGen's loop extension~\cite{livinskii2023loops} also checks against precomputed results.
+Equivalence Modulo Inputs (EMI)~\cite{le2014emi} compares program variants that preserve behavior on selected inputs, using output disagreements to expose compiler bugs.
+Alive2~\cite{lopes2021alive2} checks refinement between source and target LLVM IR functions, providing bounded translation validation of compiler transformations.
+Functional correctness alone does not establish whether a compiled binary still enforces its intended security protections.
+STACK~\cite{wang2013stack} exposes application checks removed by optimizations that assume undefined behavior never occurs, revealing flawed application assumptions.
+UBfuzz~\cite{li2024ubfuzz} targets missed sanitizer detections by injecting undefined behavior and using crash-site mapping to compare sanitizer reports.
+Spectector~\cite{guarnieri2020spectector} analyzes compiled x86 assembly for speculative non-interference, checking whether compiler-inserted mitigations prevent speculative information leaks.
+While UBfuzz and Spectector focus on sanitizer detection and speculative non-interference, \textsc{DeFenzz} checks defense requirements across mechanisms and target ISAs.
+
+\medskip\noindent\textbf{Directed and LLM-Assisted Fuzzing.}
+LLMs can supply a compiler fuzzer with test programs, reusable mutators, or semantic features that guide program generation.
+Fuzz4All~\cite{xia2024fuzz4all} generates and mutates programs from user inputs and supports custom oracles, while MetaMut~\cite{ou2024metamut} synthesizes reusable mutators offline for coverage-guided fuzzing.
+FeatureFuzz~\cite{he2026featurefuzz} mines bug-prone semantic features from past compiler bugs, then combines those features into programs using coverage feedback.
+However, steering generation toward defense-critical logic requires both selecting target branches and tracking progress toward them.
+AFLGo~\cite{bohme2017aflgo} uses distance-based scheduling to steer execution toward target locations that are supplied to the fuzzer.
+WhiteFox~\cite{yang2024whitefox} derives requirements from optimization implementations and uses them to generate programs that trigger those optimizations.
+Bulbasaur~\cite{wang2026bulbasaur} selects hard-to-cover branches, then generates branch-specific mutators from source context and runtime feedback during fuzzing.
+\textsc{DeFenzz} instead selects targets by mapping defense invariants to compiler branches, then guides generation to reach them and satisfy invariant preconditions.
+
+\medskip\noindent\textbf{Specification and Checker Generation.}
+PropertyGPT~\cite{liu2025propertygpt} retrieves existing specifications to generate smart-contract properties, then checks the contracts against these properties with external provers.
+KNighter~\cite{yang2025knighter} and SpecAuditor~\cite{lin2026specauditor} extract rules from historical patches, but differ in how they use those rules to detect bugs.
+KNighter generates static checkers, whereas SpecAuditor asks LLMs to check constraints and triage the resulting bug reports.
+ProtocolGuard~\cite{song2026protocolguard} extracts protocol rules, maps them to source code, and inserts assertions to detect silent non-compliance during directed fuzzing.
+\textsc{DeFenzz} likewise builds programmatic bug oracles, but checks defense requirements against compiled binaries or their runtime behavior.
+LLMs implement these oracles as static or dynamic checkers, combining Check~IR query primitives with target ISA specifications.
+These checkers evaluate each compiled seed during fuzzing, with zero LLM involvement in bug adjudication.
+
 \bibliographystyle{IEEEtran}
 \bibliography{refs}
 
