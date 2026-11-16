@@ -228,7 +228,7 @@ def generate_svg():
     <line x1="386" y1="70" x2="628" y2="70" stroke="#FDE68A" stroke-width="1.1"/>
     <rect x="386" y="26" width="242" height="220" rx="8" fill="none" stroke="{orc_stroke}" stroke-width="1.3"/>
     <text x="500" y="45.5" font-size="10.8" font-weight="700" fill="{text_color}" text-anchor="middle">Programmatic Oracle Construction</text>
-    <text x="500" y="60" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Check IR + Two-Gate Validation</text>
+    <text x="500" y="60" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Check IR + Target ISA Specs</text>
     <use href="#bot-logo" x="607" y="31"/>
   </g>
 
