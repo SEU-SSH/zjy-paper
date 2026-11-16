@@ -11,7 +11,7 @@
 >   2. **Section 1 Introduction（第一章 引言，`L119–L141`）**
 >   3. **Section 2 Motivation（第二章 动机与背景，`L143–L182`）**
 > - **`[不 ready]`（`main.tex` `L183` 起所有后续章节）**：
->   - Section 3 Design（`L183–L353`）与 Section 4 Implementation（`L354–L360`）已完成大刀阔斧重构初稿与图 2 对齐，Section 5 Evaluation（`L362–L594`）已完成全章大改、原始运行日志交叉核验与 4 幅矢量图 + 5 张三线表重绘，均待作者审阅确认后方可升级为 `[ready]`；待补齐的 Discussion / Related Work / Conclusion 处于 `不 ready` 状态。
+>   - Section 3 Design（`L183–L351`）与 Section 4 Implementation（`L352–L358`）已完成精简打磨并推送，Section 5 Evaluation（`L360–L531`）已完成叙事化减脂重写、双盲脱敏与图表更新，均待作者审阅确认后升级为 `[ready]`；待补齐的 Discussion / Related Work / Conclusion 处于 `不 ready` 状态。
 
 ---
 
@@ -35,24 +35,24 @@
   - [ready] 2.2 Motivating Example (`L151–L173`，GCC `_FORTIFY_SOURCE` 潜伏 14 年静默放宽漏洞匿名化解析与代码块排版)
   - [ready] 2.3 Limitations of Existing Approaches (`L175–L181`，显式点明良性执行期间缓解机制从不触发 `[R2-10]`，并对齐静态检查/动态执行确定性 Oracle 表述)
 
-### 3. Design of DeFenzz (`main.tex` `L183–L353`)
-- [不 ready] **3.0 Section 3 Overview & Architecture**（`L183–L187`：已按 `[R2-0]`、`[R2-11]` 重写为 7 句因果动机推导、移除未展开缩写并重绘对齐 `figures/method-overview.pdf`，待作者审阅确认）
-- [不 ready] **3.1 Security Invariant Generation (Section 3.A)**（`L189–L226`：已按 `[R2-0]`、`[R1-3]`、`[R2-12]`–`[R2-14]` 对比替代方案、前置 `Listing 2: INV-FORT-014` 四架构结构、首次展开 `CoT`/`RAG` 并剥离切片与检索工程细节，待作者审阅确认）
-- [不 ready] **3.2 Compiler Source Mapping (Section 3.B)**（`L228–L250`：已按 `[R2-0]`、`[R2-13]`、`[R2-14]` 论证黑盒/全覆盖/关键词检索失效原因与编译器内探针零二进制扰动优势，待作者审阅确认）
-- [不 ready] **3.3 Programmatic Oracle Construction (Section 3.C)**（`L252–L317`：已按 `[R2-0]`、`[R2-5]`、`[R2-6]`、`[R2-13]`、`[R2-14]` 补入反转运行时崩溃语义、对比四种预言机方案、剥离 Go 语言样板并补齐离线 Gate 1 / Gate 2 双门控验证，待作者审阅确认）
-- [不 ready] **3.4 Agentic Directed Fuzzing (Section 3.D)**（`L319–L352`：已按 `[R2-0]`、`[R2-13]`–`[R2-15]` 点明 targeted fuzz drivers 测试防御假设与选择性防折叠优化两难，强化联合诊断与绑定 `m + FAIL` 约简放大，待作者审阅确认）
+### 3. Design of DeFenzz (`main.tex` `L183–L351`)
+- [不 ready] **3.0 Section 3 Overview & Architecture**（`L183–L187`：已重写为 7 句因果动机推导并重绘对齐 `figures/method-overview.pdf`，待作者审阅确认）
+- [不 ready] **3.1 Security Invariant Generation (Section 3.A)**（`L189–L226`：已对比替代方案、前置 `Listing 2: INV-FORT-014` 四架构结构、首次展开 `CoT`/`RAG` 并清零细碎举例，待作者审阅确认）
+- [不 ready] **3.2 Compiler Source Mapping (Section 3.B)**（`L228–L250`：已论证黑盒/全覆盖/关键词检索失效原因与编译器内探针零二进制扰动优势，待作者审阅确认）
+- [不 ready] **3.3 Programmatic Oracle Construction (Section 3.C)**（`L252–L315`：已理顺动态/静态检查器因果衔接、清零破折号与旁支举例，离线双门控下沉至 Section 4，待作者审阅确认）
+- [不 ready] **3.4 Agentic Directed Fuzzing (Section 3.D)**（`L317–L350`：已点明 targeted fuzz drivers 测试防御假设与选择性防折叠优化两难，强化联合诊断与绑定 `m + FAIL` 约简放大，待作者审阅确认）
 
-### 4. Implementation (`main.tex` `L354–L360`)
-- [不 ready] **Section 4 Implementation**（`L354–L360`：已配合 `[R2-0]`、`[R2-13]` 完整承接从 Section 3 下沉的单函数/`.md`/手册切片、BM25 下划线子词 + `sqlite-vec` 稠密向量 RRF、`clangd`/CodeQL/Tree-sitter MCP 工具与 `fortify#b4e1` 探针重写、Go gRPC/Podman/QEMU 四架构执行、Gate 1/2 实现及 C-Reduce 工程细节，待作者审阅确认）
+### 4. Implementation (`main.tex` `L352–L358`)
+- [不 ready] **Section 4 Implementation**（`L352–L358`：已完整承接单函数/`.md`/手册切片、BM25+`sqlite-vec` 稠密向量 RRF、MCP 工具与 `fortify#b4e1` 探针重写、Go gRPC/Podman/QEMU 四架构执行、离线 Gate 1/2 校验及 C-Reduce 工程细节，待作者审阅确认）
 
-### 5. Evaluation (`main.tex` `L362–L594`)
-- [不 ready] **5.1 Experimental Setup**（`L372–L385`：已对齐 GCC 16.2.0 / 17.0 trunk、LLVM 23.1.2、四类 64 位目标架构及跨架构补充目标、`F1`–`F6` 六大防御族、`deepseek-flash` + 16-vCPU Neoverse-N2 30 GiB 环境、5 个基线与 5 个消融变体，待作者审阅确认）
-- [不 ready] **5.2 RQ1: Silent Defense Bug Discovery and Oracle Funnel**（`L410–L486`：已对齐 `Table II` 111 新漏洞 / 30 确认 / 11 修复 / +5 标签与 20 非漏洞排除明细、重绘 `Fig. 3` 根因阶段与非 x86 严重度分布、核准 `Table III` 921 $\to$ 2,922 $\to$ 9,061 $\to$ 915 (906S/9D) 离线漏斗，并精选 GCC PR 128271 与 LLVM #237864 双案例，待作者审阅确认）
-- [不 ready] **5.3 RQ2: Comparison with Existing Compiler Fuzzers**（`L487–L522`：已新增 `Table IV` 与 `Fig. 4` 对比 YARPGen / UBfuzz / MetaMut / FeatureFuzz / Fuzz4All，分离 *Native* vs. *+Our Oracle* 预言机鸿沟与 9,061 探针分支覆盖鸿沟，论证 $1 \subset 3 \subset 8 \subset 14 \subset 18 \subset 111$ 严格超集与 93 个独占漏洞，待作者审阅确认）
-- [不 ready] **5.4 RQ3: Ablation Study**（`L523–L584`：已重绘双面板独立坐标轴 `Fig. 5` 与双作用域 `Table V`，覆盖全量 921 不变量 Check IR / RAG 消融与 41 不变量受控切片在线消融，严格剥离失真表述并对齐真实 Go Check IR 架构，待作者审阅确认）
-- [不 ready] **5.5 RQ4: Agent Telemetry, Cost, and Overhead**（`L585–L594`：已重绘概念级标签 `Fig. 6` 99,236 次工具调用分布并核准 `Table VI` 59,671 次调用、1,610.01M Token、92.4% KV 缓存命中率、$<2.0\%$ 编译开销与 $0.0\%$ 目标二进制开销，待作者审阅确认）
+### 5. Evaluation (`main.tex` `L360–L526`)
+- [不 ready] **5.1 Experimental Setup**（`L370–L374`：交代 GCC 16.2.0 / LLVM 23.1.2、9700X+32G 硬件、DeepSeek-V4.1-Flash `1017`、5 个对比基线的公平输入对齐，以及统一用 `DeFenzz` checker 套件判定，待作者审阅确认）
+- [不 ready] **5.2 Real-World Silent Defense Bugs (RQ1)**（`L400–L453`：`Table II` 111 新漏洞 / 30 确认 / 11 修复、`Fig. 3` 编译器与 ISA 分布（去主观严重度与非必要 `&`）、全章节双盲脱敏，以及 LoongArch64 canary 残留动态 checker + x86-64 非预期 `endbr64` 静态 checker 双案例，待作者审阅确认）
+- [不 ready] **5.3 Comparison with Existing Fuzzers (RQ2)**（`L471–L475`：配合 `Table III` 与 `Fig. 4`，去掉原生 oracle 对比列与 Native 标签，聚焦同一预言机下基线止步 18 个漏洞而 `DeFenzz` 独占 93 个的原因，待作者审阅确认）
+- [不 ready] **5.4 Ablation Study (RQ3)**（`L477–L504`：去掉 RAG 消融行，保留 `Table IV` 讲清离线 Check IR 与在线源映射/确定性检查器/受控编排的贡献，待作者审阅确认）
+- [不 ready] **5.5 Practicality, Cost, and Overhead (RQ4)**（`L506–L532`：保留单栏 `Table V`，聚焦离线一次性复用、目标二进制 0.0% 开销与每漏洞 5.5 分钟在线成本，待作者审阅确认）
 
-### 6. Discussion, Related Work, and Conclusion (`main.tex` `L594` 后待补齐)
+### 6. Discussion, Related Work, and Conclusion (`main.tex` `L527` 后待补齐)
 - [不 ready] 6.1 Discussion and Limitations（含人工核验边界、Token 成本及历史漏洞基准讨论 `[R2-7]`）
 - [不 ready] 6.2 Related Work
 - [不 ready] 6.3 Conclusion

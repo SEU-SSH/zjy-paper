@@ -3,9 +3,9 @@
 Generate publication-grade vector SVG & PDF figures for Section V (Evaluation):
 1. figures/eval-bug-char.{svg,pdf}: Two-panel characterization of the 111 silent defense bugs
    (a) Root-cause compilation stage (GCC vs. LLVM)
-   (b) Target ISA scope & security severity
+   (b) Target ISA scope split by compiler
 2. figures/eval-rq2-comparison.{svg,pdf}: Baseline comparison across 6 compiler fuzzers
-   (a) Silent defense bugs by family (F1-F6) under +Our Oracle & strict subset gap
+   (a) Silent defense bugs by family (F1-F6) under the shared DeFenzz checker suite
    (b) Defense branch coverage (%) across all four 64-bit target ISAs (/ 9,061 probes)
 3. figures/eval-ablation.{svg,pdf}: Two-scope controlled ablation study
    (a) Full campaign (921 invariants, 4 ISAs): Check IR & RAG transfer
@@ -69,12 +69,12 @@ def generate_bug_char():
     svg.append(f'<text x="{leg_a_x + 83}" y="31" fill="{C_SUB}" font-size="9.5" font-weight="600">LLVM (53)</text>')
 
     stages = [
-        ("Backend Target &amp; Frame", 27, 27),
-        ("Middle-End IR &amp; Passes", 12, 13),
-        ("Frontend &amp; Attributes", 9, 3),
-        ("Driver &amp; Option Lowering", 5, 5),
-        ("IPA &amp; LTO Serialization", 5, 2),
-        ("Defense Runtime Library", 0, 3),
+        ("Backend Lowering", 27, 27),
+        ("Middle-End Passes", 12, 13),
+        ("Frontend", 9, 3),
+        ("Option Lowering", 5, 5),
+        ("IPA and LTO", 5, 2),
+        ("Runtime Library", 0, 3),
     ]
 
     plot_top = 40
@@ -115,7 +115,7 @@ def generate_bug_char():
 
     svg.append(f'<line x1="448" y1="12" x2="448" y2="{H - 12}" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3,3"/>')
 
-    # ---------------- PANEL (b): Target ISA Scope & Severity ----------------
+    # ---------------- PANEL (b): Target ISA Scope (GCC vs. LLVM) ----------------
     bx_x = 608
     bx_w = 212
     max_b = 75.0
@@ -123,22 +123,20 @@ def generate_bug_char():
 
     svg.append(
         f'<text x="{bx_x + bx_w/2 - 18}" y="16" fill="{C_INK}" font-size="11.5" '
-        f'font-weight="700" text-anchor="middle">(b) Target ISA Scope &amp; Severity (n = 111)</text>'
+        f'font-weight="700" text-anchor="middle">(b) Target ISA Scope (n = 111)</text>'
     )
 
-    leg_b_x = bx_x - 2
-    svg.append(f'<rect x="{leg_b_x}" y="23" width="9" height="9" rx="1.5" fill="{C_HIGH}"/>')
-    svg.append(f'<text x="{leg_b_x + 12}" y="31" fill="{C_SUB}" font-size="9.2" font-weight="600">High (50)</text>')
-    svg.append(f'<rect x="{leg_b_x + 64}" y="23" width="9" height="9" rx="1.5" fill="{C_MED}"/>')
-    svg.append(f'<text x="{leg_b_x + 76}" y="31" fill="{C_SUB}" font-size="9.2" font-weight="600">Medium (39)</text>')
-    svg.append(f'<rect x="{leg_b_x + 142}" y="23" width="9" height="9" rx="1.5" fill="{C_LOW}" stroke="#94A3B8" stroke-width="0.6"/>')
-    svg.append(f'<text x="{leg_b_x + 154}" y="31" fill="{C_SUB}" font-size="9.2" font-weight="600">Low (22)</text>')
+    leg_b_x = bx_x + 4
+    svg.append(f'<rect x="{leg_b_x}" y="23" width="9" height="9" rx="1.5" fill="{C_GCC}"/>')
+    svg.append(f'<text x="{leg_b_x + 13}" y="31" fill="{C_SUB}" font-size="9.5" font-weight="600">GCC (58)</text>')
+    svg.append(f'<rect x="{leg_b_x + 70}" y="23" width="9" height="9" rx="1.5" fill="{C_LLVM}"/>')
+    svg.append(f'<text x="{leg_b_x + 83}" y="31" fill="{C_SUB}" font-size="9.5" font-weight="600">LLVM (53)</text>')
 
     scopes = [
-        ("Cross-ISA (&#8805;3 / Generic)", 21, 17, 9),
-        ("Non-x86 Only (ARM/RV/LA)", 14, 13, 8),
-        ("x86-64 / x86 Only", 12, 6, 4),
-        ("Dual-ISA (x86 + Non-x86)", 3, 3, 1),
+        ("Cross-ISA (&#8805;3 / Generic)", 28, 19, 0),
+        ("Non-x86 Only (ARM/RV/LA)", 17, 18, 0),
+        ("x86-64 / x86 Only", 12, 10, 0),
+        ("Dual-ISA (x86 + Non-x86)", 1, 6, 0),
     ]
 
     plot_bot_b = plot_top + len(scopes) * row_hb
@@ -164,11 +162,11 @@ def generate_bug_char():
 
         svg.append(f'<text x="{bx_x - 7}" y="{cy + 12.5}" fill="{C_INK}" font-size="9.8" font-weight="500" text-anchor="end">{label}</text>')
         if hw > 0:
-            svg.append(f'<rect x="{bx_x:.1f}" y="{cy}" width="{hw:.1f}" height="{bh}" fill="{C_HIGH}"/>')
+            svg.append(f'<rect x="{bx_x:.1f}" y="{cy}" width="{hw:.1f}" height="{bh}" fill="{C_GCC}"/>')
             if hw >= 16:
                 svg.append(f'<text x="{bx_x + hw/2:.1f}" y="{cy + 12.5}" fill="#FFFFFF" font-size="8.5" font-weight="700" text-anchor="middle">{h_val}</text>')
         if mw > 0:
-            svg.append(f'<rect x="{bx_x + hw:.1f}" y="{cy}" width="{mw:.1f}" height="{bh}" fill="{C_MED}"/>')
+            svg.append(f'<rect x="{bx_x + hw:.1f}" y="{cy}" width="{mw:.1f}" height="{bh}" fill="{C_LLVM}"/>')
             if mw >= 16:
                 svg.append(f'<text x="{bx_x + hw + mw/2:.1f}" y="{cy + 12.5}" fill="#FFFFFF" font-size="8.5" font-weight="700" text-anchor="middle">{m_val}</text>')
         if lw > 0:
@@ -217,7 +215,7 @@ def generate_rq2_comparison():
 
     svg.append(
         f'<text x="214" y="15.5" fill="{C_INK}" font-size="11.3" '
-        f'font-weight="700" text-anchor="middle">(a) Silent Bugs by Defense Family (+Our Oracle)</text>'
+        f'font-weight="700" text-anchor="middle">(a) Silent Bugs by Defense Family</text>'
     )
 
     # Uniformly spaced single-row legend for F1..F6
@@ -227,12 +225,12 @@ def generate_rq2_comparison():
         svg.append(f'<text x="{lx + 11}" y="30.5" fill="{C_SUB}" font-size="8.6" font-weight="600">{lbl}</text>')
 
     fuzzers_a = [
-        ("YARPGen",     [1, 0, 0, 0, 0, 0],     "1 (Native: 0)",     False),
-        ("UBfuzz",      [1, 0, 2, 0, 0, 0],     "3 (Native: 0*)",    False),
-        ("MetaMut",     [1, 1, 6, 0, 0, 0],     "8 (Native: 0)",     False),
-        ("FeatureFuzz", [2, 1, 7, 0, 1, 3],     "14 (Native: 2)",    False),
-        ("Fuzz4All",    [3, 1, 9, 1, 1, 3],     "18 (Native: 11)",   False),
-        ("DeFenzz",     [36, 21, 21, 10, 9, 14], "111 (Native: 111)", True),
+        ("YARPGen",     [1, 0, 0, 0, 0, 0],     "1",     False),
+        ("UBfuzz",      [1, 0, 2, 0, 0, 0],     "3",    False),
+        ("MetaMut",     [1, 1, 6, 0, 0, 0],     "8",     False),
+        ("FeatureFuzz", [2, 1, 7, 0, 1, 3],     "14",    False),
+        ("Fuzz4All",    [3, 1, 9, 1, 1, 3],     "18",   False),
+        ("DeFenzz",     [36, 21, 21, 10, 9, 14], "111", True),
     ]
 
     plot_bot_a = plot_top + len(fuzzers_a) * row_h + ours_extra_gap
@@ -276,7 +274,7 @@ def generate_rq2_comparison():
     )
     svg.append(
         f'<text x="{badge_x + badge_w/2:.1f}" y="{badge_y + 24.5:.1f}" fill="#78350F" font-size="7.9" '
-        f'font-weight="600" text-anchor="middle">Strict Superset of All 5 Baselines (0 Missed)</text>'
+        f'font-weight="600" text-anchor="middle">Covers Every Baseline Bug (0 Missed)</text>'
     )
 
     for idx, (name, counts, right_lbl, is_ours) in enumerate(fuzzers_a):
