@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-DeFuzz System Architecture Diagram Generator (Version 3 - Perfected Alignment)
+DeFenzz System Architecture Diagram Generator (Version 3 - Perfected Alignment)
 Generates an extraordinary, publication-grade vector SVG and PDF matching top security conference standards
 (IEEE S&P, USENIX Security, ACM CCS, NDSS).
 """
@@ -8,7 +8,7 @@ Generates an extraordinary, publication-grade vector SVG and PDF matching top se
 import os
 import xml.etree.ElementTree as ET
 
-def create_defuzz_svg():
+def create_defenzz_svg():
     width = 1880
     height = 1010
 
@@ -143,7 +143,7 @@ def create_defuzz_svg():
     svg.append('''
   <!-- Top System Header Banner -->
   <rect x="25" y="12" width="1830" height="46" rx="8" fill="#0F172A" filter="url(#shadow-md)"/>
-  <text x="45" y="41" fill="#F8FAFC" font-size="17" font-weight="700" letter-spacing="0.4">DeFuzz: Invariant-Guided Agentic Testing Framework for Compiler-Instrumented Defenses</text>
+  <text x="45" y="41" fill="#F8FAFC" font-size="17" font-weight="700" letter-spacing="0.4">DeFenzz: Invariant-Guided Agentic Testing Framework for Compiler-Instrumented Defenses</text>
   <rect x="1485" y="23" width="345" height="24" rx="12" fill="#1E293B"/>
   <text x="1500" y="39" fill="#38BDF8" font-size="11" font-weight="600">IEEE S&amp;P / USENIX Security Architecture</text>
 ''')
@@ -867,8 +867,8 @@ def create_defuzz_svg():
     return res
 
 if __name__ == '__main__':
-    svg_content = create_defuzz_svg()
-    out_svg = '/mnt/propagation/sources/research-defuzz-paper-0a9b3a25380dae02/figures/architecture.svg'
+    svg_content = create_defenzz_svg()
+    out_svg = '/mnt/propagation/sources/research-defenzz-paper-0a9b3a25380dae02/figures/architecture.svg'
     with open(out_svg, 'w', encoding='utf-8') as f:
         f.write(svg_content)
     print(f"Generated {out_svg} ({len(svg_content)} bytes)")

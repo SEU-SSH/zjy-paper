@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a high-prestige IEEE S&P / CCS style system overview diagram for DeFuzz
+Generate a high-prestige IEEE S&P / CCS style system overview diagram for DeFenzz
 (Worktree branch: style/overview-v2):
 - Elegant Pale Warm Yellow / Amber-Cream academic palette (zero tech-AI-blue).
 - Crisp vector outlines (zero SVG filter rasterization).
@@ -147,8 +147,8 @@ def generate_svg():
     <path d="M 29.5 11.5 L 36.5 14.2 L 36.5 21.5 C 36.5 26.2 33.2 29.5 29.5 31.2 C 25.8 29.5 22.5 26.2 22.5 21.5 L 22.5 14.2 Z" fill="#FFFFFF" stroke="{accent_dark}" stroke-width="1.15"/>
     <text x="29.5" y="24" font-size="8.5" font-weight="700" fill="{accent_dark}" text-anchor="middle">&#934;</text>
 
-    <text x="128" y="18.5" font-size="10.6" font-weight="700" fill="{text_color}" text-anchor="middle">Security Invariant Extraction</text>
-    <text x="128" y="33" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">CoT + RAG</text>
+    <text x="128" y="18.5" font-size="10.6" font-weight="700" fill="{text_color}" text-anchor="middle">Security Invariant Generation</text>
+    <text x="128" y="33" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Precondition &#183; Rule &#183; Signal</text>
     <use href="#bot-logo" x="213" y="5"/>
   </g>
   <line x1="51" y1="48" x2="92" y2="48" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
@@ -228,7 +228,7 @@ def generate_svg():
     <line x1="386" y1="70" x2="628" y2="70" stroke="#FDE68A" stroke-width="1.1"/>
     <rect x="386" y="26" width="242" height="220" rx="8" fill="none" stroke="{orc_stroke}" stroke-width="1.3"/>
     <text x="500" y="45.5" font-size="10.8" font-weight="700" fill="{text_color}" text-anchor="middle">Programmatic Oracle Construction</text>
-    <text x="500" y="60" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Formally Validated Checkers</text>
+    <text x="500" y="60" font-size="9.3" font-weight="400" fill="{subtext_color}" text-anchor="middle">Check IR + Target ISA Specs</text>
     <use href="#bot-logo" x="607" y="31"/>
   </g>
 
@@ -276,13 +276,13 @@ def generate_svg():
     <text x="131" y="23" font-size="10.5" font-weight="700" fill="{text_color}" text-anchor="middle">Dynamic Sandbox Checkers</text>
   </g>
 
-  <!-- 3c: Distinct Rounded Emerald Capsule for Zero LLM in Adjudication -->
+  <!-- 3c: Distinct Rounded Emerald Capsule for Deterministic Adjudication -->
   <g transform="translate(403, 190)">
     <rect x="0" y="0" width="208" height="32" rx="16" fill="{zllm_fill}" stroke="{zllm_stroke}" stroke-width="1.4"/>
     <!-- Deterministic Shield-Check Emblem -->
-    <path d="M 26 8 L 32.5 10.5 L 32.5 16.3 C 32.5 20.3 29.6 23.1 26 24.5 C 22.4 23.1 19.5 20.3 19.5 16.3 L 19.5 10.5 Z" fill="#FFFFFF" stroke="#15803D" stroke-width="1.25"/>
-    <polyline points="23.2,16.3 25.2,18.3 29,14" fill="none" stroke="#15803D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <text x="115" y="20" font-size="10.6" font-weight="700" fill="{zllm_text}" text-anchor="middle">Zero LLM in Adjudication</text>
+    <path d="M 24 8 L 30.5 10.5 L 30.5 16.3 C 30.5 20.3 27.6 23.1 24 24.5 C 20.4 23.1 17.5 20.3 17.5 16.3 L 17.5 10.5 Z" fill="#FFFFFF" stroke="#15803D" stroke-width="1.25"/>
+    <polyline points="21.2,16.3 23.2,18.3 27,14" fill="none" stroke="#15803D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="115" y="20" font-size="10.4" font-weight="700" fill="{zllm_text}" text-anchor="middle">Deterministic Adjudication</text>
   </g>
 
   <line x1="328" y1="48" x2="384" y2="48" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
@@ -367,7 +367,7 @@ def generate_svg():
   <text x="828" y="85" font-size="9.4" font-weight="500" fill="{edge_color}">Seeds</text>
 
   <line x1="781" y1="134" x2="781" y2="159" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
-  <text x="774" y="150" font-size="9.2" font-weight="500" fill="{edge_color}" text-anchor="end">Coverage Delta</text>
+  <text x="774" y="150" font-size="9.2" font-weight="500" fill="{edge_color}" text-anchor="end">Trace &amp; Verdict</text>
 
   <line x1="861" y1="161" x2="861" y2="136" stroke="#B45309" stroke-width="1.25" marker-end="url(#arr-amber)"/>
   <text x="868" y="150" font-size="9.2" font-weight="600" fill="#B45309">Mutated Seeds</text>
@@ -378,7 +378,7 @@ def generate_svg():
     # =========================================================================
     svg.append(f'''
   <path d="M 211 246 L 211 268 L 821 268 L 821 248" fill="none" stroke="#1C1917" stroke-width="1.2" marker-end="url(#arr)"/>
-  <text x="516" y="262" font-size="9.5" font-weight="500" fill="{edge_color}" text-anchor="middle">Call Graph &amp; Mapped Branches</text>
+  <text x="516" y="262" font-size="9.5" font-weight="500" fill="{edge_color}" text-anchor="middle">Mapped Branches &amp; Compile-Time Probes</text>
 ''')
 
     # =========================================================================

@@ -135,7 +135,7 @@ def create_fig4_svg(output_base="figures/method-source-mapping"):
     <text x="12" y="22" fill="#C2410C" font-size="11.5" font-weight="700">Lightweight UID Log Probes</text>
     
     <rect x="12" y="32" width="{c3_w - 52}" height="32" rx="4" fill="#FFEDD5" stroke="#FDBA74" stroke-width="1"/>
-    <text x="20" y="52" fill="#9A3412" font-size="10.5" font-weight="700" font-family="monospace">DEFUZZ_LOG("SP#a3f2:hit", slot)</text>
+    <text x="20" y="52" fill="#9A3412" font-size="10.5" font-weight="700" font-family="monospace">DEFENZZ_LOG("SP#a3f2:hit", slot)</text>
 
     <text x="12" y="80" fill="#475569" font-size="9.5">&#x2022; Zero runtime overhead in target binary</text>
     <text x="12" y="94" fill="#475569" font-size="9.5">&#x2022; Uniquely tracks internal defense paths</text>

@@ -213,7 +213,7 @@
     
     <!-- Title Text -->
     <text x="24" y="32" font-size="18" font-weight="800" fill="#FFFFFF" letter-spacing="0.2">
-      DeFuzz: Invariant-Guided Testing &amp; Self-Healing Framework for Compiler Defenses
+      DeFenzz: Invariant-Guided Testing &amp; Self-Healing Framework for Compiler Defenses
     </text>
     
     <!-- Badges on the right -->
@@ -411,7 +411,7 @@
       <g transform="translate(8, 30)">
         <rect x="0" y="0" width="330" height="70" rx="5" fill="#042F2E"/>
         <text x="10" y="18" font-size="9.5" font-weight="600" fill="#FDE047" class="code-text">// Injected Unique ID Prefix Logging</text>
-        <text x="10" y="35" font-size="9" font-weight="500" fill="#A5F3FC" class="code-text">fprintf(stderr, "[DEFUZZ-LOG-SP-042] frame: %ld
+        <text x="10" y="35" font-size="9" font-weight="500" fill="#A5F3FC" class="code-text">fprintf(stderr, "[DEFENZZ-LOG-SP-042] frame: %ld
 ",</text>
         <text x="10" y="50" font-size="9" font-weight="500" fill="#A5F3FC" class="code-text">        frame.canary_offset);</text>
       </g>
@@ -647,14 +647,14 @@
           <rect x="0" y="0" width="256" height="66" rx="4" fill="#0F172A"/>
           <text x="8" y="16" font-size="10" font-weight="700" fill="#38BDF8">GCC 13-17 Instrumented</text>
           <text x="8" y="32" font-size="9" font-weight="500" fill="#94A3B8" class="code-text">-fstack-protector -fstack-usage</text>
-          <text x="8" y="52" font-size="9" font-weight="600" fill="#4ADE80" class="code-text">Emits: [DEFUZZ-LOG-SP-042]</text>
+          <text x="8" y="52" font-size="9" font-weight="600" fill="#4ADE80" class="code-text">Emits: [DEFENZZ-LOG-SP-042]</text>
         </g>
 
         <g transform="translate(268, 0)">
           <rect x="0" y="0" width="256" height="66" rx="4" fill="#0F172A"/>
           <text x="8" y="16" font-size="10" font-weight="700" fill="#A78BFA">LLVM 15-19 Instrumented</text>
           <text x="8" y="32" font-size="9" font-weight="500" fill="#94A3B8" class="code-text">-fstack-size-section -Rpass-missed</text>
-          <text x="8" y="52" font-size="9" font-weight="600" fill="#4ADE80" class="code-text">Emits: [DEFUZZ-LOG-LLVM-019]</text>
+          <text x="8" y="52" font-size="9" font-weight="600" fill="#4ADE80" class="code-text">Emits: [DEFENZZ-LOG-LLVM-019]</text>
         </g>
       </g>
     </g>
