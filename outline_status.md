@@ -9,7 +9,7 @@
 > - **`[ready]`（`main.tex` `L1–L182`，Motivation 及之前全部章节已按大佬两轮意见修改定稿并锁定）**：
 >   1. **Title & Abstract（标题与摘要，`L103–L117`）**
 >   2. **Section 1 Introduction（第一章 引言，`L119–L141`）**
->   3. **Section 2 Motivation（第二章 动机与背景，`L143–L182`）**
+>   3. **Section 2 Background and Motivation（第二章 背景与动机，`L143–L182`）**
 > - **`[不 ready]`（`main.tex` `L183` 起所有后续章节）**：
 >   - Section 3 Design（`L183–L351`）与 Section 4 Implementation（`L352–L358`）已完成精简打磨并推送，Section 5 Evaluation（`L360–L531`）已完成叙事化减脂重写、双盲脱敏与图表更新，均待作者审阅确认后升级为 `[ready]`；待补齐的 Discussion / Related Work / Conclusion 处于 `不 ready` 状态。
 
@@ -29,8 +29,8 @@
   - [ready] 1.5 Three Challenges & `Check IR` Accuracy Grounding (`L129`, `[R1-10]`, `[R1-11]`, `[R2-5]`, `[R2-6]`)
   - [ready] 1.6 Evaluation Summary & Four Contributions with Compiler Versions (`L131–L141`, `[R1-10]`, `[R2-7]`)
 
-### 2. Motivation (`main.tex` `L143–L182`)
-- [ready] **Section 2 Motivation（全章锁定）**（已完整落实大佬两轮批注 `[R2-8]`–`[R2-10]` 并对齐 `AGENTS.md` 规范）
+### 2. Background and Motivation (`main.tex` `L143–L182`)
+- [ready] **Section 2 Background and Motivation（全章锁定）**（已完整落实大佬两轮批注 `[R2-8]`–`[R2-10]` 并对齐 `AGENTS.md` 规范）
   - [ready] 2.1 Compiler-Instrumented Defenses (`L145–L149`，明确保护 `C and C++ systems software` 抵御 `unknown or unpatched vulnerabilities`，统一 `silently weakened or broken`，回应 `[R2-8]`、`[R2-9]`)
   - [ready] 2.2 Motivating Example (`L151–L173`，GCC `_FORTIFY_SOURCE` 潜伏 14 年静默放宽漏洞匿名化解析与代码块排版)
   - [ready] 2.3 Limitations of Existing Approaches (`L175–L181`，显式点明良性执行期间缓解机制从不触发 `[R2-10]`，并对齐静态检查/动态执行确定性 Oracle 表述)
