@@ -43,7 +43,7 @@
 - [不 ready] **3.4 Agentic Directed Fuzzing (Section 3.D)**（`L317–L350`：已点明 targeted fuzz drivers 测试防御假设与选择性防折叠优化两难，强化联合诊断与绑定 `m + FAIL` 约简放大，待作者审阅确认）
 
 ### 4. Implementation (`main.tex` `L352–L358`)
-- [不 ready] **Section 4 Implementation**（`L352–L358`：已完整承接单函数/`.md`/手册切片、BM25+`sqlite-vec` 稠密向量 RRF、MCP 工具与 `fortify#b4e1` 探针重写、Go gRPC/Podman/QEMU 四架构执行、离线 Gate 1/2 校验及 C-Reduce 工程细节，待作者审阅确认）
+- [不 ready] **Section 4 Implementation**（`L352–L358`：已补充核心框架 40.2K 行代码量明细（27.0K Python / 12.5K Go / 0.7K TypeScript），并完整承接单函数/`.md`/手册切片、BM25+`sqlite-vec` 稠密向量 RRF、MCP 工具与 `fortify#b4e1` 探针重写、Go gRPC/Podman/QEMU 四架构执行、离线 Gate 1/2 校验及 C-Reduce 工程细节，待作者审阅确认）
 
 ### 5. Evaluation (`main.tex` `L360–L526`)
 - [不 ready] **5.1 Experimental Setup**（`L370–L374`：交代 GCC 16.2.0 / LLVM 23.1.2、9700X+32G 硬件、DeepSeek-V4.1-Flash `1017`、5 个对比基线的公平输入对齐，以及统一用 `DeFenzz` checker 套件判定，待作者审阅确认）
