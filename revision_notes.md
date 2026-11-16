@@ -1,8 +1,10 @@
-# DeFuzz 论文修订意见与写作参考指南 (Revision Notes & Writing Guide)
+# DeFenzz 论文修订意见与写作参考指南 (Revision Notes & Writing Guide)
 
 > **文档说明**：本文档汇总并整理了围绕 IEEE S&P (Oakland) 顶级安全会议标准进行的多次导师指导、线上研讨以及微信专项讨论（包括 8月31日会议录音、9月4日截图意见、9月8日与9月11日修改纪要）。
 > 
-> **重要状态声明**：**摘要（Abstract）与第三章概览（Section 3 Overview）现已正式精校定稿并锁定（Ready），禁止随意修改，作为全篇正文统一的最高权威参考基准**。在全篇进度追踪中，目前仅这两个部分处于 `ready` 状态，其余章节均为 `不 ready`。后续所有章节撰写、修改与对齐必须严格以这两个精校基准为参照。
+> **重要状态声明（2026-11-14 更新，以 [`outline_status.md`](./outline_status.md) 与 [`mat_comments_list.md`](./mat_comments_list.md) 为最新权威准绳）**：
+> - **`Title`、`Abstract`、`Section 1 Introduction` 与 `Section 2 Motivation`（`main.tex` `L1–L182`）现已结合大佬（Mat）两轮批注全部修改完毕并正式锁定（`[ready]`）**，未经显式指示禁止改动。
+> - **`Section 3 Design` 及之后章节（`main.tex` `L183+`）当前处于 `[不 ready]` 状态**，待结合大佬第二轮批注（`[R2-11]`–`[R2-15]`）与 [`AGENTS.md`](./AGENTS.md) 中的 `Check IR` 技术事实规范继续修订。（注：下文早期 Section 3 Overview 范本仅供句式节奏参考，具体技术表述以 `AGENTS.md` 与 `mat_comments_list.md` 为准。）
 
 ---
 
@@ -44,18 +46,18 @@ on AArch64. Such failures expose a fundamental \textbf{oracle gap}: conventional
 testing only check whether a program produces correct outputs, making them completely blind when 
 compilers silently weaken or break a defense.
 
-In this paper, we present \textbf{\textsc{DeFuzz}}, an invariant-directed agentic framework for discovering 
-silent failures in compiler-instrumented defenses. \textsc{DeFuzz} first extracts formal security invariants 
+In this paper, we present \textbf{\textsc{DeFenzz}}, an invariant-directed agentic framework for discovering 
+silent failures in compiler-instrumented defenses. \textsc{DeFenzz} first extracts formal security invariants 
 from compiler source code, ISA specifications, and historical bug fixes using a hybrid CoT and RAG pipeline. 
 It then maps these invariants to compiler passes and decision branches, locating where defenses are implemented 
-and controlled. To detect violations, \textsc{DeFuzz} turns this mapped logic into programmatic bug oracles, 
+and controlled. To detect violations, \textsc{DeFenzz} turns this mapped logic into programmatic bug oracles, 
 implemented as static and dynamic checkers across target ISAs. All bug verdicts are decided strictly by these checkers, 
 with \textbf{zero LLM involvement in bug adjudication}. Guided by the mapped compiler locations, specialized 
 LLM agents perform directed fuzzing to hit targeted defense branches, synthesizing and mutating seeds to trigger 
-invariant violations under oracle evaluation. We evaluated \textsc{DeFuzz} on GCC and LLVM across multiple architectures. 
-\textsc{DeFuzz} discovered \textbf{\tbd{N} previously unknown silent failures in compiler-instrumented defenses}, 
+invariant violations under oracle evaluation. We evaluated \textsc{DeFenzz} on GCC and LLVM across multiple architectures. 
+\textsc{DeFenzz} discovered \textbf{\tbd{N} previously unknown silent failures in compiler-instrumented defenses}, 
 of which \textbf{\tbd{M} have been confirmed upstream}. Some of these bugs were rated as high-severity vulnerabilities. 
-These results show that \textsc{DeFuzz} effectively uncovers critical silent defense bugs that evade existing compiler 
+These results show that \textsc{DeFenzz} effectively uncovers critical silent defense bugs that evade existing compiler 
 testing techniques.
 ```
 
@@ -64,16 +66,16 @@ testing techniques.
 > **状态**：`[ready]`（以最新 `main.tex` 为准，确立全篇技术体系的四步工作流骨架）
 
 ```latex
-\section{Design of DeFuzz}\label{sec:design}\label{sec:overview}
+\section{Design of DeFenzz}\label{sec:design}\label{sec:overview}
 
-\wincfig{method-overview}{Overview of \textsc{DeFuzz}. The framework operates across four core steps: 
+\wincfig{method-overview}{Overview of \textsc{DeFenzz}. The framework operates across four core steps: 
 (1) extracting security invariants from compiler corpora and historical defects via a hybrid CoT and RAG pipeline; 
 (2) mapping invariant logic to compiler passes and decision branches; 
 (3) constructing programmatic static and dynamic oracles across target ISAs; and 
 (4) performing agentic directed fuzzing, where a generator agent synthesizes probe seeds and a feedback agent steers 
 iterative exploration under programmatic oracle verification.}
 
-In this section, we present the design of \textsc{DeFuzz}, an invariant-directed framework for discovering 
+In this section, we present the design of \textsc{DeFenzz}, an invariant-directed framework for discovering 
 silent failures in compiler-instrumented defenses. Figure~\ref{fig:method-overview} illustrates its overall 
 workflow, which consists of four core steps: invariant generation, compiler source mapping, programmatic oracle 
 construction, and agentic directed fuzzing. First, we extract formal security invariants from compiler corpora and 
@@ -108,7 +110,7 @@ and verifying each candidate. We discuss each step in detail in the following su
 [讨论原稿要点]
 1. compiler-instrumented defense
 2. including 改少一点
-3. 标题重构下 -> DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses
+3. 标题重构下 -> DeFenzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses
 4. 体现下 invariants 从哪来
 5. 不要 on a particular backend 了
 6. 摘要不要解释太多原因，直接讲 cve 后果
@@ -134,7 +136,7 @@ and verifying each candidate. We discuss each step in detail in the following su
   - 传统的语法引导或随机变异 Fuzzing（如 Csmith、YARPGen）完全是盲目的，其变异算子**无法感知并生成能够针对性触碰安全不变量边界的特定语义结构代码**，生成的测试用例绝大多数在前端或早早期就被 DCE（死代码消除）或常规优化剔除。
 * **自由运行 Agent（Free-Running Agent）的缺陷**：
   - 若单纯让 LLM 自主写代码并自主判断是否有 Bug，会产生海量的**幻觉（Hallucination）与不可复现性**，安全顶会审稿人对此极度反感。
-* **DeFuzz 的 Agent 定位与闭环价值**：
+* **DeFenzz 的 Agent 定位与闭环价值**：
   - **生成端**：利用 LLM 的代码理解能力，以 Invariant 违例条件为引导，合成具备 Anti-DCE 探针和深层底层语义结构的种子输入；
   - **判定端**：**LLM 绝不参与 Bug 裁决**！裁决完全交由确定性的机器 Checker；
   - **反馈端**：Feedback Agent 根据编译日志、汇编指令模式和覆盖率反馈，指导下一轮变异与生成。
@@ -206,7 +208,7 @@ flowchart LR
    这些防御在后端优化与指令下沉过程中会**静默失效**。程序表现出正常的功能语义，但底层的安全保护契约已被完全剥离或绕过（以 CVE-2023-4039 为标志性事实支撑）。
 3. **Paragraph 3: Research Gap & Fundamental Bottlenecks**  
    现有基于 Crash 和差异测试（Differential Testing）的编译器模糊测试无法检测静默防御破坏（Oracle Gap）；而静态分析由于跨架构后端 lowering 的复杂性无法有效建模。
-4. **Paragraph 4: Key Insights & Our Approach (DeFuzz)**  
+4. **Paragraph 4: Key Insights & Our Approach (DeFenzz)**  
    核心思路：将底层防御契约形式化为不变量 Oracle，并引入 Invariant-Directed Agentic Loop，利用 Agent 合成具备特定底层语义结构的探针输入。
 5. **Paragraph 5: Summary of Results**  
    实证结果总结：发现漏洞数量、CVE 编号、上游确认情况及对编译器生态的保护价值。

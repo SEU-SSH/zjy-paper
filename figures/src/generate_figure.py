@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses
+DeFenzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses
 Main Method Overview Architecture Diagram Generator (IEEE S&P / USENIX Security Grade)
 V3: Clean separation of Decision Diamond, no overlap on Checker Oracle Evaluation header,
     pixel-perfect alignment of all labels, arrows, and code blocks.
@@ -510,10 +510,10 @@ def build_figure():
 
       <text x="12" y="34" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#E2E8F0">void expand_stack_protection() {{</text>
       <rect x="6" y="40" width="328" height="17" fill="#1E293B" rx="3"/>
-      <text x="24" y="52" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">  DEFUZZ_LOG("SP#a3f2", has_vla, off);</text>
+      <text x="24" y="52" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">  DEFENZZ_LOG("SP#a3f2", has_vla, off);</text>
       <text x="24" y="69" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#93C5FD">  if (has_vla || has_vla_ptr) {{</text>
       <rect x="6" y="75" width="328" height="17" fill="#1E293B" rx="3"/>
-      <text x="36" y="87" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">    DEFUZZ_LOG("SP#a3f2:hit", slot);</text>
+      <text x="36" y="87" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">    DEFENZZ_LOG("SP#a3f2:hit", slot);</text>
       <text x="36" y="103" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#E2E8F0">    emit_canary_prologue();</text>
       <text x="24" y="119" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#93C5FD">  }}</text>
       <text x="12" y="125" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#E2E8F0">}}</text>
@@ -669,7 +669,7 @@ def build_figure():
       <text x="78" y="19" font-size="11.5" font-weight="800" fill="{P2_HEADER}">Compile with IC (GCC / LLVM)</text>
       <text x="78" y="34" font-size="9.5" fill="{INK_MUTED}">Emits assembly, IR &amp; unique UID log trace</text>
       <rect x="78" y="42" width="226" height="20" rx="4" fill="#FEF3C7" stroke="#D97706" stroke-width="0.8"/>
-      <text x="191" y="56" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700" fill="#92400E" text-anchor="middle">UID Log: DEFUZZ_LOG("SP#a3f2:hit")</text>
+      <text x="191" y="56" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700" fill="#92400E" text-anchor="middle">UID Log: DEFENZZ_LOG("SP#a3f2:hit")</text>
     </g>
 
     <!-- Dual Checker Oracle Evaluation (Header elevated to eliminate overlap) -->

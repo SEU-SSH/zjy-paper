@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""DeFuzz — main method-overview figure.
+"""DeFenzz — main method-overview figure.
 
 Style: IEEE S&P academic, restrained pastel palette, iconography per node.
 Renders one SVG (2:1) that can be converted to PDF via
@@ -386,9 +386,9 @@ parts.append(rect(code_x, code_y, box_w-44, 92, fill="#0F172A", stroke=AMBER_LIN
 # code lines
 lines_code = [
     ("void  emit_stack_prot ( ) {", "#E5E7EB"),
-    ('  DEFUZZ_TAG(\"SPGuard#a3f2\");', "#FCD34D"),
+    ('  DEFENZZ_TAG(\"SPGuard#a3f2\");', "#FCD34D"),
     ("  build_canary(&frame);", "#93C5FD"),
-    ('  DEFUZZ_TAG(\"SPGuard#a3f2:hit\");', "#FCD34D"),
+    ('  DEFENZZ_TAG(\"SPGuard#a3f2:hit\");', "#FCD34D"),
     ("  emit_epilogue_check();  }", "#E5E7EB"),
 ]
 for i,(ln,c) in enumerate(lines_code):
@@ -614,7 +614,7 @@ parts.append(text(orch_x+105, orch_y+18, "Orchestrator", size=12, weight="700", 
 parts.append(text(orch_x+105, orch_y+34, "locks one ϕ  ·  equal time budget", size=10.5, fill=INK_SOFT, anchor="middle"))
 
 # Big title at top — pushed down a bit so the red top-corridor label sits cleanly above it
-parts.append(text(W/2, 55, "DeFuzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses",
+parts.append(text(W/2, 55, "DeFenzz: Invariant-Guided Agentic Testing of Compiler-Instrumented Defenses",
                   size=20, weight="700", fill=INK, anchor="middle"))
 
 # Legend (bottom-left corner to avoid the centered bug PoC card)

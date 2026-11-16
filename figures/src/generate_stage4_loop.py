@@ -249,11 +249,11 @@ def create_stage4_svg(output_path="figures/method-agentic-loop.svg"):
       <circle cx="36" cy="12" r="3.5" fill="#10B981"/>
       <text x="50" y="16" font-family="monospace" font-size="9.5" fill="#94A3B8">GCC_INST Execution Stream (UID Trace)</text>
 
-      <text x="12" y="42" font-family="monospace" font-size="9" fill="#4ADE80">[DEFUZZ_LOG:SP#a3f2:hit] expand_stack_protection()</text>
+      <text x="12" y="42" font-family="monospace" font-size="9" fill="#4ADE80">[DEFENZZ_LOG:SP#a3f2:hit] expand_stack_protection()</text>
       <text x="12" y="58" font-family="monospace" font-size="9" fill="#38BDF8">  has_vla=1, stack_protect_decl=1, canary_slot=0x30</text>
-      <text x="12" y="74" font-family="monospace" font-size="9" fill="#FDE047">[DEFUZZ_LOG:SP#b109:hit] aarch64_layout_frame()</text>
+      <text x="12" y="74" font-family="monospace" font-size="9" fill="#FDE047">[DEFENZZ_LOG:SP#b109:hit] aarch64_layout_frame()</text>
       <text x="12" y="90" font-family="monospace" font-size="9" fill="#F472B6">  LR_offset=0x20, canary_offset=0x38 (ALERT: LR &lt; canary!)</text>
-      <text x="12" y="108" font-family="monospace" font-size="9" fill="#A78BFA">[DEFUZZ_BIN] Compiled Target Binary: ./a.out (deterministic)</text>
+      <text x="12" y="108" font-family="monospace" font-size="9" fill="#A78BFA">[DEFENZZ_BIN] Compiled Target Binary: ./a.out (deterministic)</text>
       <text x="12" y="126" font-family="monospace" font-size="8.5" fill="#94A3B8">&gt;&gt; Streamed directly to Dual Deterministic Oracle</text>
     </g>
   </g>

@@ -1,6 +1,6 @@
-# DeFuzz 论文修改意见清单
+# DeFenzz 论文修改意见清单
 
-> **来源文档**：[DeFuzz 论文 - 飞书文档](https://dxqswftp8yb.feishu.cn/wiki/YB1Jwb2pKiMXTvk8LEYcPESOnxb?from=from_copylink)  
+> **来源文档**：[DeFenzz 论文 - 飞书文档](https://dxqswftp8yb.feishu.cn/wiki/YB1Jwb2pKiMXTvk8LEYcPESOnxb?from=from_copylink)  
 > **内容概要**：针对 Abstract 与 Introduction 的 19 条具体批注与修改要求。
 
 ---
@@ -73,7 +73,7 @@
   - **修改要求**：没有回到根本上。核心其实是想说“编译器有 bug，所以我们不能信任它作为 ground truth”。
 
 - **位置**：Introduction 第 5 段 (Challenge 1)
-  - **原文**：`Instead, DeFuzz extracts invariants from compiler source code, ISA specifications, and historical bug fixes using a hybrid CoT a`
+  - **原文**：`Instead, DeFenzz extracts invariants from compiler source code, ISA specifications, and historical bug fixes using a hybrid CoT a`
   - **修改要求**：缺少 insight idea，太流水（不能只列技术流程，要有核心洞见）。
 
 - **位置**：Introduction 第 5 段 (Challenge 2)

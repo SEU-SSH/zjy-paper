@@ -302,10 +302,10 @@
 
       <text x="10" y="36" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#E2E8F0">void expand_stack_protection() {</text>
       <rect x="6" y="42" width="328" height="18" fill="#1E293B" rx="3"/>
-      <text x="10" y="55" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">  DEFUZZ_LOG("SP#a3f2", has_vla, off);</text>
+      <text x="10" y="55" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">  DEFENZZ_LOG("SP#a3f2", has_vla, off);</text>
       <text x="10" y="74" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#93C5FD">  if (has_vla || has_vla_ptr) {</text>
       <rect x="6" y="80" width="328" height="18" fill="#1E293B" rx="3"/>
-      <text x="10" y="93" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">    DEFUZZ_LOG("SP#a3f2:hit", canary_slot);</text>
+      <text x="10" y="93" font-family="'JetBrains Mono', monospace" font-size="9.5" font-weight="700" fill="#FCD34D">    DEFENZZ_LOG("SP#a3f2:hit", canary_slot);</text>
       <text x="10" y="112" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#E2E8F0">  } emit_canary_prologue(); }</text>
     </g>
 
