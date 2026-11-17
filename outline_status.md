@@ -11,7 +11,7 @@
 >   2. **Section 1 Introduction（第一章 引言，`L119–L141`）**
 >   3. **Section 2 Background and Motivation（第二章 背景与动机，`L143–L182`）**
 > - **`[不 ready]`（`main.tex` `L183` 起所有后续章节）**：
->   - Section 3 Design（`L183–L351`）与 Section 4 Implementation（`L352–L358`）已完成精简打磨并推送，Section 5 Evaluation（`L360–L531`）已完成叙事化减脂重写、双盲脱敏与图表更新，均待作者审阅确认后升级为 `[ready]`；待补齐的 Discussion / Related Work / Conclusion 处于 `不 ready` 状态。
+>   - Section 3 Design（`L183–L351`）、Section 4 Implementation（`L352–L358`）、Section 5 Evaluation（`L360–L531`）、Section 6 Discussion（`L532–L545`）、Section 7 Related Work（`L546–L576`）与 Section 8 Conclusion（`L578–L580`）均已完成全文初稿与 `conference,compsoc` 12 页排版，均待作者审阅确认后升级为 `[ready]`。
 
 ---
 
@@ -52,7 +52,7 @@
 - [不 ready] **5.4 Ablation Study (RQ3)**（`L477–L504`：去掉 RAG 消融行，保留 `Table IV` 讲清离线 Check IR 与在线源映射/确定性检查器/受控编排的贡献，待作者审阅确认）
 - [不 ready] **5.5 Practicality, Cost, and Overhead (RQ4)**（`L506–L532`：保留单栏 `Table V`，聚焦离线一次性复用、目标二进制 0.0% 开销与每漏洞 5.5 分钟在线成本，待作者审阅确认）
 
-### 6. Discussion, Related Work, and Conclusion (`main.tex` `L527` 后待补齐)
-- [不 ready] 6.1 Discussion and Limitations（含人工核验边界、Token 成本及历史漏洞基准讨论 `[R2-7]`）
-- [不 ready] 6.2 Related Work
-- [不 ready] 6.3 Conclusion
+### 6. Discussion, Related Work, and Conclusion (`main.tex` `L532–L577`)
+- [不 ready] **Section 6 Discussion**（`L532–L542`：三段——Cross-Defense RAG Transfer 跨防御历史经验迁移与发现、Generalizing to Other Compilers and Architectures 跨编译器与新架构泛化、Limitations 聚焦无法自动区分编译器漏洞与文档/注释笔误或滞后及未文档化假设与单次用户态观测边界，待作者审阅确认）
+- [不 ready] **Section 7 Related Work**（`L543–L573`：编译器测试与防御验证、定向与 LLM 辅助 Fuzzing、规范提取与 Checker 生成三段对照，待作者审阅确认）
+- [不 ready] **Section 8 Conclusion**（`L575–L577`：单段 6 句闭环收束全篇问题、机制与 111/30/11 实证成果，待作者审阅确认）
