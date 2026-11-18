@@ -666,7 +666,7 @@ Compilers insert mitigations such as stack canaries~\cite{cowan1998stackguard}, 
 However, compilation also opens a correctness-security gap~\cite{dsilva2015correctness}, where passes preserve standard language semantics while silently breaking security guarantees.
 Assuming programs have no undefined behavior, optimizations can strip safety checks~\cite{wang2013stack}, remove dead secret-scrubbing stores~\cite{yang2017deadstore}, or alter low-level side effects~\cite{simon2018whatyouc}.
 Prior studies catalog such compiler-introduced security bugs across GCC and Clang~\cite{silentbugs2023}, and WarpAttack~\cite{xu2023warpattack} shows that compiler-generated double-fetches can bypass CFI.
-Recent studies show that compilers still break constant-time code~\cite{schneider2025breaking}, emit redundant memory accesses that widen attack surfaces~\cite{xu2026clower}, and leave CFI open to bypasses~\cite{bajo2025await,zhang2026sack}.
+Recent studies show that compilers still break constant-time code~\cite{schneider2025breaking}, emit redundant memory accesses that widen attack surfaces~\cite{xu2026clower}, and leave CFI open to bypasses~\cite{bajo2025await}.
 To counter side channels, specialized tools check or rewrite programs against speculative leaks~\cite{guarnieri2020spectector,oleksenko2020specfuzz,vassena2021blade} and timing variations~\cite{daniel2020binsec,jiang2026vect}.
 Whereas these works study specific optimization hazards or harden individual threat classes, \textsc{DeFenzz} systematically tests whether compilers preserve their own instrumented defenses.
 
