@@ -661,14 +661,22 @@ To avoid trusting buggy compiler code, \textsc{DeFenzz} treats manuals and devel
 
 \section{Related Work}\label{sec:related-work}
 
-\noindent\textbf{Compiler Testing and Defense Validation.}
+\noindent\textbf{Compiler Security.}
+Compilers insert mitigations such as stack canaries~\cite{cowan1998stackguard}, control-flow integrity~\cite{abadi2009cfi,tice2014forwardcfi}, shadow stacks~\cite{kuznetsov2014cpi,burow2019shadowstacks}, and sanitizers~\cite{serebryany2012asan,marini2025qmsan} to harden software against attack.
+However, compilation also opens a correctness-security gap~\cite{dsilva2015correctness}, where passes preserve standard language semantics while silently breaking security guarantees.
+Assuming programs have no undefined behavior, optimizations can strip safety checks~\cite{wang2013stack}, remove dead secret-scrubbing stores~\cite{yang2017deadstore}, or alter low-level side effects~\cite{simon2018whatyouc}.
+Prior studies catalog such compiler-introduced security bugs across GCC and Clang~\cite{silentbugs2023}, and WarpAttack~\cite{xu2023warpattack} shows that compiler-generated double-fetches can bypass CFI.
+Recent studies show that compilers still break constant-time code~\cite{schneider2025breaking}, emit redundant memory accesses that widen attack surfaces~\cite{xu2026clower}, and leave CFI open to bypasses~\cite{bajo2025await,zhang2026sack}.
+To counter side channels, specialized tools check or rewrite programs against speculative leaks~\cite{guarnieri2020spectector,oleksenko2020specfuzz,vassena2021blade} and timing variations~\cite{daniel2020binsec,jiang2026vect}.
+Whereas these works study specific optimization hazards or harden individual threat classes, \textsc{DeFenzz} systematically tests whether compilers preserve their own instrumented defenses.
+
+\medskip\noindent\textbf{Compiler Testing and Verification.}
 Conventional compiler testing checks whether compilation preserves standard program semantics on valid inputs.
 Csmith~\cite{yang2011csmith}, YARPGen~\cite{livinskii2020yarpgen,livinskii2023loops}, EMI~\cite{le2014emi}, and Hermes~\cite{sun2016hermes} expose miscompilations through crashes or output disagreements across builds.
 CompCert~\cite{leroy2009compcert} establishes semantic preservation in Coq, while Alive2~\cite{lopes2021alive2} checks bounded refinement across LLVM IR transformations.
-However, a silently weakened mitigation still produces normal outputs on benign inputs, leaving functional oracles and IR refinement blind to broken protections~\cite{simon2018whatyouc,silentbugs2023}.
-Prior studies show that optimizations assuming no undefined behavior can strip safety checks~\cite{wang2013stack} or dead secret-scrubbing stores~\cite{yang2017deadstore} without violating language rules.
-Existing defense tools instead target specific mitigations: UBfuzz~\cite{li2024ubfuzz} injects undefined behavior to catch missed sanitizer crashes, while Spectector~\cite{guarnieri2020spectector}, SpecFuzz~\cite{oleksenko2020specfuzz}, and Blade~\cite{vassena2021blade} address speculative leaks.
-Sanitizer crash comparison cannot test non-aborting or hardware-assisted defenses, whereas \textsc{DeFenzz} checks placed mitigations after compilation across six defense families and multiple target ISAs.
+However, a silently weakened mitigation still produces normal outputs on benign inputs, leaving functional oracles and IR refinement blind to broken protections.
+For security checks, UBfuzz~\cite{li2024ubfuzz} injects undefined behavior to catch missed sanitizer crashes, while CISBFuzz~\cite{oh2026cisbfuzz} mutates LLVM IR to expose optimization-induced check removals.
+Sanitizer crash comparison and IR mutation cannot test non-aborting or backend-lowered defenses, whereas \textsc{DeFenzz} checks compiled binaries across six defense families and multiple ISAs.
 
 \medskip\noindent\textbf{Directed and LLM-Assisted Fuzzing.}
 Triggering silent defense bugs requires both locating defense-related compiler branches and satisfying their coupled semantic preconditions.
