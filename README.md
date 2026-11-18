@@ -14,6 +14,11 @@ All cleaned, reconciled, and machine-verified experimental results, JSON summari
 - **[`evaluation_data/tables/`](./evaluation_data/tables/)** — Drop-in `.tex` tables (`tab_rq1_bugs.tex`, `tab_offline_funnel.tex`, `tab_rq2_comparison.tex`, `tab_rq3_ablation.tex`, `tab_rq4_overhead.tex`)
 - **[`evaluation_data/data/`](./evaluation_data/data/)** — Machine-verified JSON summaries (`01_main_rq1.json` .. `04_overhead_rq4.json`)
 
+## Anonymized Artifact
+
+- **Anonymous Review URL**: `https://anonymous.4open.science/r/DeFenzz/README.md` (cited in `main.tex` Section IV Implementation and compiled into `main.pdf` Page 7)
+- **Local Artifact Repo**: `/Users/bytedance/projects/research/defenzz-artifact` (anonymized single-commit release `2671de5`; backing GitHub repo `zjy-dev/defenzz-artifact` is private and must not be updated after the submission deadline per CFP rules)
+
 ## Build
 
 Install [Tectonic](https://tectonic-typesetting.github.io/) and run:

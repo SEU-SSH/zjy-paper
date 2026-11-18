@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0.0-final-clean",
+  "stage_token_and_wallclock_accounting": {
+    "stages": [
+      {
+        "stage": "Step 1: Invariant Extraction (CoT + Hybrid RAG)",
+        "scope": "Offline (One-Time)",
+        "llm_calls": 1160,
+        "prompt_cached_M": 18.2,
+        "prompt_uncached_M": 9.45,
+        "output_tokens_M": 3.15,
+        "total_tokens_M": 30.8,
+        "kv_cache_hit_rate_pct": 65.8,
+        "wall_clock_hours": 1.7
+      },
+      {
+        "stage": "Step 2: MCP-Guided Source Mapping (GCC + LLVM)",
+        "scope": "Offline (One-Time)",
+        "llm_calls": 35976,
+        "prompt_cached_M": 556.82,
+        "prompt_uncached_M": 49.64,
+        "output_tokens_M": 17.1,
+        "total_tokens_M": 623.56,
+        "kv_cache_hit_rate_pct": 91.8,
+        "wall_clock_hours": 29.5
+      },
+      {
+        "stage": "Step 3: Check IR Synthesis & Validation",
+        "scope": "Offline (One-Time)",
+        "llm_calls": 1120,
+        "prompt_cached_M": 46.41,
+        "prompt_uncached_M": 5.23,
+        "output_tokens_M": 3.17,
+        "total_tokens_M": 54.81,
+        "kv_cache_hit_rate_pct": 89.9,
+        "wall_clock_hours": 3.32
+      },
+      {
+        "stage": "Step 4: Agentic Directed Fuzzing (4 ISAs)",
+        "scope": "Online Campaign",
+        "llm_calls": 21415,
+        "prompt_cached_M": 824.12,
+        "prompt_uncached_M": 57.05,
+        "output_tokens_M": 19.67,
+        "total_tokens_M": 900.84,
+        "kv_cache_hit_rate_pct": 93.5,
+        "wall_clock_hours": 10.16
+      }
+    ],
+    "offline_subtotal": {
+      "llm_calls": 38256,
+      "total_tokens_M": 709.17,
+      "wall_clock_hours": 34.52,
+      "share_of_total_tokens_pct": 44.05
+    },
+    "online_subtotal": {
+      "llm_calls": 21415,
+      "total_tokens_M": 900.84,
+      "wall_clock_hours": 10.16,
+      "share_of_total_tokens_pct": 55.95,
+      "amortized_per_bug": {
+        "bugs": 111,
+        "online_minutes_per_bug": 5.49,
+        "online_tokens_M_per_bug": 8.12,
+        "online_calls_per_bug": 192.9
+      }
+    },
+    "grand_total": {
+      "llm_calls": 59671,
+      "prompt_cached_M": 1445.55,
+      "prompt_uncached_M": 121.37,
+      "output_tokens_M": 43.09,
+      "total_tokens_M": 1610.01,
+      "overall_kv_cache_hit_rate_pct": 92.4,
+      "wall_clock_hours": 44.68
+    }
+  },
+  "tool_call_telemetry": {
+    "full_defenzz_total_tool_calls": 99236,
+    "full_defenzz_total_sessions": 6798,
+    "by_stage_and_compiler": [
+      {
+        "stage": "Source Map (GCC)",
+        "callgraph_mcp": 9529,
+        "grep": 17322,
+        "slice_read": 12292,
+        "write_edit": 0,
+        "workspace_exec": 13810,
+        "total_calls": 52953,
+        "sessions": 3677,
+        "avg_per_session": 14.4
+      },
+      {
+        "stage": "Source Map (LLVM)",
+        "callgraph_mcp": 9,
+        "grep": 3421,
+        "slice_read": 2606,
+        "write_edit": 0,
+        "workspace_exec": 208,
+        "total_calls": 6244,
+        "sessions": 568,
+        "avg_per_session": 11.0
+      },
+      {
+        "stage": "Check IR (GCC)",
+        "callgraph_mcp": 0,
+        "grep": 101,
+        "slice_read": 90,
+        "write_edit": 607,
+        "workspace_exec": 10,
+        "total_calls": 808,
+        "sessions": 558,
+        "avg_per_session": 1.4
+      },
+      {
+        "stage": "Check IR (LLVM)",
+        "callgraph_mcp": 0,
+        "grep": 155,
+        "slice_read": 91,
+        "write_edit": 609,
+        "workspace_exec": 17,
+        "total_calls": 872,
+        "sessions": 562,
+        "avg_per_session": 1.6
+      },
+      {
+        "stage": "Fuzz Audit (GCC)",
+        "callgraph_mcp": 1498,
+        "grep": 10757,
+        "slice_read": 10261,
+        "write_edit": 0,
+        "workspace_exec": 1408,
+        "total_calls": 23924,
+        "sessions": 860,
+        "avg_per_session": 27.8
+      },
+      {
+        "stage": "Fuzz Audit (LLVM)",
+        "callgraph_mcp": 1077,
+        "grep": 7317,
+        "slice_read": 5272,
+        "write_edit": 0,
+        "workspace_exec": 769,
+        "total_calls": 14435,
+        "sessions": 573,
+        "avg_per_session": 25.2
+      }
+    ],
+    "ablation_wo_check_ir_comparison": {
+      "stage": "w/o Check IR (All)",
+      "callgraph_mcp": 0,
+      "grep": 4606,
+      "slice_read": 7961,
+      "write_edit": 4447,
+      "workspace_exec": 1481,
+      "total_calls": 18495,
+      "sessions": 1229,
+      "avg_per_session": 15.0,
+      "reduction_ratio_by_check_ir": "11.0x fewer tool calls (1,680 vs 18,495)"
+    }
+  },
+  "toolchain_instrumentation_and_build_benchmark": {
+    "benchmark_source": "defenzz-paper/compiler-benchmark-20261101/report.md",
+    "hardware": "16-vCPU ARM Neoverse-N2 (aarch64 Linux 5.15), 62 GiB RAM, NVMe SSD, Ninja + LLD (-j16)",
+    "gcc_16_2_0_c_cxx": {
+      "commit": "78d4ac73dd391005b895a6148cd9831e28e1208b",
+      "wall_clock": "4m 37.1s (277.08s)",
+      "user_cpu_sec": 21796.71,
+      "sys_cpu_sec": 1353.3,
+      "log_probe_injection_pass_sec": 1287.6
+    },
+    "llvm_clang_23_1_all_4_targets": {
+      "commit": "85ac560262434c9ccfc0c183ec22d4138ed647fb",
+      "targets": "X86;AArch64;RISCV;LoongArch",
+      "compile_actions": 4562,
+      "wall_clock": "25m 50.8s (1,550.83s)",
+      "user_cpu_sec": 18950.4,
+      "sys_cpu_sec": 1002.63,
+      "log_probe_injection_pass_sec": 1645.4
+    },
+    "runtime_and_compile_overhead": {
+      "target_binary_runtime_overhead_pct": 0.0,
+      "target_binary_runtime_note": "DEFENZZ_LOG instruments host compiler decision branches (emitting stderr/trace markers during compilation) and inserts zero instructions into emitted target binaries; hence target binary runtime overhead is strictly 0%.",
+      "per_seed_compile_overhead_pct": "< 2.0%"
+    }
+  }
+}

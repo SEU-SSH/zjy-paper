@@ -1,0 +1,27 @@
+% Ready-to-paste IEEE S&P Table: RQ3 Component Ablation Study (Full Campaign + Controlled 41-Invariant Audit Lane)
+\begin{table*}[t]
+\centering
+\caption{RQ3 ablation results across (A) the full 921-invariant, 4-ISA campaign (\texttt{GCC~16.2} + \texttt{LLVM~23.1}) for offline specification/oracle components and (B) the controlled 41-invariant \texttt{GCC~16.2} \texttt{AArch64} end-to-end audit lane (\texttt{demo-workset}) for online agentic components.}
+\label{tab:ablation-all}
+\small
+\setlength{\tabcolsep}{5.0pt}
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+\textbf{Scope} & \textbf{System Variant} & \textbf{1st-Pass} & \textbf{Stage Tokens} & \textbf{LLM / Tool} & \textbf{Non-x86 Hits} & \textbf{False / Rejected} & \textbf{Verified} \\
+ & & \textbf{Checkers} & \textbf{Consumed} & \textbf{Calls} & \textbf{(RV64+LA64)} & \textbf{Alerts} & \textbf{Bugs} \\
+\midrule
+\multirow{3}{*}{\shortstack[l]{(A) Full Campaign\\(921 Inv., 4 ISAs)}}
+ & \textbf{Full \sys (Check IR + RAG)} & \textbf{82.3\%} (758/921) & \textbf{54.81M} (Step 3) & 1,680 tools & \textbf{136} (315 all) & \textbf{0} raw FPs & \textbf{111} \\
+ & w/o Formal Check IR (Raw Go) & 70.5\% (649/921) & 638.44M ($11.6\times$) & 18,495 tools & 64 ($-52.9\%$) & 51 raw FPs & 82 ($-29$) \\
+ & w/o Hybrid RAG (CoT Only) & 82.4\% (745/904) & 53.79M (Step 3) & 1,648 tools & 135 (312 all) & 0 raw FPs & 109 ($-2$) \\
+\midrule
+\multirow{4}{*}{\shortstack[l]{(B) Controlled Lane\\(41 Inv., GCC-16\\AArch64 Subset)}}
+ & \textbf{Full \sys (41-Inv.\ Baseline)} & — & 429.13M (95.2\% cached) & 1,160 LLM & — & 4 (4/4 filtered, \textbf{0 leaked}) & 0$^\ast$ \\
+ & w/o Source Mapping (\texttt{inv-only}) & — & 50.78M (92.9\% cached) & 1,135 LLM & — & 9 (8 rej.\ + \textbf{1 leaked FP}) & 0 \\
+ & w/o Prog.\ Oracle (\texttt{llm-judge}) & — & 206.01M (7.25M reason.) & 2,681 LLM ($2.3\times$) & — & 6 (5 rej.\ + \textbf{1 leaked FP}) & 0 \\
+ & Bare Agent (\texttt{free-agent}, 1 worker) & — & 5.88M (96.3\% cached) & 54 LLM & — & 1 (1/1 non-defense rej.) & 0 \\
+\bottomrule
+\multicolumn{8}{@{}l}{\footnotesize $^\ast$On the 41-invariant \texttt{demo-workset} slice, no new true bug existed; \sys's deterministic oracle cleanly rejected 100\% (4/4) of candidate alerts ($8{,}119$s LLM latency), whereas} \\
+\multicolumn{8}{@{}l}{\footnotesize \texttt{llm-judge} leaked unexecutable hallucinations (\texttt{poc\_verified=false}) while inflating LLM calls by $2.31\times$ and LLM latency by $6.87\times$ ($55{,}788$s).}
+\end{tabular}
+\end{table*}

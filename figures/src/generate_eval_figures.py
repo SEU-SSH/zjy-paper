@@ -225,11 +225,11 @@ def generate_rq2_comparison():
         svg.append(f'<text x="{lx + 11}" y="30.5" fill="{C_SUB}" font-size="8.6" font-weight="600">{lbl}</text>')
 
     fuzzers_a = [
-        ("YARPGen",     [1, 0, 0, 0, 0, 0],     "1",     False),
-        ("UBfuzz",      [1, 0, 2, 0, 0, 0],     "3",    False),
-        ("MetaMut",     [1, 1, 6, 0, 0, 0],     "8",     False),
-        ("FeatureFuzz", [2, 1, 7, 0, 1, 3],     "14",    False),
-        ("Fuzz4All",    [3, 1, 9, 1, 1, 3],     "18",   False),
+        ("YARPGen",     [1, 0, 0, 0, 0, 0],     "1",   False),
+        ("UBfuzz",      [1, 0, 2, 0, 0, 0],     "3",   False),
+        ("MetaMut",     [1, 1, 6, 0, 0, 0],     "8",   False),
+        ("Fuzz4All",    [3, 3, 9, 2, 1, 0],     "18",  False),
+        ("FeatureFuzz", [3, 4, 10, 1, 2, 3],    "23",  False),
         ("DeFenzz",     [36, 21, 21, 10, 9, 14], "111", True),
     ]
 
@@ -245,23 +245,23 @@ def generate_rq2_comparison():
         f'font-weight="600" text-anchor="middle">Deduplicated Silent Defense Bugs (F1&#8211;F6)</text>'
     )
 
-    # Vertical dashed guide from Fuzz4All end (18) down into the bracket channel
-    x_18 = ax_x + (18.0 / max_a) * ax_w
+    # Vertical dashed guide from FeatureFuzz end (23) down into the bracket channel
+    x_23 = ax_x + (23.0 / max_a) * ax_w
     x_111 = ax_x + (111.0 / max_a) * ax_w
     br_y = plot_top + 5 * row_h + 6.5
     svg.append(
-        f'<line x1="{x_18:.1f}" y1="{plot_top + 4 * row_h + 18:.1f}" x2="{x_18:.1f}" '
-        f'y2="{br_y + 3:.1f}" stroke="#B45309" stroke-width="1" stroke-dasharray="2.5,2"/>'
+        f'<line x1="{x_23:.1f}" y1="{plot_top + 4 * row_h + 18.2:.1f}" x2="{x_23:.1f}" '
+        f'y2="{br_y + 2.6:.1f}" stroke="#B45309" stroke-width="1" stroke-dasharray="2.5,2"/>'
     )
 
-    # Bracket spanning [18, 111] directly above DeFenzz bar
-    svg.append(f'<line x1="{x_18:.1f}" y1="{br_y:.1f}" x2="{x_111:.1f}" y2="{br_y:.1f}" stroke="#B45309" stroke-width="1.15"/>')
-    svg.append(f'<line x1="{x_18:.1f}" y1="{br_y - 2.6:.1f}" x2="{x_18:.1f}" y2="{br_y + 2.6:.1f}" stroke="#B45309" stroke-width="1.15"/>')
+    # Bracket spanning [23, 111] directly above DeFenzz bar
+    svg.append(f'<line x1="{x_23:.1f}" y1="{br_y:.1f}" x2="{x_111:.1f}" y2="{br_y:.1f}" stroke="#B45309" stroke-width="1.15"/>')
+    svg.append(f'<line x1="{x_23:.1f}" y1="{br_y - 2.6:.1f}" x2="{x_23:.1f}" y2="{br_y + 2.6:.1f}" stroke="#B45309" stroke-width="1.15"/>')
     svg.append(f'<line x1="{x_111:.1f}" y1="{br_y - 2.6:.1f}" x2="{x_111:.1f}" y2="{br_y + 2.6:.1f}" stroke="#B45309" stroke-width="1.15"/>')
 
-    # Exclusive callout badge placed in clean upper-right whitespace (rows 0-2, x=196..396)
-    badge_x, badge_y, badge_w, badge_h = 196.0, plot_top + 10.0, 198.0, 31.0
-    lead_x = 236.0
+    # Exclusive callout badge placed in clean upper-right whitespace (rows 0-2, x=188..396)
+    badge_x, badge_y, badge_w, badge_h = 188.0, plot_top + 10.0, 208.0, 31.0
+    lead_x = 232.0
     svg.append(
         f'<line x1="{lead_x:.1f}" y1="{badge_y + badge_h:.1f}" x2="{lead_x:.1f}" y2="{br_y:.1f}" '
         f'stroke="#D97706" stroke-width="0.9" stroke-dasharray="2.5,2"/>'
@@ -269,12 +269,12 @@ def generate_rq2_comparison():
     svg.append(f'<circle cx="{lead_x:.1f}" cy="{br_y:.1f}" r="2.0" fill="#B45309"/>')
     svg.append(f'<rect x="{badge_x:.1f}" y="{badge_y:.1f}" width="{badge_w:.1f}" height="{badge_h:.1f}" rx="3.5" fill="#FEFCE8" stroke="#D97706" stroke-width="0.9"/>')
     svg.append(
-        f'<text x="{badge_x + badge_w/2:.1f}" y="{badge_y + 12.5:.1f}" fill="#92400E" font-size="8.4" '
-        f'font-weight="700" text-anchor="middle">+93 Exclusive to DeFenzz (83.8%)</text>'
+        f'<text x="{badge_x + badge_w/2:.1f}" y="{badge_y + 12.5:.1f}" fill="#92400E" font-size="8.2" '
+        f'font-weight="700" text-anchor="middle">+88 vs. Best Baseline &#183; 83 Exclusive (74.8%)</text>'
     )
     svg.append(
-        f'<text x="{badge_x + badge_w/2:.1f}" y="{badge_y + 24.5:.1f}" fill="#78350F" font-size="7.9" '
-        f'font-weight="600" text-anchor="middle">Covers Every Baseline Bug (0 Missed)</text>'
+        f'<text x="{badge_x + badge_w/2:.1f}" y="{badge_y + 24.5:.1f}" fill="#78350F" font-size="7.8" '
+        f'font-weight="600" text-anchor="middle">Covers All 28 Baseline Bugs (0 Missed)</text>'
     )
 
     for idx, (name, counts, right_lbl, is_ours) in enumerate(fuzzers_a):
@@ -318,11 +318,11 @@ def generate_rq2_comparison():
 
     TOOL_COLS = [
         ("YARPGen",     "#E2E8F0", "#64748B", 444),
-        ("UBfuzz",      "#94A3B8", None,      510),
-        ("MetaMut",     "#FDE68A", "#B45309", 566),
-        ("FeatureFuzz", "#F59E0B", None,      629),
-        ("Fuzz4All",    "#B45309", None,      709),
-        ("DeFenzz",     "#228833", None,      772),
+        ("UBfuzz",      "#94A3B8", None,      507),
+        ("MetaMut",     "#FDE68A", "#B45309", 562),
+        ("Fuzz4All",    "#F59E0B", None,      622),
+        ("FeatureFuzz", "#B45309", None,      684),
+        ("DeFenzz",     "#228833", None,      758),
     ]
 
     for tname, fill, stroke, lx in TOOL_COLS:
@@ -338,10 +338,10 @@ def generate_rq2_comparison():
         svg.append(f'<text x="{bx_x - 5}" y="{ty + 3.2:.1f}" fill="{C_SUB}" font-size="8.6" text-anchor="end">{tick}%</text>')
 
     isa_groups = [
-        ("x86-64",      "(2,295)", [53.3, 64.5, 72.7, 71.0, 74.0, 80.1]),
-        ("AArch64",     "(2,568)", [50.3, 61.0, 69.1, 66.9, 69.9, 79.9]),
-        ("RISC-V64",    "(2,095)", [50.1, 62.1, 70.4, 68.6, 72.0, 78.5]),
-        ("LoongArch64", "(2,103)", [51.5, 62.9, 71.9, 70.0, 73.3, 79.7]),
+        ("x86-64",      "(2,295)", [53.3, 64.5, 72.7, 77.6, 81.4, 80.1]),
+        ("AArch64",     "(2,568)", [50.3, 61.0, 69.1, 73.3, 77.1, 79.9]),
+        ("RISC-V64",    "(2,095)", [50.1, 62.1, 70.4, 75.7, 79.6, 78.5]),
+        ("LoongArch64", "(2,103)", [51.5, 62.9, 71.9, 77.0, 80.9, 79.7]),
     ]
 
     slot_w = bx_w / len(isa_groups)
@@ -363,8 +363,13 @@ def generate_rq2_comparison():
             svg.append(f'<rect x="{x_bar:.1f}" y="{y_bar:.1f}" width="{bw:.1f}" height="{h_bar:.1f}" rx="1.2" fill="{fill}"{st_attr}/>')
             if tname == "DeFenzz":
                 svg.append(
-                    f'<text x="{x_bar + bw/2:.1f}" y="{y_bar - 3.8:.1f}" fill="#166534" '
-                    f'font-size="8.2" font-weight="700" text-anchor="middle">{pct:.1f}%</text>'
+                    f'<text x="{x_bar + 1.2:.1f}" y="{y_bar - 3.8:.1f}" fill="#166534" '
+                    f'font-size="7.8" font-weight="700" text-anchor="start">{pct:.1f}%</text>'
+                )
+            elif tname == "FeatureFuzz":
+                svg.append(
+                    f'<text x="{x_bar + bw - 1.2:.1f}" y="{y_bar - 3.8:.1f}" fill="#92400E" '
+                    f'font-size="7.5" font-weight="600" text-anchor="end">{pct:.1f}%</text>'
                 )
             elif tname == "YARPGen":
                 svg.append(
@@ -639,7 +644,11 @@ def generate_tool_calls():
 
 
 if __name__ == "__main__":
-    generate_bug_char()
-    generate_rq2_comparison()
-    generate_ablation()
-    generate_tool_calls()
+    import sys
+    if "--rq2" in sys.argv:
+        generate_rq2_comparison()
+    else:
+        generate_bug_char()
+        generate_rq2_comparison()
+        generate_ablation()
+        generate_tool_calls()

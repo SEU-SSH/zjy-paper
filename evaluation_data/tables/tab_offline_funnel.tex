@@ -1,0 +1,26 @@
+% Ready-to-paste IEEE S&P Table: Offline Invariant Extraction, Source Mapping & Check IR Funnel
+\begin{table}[t]
+\centering
+\caption{Offline invariant extraction, compiler source mapping, and two-gate Check~IR oracle construction funnel.}
+\label{tab:invariant-funnel}
+\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Offline Pipeline Metric} & \textbf{GCC 16} & \textbf{LLVM 23} & \textbf{Total} \\
+\midrule
+Doc \& Source Slices Processed & 312 & 268 & 580 \\
+Accepted Invariants (Segmented CoT) & 463 & 441 & 904 \\
+Accepted Invariants (Hybrid RAG) & +12 & +5 & +17 \\
+\textbf{Total Accepted Invariants ($\Phi$)} & \textbf{475} & \textbf{446} & \textbf{921} \\
+\midrule
+Mapped Compiler Decision Paths & 1,669 & 1,253 & 2,922 \\
+Distinct Mapped Source Files & 412 & 335 & 747 \\
+Active 4-ISA Branch Probes Injected & 4,537 & 4,524 & 9,061 \\
+\midrule
+Check~IR 1st-Attempt Valid Rate & 83.4\% & 81.2\% & 82.3\% \\
+\textbf{Final Validated Checkers (Gate 1+2)} & \textbf{473} & \textbf{442} & \textbf{915} \\
+Active 4-ISA Batch Checkers & 470 & 433 & 903 \\
+\bottomrule
+\end{tabular}
+\end{table}

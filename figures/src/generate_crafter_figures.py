@@ -17,12 +17,14 @@ def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
     svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" style="background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">')
     
     # Fill colors (DeFenzz status: Confirmed / Reported / None)
-    C_REP  = "#E3F1E7"   # Reported (light green fill)
-    C_CONF = "#228833"   # Confirmed (dark green fill)
+    # Reviewer: green is a poor color for bugs; use yellow (reported) and orange (confirmed).
+    C_REP  = "#FDE68A"   # Reported (yellow fill)
+    C_CONF = "#EA580C"   # Confirmed (orange fill)
     C_NONE = "#FFFFFF"   # Empty (white fill)
     
-    # Border color for Historical bugs (orthogonal soft coral-red frame, keeps interior fill intact)
-    B_HIST = "#E57373"   # Soft muted red border for cells with prior historical bugs
+    # Border for cells with prior historical bugs: neutral dark slate so it stays
+    # distinguishable on top of both yellow and orange fills.
+    B_HIST = "#1F2937"
     
     # Horizontal: 9 Single Defense Mechanisms (each column is strictly one mechanism)
     cols = [
@@ -124,11 +126,11 @@ def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
         for j, (fill_color, is_hist) in enumerate(cells):
             cx = start_x + j * (col_w + gap_x)
             if is_hist:
-                border_color, stroke_w = B_HIST, "1.35"
+                border_color, stroke_w = B_HIST, "2.0"
             elif fill_color == C_CONF:
-                border_color, stroke_w = "#15803D", "1.0"
+                border_color, stroke_w = "#C2410C", "1.0"
             elif fill_color == C_REP:
-                border_color, stroke_w = "#86EFAC", "1.0"
+                border_color, stroke_w = "#D97706", "1.0"
             else:
                 border_color, stroke_w = "#E5E7EB", "1.0"
             svg.append(f'<rect x="{cx}" y="{y}" width="{col_w}" height="{row_h}" rx="4" fill="{fill_color}" stroke="{border_color}" stroke-width="{stroke_w}"/>')
@@ -138,9 +140,9 @@ def create_defense_matrix_svg(output_path="figures/defense-matrix.svg"):
     # Legend at Bottom: Historical is shown with hollow interior + soft red border
     legend_y = y + 10
     legend_items = [
-        ("Historical", "#FFFFFF", B_HIST,    "1.35", "#C53030"),
-        ("Reported",   C_REP,     "#86EFAC", "1.0",  "#166534"),
-        ("Confirmed",  C_CONF,    "#15803D", "1.0",  "#FFFFFF"),
+        ("Historical", "#FFFFFF", B_HIST,    "2.0",  "#1F2937"),
+        ("Reported",   C_REP,     "#D97706", "1.0",  "#78350F"),
+        ("Confirmed",  C_CONF,    "#C2410C", "1.0",  "#FFFFFF"),
     ]
     
     badge_w = 106

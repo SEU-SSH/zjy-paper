@@ -1,0 +1,780 @@
+{
+  "schema_version": "2.2.0-small-pot-step5-clean",
+  "protocol_summary": {
+    "traditional_fuzzers": {
+      "baselines": [
+        "YARPGen",
+        "UBfuzz",
+        "MetaMut"
+      ],
+      "budget_per_baseline": "1 CPU core × 12 hours × 5 independent trials (60 CPU-hours / baseline)",
+      "evaluated_seeds_per_baseline": "500 stratified-random valid seeds / trial × 5 trials = 2,500 seeds (random_seed = 20261112)",
+      "literature_precedent": "Follows single-core multi-trial convention of HLPFuzz (USENIX Security '25, 1c×24h×5), PBFuzz (CCS '26, 1c×24h×10), and TrigFuzz (IEEE S&P '26, 1c×24h×10)."
+    },
+    "llm_fuzzers": {
+      "baselines": [
+        "Fuzz4All",
+        "FeatureFuzz"
+      ],
+      "model": "deepseek-chat (DeepSeek-V4.1-Flash non-thinking — same model as DeFenzz)",
+      "budget_per_baseline": "21,415 valid online LLM calls (exact 1:1 online call parity with DeFenzz Step 4)",
+      "cell_allocation": "12 cells (2 compilers × 6 defense families F1..F6), ~1,784–1,785 calls/cell",
+      "evaluated_seeds_per_baseline": "100% of unique valid compiled seeds (Fuzz4All: 14,906 unique / 21,090 valid; FeatureFuzz: 14,814 unique / 14,864 valid)",
+      "upstream_provenance": {
+        "fuzz4all": {
+          "upstream_repo": "https://github.com/fuzz4all/fuzz4all",
+          "upstream_commit": "0bf42fe037c8761bdde61e1c37a0946e8103fba1",
+          "driver": "Official upstream CTarget with auto_prompt distillation + evolutionary cs/ci/ce/comb strategies over official GCC/Clang defense docs and starter C programs"
+        },
+        "featurefuzz": {
+          "upstream_repo": "https://github.com/addaddgo/FeatureFuzz",
+          "upstream_commit": "7486da17d863293f657a00329ac5b4b23d8cbc7d",
+          "driver": "Official upstream CombineFeatureSetStrategy + GCCValidator over 67,530 C-compatible historical PR features (62,377 general C + family defense PR features) and manual-derived defense operators"
+        }
+      },
+      "token_comparison": {
+        "fuzz4all": {
+          "calls": 21415,
+          "prompt_tokens": 57657620,
+          "cached_prompt_tokens": 35125273,
+          "uncached_prompt_tokens": 22532347,
+          "completion_tokens": 31834041,
+          "total_tokens": 89491661,
+          "wall_clock_sec": 4824.25
+        },
+        "featurefuzz": {
+          "calls": 21415,
+          "prompt_tokens": 8639933,
+          "cached_prompt_tokens": 4484608,
+          "uncached_prompt_tokens": 4155325,
+          "completion_tokens": 13317068,
+          "total_tokens": 21957001,
+          "wall_clock_sec": 3818.73
+        },
+        "defenzz_step4_online": {
+          "calls": 21415,
+          "prompt_tokens": 881170000,
+          "cached_prompt_tokens": 820120000,
+          "uncached_prompt_tokens": 61050000,
+          "completion_tokens": 19670000,
+          "total_tokens": 900840000,
+          "wall_clock_sec": 36576.0
+        },
+        "note": "Both LLM baselines run their official upstream codebases on deepseek-chat for 21,415 online calls (1:1 parity with DeFenzz Step 4). Fuzz4All generates 31.83M completion tokens (+61.8% more output tokens than DeFenzz Step 4's 19.67M) and FeatureFuzz generates 13.32M completion tokens across concise feature-combination prompts; DeFenzz's larger input token count comes from 93.1% KV-cached compiler context slices."
+      }
+    },
+    "small_pot_oracle_evaluation": {
+      "denominators": {
+        "active_4isa_probes": 9061,
+        "active_4isa_invariants": 903,
+        "total_checkers": 915
+      },
+      "rules": [
+        "Per-Mechanism Small-Pot Routing: Each seed is compiled under per-mechanism profiles (not a single conflicting flag soup) and only audited by checkers mapped to that mechanism.",
+        "Step-5 Audit Parity: FAIL verdicts require passing UB filtering (-fsanitize=undefined -Werror=uninitialized -fno-sanitize-recover=all) and Step-5 calibrated checker verification (eliminating 12 benign-firing canary/frame-layout over-approximations).",
+        "Deduplication Key: (compiler, checker_id) across all 4 ISAs (x86_64, aarch64, riscv64, loongarch64), matching DeFenzz's bug deduplication granularity."
+      ]
+    }
+  },
+  "denominators_by_isa": {
+    "x86_64": 2295,
+    "aarch64": 2568,
+    "riscv64": 2095,
+    "loongarch64": 2103,
+    "total": 9061
+  },
+  "denominators_by_family": {
+    "F1_cfi": 1747,
+    "F2_stack": 1429,
+    "F3_sanitizers": 2265,
+    "F4_scrubbing": 575,
+    "F5_speculation": 296,
+    "F6_fortify": 2749,
+    "total": 9061
+  },
+  "main_table_rows": [
+    {
+      "fuzzer": "YARPGen",
+      "budget": "1c × 12h × 5",
+      "host": "devbox-arm64-16",
+      "valid_seeds_mean_std": "13,114.0 ± 335.2",
+      "ice_mean_std_union": "0.4 ± 0.5 (U:2)",
+      "evaluated_seeds": 2500,
+      "probe_cov_mean_std": "4,629.8 ± 2.4 (51.1%)",
+      "probe_cov_union": 4648,
+      "probe_cov_union_pct": 51.3,
+      "activated_inv_mean_std": "103.8 ± 1.5 (11.5%)",
+      "activated_inv_union": 107,
+      "activated_inv_union_pct": 11.85,
+      "native_silent_bugs": "0.0 ± 0.0 (U:0)",
+      "our_oracle_bugs_mean_std": "1.0 ± 0.0",
+      "our_oracle_bugs_union": 1,
+      "our_oracle_bugs_by_compiler": {
+        "gcc": 0,
+        "llvm": 1
+      },
+      "triggered_checkers_union": 1,
+      "isa_probes_union": {
+        "x86_64": 1224,
+        "aarch64": 1292,
+        "riscv64": 1049,
+        "loongarch64": 1083
+      },
+      "family_bugs_union": {
+        "F1_cfi": 1,
+        "F2_stack": 0,
+        "F3_sanitizers": 0,
+        "F4_scrubbing": 0,
+        "F5_speculation": 0,
+        "F6_fortify": 0
+      }
+    },
+    {
+      "fuzzer": "UBfuzz",
+      "budget": "1c × 12h × 5",
+      "host": "x64_8c16g_01",
+      "valid_seeds_mean_std": "4,974.8 ± 177.8",
+      "ice_mean_std_union": "0.0 ± 0.0 (U:0)",
+      "evaluated_seeds": 2500,
+      "probe_cov_mean_std": "5,586.2 ± 31.6 (61.6%)",
+      "probe_cov_union": 5672,
+      "probe_cov_union_pct": 62.6,
+      "activated_inv_mean_std": "135.6 ± 2.4 (15.0%)",
+      "activated_inv_union": 140,
+      "activated_inv_union_pct": 15.5,
+      "native_silent_bugs": "649.0 ± 23.8 [U:3,102] (F3 injected-UB alerts only; F1,F2,F4–F6: N/A)",
+      "our_oracle_bugs_mean_std": "2.2 ± 0.5",
+      "our_oracle_bugs_union": 3,
+      "our_oracle_bugs_by_compiler": {
+        "gcc": 0,
+        "llvm": 3
+      },
+      "triggered_checkers_union": 3,
+      "isa_probes_union": {
+        "x86_64": 1481,
+        "aarch64": 1566,
+        "riscv64": 1302,
+        "loongarch64": 1323
+      },
+      "family_bugs_union": {
+        "F1_cfi": 1,
+        "F2_stack": 0,
+        "F3_sanitizers": 2,
+        "F4_scrubbing": 0,
+        "F5_speculation": 0,
+        "F6_fortify": 0
+      }
+    },
+    {
+      "fuzzer": "MetaMut",
+      "budget": "1c × 12h × 5",
+      "host": "devbox-arm64-16",
+      "valid_seeds_mean_std": "126,605.2 ± 1,697.8",
+      "ice_mean_std_union": "0.6 ± 0.5 (U:1)",
+      "evaluated_seeds": 2500,
+      "probe_cov_mean_std": "6,297.4 ± 19.4 (69.5%)",
+      "probe_cov_union": 6429,
+      "probe_cov_union_pct": 70.95,
+      "activated_inv_mean_std": "143.8 ± 6.5 (15.9%)",
+      "activated_inv_union": 163,
+      "activated_inv_union_pct": 18.05,
+      "native_silent_bugs": "0.0 ± 0.0 (U:0; ICE-only native oracle)",
+      "our_oracle_bugs_mean_std": "6.4 ± 0.9",
+      "our_oracle_bugs_union": 8,
+      "our_oracle_bugs_by_compiler": {
+        "gcc": 1,
+        "llvm": 7
+      },
+      "triggered_checkers_union": 8,
+      "isa_probes_union": {
+        "x86_64": 1669,
+        "aarch64": 1774,
+        "riscv64": 1474,
+        "loongarch64": 1512
+      },
+      "family_bugs_union": {
+        "F1_cfi": 1,
+        "F2_stack": 1,
+        "F3_sanitizers": 6,
+        "F4_scrubbing": 0,
+        "F5_speculation": 0,
+        "F6_fortify": 0
+      }
+    },
+    {
+      "fuzzer": "Fuzz4All",
+      "budget": "@21,415 calls",
+      "host": "mac-arm64-vm",
+      "upstream_repo": "https://github.com/fuzz4all/fuzz4all",
+      "upstream_commit": "0bf42fe037c8761bdde61e1c37a0946e8103fba1",
+      "valid_seeds": 21090,
+      "unique_evaluated_seeds": 14906,
+      "ice_count": 0,
+      "probe_cov": 6870,
+      "probe_cov_pct": 75.82,
+      "probe_cov_by_compiler": {
+        "gcc": 3665,
+        "llvm": 3205
+      },
+      "activated_inv": 173,
+      "activated_inv_pct": 19.16,
+      "native_silent_bugs": "0 (ICE-only native oracle)",
+      "our_oracle_bugs": 18,
+      "our_oracle_bugs_by_compiler": {
+        "gcc": 8,
+        "llvm": 10
+      },
+      "triggered_checkers": 17,
+      "isa_probes": {
+        "x86_64": 1782,
+        "aarch64": 1882,
+        "riscv64": 1586,
+        "loongarch64": 1620
+      },
+      "family_bugs": {
+        "F1_cfi": 3,
+        "F2_stack": 3,
+        "F3_sanitizers": 9,
+        "F4_scrubbing": 2,
+        "F5_speculation": 1,
+        "F6_fortify": 0
+      }
+    },
+    {
+      "fuzzer": "FeatureFuzz",
+      "budget": "@21,415 calls",
+      "host": "mac-arm64-vm",
+      "upstream_repo": "https://github.com/addaddgo/FeatureFuzz",
+      "upstream_commit": "7486da17d863293f657a00329ac5b4b23d8cbc7d",
+      "valid_seeds": 14864,
+      "unique_evaluated_seeds": 14814,
+      "ice_count": 4,
+      "probe_cov": 7220,
+      "probe_cov_pct": 79.68,
+      "probe_cov_by_compiler": {
+        "gcc": 3920,
+        "llvm": 3300
+      },
+      "activated_inv": 187,
+      "activated_inv_pct": 20.71,
+      "native_silent_bugs": "0 (ICE-only native oracle)",
+      "our_oracle_bugs": 23,
+      "our_oracle_bugs_by_compiler": {
+        "gcc": 12,
+        "llvm": 11
+      },
+      "triggered_checkers": 21,
+      "isa_probes": {
+        "x86_64": 1869,
+        "aarch64": 1981,
+        "riscv64": 1668,
+        "loongarch64": 1702
+      },
+      "family_bugs": {
+        "F1_cfi": 3,
+        "F2_stack": 4,
+        "F3_sanitizers": 10,
+        "F4_scrubbing": 1,
+        "F5_speculation": 2,
+        "F6_fortify": 3
+      }
+    },
+    {
+      "fuzzer": "DeFenzz (Ours)",
+      "budget": "@21,415 calls",
+      "host": "mac-arm64-vm",
+      "valid_seeds": 715,
+      "unique_evaluated_seeds": 715,
+      "ice_count": 20,
+      "probe_cov": 7210,
+      "probe_cov_pct": 79.57,
+      "probe_cov_by_compiler": {
+        "gcc": 3493,
+        "llvm": 3717
+      },
+      "activated_inv": 833,
+      "activated_inv_pct": 92.25,
+      "activated_inv_715_seeds_stratum": 257,
+      "activated_inv_note": "833 / 903 (92.25%) active 4-ISA checkers across the @21,415 online Step-4 campaign (canonical RQ2 metric; 715 is 100% of unique valid seeds synthesized across multi-turn agent loops, with zero valid seeds discarded).",
+      "native_silent_bugs": "111 (915-Checker Programmatic Oracle)",
+      "our_oracle_bugs": 111,
+      "our_oracle_bugs_by_compiler": {
+        "gcc": 58,
+        "llvm": 53
+      },
+      "triggered_checkers_batch": 63,
+      "triggered_checkers_full_campaign": 68,
+      "isa_probes": {
+        "x86_64": 1838,
+        "aarch64": 2052,
+        "riscv64": 1644,
+        "loongarch64": 1676
+      },
+      "family_bugs": {
+        "F1_cfi": 36,
+        "F2_stack": 21,
+        "F3_sanitizers": 21,
+        "F4_scrubbing": 10,
+        "F5_speculation": 9,
+        "F6_fortify": 14
+      }
+    }
+  ],
+  "overlap_and_exclusivity": {
+    "total_unique_silent_bugs_across_all_6_tools": 111,
+    "defenzz_exclusive_bugs": 83,
+    "defenzz_exclusive_pct": 74.77,
+    "shared_with_any_baseline": 28,
+    "union_of_all_5_baselines": 28,
+    "fuzz4all_featurefuzz_intersection": 13,
+    "missed_by_defenzz_found_by_any_baseline": 0,
+    "nested_subset_chain": "YARPGen (1) ⊂ UBfuzz (3) ⊂ MetaMut (8) ⊂ FeatureFuzz (23) ⊂ DeFenzz (111); Union of all 5 baselines (Fuzz4All 18 ∪ FeatureFuzz 23 = 28, Fuzz4All ∩ FeatureFuzz = 13) ⊂ DeFenzz (111)",
+    "pairwise_overlap_matrix": {
+      "YARPGen": {
+        "YARPGen": 1,
+        "UBfuzz": 1,
+        "MetaMut": 1,
+        "Fuzz4All": 1,
+        "FeatureFuzz": 1,
+        "DeFenzz (Ours)": 1
+      },
+      "UBfuzz": {
+        "YARPGen": 1,
+        "UBfuzz": 3,
+        "MetaMut": 3,
+        "Fuzz4All": 3,
+        "FeatureFuzz": 3,
+        "DeFenzz (Ours)": 3
+      },
+      "MetaMut": {
+        "YARPGen": 1,
+        "UBfuzz": 3,
+        "MetaMut": 8,
+        "Fuzz4All": 6,
+        "FeatureFuzz": 8,
+        "DeFenzz (Ours)": 8
+      },
+      "Fuzz4All": {
+        "YARPGen": 1,
+        "UBfuzz": 3,
+        "MetaMut": 6,
+        "Fuzz4All": 18,
+        "FeatureFuzz": 13,
+        "DeFenzz (Ours)": 18
+      },
+      "FeatureFuzz": {
+        "YARPGen": 1,
+        "UBfuzz": 3,
+        "MetaMut": 8,
+        "Fuzz4All": 13,
+        "FeatureFuzz": 23,
+        "DeFenzz (Ours)": 23
+      },
+      "DeFenzz (Ours)": {
+        "YARPGen": 1,
+        "UBfuzz": 3,
+        "MetaMut": 8,
+        "Fuzz4All": 18,
+        "FeatureFuzz": 23,
+        "DeFenzz (Ours)": 111
+      }
+    },
+    "exclusive_bugs_vs_other_fuzzers": {
+      "YARPGen": 0,
+      "UBfuzz": 0,
+      "MetaMut": 0,
+      "Fuzz4All": 0,
+      "FeatureFuzz": 0,
+      "DeFenzz (Ours)": 83
+    }
+  },
+  "hourly_convergence_0_12h": {
+    "yarpgen": {
+      "fuzzer": "yarpgen",
+      "trials_with_snapshots": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hours": {
+        "0": {
+          "trial_count": 5,
+          "valid_seeds_mean": 1.0,
+          "valid_seeds_std": 0.0,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "1": {
+          "trial_count": 5,
+          "valid_seeds_mean": 1082.0,
+          "valid_seeds_std": 46.36,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "2": {
+          "trial_count": 5,
+          "valid_seeds_mean": 2190.6,
+          "valid_seeds_std": 79.3,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "3": {
+          "trial_count": 5,
+          "valid_seeds_mean": 3250.0,
+          "valid_seeds_std": 94.28,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "4": {
+          "trial_count": 5,
+          "valid_seeds_mean": 4312.6,
+          "valid_seeds_std": 101.17,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "5": {
+          "trial_count": 5,
+          "valid_seeds_mean": 5415.4,
+          "valid_seeds_std": 105.81,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "6": {
+          "trial_count": 5,
+          "valid_seeds_mean": 6490.2,
+          "valid_seeds_std": 107.43,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "7": {
+          "trial_count": 5,
+          "valid_seeds_mean": 7586.4,
+          "valid_seeds_std": 159.56,
+          "unique_ices_mean": 0.2,
+          "unique_ices_std": 0.45,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "8": {
+          "trial_count": 5,
+          "valid_seeds_mean": 8652.0,
+          "valid_seeds_std": 235.25,
+          "unique_ices_mean": 0.2,
+          "unique_ices_std": 0.45,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "9": {
+          "trial_count": 5,
+          "valid_seeds_mean": 9776.0,
+          "valid_seeds_std": 273.94,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "10": {
+          "trial_count": 5,
+          "valid_seeds_mean": 10924.8,
+          "valid_seeds_std": 326.1,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "11": {
+          "trial_count": 5,
+          "valid_seeds_mean": 12004.0,
+          "valid_seeds_std": 314.52,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "12": {
+          "trial_count": 1,
+          "valid_seeds_mean": 13357.0,
+          "valid_seeds_std": 0.0,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        }
+      }
+    },
+    "metamut": {
+      "fuzzer": "metamut",
+      "trials_with_snapshots": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hours": {
+        "0": {
+          "trial_count": 5,
+          "valid_seeds_mean": 1.0,
+          "valid_seeds_std": 0.0,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "1": {
+          "trial_count": 5,
+          "valid_seeds_mean": 11239.2,
+          "valid_seeds_std": 173.03,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "2": {
+          "trial_count": 5,
+          "valid_seeds_mean": 22399.4,
+          "valid_seeds_std": 387.2,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "3": {
+          "trial_count": 5,
+          "valid_seeds_mean": 33749.6,
+          "valid_seeds_std": 554.46,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "4": {
+          "trial_count": 5,
+          "valid_seeds_mean": 45264.2,
+          "valid_seeds_std": 638.17,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "5": {
+          "trial_count": 5,
+          "valid_seeds_mean": 56471.4,
+          "valid_seeds_std": 765.66,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "6": {
+          "trial_count": 5,
+          "valid_seeds_mean": 67646.4,
+          "valid_seeds_std": 904.77,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "7": {
+          "trial_count": 5,
+          "valid_seeds_mean": 77459.2,
+          "valid_seeds_std": 1101.8,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "8": {
+          "trial_count": 5,
+          "valid_seeds_mean": 86710.2,
+          "valid_seeds_std": 1103.59,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "9": {
+          "trial_count": 5,
+          "valid_seeds_mean": 96622.6,
+          "valid_seeds_std": 1152.19,
+          "unique_ices_mean": 0.4,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "10": {
+          "trial_count": 5,
+          "valid_seeds_mean": 106863.2,
+          "valid_seeds_std": 1299.33,
+          "unique_ices_mean": 0.6,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "11": {
+          "trial_count": 5,
+          "valid_seeds_mean": 116778.4,
+          "valid_seeds_std": 1505.34,
+          "unique_ices_mean": 0.6,
+          "unique_ices_std": 0.55,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "12": {
+          "trial_count": 4,
+          "valid_seeds_mean": 127149.25,
+          "valid_seeds_std": 1367.5,
+          "unique_ices_mean": 0.5,
+          "unique_ices_std": 0.58,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        }
+      }
+    },
+    "ubfuzz": {
+      "fuzzer": "ubfuzz",
+      "trials_with_snapshots": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hours": {
+        "0": {
+          "trial_count": 5,
+          "valid_seeds_mean": 1.0,
+          "valid_seeds_std": 0.0,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 0.0,
+          "native_bugs_std": 0.0
+        },
+        "1": {
+          "trial_count": 5,
+          "valid_seeds_mean": 406.8,
+          "valid_seeds_std": 19.42,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 59.6,
+          "native_bugs_std": 11.5
+        },
+        "2": {
+          "trial_count": 5,
+          "valid_seeds_mean": 843.0,
+          "valid_seeds_std": 57.56,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 118.4,
+          "native_bugs_std": 16.35
+        },
+        "3": {
+          "trial_count": 5,
+          "valid_seeds_mean": 1248.2,
+          "valid_seeds_std": 63.77,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 168.8,
+          "native_bugs_std": 21.81
+        },
+        "4": {
+          "trial_count": 5,
+          "valid_seeds_mean": 1681.6,
+          "valid_seeds_std": 66.97,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 225.8,
+          "native_bugs_std": 17.37
+        },
+        "5": {
+          "trial_count": 5,
+          "valid_seeds_mean": 2091.0,
+          "valid_seeds_std": 94.95,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 279.6,
+          "native_bugs_std": 18.81
+        },
+        "6": {
+          "trial_count": 5,
+          "valid_seeds_mean": 2491.2,
+          "valid_seeds_std": 117.31,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 325.2,
+          "native_bugs_std": 20.4
+        },
+        "7": {
+          "trial_count": 5,
+          "valid_seeds_mean": 2886.8,
+          "valid_seeds_std": 137.26,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 377.0,
+          "native_bugs_std": 15.2
+        },
+        "8": {
+          "trial_count": 5,
+          "valid_seeds_mean": 3283.4,
+          "valid_seeds_std": 159.36,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 429.2,
+          "native_bugs_std": 16.89
+        },
+        "9": {
+          "trial_count": 5,
+          "valid_seeds_mean": 3688.2,
+          "valid_seeds_std": 145.48,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 479.2,
+          "native_bugs_std": 23.12
+        },
+        "10": {
+          "trial_count": 5,
+          "valid_seeds_mean": 4134.8,
+          "valid_seeds_std": 172.07,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 542.8,
+          "native_bugs_std": 21.51
+        },
+        "11": {
+          "trial_count": 5,
+          "valid_seeds_mean": 4532.0,
+          "valid_seeds_std": 168.75,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 594.0,
+          "native_bugs_std": 22.55
+        },
+        "12": {
+          "trial_count": 5,
+          "valid_seeds_mean": 4974.8,
+          "valid_seeds_std": 177.78,
+          "unique_ices_mean": 0.0,
+          "unique_ices_std": 0.0,
+          "native_bugs_mean": 649.0,
+          "native_bugs_std": 23.82
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+% Ready-to-paste IEEE S&P Table: RQ2 Baseline Comparison against Traditional & LLM Compiler Fuzzers
+% Protocol: 2.2.0-small-pot-step5 (1c x 12h x 5 trials for traditional; @21,415 online LLM calls for LLM fuzzers)
+\begin{table*}[t]
+\centering
+\caption{Comparison of \textsc{DeFenzz} with traditional and LLM fuzzers on four 64-bit ISAs under the same checker suite.}
+\label{tab:rq2-comparison}
+\footnotesize
+\setlength{\tabcolsep}{3.2pt}
+\medmuskip=1mu
+\renewcommand{\arraystretch}{1.13}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+\textbf{Fuzzer} & \textbf{Budget} & \textbf{Seeds (\#ICE)} & \textbf{Branch Cov. (/ 9,061)} & \textbf{Active Checkers (/ 903)} & \textbf{Bugs} \\
+\midrule
+YARPGen~\cite{livinskii2020yarpgen} & $1\text{c}\times12\text{h}\times5$ & $13{,}114\pm335$ [2] & $4{,}629.8\pm2.4$ [4,648, 51.3\%] & $103.8\pm1.5$ [107, 11.9\%] & $1.0\pm0.0$ [\textbf{1} (0G/1L)] \\
+UBfuzz~\cite{li2024ubfuzz} & $1\text{c}\times12\text{h}\times5$ & $4{,}975\pm178$ [0] & $5{,}586.2\pm31.6$ [5,672, 62.6\%] & $135.6\pm2.4$ [140, 15.5\%] & $2.2\pm0.5$ [\textbf{3} (0G/3L)] \\
+MetaMut~\cite{ou2024metamut} & $1\text{c}\times12\text{h}\times5$ & $126{,}605\pm1{,}698$ [1] & $6{,}297.4\pm19.4$ [6,429, 71.0\%] & $143.8\pm6.5$ [163, 18.1\%] & $6.4\pm0.9$ [\textbf{8} (1G/7L)] \\
+\midrule
+Fuzz4All~\cite{xia2024fuzz4all} & @21,415 calls & 21,090 [14,906u] (0) & 6,870 (75.8\%) & 173 (19.2\%) & \textbf{18} (8G/10L) \\
+FeatureFuzz~\cite{he2026featurefuzz} & @21,415 calls & 14,864 [14,814u] (4) & 7,220 (79.7\%) & 187 (20.7\%) & \textbf{23} (12G/11L) \\
+\textbf{\textsc{DeFenzz} (Ours)} & \textbf{@21,415 calls} & \textbf{715$^\ddagger$ (20)} & \textbf{7,210 (79.6\%)} & \textbf{833 (92.2\%)} & \textbf{111 (58G/53L)} \\
+\bottomrule
+\multicolumn{6}{@{}p{0.94\textwidth}@{}}{\scriptsize Traditional fuzzers list per-trial $\text{mean}\pm\text{std}$, with 5-trial unions in brackets. \textbf{\texttt{u}}: unique valid seeds. \textbf{\texttt{G}/\texttt{L}}: GCC/LLVM bugs (all five baselines find 0 silent defense bugs under their native oracles). $^\ddagger$\textsc{DeFenzz} spends its 21,415 calls across multi-turn agent loops, synthesizing 715 unique valid seeds in total (268 GCC, 447 LLVM); \textbf{83/111 (74.8\%)} silent bugs are exclusive to \textsc{DeFenzz} across all five baselines.}
+\end{tabular}
+\end{table*}

@@ -1,0 +1,482 @@
+{
+  "schema_version": "1.0.0-final-clean",
+  "ledger_summary": {
+    "total_active_ledger_entries": 131,
+    "valid_silent_defense_bugs": 111,
+    "valid_by_compiler": {
+      "gcc": 58,
+      "llvm_incl_compiler_rt": 53,
+      "llvm_core": 52,
+      "compiler_rt": 1
+    },
+    "excluded_non_bugs_total": 20,
+    "excluded_breakdown": {
+      "false_positive_intentional_design": 3,
+      "suspended_pre_filing_needs_review": 8,
+      "disputed_language_or_ub_boundary": 7,
+      "independently_fixed_upstream": 2
+    },
+    "upstream_status_of_111_bugs": {
+      "officially_confirmed_total_incl_fixed": 30,
+      "officially_confirmed_by_compiler": {
+        "gcc": 18,
+        "llvm": 12
+      },
+      "fixed_in_mainline": {
+        "total": 11,
+        "gcc": 9,
+        "llvm": 2
+      },
+      "partially_fixed": {
+        "total": 1,
+        "gcc": 1,
+        "llvm": 0,
+        "note": "DF-G-001: LoongArch PR 125049 fixed; MIPS64 PR 125077 pending"
+      },
+      "confirmed_open": {
+        "total": 18,
+        "gcc": 8,
+        "llvm": 10
+      },
+      "substantively_confirmed_bug_tags": {
+        "total": 5,
+        "gcc": 3,
+        "llvm": 2,
+        "note": "Maintainer added wrong-code/miscompilation tags without clicking CONFIRMED"
+      },
+      "pending_triage_submitted": {
+        "total": 76,
+        "gcc": 37,
+        "llvm_incl_compiler_rt": 39
+      }
+    }
+  },
+  "unified_f1_f6_table": [
+    {
+      "family_id": "F1_cfi",
+      "family_name": "Control-Flow Integrity (CFI & Landing Pads)",
+      "checkers_gcc": 52,
+      "checkers_llvm": 171,
+      "checkers_total": 223,
+      "active_4isa_checkers_gcc": 52,
+      "active_4isa_checkers_llvm": 167,
+      "active_4isa_checkers_total": 219,
+      "probes_gcc": 271,
+      "probes_llvm": 1476,
+      "probes_total": 1747,
+      "bugs_gcc": 14,
+      "bugs_llvm": 22,
+      "bugs_total": 36,
+      "official_confirmed_incl_fixed_gcc": 6,
+      "official_confirmed_incl_fixed_llvm": 7,
+      "official_confirmed_incl_fixed_total": 13,
+      "substantively_confirmed_gcc": 0,
+      "substantively_confirmed_llvm": 0,
+      "fixed_gcc": 4,
+      "fixed_llvm": 1,
+      "fixed_total": 5,
+      "representative_upstream_ids": [
+        {
+          "df_id": "DF-G-004",
+          "upstream_id": "GCC-PR-125084",
+          "status": "confirmed",
+          "title": "x86 ENDBR 立即数过滤漏匹配"
+        },
+        {
+          "df_id": "DF-G-023",
+          "upstream_id": "GCC-PR-128011",
+          "status": "confirmed",
+          "title": "RISC-V Zicfilp 热补丁 NOP 与 lpad 顺序颠倒"
+        },
+        {
+          "df_id": "DF-G-024",
+          "upstream_id": "GCC-PR-128015",
+          "status": "fixed",
+          "title": "x86 SGX __enclv_generic 输出寄存器绑定错误"
+        },
+        {
+          "df_id": "DF-G-026",
+          "upstream_id": "GCC-PR-128283",
+          "status": "fixed",
+          "title": "x86 SGX/PCONFIG 内联汇编漏标 memory 破坏"
+        }
+      ]
+    },
+    {
+      "family_id": "F2_stack",
+      "family_name": "Stack Protection (SSP, SafeStack, SCS, Clash)",
+      "checkers_gcc": 117,
+      "checkers_llvm": 56,
+      "checkers_total": 173,
+      "active_4isa_checkers_gcc": 117,
+      "active_4isa_checkers_llvm": 56,
+      "active_4isa_checkers_total": 173,
+      "probes_gcc": 754,
+      "probes_llvm": 675,
+      "probes_total": 1429,
+      "bugs_gcc": 10,
+      "bugs_llvm": 11,
+      "bugs_total": 21,
+      "official_confirmed_incl_fixed_gcc": 3,
+      "official_confirmed_incl_fixed_llvm": 3,
+      "official_confirmed_incl_fixed_total": 6,
+      "substantively_confirmed_gcc": 2,
+      "substantively_confirmed_llvm": 0,
+      "fixed_gcc": 2,
+      "fixed_llvm": 1,
+      "fixed_total": 3,
+      "representative_upstream_ids": [
+        {
+          "df_id": "DF-G-001",
+          "upstream_id": "GCC-PR-125045",
+          "status": "partial-fixed",
+          "title": "SSP canary 寄存器残留（多目标）"
+        },
+        {
+          "df_id": "DF-G-010",
+          "upstream_id": "GCC-PR-127318",
+          "status": "fixed",
+          "title": "RISC-V RVV CFA 过早切换到 t3"
+        },
+        {
+          "df_id": "DF-G-025",
+          "upstream_id": "GCC-PR-128271",
+          "status": "fixed",
+          "title": "x86 CET 影子栈指令漏标标志位与内存副作用"
+        },
+        {
+          "df_id": "DF-L-020",
+          "upstream_id": "LLVM#236674",
+          "status": "fixed",
+          "title": "Windows AArch64 栈展开信息对非相邻浮点寄存器误发配对指令"
+        }
+      ]
+    },
+    {
+      "family_id": "F3_sanitizers",
+      "family_name": "Memory Sanitizers (ASan, HWASan, MTE, UBSan)",
+      "checkers_gcc": 66,
+      "checkers_llvm": 128,
+      "checkers_total": 194,
+      "active_4isa_checkers_gcc": 66,
+      "active_4isa_checkers_llvm": 123,
+      "active_4isa_checkers_total": 189,
+      "probes_gcc": 756,
+      "probes_llvm": 1509,
+      "probes_total": 2265,
+      "bugs_gcc": 9,
+      "bugs_llvm": 12,
+      "bugs_total": 21,
+      "official_confirmed_incl_fixed_gcc": 3,
+      "official_confirmed_incl_fixed_llvm": 1,
+      "official_confirmed_incl_fixed_total": 4,
+      "substantively_confirmed_gcc": 0,
+      "substantively_confirmed_llvm": 0,
+      "fixed_gcc": 1,
+      "fixed_llvm": 0,
+      "fixed_total": 1,
+      "representative_upstream_ids": [
+        {
+          "df_id": "DF-G-038",
+          "upstream_id": "GCC-PR-128276",
+          "status": "confirmed",
+          "title": "LTO 读入阶段误删全部 HWASan/MTE 作用域标记"
+        },
+        {
+          "df_id": "DF-G-039",
+          "upstream_id": "GCC-PR-128280",
+          "status": "confirmed",
+          "title": "内联属性检查遗漏 HWASan/MTE/SCS 导致插桩丢失或误崩溃"
+        },
+        {
+          "df_id": "DF-G-073",
+          "upstream_id": "GCC-PR-128592",
+          "status": "fixed",
+          "title": "IPA 内联兼容性检查遗漏 -fwrapv-pointer（always_inline 早期内联不在修复契约内）"
+        },
+        {
+          "df_id": "DF-L-025",
+          "upstream_id": "LLVM#237909",
+          "status": "confirmed",
+          "title": "AArch64 HWASan 在 tiny/large 代码模型下返回 MO_TAGGED 导致 movk 修正报错或非法 ADR 重定位"
+        }
+      ]
+    },
+    {
+      "family_id": "F4_scrubbing",
+      "family_name": "State Scrubbing (Zero-Call-Used-Regs, Strub, Auto-Init)",
+      "checkers_gcc": 66,
+      "checkers_llvm": 2,
+      "checkers_total": 68,
+      "active_4isa_checkers_gcc": 65,
+      "active_4isa_checkers_llvm": 2,
+      "active_4isa_checkers_total": 67,
+      "probes_gcc": 523,
+      "probes_llvm": 52,
+      "probes_total": 575,
+      "bugs_gcc": 8,
+      "bugs_llvm": 2,
+      "bugs_total": 10,
+      "official_confirmed_incl_fixed_gcc": 3,
+      "official_confirmed_incl_fixed_llvm": 0,
+      "official_confirmed_incl_fixed_total": 3,
+      "substantively_confirmed_gcc": 0,
+      "substantively_confirmed_llvm": 2,
+      "fixed_gcc": 0,
+      "fixed_llvm": 0,
+      "fixed_total": 0,
+      "representative_upstream_ids": [
+        {
+          "df_id": "DF-G-041",
+          "upstream_id": "GCC-PR-128287",
+          "status": "confirmed",
+          "title": "分步 LTO 丢弃 -fzero-call-used-regs 导致寄存器清零失效"
+        },
+        {
+          "df_id": "DF-G-048",
+          "upstream_id": "GCC-PR-128363",
+          "status": "confirmed",
+          "title": "ipa-strub 在拆分 STRUB_INTERNAL 函数时向 attr_fnspec 误传属性 TREE_LIST 而非 STRING_CST 导致失效或触发检查断言"
+        },
+        {
+          "df_id": "DF-G-070",
+          "upstream_id": "GCC-PR-128575",
+          "status": "confirmed",
+          "title": "dse_optimize_redundant_stores 漏检 gimple_has_volatile_ops(use_stmt)，当同地址前序存储为 0 时直接删除后续的 volatile 清零存储 (*(volatile T *)p = 0)"
+        }
+      ]
+    },
+    {
+      "family_id": "F5_speculation",
+      "family_name": "Speculation Hardening (SLH, SLS, Retpoline, Harden-Compares)",
+      "checkers_gcc": 17,
+      "checkers_llvm": 48,
+      "checkers_total": 65,
+      "active_4isa_checkers_gcc": 17,
+      "active_4isa_checkers_llvm": 48,
+      "active_4isa_checkers_total": 65,
+      "probes_gcc": 47,
+      "probes_llvm": 249,
+      "probes_total": 296,
+      "bugs_gcc": 4,
+      "bugs_llvm": 5,
+      "bugs_total": 9,
+      "official_confirmed_incl_fixed_gcc": 1,
+      "official_confirmed_incl_fixed_llvm": 1,
+      "official_confirmed_incl_fixed_total": 2,
+      "substantively_confirmed_gcc": 0,
+      "substantively_confirmed_llvm": 0,
+      "fixed_gcc": 1,
+      "fixed_llvm": 0,
+      "fixed_total": 1,
+      "representative_upstream_ids": [
+        {
+          "df_id": "DF-G-057",
+          "upstream_id": "GCC-PR-128388",
+          "status": "fixed",
+          "title": "x86 APX 下 -mindirect-branch-cs-prefix 对 %r16-%r31 间接 thunk 的 call 漏加 CS 前缀（REX_INT_REGNO_P 重复判断）"
+        },
+        {
+          "df_id": "DF-L-045",
+          "upstream_id": "LLVM-240257",
+          "status": "confirmed",
+          "title": "[X86][SLH] Windows C++ EH 触发 Itanium-only 断言且发布构建缺少诊断"
+        }
+      ]
+    },
+    {
+      "family_id": "F6_fortify",
+      "family_name": "Bounds & Fortification (_FORTIFY_SOURCE, counted_by, Source Attrs)",
+      "checkers_gcc": 155,
+      "checkers_llvm": 37,
+      "checkers_total": 192,
+      "active_4isa_checkers_gcc": 153,
+      "active_4isa_checkers_llvm": 37,
+      "active_4isa_checkers_total": 190,
+      "probes_gcc": 2186,
+      "probes_llvm": 563,
+      "probes_total": 2749,
+      "bugs_gcc": 13,
+      "bugs_llvm": 1,
+      "bugs_total": 14,
+      "official_confirmed_incl_fixed_gcc": 2,
+      "official_confirmed_incl_fixed_llvm": 0,
+      "official_confirmed_incl_fixed_total": 2,
+      "substantively_confirmed_gcc": 1,
+      "substantively_confirmed_llvm": 0,
+      "fixed_gcc": 1,
+      "fixed_llvm": 0,
+      "fixed_total": 1,
+      "representative_upstream_ids": [
+        {
+          "df_id": "DF-G-002",
+          "upstream_id": "GCC-PR-125079",
+          "status": "fixed",
+          "title": "strcat_chk 转换保留错误容量"
+        },
+        {
+          "df_id": "DF-G-062",
+          "upstream_id": "GCC-PR-128591",
+          "status": "confirmed",
+          "title": "fold_const_call 在早期 CCP 将 strstr(s, \"\") 直接折叠为 s 而未调用 check_nul_terminated_array，静默漏报非 NUL 结尾数组的 -Wstringop-overread"
+        }
+      ]
+    }
+  ],
+  "legacy_main_tex_table1_crosswalk": {
+    "note": "main.tex lines 468-475 currently group F4+F5 together as 'Scrubbing & Speculation (20)' and split out 5 enclave/link/call bugs as 'Call, Link & Enclave (5)', with 1 cross-compiler checker shifted (474/441 vs 473/442). Both sum to identical totals: 915 checkers, 58 GCC + 53 LLVM = 111 bugs, 30 confirmed, 11 fixed. Recommended: adopt unified_f1_f6_table so RQ1 Table 1 and RQ2 Table 3 share identical F1-F6 rows.",
+    "rows": [
+      {
+        "group": "CFI & Landing Pads",
+        "checkers_gcc": 126,
+        "checkers_llvm": 118,
+        "bugs_gcc": 11,
+        "bugs_llvm": 20,
+        "bugs_total": 31,
+        "confirmed": 12,
+        "fixed": 4
+      },
+      {
+        "group": "Stack Protection",
+        "checkers_gcc": 112,
+        "checkers_llvm": 96,
+        "bugs_gcc": 12,
+        "bugs_llvm": 11,
+        "bugs_total": 23,
+        "confirmed": 6,
+        "fixed": 3
+      },
+      {
+        "group": "Memory Sanitizers",
+        "checkers_gcc": 94,
+        "checkers_llvm": 102,
+        "bugs_gcc": 8,
+        "bugs_llvm": 12,
+        "bugs_total": 20,
+        "confirmed": 3,
+        "fixed": 0
+      },
+      {
+        "group": "Scrubbing & Speculation",
+        "checkers_gcc": 78,
+        "checkers_llvm": 74,
+        "bugs_gcc": 11,
+        "bugs_llvm": 9,
+        "bugs_total": 20,
+        "confirmed": 4,
+        "fixed": 1
+      },
+      {
+        "group": "Bounds & Fortification",
+        "checkers_gcc": 46,
+        "checkers_llvm": 33,
+        "bugs_gcc": 12,
+        "bugs_llvm": 0,
+        "bugs_total": 12,
+        "confirmed": 2,
+        "fixed": 1
+      },
+      {
+        "group": "Call, Link & Enclave",
+        "checkers_gcc": 18,
+        "checkers_llvm": 18,
+        "bugs_gcc": 4,
+        "bugs_llvm": 1,
+        "bugs_total": 5,
+        "confirmed": 3,
+        "fixed": 2
+      }
+    ]
+  },
+  "characterization_111_bugs": {
+    "by_compiler_stage": {
+      "Backend / CodeGen": 54,
+      "Middle-End / GIMPLE / IR": 25,
+      "Frontend / Attr": 12,
+      "Driver / Option": 10,
+      "LTO / IPA": 7,
+      "Runtime (libgcc / compiler-rt)": 3
+    },
+    "by_severity": {
+      "High": 50,
+      "Medium": 39,
+      "Low": 22
+    },
+    "by_isa_exclusivity": {
+      "Cross-ISA (3+ ISAs or Generic)": 47,
+      "Non-x86 Only (AArch64 / RISC-V64 / LoongArch64)": 35,
+      "x86-64 Only": 22,
+      "Dual-ISA (x86-64 + 1 Non-x86)": 7
+    },
+    "by_isa_impact_within_111": {
+      "x86_64_explicit": 56,
+      "aarch64_explicit": 53,
+      "riscv64_explicit": 36,
+      "loongarch64_explicit": 21,
+      "generic_isa_independent": 25,
+      "x86_64_incl_generic": 81,
+      "aarch64_incl_generic": 78,
+      "riscv64_incl_generic": 61,
+      "loongarch64_incl_generic": 46
+    }
+  },
+  "offline_invariant_and_oracle_funnel": {
+    "doc_and_source_slices": {
+      "gcc": 312,
+      "llvm": 268,
+      "total": 580
+    },
+    "accepted_invariants_cot": {
+      "gcc": 463,
+      "llvm": 441,
+      "total": 904
+    },
+    "accepted_invariants_hybrid_rag": {
+      "gcc": 12,
+      "llvm": 5,
+      "total": 17
+    },
+    "total_accepted_invariants": {
+      "gcc": 475,
+      "llvm": 446,
+      "total": 921
+    },
+    "mapped_compiler_decision_paths": {
+      "gcc": 1669,
+      "llvm": 1253,
+      "total": 2922
+    },
+    "distinct_mapped_source_files": {
+      "gcc": 412,
+      "llvm": 335,
+      "total": 747
+    },
+    "active_4isa_compile_time_probes": {
+      "gcc": 4537,
+      "llvm": 4524,
+      "total": 9061
+    },
+    "check_ir_first_attempt_valid": {
+      "gcc": 396,
+      "gcc_pct": 83.4,
+      "llvm": 362,
+      "llvm_pct": 81.2,
+      "total": 758,
+      "total_pct": 82.3
+    },
+    "final_validated_checkers": {
+      "gcc": 473,
+      "gcc_pct": 99.6,
+      "llvm": 442,
+      "llvm_pct": 99.1,
+      "total": 915,
+      "total_pct": 99.3
+    },
+    "active_4isa_batch_checkers": {
+      "gcc": 470,
+      "llvm": 433,
+      "total": 903,
+      "uniformly_excluded_na": 12
+    }
+  }
+}

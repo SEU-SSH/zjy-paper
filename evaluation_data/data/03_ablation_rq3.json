@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0.0-final-clean",
+  "scope_architecture_note": "RQ3 comprises two complementary experimental scopes matching figures/eval-ablation.pdf: (A) Full-Scale 921-Invariant / 4-ISA Campaign Ablations (GCC 16.2.0 + LLVM 23.1.2 across x86-64, AArch64, RISC-V64, LoongArch64) evaluating Step-3 Formal Check IR and Step-1 Hybrid RAG; and (B) Controlled 41-Invariant GCC-16 AArch64 End-to-End Audit Lane ('demo-workset') evaluating online agentic components (w/o Source Mapping, w/o Programmatic Oracle, and Bare Agent) where running unconstrained LLM judges across all 921×4 ISA lanes would be cost-prohibitive.",
+  "scope_A_full_campaign_921_invariants_4isa": [
+    {
+      "variant": "Full DeFenzz (Check IR + Hybrid RAG)",
+      "invariants_accepted": 921,
+      "step3_first_attempt_valid_rate_pct": 82.3,
+      "step3_first_attempt_valid_counts": "758 / 921 (GCC 396/475 = 83.4%, LLVM 362/446 = 81.2%)",
+      "step3_final_validated_checkers": 915,
+      "step3_synthesis_tokens_M": 54.81,
+      "step3_tool_calls": 1680,
+      "step3_sessions": 1120,
+      "non_x86_rv64_la64_detections": 136,
+      "non_x86_breakdown": {
+        "riscv64": 72,
+        "loongarch64": 64,
+        "all_4isa_detections": 315
+      },
+      "spurious_raw_oracle_alerts_fp": 0,
+      "unique_silent_bugs": 111
+    },
+    {
+      "variant": "w/o Formal Check IR (Raw Go Scripts)",
+      "invariants_accepted": 921,
+      "step3_first_attempt_valid_rate_pct": 70.5,
+      "step3_first_attempt_valid_counts": "649 / 921 (GCC 344/475 = 72.4%, LLVM 305/446 = 68.4%)",
+      "step3_final_validated_checkers": 915,
+      "step3_synthesis_tokens_M": 638.44,
+      "step3_synthesis_tokens_breakdown_M": {
+        "gcc": 337.55,
+        "llvm": 300.88,
+        "blowup_vs_check_ir": "11.6x"
+      },
+      "step3_tool_calls": 18495,
+      "step3_sessions": 1229,
+      "non_x86_rv64_la64_detections": 64,
+      "non_x86_breakdown": {
+        "riscv64": 33,
+        "loongarch64": 31,
+        "all_4isa_detections": 188,
+        "drop_pct": -52.9
+      },
+      "spurious_raw_oracle_alerts_fp": 51,
+      "spurious_raw_oracle_alerts_breakdown": {
+        "gcc": 12,
+        "llvm": 39
+      },
+      "unique_silent_bugs": 82,
+      "bug_loss_vs_full": -29
+    },
+    {
+      "variant": "w/o Hybrid RAG (Segmented CoT Only)",
+      "invariants_accepted": 904,
+      "invariants_lost_cross_mechanism": 17,
+      "invariants_lost_breakdown": {
+        "gcc": 12,
+        "llvm": 5
+      },
+      "step3_first_attempt_valid_rate_pct": 82.4,
+      "step3_synthesis_tokens_M": 53.79,
+      "non_x86_rv64_la64_detections": 135,
+      "spurious_raw_oracle_alerts_fp": 0,
+      "unique_silent_bugs": 109,
+      "bug_loss_vs_full": -2,
+      "controlled_gcc_cot_only_verification": {
+        "run_path": "runs/ablation-without-rag/ablation-without-rag/rep-001",
+        "segments_processed": 173,
+        "rag_candidates": 0,
+        "accepted_invariants_gcc": 472,
+        "consumed_tokens": 6095178
+      }
+    }
+  ],
+  "scope_B_controlled_41_invariant_gcc16_aarch64_lane": [
+    {
+      "variant": "Full DeFenzz (41-Invariant Controlled Baseline)",
+      "run_evidence": "runs/paper-evaluation-summary/audit_evidence/rq3/full_baseline",
+      "workers": 41,
+      "invariants_visible": 41,
+      "source_mapping": "on",
+      "oracle": "deterministic-checker",
+      "raw_candidates": 4,
+      "rejected_false_alerts": 4,
+      "hallucinated_unverified_claims_leaked": 0,
+      "poc_verified_true_bugs": 0,
+      "online_oracle_calls": 5,
+      "llm_calls": 1160,
+      "total_tokens_M": 429.13,
+      "cached_input_tokens_M": 408.55,
+      "reasoning_tokens_M": 0.75,
+      "llm_latency_sec": 8118.5
+    },
+    {
+      "variant": "w/o Source Mapping (inv-only)",
+      "run_evidence": "runs/ablation-inv-only",
+      "workers": 41,
+      "invariants_visible": 41,
+      "source_mapping": "off",
+      "oracle": "off",
+      "raw_candidates": 9,
+      "rejected_false_alerts": 8,
+      "hallucinated_unverified_claims_leaked": 1,
+      "leaked_claim_note": "CAND-2025-001 (poc_verified=False): misinterprets -fstack-protector-explicit design as a bug",
+      "poc_verified_true_bugs": 0,
+      "online_oracle_calls": 0,
+      "llm_calls": 1135,
+      "total_tokens_M": 50.78,
+      "cached_input_tokens_M": 47.19,
+      "reasoning_tokens_M": 0.89,
+      "llm_latency_sec": 9599.7
+    },
+    {
+      "variant": "w/o Programmatic Oracle (llm-judge)",
+      "run_evidence": "runs/ablation-without-oracle",
+      "workers": 41,
+      "invariants_visible": 41,
+      "source_mapping": "on",
+      "oracle": "llm-judge",
+      "raw_candidates": 6,
+      "rejected_false_alerts": 5,
+      "hallucinated_unverified_claims_leaked": 1,
+      "leaked_claim_note": "CAND-2026-002 (poc_verified=False): LLM judge accepted uncompiled link-spec speculation without binary reproduction",
+      "poc_verified_true_bugs": 0,
+      "online_oracle_calls": 15,
+      "llm_calls": 2681,
+      "llm_call_blowup_vs_full": "2.31x",
+      "total_tokens_M": 206.01,
+      "cached_input_tokens_M": 190.74,
+      "reasoning_tokens_M": 7.25,
+      "reasoning_token_blowup_vs_full": "9.61x",
+      "llm_latency_sec": 55787.7,
+      "latency_blowup_vs_full": "6.87x"
+    },
+    {
+      "variant": "Bare Agent (free-agent)",
+      "run_evidence": "runs/ablation-free-agent",
+      "workers": 1,
+      "invariants_visible": 0,
+      "source_mapping": "off",
+      "oracle": "off",
+      "raw_candidates": 1,
+      "rejected_false_alerts": 1,
+      "hallucinated_unverified_claims_leaked": 0,
+      "leaked_claim_note": "Single static claim on JSON tuning parser (outside defense passes, poc_verified=False, rejected)",
+      "poc_verified_true_bugs": 0,
+      "online_oracle_calls": 0,
+      "llm_calls": 54,
+      "total_tokens_M": 5.88,
+      "cached_input_tokens_M": 5.66,
+      "reasoning_tokens_M": 0.01,
+      "llm_latency_sec": 512.9
+    }
+  ]
+}

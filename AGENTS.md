@@ -19,3 +19,9 @@
    - During fuzzing, deterministic checkers directly test **each compiled seed** (`each compiled seed`) to detect invariant violations, rather than relying on differential baseline builds to find bugs or asking an LLM to judge whether silent defense bugs occur.
 4. **Formalization wording boundary**:
    - Describing our formalized primitives / specifications is accurate and encouraged, but avoid overclaiming formal verification terms such as `verify`, `verified`, `proven`, or `fully safe` without theorem-prover proofs; use `check`, `test`, `detect`, or `validate`.
+
+## 3. Anonymized Artifact Repository
+- **Live Anonymous URL (included in `main.tex` §IV Implementation)**: `https://anonymous.4open.science/r/DeFenzz/README.md`
+- **Local Staging Repository**: `/Users/bytedance/projects/research/defenzz-artifact` (orphan commit `2671de5`, `Anonymous Authors <anonymous@example.invalid>`).
+- **Backing GitHub Repository**: `git@github.com:zjy-dev/defenzz-artifact.git` (**must remain Private** throughout double-blind review so code search cannot link identifiers to the author's GitHub handle; local gitignored `pipeline/.env` is not tracked or served on `anonymous.4open.science`).
+- **CFP Freeze Rule**: Per IEEE S&P 2027 CFP, **do NOT push updates** to the artifact repository after the paper submission deadline passes.

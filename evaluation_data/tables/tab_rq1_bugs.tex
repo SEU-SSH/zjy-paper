@@ -1,0 +1,25 @@
+% Ready-to-paste IEEE S&P Table: RQ1 Silent Defense Bugs by Unified Defense Family (F1--F6)
+% Source: docs/bugs/metadata.json + runs/rq2-eval-config.json (100% aligned with RQ2 F1--F6 rows)
+\begin{table*}[t]
+\centering
+\caption{Summary of \textbf{111} previously unknown silent defense bugs discovered by \sys across GCC and LLVM/Clang, grouped by the six defense families (\texttt{F1}--\texttt{F6}). ``Checkers'' lists validated Check~IR oracles ($473 + 442 = 915$); ``Probes'' lists active 4-ISA compile-time branch probes ($4{,}537 + 4{,}524 = 9{,}061$); ``Conf.'' counts bugs officially confirmed or fixed by upstream maintainers ($+5$ additional bugs carry maintainer \texttt{wrong-code}/\texttt{miscompilation} tags).}
+\label{tab:bug-summary}
+\small
+\setlength{\tabcolsep}{4.8pt}
+\begin{tabular}{@{}llrrrrrrrrl@{}}
+\toprule
+\textbf{ID} & \textbf{Defense Family} & \multicolumn{2}{c}{\textbf{Checkers}} & \textbf{4-ISA} & \multicolumn{3}{c}{\textbf{Silent Bugs}} & \textbf{Conf.} & \textbf{Fixed} & \textbf{Representative Upstream IDs} \\
+\cmidrule(lr){3-4} \cmidrule(lr){6-8}
+ & & \textbf{GCC} & \textbf{LLVM} & \textbf{Probes} & \textbf{GCC} & \textbf{LLVM} & \textbf{Total} & & & \\
+\midrule
+F1 & Control-Flow Integrity (CFI, IBT, BTI, Zicfilp) & 52 & 171 & 1,747 & 14 & 22 & \textbf{36} & 13 & 5 & GCC PR 125084, 128011, 128360; LLVM \#208751 \\
+F2 & Stack Protection (SSP, SafeStack, SCS, Clash) & 117 & 56 & 1,429 & 10 & 11 & \textbf{21} & 6 & 3 & GCC PR 127318, 128271; LLVM \#237864, \#236674 \\
+F3 & Memory Sanitizers (ASan, HWASan, MTE, UBSan) & 66 & 128 & 2,265 & 9 & 12 & \textbf{21} & 4 & 1 & GCC PR 128276, 128280, 128592; LLVM \#237909 \\
+F4 & State Scrubbing (Zero-Regs, Strub, Auto-Init) & 66 & 2 & 575 & 8 & 2 & \textbf{10} & 3 & 0 & GCC PR 128287, 128363, 128575; LLVM \#236795 \\
+F5 & Speculation Hardening (SLH, SLS, Retpoline) & 17 & 48 & 296 & 4 & 5 & \textbf{9} & 2 & 1 & GCC PR 128388; LLVM \#240257 \\
+F6 & Bounds \& Fortification (\texttt{\_FORTIFY}, \texttt{counted\_by}) & 155 & 37 & 2,749 & 13 & 1 & \textbf{14} & 2 & 1 & GCC PR 125079, 127333, 128591 \\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{Total (Across 4 ISAs: x86-64, AA64, RV64, LA64)}} & \textbf{473} & \textbf{442} & \textbf{9,061} & \textbf{58} & \textbf{53} & \textbf{111} & \textbf{30} & \textbf{11} & \textbf{915 checkers (903 active 4-ISA)} \\
+\bottomrule
+\end{tabular}
+\end{table*}

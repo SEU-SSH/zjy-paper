@@ -398,3 +398,25 @@ happy to expand/discuss if you have questions.
 2. **下一阶段待办（Section V Evaluation `L362–L557` 及 Section VI+ 收尾章节）**：
    - **Section V 措辞与占位符核查**：审定 `L381` 处 `zero LLM involvement in bug adjudication` 表述（`[R2-6]`），并依据 [`evaluation_data/`](./evaluation_data/README.md) 填入已完成数据，替换尚存的 `\tbd{N}` / `TBD`（`L406–L407, L415, L498, L509–L512, L547`）；
    - **Section VI+ 收尾章节补齐**：在 `L557` 后补齐 Discussion（回应 `[R2-7]` 用旧版本已知历史漏洞构建 ground-truth 基准的讨论、人工核验边界与 Token 成本）、Related Work 与 Conclusion。
+
+---
+
+## 三、第三轮批注（V3：`defenzz1117-mat.pdf`，2026-11-17，共 15 处）及落实状态（2026-11-18）
+
+| 编号 | 位置 | 批注原话 | 落实 |
+| :--- | :--- | :--- | :--- |
+| R3-1 | Intro 第 1 段首句 | `systems software` → `code` | ✅ `harden C and C++ code` |
+| R3-2 | Intro 第 1 段 | `these defenses insert` → `mitigations` | ✅ |
+| R3-3 | Intro 第 1 段 | `Defense code must interact` → `Defense passes` | ✅ |
+| R3-4 | Intro 第 2 段 | `violates an ISA rule` → `dependencies` | ✅ `violates ISA dependencies` |
+| R3-5 | Intro 第 2 段 CVE 处 | cite the "correctness compiler gap" from LangSec (best paper) | ✅ 新增 `dsilva2015correctness`（D'Silva, Payer, Song, LangSec 2015），第三人称引用 |
+| R3-6 | Fig. 1 | green is not a good color; use yellow and orange for reported/confirmed | ✅ Reported 黄、Confirmed 橙，Historical 改深灰边框 |
+| R3-7 | Intro 第 4 段（central question）左栏 | this column is quite fluffy and could be shortened | ✅ 208 → ~110 词，删除 predicate IR 旧表述 |
+| R3-8 | Intro 第 5 段（三挑战） | cut by 1/2 | ✅ 282 → ~150 词 |
+| R3-9 | Intro 末尾 | intro is too long, cut by 1/2 page | ✅ Intro 1.81 → 1.31 页（-0.50 页） |
+| R3-10 | Fig. 2 | too small to read; simplify text, make remaining text larger | ✅ 按作者决定保留原图（logo 与文字不变），仅在正文中由 `0.90\textwidth` 放大到 `\textwidth` |
+| R3-11 | Listing 3 | 勾画换行处 | ✅ Listing 1/2/3/6 全部消除自动折行 |
+| R3-12 | §3.2 首句 | LLMism, rephrase | ✅ 去掉 "X, not Y" 句式 |
+| R3-13 | §3.2 | `drown out` → hide? suppress? | ✅ `hide` |
+| R3-14 | §3.3 | `exact opposite logic` → behavior? | ✅ `Runtime defenses expect the opposite behavior.` |
+| R3-15 | §3.4 | would it make sense to show an example of the loop? | ✅ 新增 Listing 6：INV-FORT-014 三轮示例 + 解读段 |
